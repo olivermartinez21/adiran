@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Asignaciones</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table" hidden=true>
+			<h1>Asignaciones <span th:text="${loggedUser.warehouseId}"></span></h1>
+		</div>
+		<div class="title-table">
+			<h2>Bookings / reserva </h2>
+		</div>
+			<select class="form-control" id="statusBookingCatalog" hidden=true>
+									<option value=1>ABIERTO</option>
+									<option value=2>CANCELADO</option>
+									<option value=3>CERRADO</option>
+			</select>
+			
+			<select class="form-control" id="shippingCompanyCatalog" hidden=true>
+				<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+			</select>									
+						<input type="text" class="form-control" id="assignmentId" hidden=true>			
+						<input type="text" class="form-control" id="assigmentType" hidden=true>			
+							
+							
+			<select class="form-control" id="containerTypeBooking" hidden=true>
+									<option >Selecciona una opción</option>
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+			</select>
+									
+			<select class="form-control" id="containerQualityBooking" hidden=true>
+									<option >Selecciona una opción</option>
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+			</select>
+		<div class="container-table" id="divTablebooking">
+			<table id="bookignTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+					<th>ID</th>
+					<th>Tipo</th>
+					<th>Tamaño</th>
+					<th>Booking </th>
+					<th>Estado de booking</th>
+					<th>Grado /Calidad</th>
+					<th>Propietario</th>
+					<th>Cantidad De Unidades</th>
+					<th>Fecha de Creacion</th>
+					<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+					<th>ID</th>
+					<th>Tipo</th>
+					<th>Tamaño</th>
+					<th>Booking </th>
+					<th>Estado de booking</th>
+					<th>Grado /Calidad</th>
+					<th>Propietario</th>
+					<th>Cantidad De Unidades</th>
+					<th>Fecha de Creacion</th>
+					<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div> 
+		<div class="container-table" id=divTableHapag>
+			<table id="bookignTablehapag" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+					<th>Contenedor</th>
+					<th>Tipo</th>
+					<th>Modelo</th>
+					<th>Booking</th>
+					<th>FechaEDI</th>
+					<th>CantidadUnidades</th>
+					<th>EDIFilename</th>
+					<th>ProcessTimeStamp</th>
+					<th>CustomerIdentifier</th>
+					<th>CarrierCustomer</th>
+					<th>CarrierShipper</th>
+					<th>Status</th>
+					<th>Shipment</th>
+					<th>AdviceNum</th>
+					<th>ReleaseDate</th>
+					<th>ExpirationDate</th>
+					<th>Remark</th>
+					<th>FreeTxT</th>
+					<th>Assigned</th>
+					<th>Sequence</th>
+					<th>Haulage</th>
+					<th>TareWeight</th>
+					<th>TareWeightUnit</th>
+					<th>Temperature</th>
+					<th>TemperatureUnit</th>
+					<th>VentilationOption</th>
+					<th>VentilationOptionUnit</th>
+					<th>FreshAir</th>
+					<th>FreshAirUnit</th>
+					<th>Humidity</th>
+					<th>HumidityUnit</th>
+					<th>CO2</th>
+					<th>CO2Unit</th>
+					<th>O2</th>
+					<th>O2Unit</th>
+					<th>N</th>
+					<th>NUnit</th>
+					<th>Localidad</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+					<th>Contenedor</th>
+					<th>Tipo</th>
+					<th>Modelo</th>
+					<th>Booking</th>
+					<th>FechaEDI</th>
+					<th>CantidadUnidades</th>
+					<th>EDIFilename</th>
+					<th>ProcessTimeStamp</th>
+					<th>CustomerIdentifier</th>
+					<th>CarrierCustomer</th>
+					<th>CarrierShipper</th>
+					<th>Status</th>
+					<th>Shipment</th>
+					<th>AdviceNum</th>
+					<th>ReleaseDate</th>
+					<th>ExpirationDate</th>
+					<th>Remark</th>
+					<th>FreeTxT</th>
+					<th>Assigned</th>
+					<th>Sequence</th>
+					<th>Haulage</th>
+					<th>TareWeight</th>
+					<th>TareWeightUnit</th>
+					<th>Temperature</th>
+					<th>TemperatureUnit</th>
+					<th>VentilationOption</th>
+					<th>VentilationOptionUnit</th>
+					<th>FreshAir</th>
+					<th>FreshAirUnit</th>
+					<th>Humidity</th>
+					<th>HumidityUnit</th>
+					<th>CO2</th>
+					<th>CO2Unit</th>
+					<th>O2</th>
+					<th>O2Unit</th>
+					<th>N</th>
+					<th>NUnit</th>
+					<th>Localidad</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div> 
+		
+		<div class="modal fade" id="newBookingModal" tabindex="-1" role="dialog" aria-labelledby="newBookingModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addBookinglLabel">Crear Booking o Reserva</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newBookingForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBooking">Booking</label>
+									<input type="text" class="form-control" id="newBooking" onkeyup="bookingValidation()">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippingConpanyBooking">Propietario</label>
+									<select class="form-control" id="newShippingConpanyBooking">
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newFinalClientBooking">Cliente Final</label>
+									<select class="form-control" id="newFinalClientBooking">
+									<option th:each="option : ${catFinalClient}" th:value="${option.finalClientId}" th:text="${option.clientName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBilTo">Cobrar a</label>
+									<input type="text" class="form-control" id="newBilTo" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLocationBooking">Localidad</label>
+									<input type="text" class="form-control" id="newLocationBooking" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkOrderBooking">Work Order</label>
+									<input type="text" class="form-control" id="newWorkOrderBooking">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newExpirationDateBooking">Fecha de Expiracion</label>
+									<input type="date" class="form-control" id="newExpirationDateBooking">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newReleaseDateBooking">Fecha de Liberacion</label>
+									<input type="date" class="form-control" id="newReleaseDateBooking">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newQuantityUnitsBookings">Cantidad de unidades</label>
+									<input type="number" class="form-control" id="newQuantityUnitsBookings"  min="1">
+								</div>
+							</div>
+						</div>
+						<div class="container-table" hidden=true>
+							<table id="bookingInformation" class="table table-striped dt-responsive" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>ID</th>
+									<th>N°</th>
+									<th>Tipo </th>
+									<th>Tamaño </th>
+									<th>Calidad</th>
+									<th>Número de unidad</th>
+									<th>Temperatura (RF)</th>
+									<th>Ventilación (RF)</th>
+									<th>Humedad (RF)</th>
+									<th>CO2 (RF)</th>
+									<th>O2 (RF)</th>
+									<th>Nitrogeno</th>
+									<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade " id="newBookingInformationModal" tabindex="-1" role="dialog" aria-labelledby="newBookingInformationLabel" aria-hidden="true"  style="z-index: 9999;" >
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Asignar</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newBookingInformationForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="typeBookingInformation">Tipo de la unidad</label>
+									<select class="form-control" id="typeBookingInformation" onInput="showMoreInformation()">
+									<option >Selecciona una opción</option>
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+								<label for="sizeBookingInformation">Tamaño de la unidad</label>
+								<select class="form-control" id="sizeBookingInformation"  onInput="nexInput()" disabled>
+								<option >Selecciona una opción</option>
+								<option>20</option>
+								<option>40</option>
+								</select>
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="qualityBookingInformation">Grado de la unidad</label>
+									<select class="form-control" id="qualityBookingInformation" onInput="getContainersEspecifications()" disabled>
+									<option >Selecciona una opción</option>
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unitNumberBookingInformation">Numero de Unidad</label>
+									<input type="text" class="form-control" id="unitNumberBookingInformation" list="newContainerList" onInput ="selectContainer()" autocomplete="off">
+									<datalist id="newContainerList" >
+									 <!-- <option th:each="option : ${catContainer}" th:value="${option.container}" th:text="${option.container}"></option> -->
+									</datalist>
+								</div>
+							</div>
+						</div>
+						<div class="row" id="divReffer1"hidden=true>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="temperatureBookingInformation">Temperatura</label>
+									<input type="text" class="form-control" id="temperatureBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="ventilationBookingInformation">Ventilación </label>
+									<input type="text" class="form-control" id="ventilationBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="humidityBookingInformation">Humedad</label>
+									<input type="text" class="form-control" id="humidityBookingInformation">
+								</div>
+							</div>
+						</div>
+						<div class="row" id="divReffer" hidden=true>
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="co2BookingInformation">CO2 </label>
+									<input type="text" class="form-control" id="co2BookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="o2BookingInformation">O2 </label>
+									<input type="text" class="form-control" id="o2BookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="nitrogenBookingInformation">Nitrogeno </label>
+									<input type="text" class="form-control" id="nitrogenBookingInformation">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade " id="newDeliveryOrderlModal" tabindex="-1" role="dialog" aria-labelledby="newDeliveryOrderModalLabel" aria-hidden="true" style="overflow-y: scroll;"  >
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Orden de entrega</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<input type="text" class="form-control" id="bookingId" hidden=true>
+					<form id="newDeliveryOrderForm">
+					<div class="modal-body modal-body-app">
+					<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newBookingOrder">Booking </label>
+									<input type="text" class="form-control" id="newBookingOrder">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippngCompanyOrder">Propietario </label>
+									<input type="text" class="form-control" id="newShippngCompanyOrder">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTypeServiceOrder">Tipo de servicio </label>
+									<select class="form-control" id="newTypeServiceOrder">
+									<option >CARRIER</option>
+									<option >MERCAHNT</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" hidden =true>
+								<div class="form-group">
+									<label for="newUnitRemainingOrder">Unidades restantes del booking </label>
+									<input type="text" class="form-control" id="newUnitRemainingOrder" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBillToOrder">Cobrar a</label>
+									<input type="text" class="form-control" id="newBillToOrder" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTypeUnitOrder">Tipo de la unidad</label>
+									<select class="form-control" id="newTypeUnitOrder">
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCarrierCompanyOrder">Compañia transportista</label>
+									<input type="text" class="form-control" id="newCarrierCompanyOrder" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorOrder">Operador   </label>
+									<input type="text" class="form-control" id="newOperatorOrder">
+								</div>
+							</div>	
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEconomicNumberOrder">Número del economico</label>
+									<input type="text" class="form-control" id="newEconomicNumberOrder">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkOrderOrder">Work Order / Carta Porte</label>
+									<input type="text" class="form-control" id="newWorkOrderOrder">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newUnitDeliver">Unidades a entregar</label>
+									<input type="text" class="form-control" id="newUnitDeliver">
+								</div>
+							</div>
+						</div>
+						<div class="container-table">
+							<table id="bookingInformationOrder" class="table table-striped dt-responsive" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>ID</th>
+									<th>N°</th>
+									<th>Unidad</th>
+									<th>Tipo </th>
+									<th>Tamaño </th>
+									<th>Calidad</th>
+									<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+						<div class="container-table">
+							<table id="deliveryOrdersTable" class="table table-striped dt-responsive" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>Booking</th>
+									<th>Unidades</th>
+									<th>Propietario</th>
+									<th>Tipo de Servicio</th>
+									<th>Unidades restantes para completar el booking</th>
+									<th>Opciones</th>
+									<th>assignmentID</th>
+									<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+			<div class="modal fade " id="newDeliveryOrderEditlModal" tabindex="-1" role="dialog" aria-labelledby="newDeliveryOrderEditModalLabel" aria-hidden="true" style="overflow-y: scroll;"  >
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Orden de entrega</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<input type="text" class="form-control" id="deliveryOrderId" hidden=true>
+					<form id="newDeliveryOrderEditForm">
+					<div class="modal-body modal-body-app">
+					<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newBookingOrderEdit">Booking </label>
+									<input type="text" class="form-control" id="newBookingOrderEdit">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippngCompanyOrderEdit">Propietario </label>
+									<input type="text" class="form-control" id="newShippngCompanyOrderEdit">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTypeServiceOrderEdit">Tipo de servicio </label>
+									<select class="form-control" id="newTypeServiceOrderEdit">
+									<option >CARRIER</option>
+									<option >MERCAHNT</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" hidden =true>
+								<div class="form-group">
+									<label for="newUnitRemainingOrderEdit">Unidades restantes del booking </label>
+									<input type="text" class="form-control" id="newUnitRemainingOrderEdit" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBillToOrderEdit">Cobrar a</label>
+									<input type="text" class="form-control" id="newBillToOrderEdit" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTypeUnitOrderEdit">Tipo de la unidad</label>
+									<select class="form-control" id="newTypeUnitOrderEdit">
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCarrierCompanyOrderEdit">Compañia transportista</label>
+									<input type="text" class="form-control" id="newCarrierCompanyOrderEdit" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorOrderEdit">Operador   </label>
+									<input type="text" class="form-control" id="newOperatorOrderEdit">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEconomicNumberOrderEdit">Número del economico</label>
+									<input type="text" class="form-control" id="newEconomicNumberOrderEdit">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkOrderOrderEdit">Work Order / Carta Porte</label>
+									<input type="text" class="form-control" id="newWorkOrderOrderEdit">
+								</div>
+							</div>
+							<div class="col-sm"hidden=true>
+								<div class="form-group">
+									<label for="newUnitDeliverEdit">Unidades a entregar</label>
+									<input type="text" class="form-control" id="newUnitDeliverEdit">
+								</div>
+							</div>
+						</div>
+						<div class="container-table">
+							<table id="bookingInformationOrderEdit" class="table table-striped dt-responsive" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>ID</th>
+									<th>N°</th>
+									<th>Unidad</th>
+									<th>Tipo </th>
+									<th>Tamaño </th>
+									<th>Calidad</th>
+									<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+			<div class="modal fade" id="newDeliveryOrderlinformationModal" tabindex="-1" role="dialog" aria-labelledby="newDeliveryOrderlinformationModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" >Asignar Unidad</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newDeliveryOrderlinformationForm">
+					<div class="modal-body modal-body-app ">
+						<div class="row-3">
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="newUnitInformation">Uidad </label>
+										<input type="text" class="form-control" id="newUnitInformation">
+									</div>
+								</div>
+							</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Asignar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		
+		<script type="text/javascript" th:src="@{/js/assignments/bookings.js}"></script>
+	</section>
+</body>
+</html>

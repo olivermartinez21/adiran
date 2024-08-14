@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Pre-Registro</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>Pre-Registro <span th:text="${loggedUser.warehouseId}"></span></h1>
+			<br>
+			<h1>Entrada </h1>
+			 <input type="text" class="form-control" id="sapNumber" hidden=true>
+			 <input type="text" class="form-control" id="typeForAppointmentOut" hidden=true>
+		</div>
+		
+		<div id="image"></div>
+		<img id="img" src="../images/logo-ademsa.jpg" hidden=true>
+		
+		<select class="form-control" id="status" hidden=true>
+						<option value="1">CREADA</option>
+						<option value="2">ACEPTADA</option>
+						<option value="3">EN INSPECCION</option>
+						<option value="4">EN PROCESO</option>
+						<option value="5">CONFIRMADO</option>
+						<option value="6">EN TALLER</option>
+						<option value="7">LISTO</option>
+						<option value="8">PRUEBA TECNICA</option>
+						<option value="9">FINALIZADO</option>
+						
+		</select>
+		<select class="form-control" id="precios" hidden=true>
+						<option value="1">300</option>
+						<option value="2">200</option>
+						<option value="3">100</option>
+						<option value="4">50</option>
+						<option value="5">205</option>
+						<option value="6">43</option>
+						<option value="7">786</option>
+						<option value="8">77</option>
+						<option value="9">88</option>
+						<option value="10">99</option>
+						<option value="11">11</option>
+						<option value="12">22</option>
+						<option value="13">33</option>
+						<option value="14">44</option>
+						<option value="15">55</option>
+						<option value="16">66</option>
+		</select>
+		
+		<select class="form-control" id="part" hidden=true>
+									<optgroup label="FRENTE">
+									<option value="1">FRENTE/Travesaño Sup.</option>
+									<option value="2">FRENTE/Panel</option>
+									<option value="3">FRENTE/Travesaño Int.</option>
+									</optgroup>
+									<optgroup label="IZQUIERDO">
+									<option value="4">IZQ/Poste Frente</option>
+									<option value="5">IZQ/Larguero Sup.</option>
+									<option value="6">IZQ/Panel</option>
+									<option value="7">IZQ/Panel</option>
+									<option value="8">IZQ/Larguero Inf.</option>
+									<option value="9">IZQ/Poste Posterior</option>
+									</optgroup>
+									<optgroup label="POSTERIOR">
+									<option value="10">POSTERIOR/Travesaño Sup.</option>
+									<option value="11">POSTERIOR/Paneles</option>
+									<option value="12">POSTERIOR/Barras Guias</option>
+									<option value="13">POSTERIOR/Travesaño Inferior</option>
+									<option value="14">POSTERIOR/Otros</option>
+									</optgroup>
+									<optgroup label="DERECHO">
+									<option value="15">DER/Poste Posterior</option>
+									<option value="16">DER/Larguero Sup.</option>
+									<option value="17">DER/Panel</option>
+									<option value="18">DER/Panel</option>
+									<option value="19">DER/Larguero Inf.</option>
+									<option value="20">DER/Poste Frente</option>
+									</optgroup>
+									<optgroup label="TECHO">
+									<option value="21">TECHO/Panel Lona</option>
+									<option value="22">TECHO/Protecciones</option>
+									</optgroup>
+									<optgroup label="INFERIOR">
+									<option value="23">INFERIOR/Travesaño Techo.</option>
+									<option value="24">INFERIOR/Piso</option>
+									<option value="25">INFERIOR/Otros</option>
+									</optgroup>
+									<optgroup label="BASE">
+									<option value="26">BASE/Travesaños</option>
+									<option value="27">BASE/Travesaños</option>
+									<option value="28">BASE/Pasajes Orquilla</option>
+									</optgroup>
+									<optgroup label="GENERAL">
+									<option value="29">GENERAL/Otros</option>
+									<option value="30">GENERAL/Cond. Generales</option>
+									</optgroup>
+									</select>
+									
+		<select class="form-control" id="ErrorCode" hidden=true>
+									<option value="1">PI</option>
+									<option value="2">PO</option>
+									<option value="3">D</option>
+									<option value="4">SC</option>
+									<option value="5">C</option>
+									<option value="6">H</option>
+									<option value="7">B</option>
+									<option value="8">MN</option>
+									<option value="9">BR</option>
+									<option value="10">L</option>
+									<option value="11">GT</option>
+									<option value="12">CR</option>
+									<option value="13">M</option>
+									<option value="14">R</option>
+									<option value="15">DY</option>
+									<option value="16">IR</option>
+									</select>
+		<select class="form-control" id="usersDescriptions" hidden=true>
+						<option th:each="option : ${usersDescription}" th:value="${option.userId}" th:text="${option.userName}"></option>
+		</select>
+		<select class="form-control" id="containers" hidden=true>
+						<option th:each="option : ${containers}" th:value="${option.containerId}" th:text="${option.container}"></option>
+		</select>
+		
+		<select class="form-control" id="newAgencySelectTable" hidden=true>
+						 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerName}"></option>
+		</select>
+		
+		<a th:href="@{/containers/container}"></a>
+			<div class="container-table">
+			<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="startDate">Fecha inicial</label>
+									<input type="date" class="form-control" id="startDate"  min="" onchange="searchAppointmentByDate()">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="lastDate">Fecha final</label>
+									<input type="date" class="form-control"  id="lastDate"  min="" onchange="searchAppointmentByDate()" >
+								</div>
+							</div>
+							</div>
+			<table id="appointmentTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>appointmentId</th>
+						<th>Localidad</th>
+						<th>Folio</th>
+						<th>Fecha</th>
+						<th>Teléfono</th>
+						<th>Agencia Aduanal</th>
+						<th>Compañía Transportista</th>
+						<th>Tipo de Cliente</th>
+						<th>Contenedores</th>
+						<th>Tipo de Factura</th>
+						<th>Tipo de Servicio</th>
+						<th>Método de pago</th>
+						<th>Usuario</th>
+						<th>Comprobante</th>
+						<th>status</th>
+						<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>appointmentId</th>
+						<th>Localidad</th>
+						<th>Folio</th>
+						<th>Fecha</th>
+						<th>Teléfono</th>
+						<th>Agencia Aduanal</th>
+						<th>Compañía Transportista</th>
+						<th>Tipo de Cliente</th>
+						<th>Contenedores</th>
+						<th>Tipo de Factura</th>
+						<th>Tipo de Servicio</th>
+						<th>Método de pago</th>
+						<th>Usuario</th>
+						<th>Comprobante</th>
+						<th>status</th>
+						<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		
+		<br>
+		<div class="title-table">
+			<h1>Salidas</span></h1>
+			 <input type="text" class="form-control" id="sapNumber" hidden=true>
+			 <input type="text" class="form-control" id="typeForAppointmentOut" hidden=true>
+			</div>
+		
+		<a th:href="@{/containers/container}"></a>
+			<div class="container-table">
+			<div class="row">
+			
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="startDate">Fecha inicial</label>
+									<input type="date" class="form-control" id="startDate"  min="" onchange="searchAppointmentByDate()">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="lastDate">Fecha final</label>
+									<input type="date" class="form-control"  id="lastDate"  min="" onchange="searchAppointmentByDate()" >
+								</div>
+							</div>
+							</div>
+			<table id="appointmentTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						
+						<th>Localidad</th>
+						<th>Folio</th>
+						<th>Fecha</th>
+						<th>Teléfono</th>
+						<th>Agencia Aduanal</th>
+						<th>Compañía Transportista</th>
+						<th>Tipo de Cliente</th>
+						<th>Contenedores</th>
+						<th>Tipo de Factura</th>
+						<th>Tipo de Servicio</th>
+						<th>Método de pago</th>
+						<th>Usuario</th>
+						<th>Comprobante</th>
+						<th>status</th>
+						<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						
+						<th>Localidad</th>
+						<th>Folio</th>
+						<th>Fecha</th>
+						<th>Teléfono</th>
+						<th>Agencia Aduanal</th>
+						<th>Compañía Transportista</th>
+						<th>Tipo de Cliente</th>
+						<th>Contenedores</th>
+						<th>Tipo de Factura</th>
+						<th>Tipo de Servicio</th>
+						<th>Método de pago</th>
+						<th>Usuario</th>
+						<th>Comprobante</th>
+						<th>status</th>
+						<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		
+		<div class="modal fade" id="newAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="newAppointmentModalLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addOrderModalLabel">Pre Salida </h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newAppointmentForm">
+					<input type="text" id="appointmentId" hidden=true>
+					<input type="text" id="containerId" hidden=true>
+					<input type="text" id="operation" hidden=true>
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+<!--	Cambiar propiedad -->
+									<label for="newDateAppointment" id="datelabel">Fecha de Evento</label>
+									<input type="date" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventType">Tipo de movimiento</label>
+									<select class="form-control" id="newEventType" onchange="inOrOut()">
+									<option value="1">SALIDA</option>
+									
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLocation">Localidad</label>
+									<select class="form-control" id="newLocation" disabled>
+									<option>AGUASCALIENTES</option>
+									<option>ALTAMIRA</option>
+									<option>ENSENADA</option>
+									<option>VERACRUZ</option>
+									<option>PANTACO</option>
+									<option>MANZANILLO</option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<!--<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Cliente</label>
+									<input type="text" class="form-control" id="newCustomer" required>
+								</div>
+							</div>-->
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newTelephone">Fecha de salida</label>
+									<input type="date" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomerType">Hora</label>
+									<input type="time" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newOrigin">Observaciones</label>
+									<input type="text" class="form-control" id="newOrigin" >
+								</div>
+							</div>
+					 		<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newOrigin">Notas</label>
+									<input type="text" class="form-control" id="newOrigin" >
+								</div>
+							</div>
+						</div>
+						
+						<div class="row" id="divOutPutData" hidden=true>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="nweBuque">Buque</label>
+									<input type="text" class="form-control" id="nweBuque" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newOrigin">PTO de procedencia</label>
+									<input type="text" class="form-control" id="newOrigin" >
+								</div>
+							</div>
+							
+						</div>
+						<br>
+						
+						<label>AGREGAR UNIDADES</label>
+						<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm" hidden=true id=divBooking>
+								<div class="form-group">
+									<label for="newBooking">booking</label>
+									<input type="text" class="form-control" id="newBooking" >
+								</div>
+							</div>
+							<div class="col-sm" hidden=true id=divContainerQuantity>
+								<div class="form-group">
+									<label for="bookingQuantity">Cant. de contenedores</label>
+									<input type="number" class="form-control" id=bookingQuantity >
+								</div>
+							</div>
+							<div class="col-sm" id="divContainers">
+								<div class="form-group">
+									<label for="newContainer">Unidad</label>
+									<input type="text" class="form-control" id="newContainer"  placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
+									
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerSize">Tamaño de la Unidad</label>
+									<select class="form-control" id="newContainerSize">
+									<option >20</option>
+									<option >40</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerSize">Estatus</label>
+									<select class="form-control" id="newContainerSize">
+									<option >Aprobado</option>
+									<option >Denegado</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCustomerType">Tipo de servicio</label>
+									<select class="form-control" id="newCustomerType" onchange="customerType()" >
+									<option value="1">MERCHANT</option>
+									<option value="2">CARRIER</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Compañía Transportista</label>
+									<input type="text" class="form-control" id="newCustomer" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+			
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newTelephone">Operador</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Eco</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Placas</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Cliente</label>
+									<select class="form-control" id="newContainerSize">
+									<option >WHIRPOOL</option>
+									<option >NISSAN</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Destino</label>
+									<select class="form-control" id="newContainerSize">
+									<option >ATM</option>
+									<option >AGS</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Sello</label>
+									<input type="text" class="form-control" id="newTelephone" placeholder="Ejem: XXXX1234567" maxlength="11">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">EIR</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Booking</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Haulage</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Remark</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+						</div>
+						</div>		
+				
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success">Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newPreExitModal" tabindex="-1" role="dialog" aria-labelledby="newPreExitModal" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addOrderModalLabel">Pre-Entrada </h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newAppointmentForm">
+					<input type="text" id="appointmentId" hidden=true>
+					<input type="text" id="containerId" hidden=true>
+					<input type="text" id="operation" hidden=true>
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+<!--	Cambiar propiedad -->
+									<label for="newDateAppointment" id="datelabel">Fecha de Evento</label>
+									<input type="date" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventType">Tipo de movimiento</label>
+									<select class="form-control" id="newEventType" >
+									<option value="1">Entrada</option>
+									
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLocation">Localidad</label>
+									<select class="form-control" id="newLocation" disabled>
+									<option>AGUASCALIENTES</option>
+									<option>ALTAMIRA</option>
+									<option>ENSENADA</option>
+									<option>VERACRUZ</option>
+									<option>PANTACO</option>
+									<option>MANZANILLO</option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<!--<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Cliente</label>
+									<input type="text" class="form-control" id="newCustomer" required>
+								</div>
+							</div>-->
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newTelephone">Fecha de Real</label>
+									<input type="date" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomerType">Hora</label>
+									<input type="time" class="form-control" id="dateAppointment"  min=""  >
+								</div>
+							</div>
+						</div>
+						<div class="row" id="divOutPutData" hidden=true>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="nweBuque">Buque</label>
+									<input type="text" class="form-control" id="nweBuque" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newOrigin">PTO de procedencia</label>
+									<input type="text" class="form-control" id="newOrigin" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newOrigin">Observaciones</label>
+									<input type="text" class="form-control" id="newOrigin" >
+								</div>
+							</div>
+						</div>
+						<br>
+						
+						<label>AGREGAR UNIDADES</label>
+						<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm" hidden=true id=divBooking>
+								<div class="form-group">
+									<label for="newBooking">booking</label>
+									<input type="text" class="form-control" id="newBooking" >
+								</div>
+							</div>
+							<div class="col-sm" hidden=true id=divContainerQuantity>
+								<div class="form-group">
+									<label for="bookingQuantity">Cant. de contenedores</label>
+									<input type="number" class="form-control" id=bookingQuantity >
+								</div>
+							</div>
+							<div class="col-sm" id="divContainers">
+								<div class="form-group">
+									<label for="newContainer">Unidad</label>
+									<input type="text" class="form-control" id="newContainer"  placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
+									
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerSize">Tamaño de la Unidad</label>
+									<select class="form-control" id="newContainerSize">
+									<option >20</option>
+									<option >40</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCustomerType">Origen</label>
+									<select class="form-control" id="newCustomerType" onchange="customerType()" >
+									<option value="1">AGS</option>
+									<option value="2">ATM</option>
+									<option value="2">VER</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Compañía Transportista</label>
+									<input type="text" class="form-control" id="newCustomer" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+			
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newTelephone">Operador</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Eco</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Placas</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Carta Porte</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">Pais</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Cliente</label>
+									<select class="form-control" id="newContainerSize">
+									<option >WHIRPOOL</option>
+									<option >NISSAN</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Destino</label>
+									<select class="form-control" id="newContainerSize">
+									<option >ATM</option>
+									<option >AGS</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newCustomer">Valido</label>
+									<select class="form-control" id="newContainerSize" disabled>
+									<option >ADMIN</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newInvoicingType">ITEM</label>
+									<input type="text" class="form-control" id="newTelephone" >
+								</div>
+							</div>
+						</div>
+						</div>		
+				
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success">Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="modal fade" id="inspectionModal" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="inspectionForm">
+					<div class="inspection-table">
+							<table id="inspectionTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>inspectionId</th>
+										<th>Container</th>
+										<th>Lado</th>
+										<th>Daño</th>
+										<th>Codigo de daño</th>
+										<th>Referencia</th>
+										<th>Tipo de cliente</th>
+										<th>Imagen</th>
+										<th>Costo</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>inspectionId</th>
+										<th>Container</th>
+										<th>Lado</th>
+										<th>Daño</th>
+										<th>Codigo de daño</th>
+										<th>Referencia</th>
+										<th>Tipo de cliente</th>
+										<th>Imagen</th>
+										<th>Costo</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="imageShowModal" tabindex="-1" role="dialog" aria-labelledby="imageShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: dark">
+						</button>
+					<form id="imageShowForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<img id="imagenPrevisualizacion" src="" width="100%" height="100%" >
+								</div>
+							</div>
+						</div>
+					</div>		
+					</form>
+			</div>
+		</div>
+		<script type="text/javascript" th:src="@{/js/preRegistration/preRegistration.js}"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<!-- <script type="text/javascript" th:src="@{/js/appointments/firma.js}"></script> -->
+	</section>
+</body>
+</html>

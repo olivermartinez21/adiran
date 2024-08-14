@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Unidades </title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>Unidades <span th:text="${loggedUser.warehouseId}"></span></h1>
+			 <input type="text" class="form-control" id="sapNumber" hidden=true>
+			 <input type="text" class="form-control" id="response" hidden=true>
+			 
+				<select class="form-control" id="newContainerSize" hidden=true>
+									<option value="1">20</option>
+									<option value="2">40</option>
+				</select>
+				<select class="form-control" id="newContainerType" hidden=true>
+									<option value="1">DRY CARGO</option>
+									<option value="2">REFEER</option>
+									<option value="3">GEN SET</option>
+				</select>
+				<select class="form-control" id="containerStatus" hidden=true>
+									<option value="1">POR INSPECCIONAR</option>
+									<option value="2">INSPECCIONADO</option>
+									<option value="3">EN TALLER</option>
+									<option value="4">LISTO</option>
+									<option value="5">VISTO BUENO</option>
+									<option value="7">PRUEBA TECNICA</option>
+									<option value="8">COMPLETO</option>
+				</select>
+				
+				<select class="form-control" id="newModelevent" hidden=true>
+									<option value=""></option>
+									<option value="1">Z20</option>
+									<option value="2">Z40</option>
+									<option value="3">22UT</option>
+									<option value="4">42UT</option>
+									<option value="5">22G1</option>
+									<option value="6">42G1</option>
+									<option value="7">30CL</option>
+									<option value="8">03CL</option> 
+									<option value="9">22R1</option> 
+									<option value="10">45R1</option> 
+									<option value="11">45G1</option> 
+									</select>
+			
+									
+									
+		</div>
+		<div class="container-table">
+		<div class="row">
+					<div class="col-sm-3">
+						<div class="form-group">
+						<h2> <span th:text="${loggedUser.userName}"></span></h2>
+						</div>
+					</div>
+				<table id="tableResumen" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th>Disponibles</th>
+						<th>Dañados</th>
+						<th>PPTI</th>
+						<th>Total Loss</th>
+						<th>Suma</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th></th>
+						<th></th>
+						<th>Disponibles</th>
+						<th>Dañados</th>
+						<th>PPTI</th>
+						<th>Total Loss</th>
+						<th>Suma</th>
+					</tr>
+				</tfoot>
+			</table>
+			</div>
+			</div>
+			<br>
+			<br>
+			<div class="container-table">
+			<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="startDate">Fecha inicial</label>
+									<input type="date" class="form-control" id="startDate"  min="" onchange="searchContainerByDate()">
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="lastDate">Fecha final</label>
+									<input type="date" class="form-control"  id="lastDate"  min="" onchange="searchContainerByDate()" >
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="locationFilter">Localidad</label>
+									<select class="form-control" id="locationFilter">
+									<option>Selecciona una opcion</option>
+									<option>VERACRUZ</option>
+									<option>AGUASCALIENTES</option>
+									<option>PANTACO</option>
+									<option>ENSENADA</option>
+									<option>ALTAMIRA</option>
+									<option>MANZANILLO</option>
+									<option>TODOS</option>
+									</select>
+								</div>
+							</div>
+							
+			</div>
+			<table id="containerTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>containerId</th>
+						<th>Contenedor</th>
+						<th>Tipo de Contenedor</th>
+						<th>Tamaño</th>
+						<th>Naviera</th>
+						<th>Estado</th>
+						<th>Clasificación</th>
+						<th>Estado</th>
+						<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>containerId</th>
+						<th>Contenedor</th>
+						<th>Tipo de Contenedor</th>
+						<th>Tamaño</th>
+						<th>Naviera</th>
+						<th>Estado</th>
+						<th>Clasificación</th>
+						<th>Estado</th>
+						<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<br>
+		<br>
+		<div class="modal fade" id="inspectionModal" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionModalLabel">INSPECCIONAR</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="inspectionContainerForm">
+					<input type="text" id="appointmentId" hidden=true>
+					<input type="text" id="inspectionId" hidden=true>
+					<input type="text" id="operation" hidden=true>
+					<input type="text" id="containerId" hidden=true>
+					<input type="text" id="containerName" hidden=true>
+					<input type="text" id="containerType" hidden=true>
+					<div class="modal-body modal-body-app">
+						<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newDateInspection">Fecha</label>
+									<input type="date" class="form-control" id="newDateInspection"  min="">
+								</div>
+							</div>
+							<div class="col-sm" id=divDiesel hidden=true>
+								<div class="form-group" >
+									<label for="newDiesel">Nivel de Diesel</label>
+									<input type="text" class="form-control" id="newDiesel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divVessel>
+								<div class="form-group" >
+									<label for="newVessel">Buque</label>
+									<input type="text" class="form-control" id="newVessel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divTravel>
+								<div class="form-group">
+									<label for="newTravel">Viaje</label>
+									<input type="text" class="form-control" id="newTravel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divDestOrigin>
+								<div class="form-group">
+									<label for="newTravel"><input name="cbipeliculas"  type="checkbox" id="destination" checked="checked" onchange="checkboxDestination()"/> Destino   
+									<input name="cbipeliculas" type="checkbox" id="origin" onchange="checkboxOrigin()"/> Procedencia</label>
+									<input type="text" class="form-control" id="newDestination" >
+									<input type="text" class="form-control" id="newOrigin" hidden=true>
+									
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippingCompany">Naviera</label>
+									<select class="form-control" id="newShippingCompany" disabled>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" id=divCms hidden=true>
+								<div class="form-group">
+									<label for="newCms">CMS</label>
+									<input type="text" class="form-control" id="newCms" >
+								</div>
+							</div>
+							<div class="col-sm" id=divAa>
+								<div class="form-group">
+									<label for="newAa">AA</label>
+									<input type="text" class="form-control" id="newAa" >
+								</div>
+							</div>
+							<div class="col-sm" id=divDefinition>
+								<div class="form-group">
+									<label for="newDefinition1">Definir</label>
+									<select class="form-control" id="newDefinition1">
+									<option value="1">ACERO</option>
+									<option value="2">STANDART</option>
+									<option value="3">FLAT</option>
+									<option value="4">REFORZADO</option>
+									<option value="5">OTRO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="containerConditionInspecction">Estado de la unidad</label>
+									<select class="form-control" id="containerConditionInspection" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+						<div class="col-sm" >
+								<div class="form-group">
+									<label for="containerClasificationInspecction">Grado de la unidad</label>
+									<select class="form-control" id="containerClasificationInspection" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newYear">Año</label>
+									<input type="text" class="form-control" id="newYear">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newAptTo">Apto Para</label>
+									<input type="text" class="form-control" id="newAptTo">
+								</div>
+							</div>
+						</div>
+							
+							
+						<div class="row" id="refferData" hidden=true>
+						<div class="col-sm" id=divChassis>
+								<div class="form-group">
+									<label for="newChasssis">Chassis</label>
+									<input type="text" class="form-control" id="newChasssis" >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newGenSet">GenSet</label>
+									<input type="text" class="form-control" id="newGenSet" >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newMark">Marca</label>
+									<input type="text" class="form-control" id="newMark" >
+								</div>
+							</div>
+							<div class="col-sm" id=divHours hidden=true>
+								<div class="form-group">
+									<label for="newHours">Horas</label>
+									<input type="text" class="form-control" id="newHours" >
+								</div>
+							</div>
+							<div class="col-sm" id=divSetPoint>
+								<div class="form-group">
+									<label for="newSetPoint">SetPoint</label>
+									<input type="text" class="form-control" id="newSetPoint" >
+								</div>
+							</div>
+							<div class="col-sm" id=divVentilation>
+								<div class="form-group">
+									<label for="newVentilation">Ventilacion</label>
+									<input type="text" class="form-control" id="newVentilation" >
+								</div>
+							</div>
+							</div>
+						<br>
+						<label>DETALLES DEL CONTENEDOR</label>
+						<div class="modal-body modal-body-app">
+						
+						<div class="row">
+							<div class="col-sm" id=divPart>
+								<div class="form-group">
+									<label for="newPart">Sección</label>
+									<select class="form-control" id="newPart" onchange="showComponents(this.value)" >
+									<option value="0">Selecciona una opcion</option>
+									</select> 
+								</div>
+							</div>
+							<div class="col-sm" id=divDamage>
+								<div class="form-group">
+									<label for="newComponentInspection">Componente</label>
+									<select class="form-control" id="newComponentInspection" >
+									</select>
+									<!-- <input type="text" class="form-control" id="newComponentInspection" name="example" list="newComponentInspectionList">
+									<datalist id="newComponentInspectionList" >
+									</datalist>-->
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDamage">Daño</label>
+									<select class="form-control" id="newDamage">
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newLocationInspection">Localización</label>
+									<input type="text" class="form-control" id="newLocationInspection" >
+								</div>
+							</div>
+							
+							
+						</div>
+						
+						
+							
+						<div class="row" >
+						
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newRepair">Métodos de Reparación</label>
+									<select class="form-control" id="newRepair">
+									<option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newReferent">Observaciones</label>
+									<input type="text" class="form-control" id="newReferent" >
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divInspectionCustomerType>
+								<div class="form-group">
+									<label for="inspectionCustomerType">Tipo de Cliente</label>
+									<select class="form-control" id="inspectionCustomerType" >
+									<option value="1">MERCHANT</option>
+									<option value="2">CARRIER</option>
+									</select>
+								</div>
+							</div>
+						<div class="col-sm" >
+								<div class="form-group">
+									<label for="newImage">Foto</label>
+									<input type="file"  class="form-control"  id="newImageCode" accept="image/*"  onchange="convertToBase64()">
+								  <img id="imagenPrevisualizacion" src="" hidden=true>
+								  <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+								</div>
+							</div>
+							
+						<!-- 	<div class="col-sm">
+								<div class="form-group">
+								 <button id="snap" type="button" class="form-control btn btn-dark" onclick="stopVideo()">Tomar</button>
+								 <br> <br>
+								 <button id="snaptake" type="button" class="form-control btn btn-dark" hidden =true onclick="playVideo()">Nueva Foto</button>
+								</div>
+								 <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+							</div>
+							<div class="form-group">
+								 <video id="video" playsinline autoplay width="100%" height="100%"></video>
+								</div>
+								<div class="form-group" hidden=true>
+								 <canvas id="canvas" width="1280" height="720"></canvas>
+								 
+								</div>   -->
+							</div>
+						</div>
+						<div class="inspecction-table">
+							<table id="inspectionTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>inspectionId</th>
+										<th>Sección</th>
+										<th>Componente</th>
+										<th>Daño</th>
+										<th>Localización</th>
+										<th>Método de reparación</th>
+										<th>Observaciones</th>
+										<th>Tipo de Cliente</th>
+										<th>Imagen</th>
+										<th>Opciones</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>inspectionId</th>
+										<th>Sección</th>
+										<th>Componente</th>
+										<th>Daño</th>
+										<th>Localización</th>
+										<th>Método de reparación</th>
+										<th>Observaciones</th>
+										<th>Tipo de Cliente</th>
+										<th>Imagen</th>
+										<th>Opciones</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newComents">Comentarios</label>
+									<textarea class="form-control" id="newComents" ></textarea>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="imageShowModal" tabindex="-1" role="dialog" aria-labelledby="imageShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: dark">
+						</button>
+					<form id="imageShowForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<img id="imagenPrevisualizacionForm" src="" width="100%" height="100%" >
+								</div>
+							</div>
+						</div>
+					</div>		
+					</form>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newContainerModal" tabindex="-1" role="dialog" aria-labelledby="newContainerModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Agregar Contenedor/Unidad</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newContainerForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerName">ID Unidad</label>
+									<input type="text" class="form-control" id="newContainerName" placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerDescription">Descripción</label>
+									<select class="form-control" id="newContainerDescription" onclick="setDescription()">
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newMarca">Marca</label>
+									<input type="text" class="form-control" id="newMarca">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Vin no° Serie</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Motor</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Titulo</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Distan. Ejes.</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+						<div class="col-sm" >
+								<div class="form-group">
+									<label for="newContainerTypeSave">Tipo Unidad</label>
+									<select class="form-control" id="newContainerTypeSave" onclick="setCodeDescription()" >
+									<option value="1">CHASSIS</option>
+									<option value="2">OPEN TOP</option>
+									<option value="3">DRY CARGO</option>
+									<option value="4">GENERATOR SET</option>
+									<option value="5">ISOTANQUES</option>
+									<option value="6">REEFER</option>
+									<option value="7">HIGH CUBE</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newStatus">Estado</label>
+									<input type="text" class="form-control" id="newStatus">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Placas</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">State</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippingConpanyContainer">ID Cliente / Naviera</label>
+									<select class="form-control" id="newShippingConpanyContainer">
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Capacidad</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Nuevo Evento</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newEventForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventType">Tipo de Evento</label>
+									<select class="form-control" id="newEventType">
+									<OPTION VALUE="1">GATE-IN</OPTION>
+									<OPTION VALUE="2">GATE-OUT</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerNameEvent">ID Unidad</label>
+									<input type="text" class="form-control" id="newContainerNameEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerTypeEvent">Tipo de unidad</label>
+									<select class="form-control" id="newContainerTypeEvent" disabled>
+									<option value="1">CHASSIS</option>
+									<option value="2">OPEN TOP</option>
+									<option value="3">DRY CARGO</option>
+									<option value="4">GENERATOR SET</option>
+									<option value="5">ISOTANQUES</option>
+									<option value="6">REEFER</option>
+									<option value="7">HIGH CUBE</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newModel">Nomenclatura</label>
+									<select class="form-control" id="newModel">
+									<option value=""></option>
+									<!-- <option value="2">42G1</option>
+									<option value="3">45G1</option>
+									<option value="4">22R1</option>
+									<option value="5">45R1</option>
+									<option value="6">30CL</option>
+									<option value="7">Z20</option>
+									<option value="8">Z40</option> -->
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="shippingCompanyEvent">propietario</label>
+									<select class="form-control" id="newShippingCompany" disabled>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventDate">Fecha del evento</label>
+									<input type="date" class="form-control" id="newEventDate"  min="" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkshop">Taller</label>
+									<input type="text" class="form-control" id="newWorkshop">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newNumEvent">NO° de Evento</label>
+									<input type="text" class="form-control" id="newNumEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">EIR</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransportCompany">Compañia Transportista</label>
+									<input type="text" class="form-control" id="newTransportCompany">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newYardLocation">Ubicación del patio</label>
+									<input type="text" class="form-control" id="newYardLocation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newStatusEvent">Estado</label>
+									<input type="text" class="form-control" id="newStatusEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDeliveryBy">Entregado por</label>
+									<input type="text" class="form-control" id="newDeliveryBy">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCustomerType">Tipo de cliente</label>
+									<select class="form-control" id="newCustomerType">
+									<OPTION VALUE="1">MERCHANT</OPTION>
+									<OPTION VALUE="2">CARRIER</OPTION>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newInspectedBy">Inspeccionado por</label>
+									<input type="text" class="form-control" id="newInspectedBy">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBillTo">Cobrar a</label>
+									<input type="text" class="form-control" id="newBillTo">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEstimateRequired">Estimado requ</label>
+									<select class="form-control" id="newEstimateRequired">
+									<OPTION VALUE="1">SI</OPTION>
+									<OPTION VALUE="2">NO</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLabelAcep">Etiqueta ACEP </label>
+									<input type="text" class="form-control" id="newLabelAcep">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newPlatesCsc">Placas CSC</label>
+									<input type="text" class="form-control" id="newPlatesCsc">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorName">Nombre del Operador</label>
+									<input type="text" class="form-control" id="newOperatorName">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newNumPlates">Numero de Placas</label>
+									<input type="text" class="form-control" id="newNumPlates">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorsLicence">Licencia del Operador</label>
+									<input type="text" class="form-control" id="newOperatorsLicence">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Unidad Asociada</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Unidad Alterna</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newContainerCondition">Estado de la unidad</label>
+									<select class="form-control" id="newContainerCondition" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerClasification">Grado de la unidad</label>
+									<select class="form-control" id="newContainerClasification" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Media Maniobra</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerContent">Contenido del contenedor</label>
+									<select class="form-control" id="newContainerContent">
+									<OPTION VALUE="1">LLENO</OPTION>
+									<OPTION VALUE="2">VACIO</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransmit">Transmitir</label>
+									<select class="form-control" id="newTransmit">
+									<OPTION VALUE="1">NO</OPTION>
+									<OPTION VALUE="2">SI</OPTION>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransportType">Tipo de Transporte</label>
+									<input type="text" class="form-control" id="newTransportType">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOriginPlace">Lugar de Origen</label>
+									<input type="text" class="form-control" id="newOriginPlace">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Horas Genset</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Diesel CM</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Prdido de venta Sap</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Factura Sap</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="estimateModal" tabindex="-1" role="dialog" aria-labelledby="estimateModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="estimateForm">
+					<div class="estimate-table">
+							<table id="estimateTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>Line</th>
+										<th>Dam.code </th>
+										<th>Loc</th>
+										<th>Comp</th>
+										<th>Repair</th>
+										<th>TLength</th>
+										<th>Width</th>
+										<th>UOM</th>
+										<th>Pty</th>
+										<th>Qty</th>
+										<th>Hrs</th>
+										<th>Labor</th>
+										<th>Material</th>
+										<th>Total</th>
+										<th>Moneda</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+									<th>Line</th>
+										<th>Dam</th>
+										<th>Loc</th>
+										<th>Comp</th>
+										<th>Repair</th>
+										<th>TLength</th>
+										<th>Width</th>
+										<th>UOM</th>
+										<th>Pty</th>
+										<th>Qty</th>
+										<th>Hrs</th>
+										<th>Labor</th>
+										<th>Material</th>
+										<th>Total</th>
+										<th>Moned</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+			<div class="modal fade" id="eventShowModal" tabindex="-1" role="dialog" aria-labelledby="eventShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="eventForm">
+					<div class="event-table">
+							<table id="eventTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>eventId</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+									<th>eventId</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="conditionModel" tabindex="-1" role="dialog" aria-labelledby="conditionModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="conditionForm">
+					<div class="modal-body modal-body-app">
+					<div class="row">
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="containerCondition">Estado de la unidad</label>
+									<select class="form-control" id="containerCondition" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="containerClasification">Grado de la unidad</label>
+									<select class="form-control" id="containerClasification" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+		
+		
+		
+		
+		<script type="text/javascript" th:src="@{/js/containers/containerClient.js}"></script>
+	</section>
+</body>
+</html>

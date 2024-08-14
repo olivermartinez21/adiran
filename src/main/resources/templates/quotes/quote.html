@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Estimados</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>Estimados <span th:text="${loggedUser.warehouseId}"></span></h1>
+		</div>
+		<input type="text" class="form-control" id="length" hidden=true>
+		<input type="text" class="form-control" id="width" hidden=true >
+		<input type="text" id="containerType" hidden=true>
+		
+		<select class="form-control" id="inspectionCustomerType" hidden=true>
+									<option value="1">MERCHANT</option>
+									<option value="2">CARRIER</option>
+		</select>
+		
+		<select class="form-control" id="newContainerDescription" hidden=true >
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+		</select>									
+		
+		<select class="form-control" id="shippingCompanyCatalog" hidden=true>
+				<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+		</select>	
+		
+		<select class="form-control" id="catComponent" hidden=true>
+				<option th:each="option : ${catComponent}" th:value="${option.componentId}" th:text="${option.component}"></option>
+		</select>		
+		
+		<select class="form-control" id="catDamage" hidden=true>
+				<option th:each="option : ${catDamage}" th:value="${option.damageId}" th:text="${option.description}"></option>
+		</select>	
+		
+		<select class="form-control" id="catRepair" hidden=true>
+				<option th:each="option : ${catRepair}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
+		</select>	
+		
+		 <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+		 
+		<select class="form-control" id="containerDescriptionQuote"hidden=true>
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+		</select>
+		
+		<select class="form-control" id="containerConditionQuote" hidden=true>
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+		</select>
+		 <input type="text" class="form-control" id="containerId" hidden=true>
+		  <input type="text" class="form-control" id="inspectionId" hidden=true>
+		  
+		  <select class="form-control" id="containerDescriptionQuoteCatalog" hidden=true>
+									<option value=1>Por crear</option>
+									<option value=2>Creado</option>
+									<option value=3>Aprobado</option>
+									<option value=4>Reparación Confirmada</option>
+									<option value=5>Actualizar  </option>
+									<option value=6>Cancelado</option>
+									<option value=7>Actualizado</option>
+									<option value=8>Rechazado</option>
+									<option value=9>Cerrado</option>
+									
+									</select>
+			<div class="container-table">
+			<table id="quoteTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<Th>N° </Th>
+										<Th>Unidad </Th>
+										<Th>Tipo De Unidad </Th>
+										<Th>Nomenclatura </Th>
+										<Th>Propietario </Th>
+										<Th>Estado De La Unidad</Th>
+										<Th>Número Del Estimado </Th>
+										<Th>Responsabilidad Del Daño </Th>
+										<Th>Cobrar A: </Th>
+										<th>status</th>
+										<Th>Creación O Modificacion Estimado</Th>
+										<Th>Estado Del Estimado</Th>
+										<Th>Editar Estado Del Estimado</Th>
+										<Th>Estado Del Estimado De La Naviera </Th>
+										<Th>Aprobación Del Cliente </Th>
+										<Th># Factura</Th>
+										<Th>Opciones</Th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<Th>N° </Th>
+										<Th>Unidad </Th>
+										<Th>Tipo De Unidad </Th>
+										<Th>Nomenclatura </Th>
+										<Th>Propietario </Th>
+										<Th>Estado De La Unidad</Th>
+										<Th>Número Del Estimado </Th>
+										<Th>Responsabilidad Del Daño </Th>
+										<Th>Cobrar A: </Th>
+										<th>status</th>
+										<Th>Creación O Modificacion Estimado</Th>
+										<Th>Estado Del Estimado</Th>
+										<Th>Editar Estado Del Estimado</Th>
+										<Th>Estado Del Estimado De La Naviera </Th>
+										<Th>Aprobación Del Cliente </Th>
+										<Th># Factura</Th>
+										<Th>Opciones</Th>
+															
+									</tr>
+								</tfoot>
+							</table>
+							
+							 <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+		</div>
+		
+		<div class="modal fade" id="quoteModel" tabindex="-1" role="dialog" aria-labelledby="quoteModelLabel" aria-hidden="true" style="overflow-y: scroll;" >
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Daños</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="quoteModelForm">
+					<div class="modal-body modal-body-app">
+					
+						<div class="row">
+					
+						<div class="col-sm" id=divConditionUnit hidden=true>
+								<div class="form-group">
+									<label for="quoteCondition">Estatus</label>
+									<select class="form-control" id="quoteCondition">
+									<option value=1>Por crear</option>
+									<option value=2>Creado</option>
+									<option value=3>Aprobado</option>
+									<option value=4>Reparación Confirmada</option>
+									<option value=5>Actualizar  </option>
+									<option value=6>Cancelado</option>
+									<option value=7>Actualizado</option>
+									
+									</select>
+								</div>
+							</div>
+							
+						</div>
+					
+					<div class="inspecction-table" id="divTable">
+							<table id="inspectionTable" class="table table-striped dt-responsive striped"  style="width: 100%;" >
+								<thead>
+									<tr>
+									    <th >id </th>
+										<th>Seccion </th>
+										<th>Componente</th>
+										<th>Daño</th>
+										<th>Método De Reparación</th>
+										<th>Largo</th>
+										<th>Ancho</th>
+										<th>Área Cm2</th>
+										<th>Profunidad </th>
+										<th>Responsabilidad Del Daño </th>
+										<th>Código De Localización</th> 
+										<th>Cantidad </th>
+										<th>Fabricante </th>
+										<th>Número De Parte Sap</th>
+										<th>Número De Parte</th>
+										<th>Descripcion De La Parte</th> 
+										<th>Codigo De Trabajo </th>
+										<th>Descripción De La Reparación</th> 
+										<th>Hrs</th>
+										<th>Labor</th>
+										<th>$ Material </th>
+										<th>Tarifa </th>
+										<th>Fotos </th>
+										<th>Observaciones</th>
+										<th>status</th>
+										<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button id="btAcept" type="submit" class="btn btn-success" hidden=true >Aceptar</button>
+						<button id=quotePrint type="button" class="btn btn-quote" hidden=true onclick="openPdf()">Imprimir Estimado</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="inspectionCapModel" tabindex="-1" role="dialog" aria-labelledby="inspectionCapModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Datos del daño</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="inspectionCapModelForm">
+					<div class="modal-body modal-body-app">
+					<input type="text" class="form-control" id="inspectionIdent" hidden="true">
+					<input type="text" class="form-control" id="preLabor" hidden="true">
+					<div class="row">
+					
+							<div class="col-sm" id=divConditionUnit>
+<!-- 								<div class="form-group"> -->
+<!-- 									<label for="newWorkCode">Codigo de trabajo</label> -->
+<!-- <!-- 			Comentario Momentaneo						<input type="text" class="form-control" id="newWorkCode" > -->
+<!-- 									<select class="form-control" name="select"> -->
+<!-- 									  <option value="786" selected>IW0 40Y</option> -->
+<!-- 									  <option value="789" >LCDHL</option> -->
+<!-- 									  <option value="790">LCDHLR</option> -->
+<!-- 									</select> -->
+<!-- 								</div> -->
+								
+								<div class="form-group">
+									<label for="newJobcode">Codigo de trabajo</label>
+									<input type="text" class="form-control" id="newWorkCode" name="example" list="newJobcodeList" onchange="myFunction()">
+									<datalist id="newJobcodeList"  >
+									 <option th:each="option : ${catJobcode}" th:value="${option.jobcodeRepair}" th:text="${option.jobcodeDescription}" th:data-id="${option.jobcodeId}" ></option>
+									</datalist>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newRepairDescription">Descripcion de la reparacion</label>
+									<input type="text" class="form-control" id="newRepairDescription" >
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="newHours">HRS</label>
+									<input type="text" class="form-control" id="newHours" >
+								</div>
+							</div>
+							
+						</div>
+						
+						<div class="row">
+					
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="newLabor">LABOR</label>
+									<input type="text" class="form-control" id="newLabor" >
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newMaterial">$ MATERIAL</label>
+									<input type="text" class="form-control" id="newMaterial">
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="newTarifa">Tarifa</label>
+									<input type="text" class="form-control" id="newTarifa">
+								</div>
+							</div>
+								<input type="text" class="form-control" id="newExchange" hidden=true>
+						</div>
+						
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="imageShowModal" tabindex="-1" role="dialog" aria-labelledby="imageShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: dark">
+						</button>
+					<form id="imageShowForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<img id="imagenPrevisualizacion" src="" width="100%" height="100%" >
+								</div>
+							</div>
+						</div>
+					</div>		
+					</form>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="quoteStatusModel" tabindex="-1" role="dialog" aria-labelledby="quoteStatusModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="quoteStatusModelForm">
+					<div class="modal-body modal-body-app">
+					
+					<div class="row">
+					
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="statusQuoteEdit">Estatus</label>
+									<select class="form-control" id="statusQuoteEdit">
+									<option value=1>Por crear</option>
+									<option value=2>Creado</option>
+									<option value=3 >Aprobado</option>
+									<option value=4 disabled>Reparación Confirmada</option>
+									<option value=5>Actualizar  </option>
+									<option value=6>Cancelado</option>
+									<option value=7>Actualizado</option>
+									<option value=8>Rechazado</option>
+									<option value=9>Cerrado</option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+			<div class="modal fade" id="addNewDamageModel" tabindex="-1" role="dialog" aria-labelledby="addNewDamageLabel" aria-hidden="true" > 
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="pregatelLabel">Daño</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="addNewDamageForm" >
+					<div class="modal-body modal-body-app">
+						
+						<div class="row">
+							<div class="col-sm" id=divPart>
+								<div class="form-group">
+									<label for="newPart">Sección</label>
+									<select class="form-control" id="newPart" oninput="showComponents()" disabled>
+									<option value="0">Selecciona una opcion</option>
+									</select> 
+								</div>
+							</div>
+							<div class="col-sm" id=divDamage>
+								<div class="form-group">
+									<label for="newComponentInspection">Componente</label>
+									
+									<select class="form-control" id="newComponentInspection2" oninput="saveComponent()"disabled>
+									<option th:each="option : ${catComponent}" th:value="${option.componentId}" th:text="${option.component}"></option>
+									</select>	
+									
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDamage">Daño</label>
+									<select class="form-control" id="newDamage" oninput="saveDamage()"disabled>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newLocationInspection">Localización</label>
+									<input type="text" class="form-control" id="newLocationInspection" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="row" >
+						
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newRepair">Métodos de Reparación</label>
+									<select class="form-control" id="newRepair"disabled>
+									<option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newReferent">Observaciones</label>
+									<input type="text" class="form-control" id="newReferent" disabled>
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divInspectionCustomerType>
+								<div class="form-group">
+									<label for="inspectionCustomerType">Responsabilidad del daño</label>
+									<select class="form-control" id="inspectionCustomerType" disabled>
+									<option value="1">MERCHANT</option>
+									<option value="2">CARRIER</option>
+									</select>
+								</div>
+							</div>
+						<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newImage">Foto</label>
+									<input type="file"  class="form-control"  id="newImageCode" accept="image/*"  multiple  oninput="addImageToTable()">
+								  <img id="imagenPrevisualizacion" src="" hidden=true>
+								  <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+								</div>
+							</div>
+							</div>
+							
+							<div class="row" >
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="largeInspection">Largo</label>
+									<input type="text" class="form-control" id="largeInspection"  disabled >
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="heigthInspection">Ancho</label>
+									<input type="text" class="form-control" id="heigthInspection"  disabled>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="depthInspection">Profundidad</label>
+									<input type="text" class="form-control" id="depthInspection"  disabled>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="otherLargeInspection">Largo</label>
+									<input type="text" class="form-control" id="otherLargeInspection" disabled >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="quantityInspection">Cantidad</label>
+									<input type="text" class="form-control" id="quantityInspection"  disabled>
+								</div>
+							</div>
+						</div>
+						</div>
+						
+						<div class="inspecction-table">
+							<table id="imageTableInspection" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>inspectionId</th>
+										<th>Imagen</th>
+										<th>Archivo</th>
+										<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+						
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:src="@{/js/quotes/quote.js}"></script>
+	</section>
+</body>
+</html>

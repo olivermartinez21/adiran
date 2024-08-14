@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MYRE</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+	
+	<div class="title-table">
+			<h1>Administración de Usuarios:</h1>
+		</div>
+		
+		<div class="container-table">
+			<table id="usersTable" class="table table-striped dt-responsive" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Usuario</th>
+						<th>Rol</th>
+						<th>Administrar</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Id</th>
+						<th>Usuario</th>
+						<th>Rol</th>
+						<th>Administrar</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		
+		<div class="modal fade" id="newUserModal" tabindex="-1" role="dialog" aria-labelledby="newUserModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newUserForm">
+					<div class="modal-body modal-body-app ">
+						<div class="form-group">
+							<label for="userName" class="label-text">Nombre de usuario</label>
+							<input type="text" class="form-control" id="userName" name="userName" required>
+						</div>
+						<div class="form-group">
+							<label for="clientCountryPhysical" class="label-text"> Rol Principal</label>
+							<select class="form-control" id="roleSelect" name="roleId" required>
+								<option value="">Seleccionar una opción</option>
+								<option th:each="option : ${roleCombo}" th:value="${option.roleId}" th:text="${option.roleName}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="password" class="label-text">Password</label>
+							<input type="password" class="form-control" id="password" name="password" required>
+						</div>
+						<div class="form-group">
+							<label for="passwordCnfirm" class="label-text">Confirmar Password</label>
+							<input type="password" class="form-control" id="passwordConfirm" name="passwordCnfirm" required>
+						</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary" >Guardar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newRoleModal" tabindex="-1" role="dialog" aria-labelledby="newRoleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="exampleModalLabel">Crear Usuario</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newRoleForm">
+					<div class="modal-body modal-body-app ">
+						<div class="form-group">
+							<label for="roleName" class="label-text">Nombre del Rol</label>
+							<input type="text" class="form-control" id="roleName" required>
+						</div>
+						<div class="form-group">
+							<label for="confirmRoleName" class="label-text">Confirmar Rol</label>
+							<input type="text" class="form-control" id="confirmRoleName" required>
+						</div>
+						
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary" >Guardar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="assignRoleModal" tabindex="-1" role="dialog" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="assignRoleModalLabel">Asignación de Rol</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="roleAssignForm">
+					<div class="modal-body modal-body-app ">
+						<div class="form-group">
+							<label for="userRoleSelect" class="label-text"> Usuario</label>
+							<select class="form-control" id="userRoleSelect" name="userId" required>
+								<option th:each="option : ${userCombo}" th:value="${option.userId}" th:text="${option.userName}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="roleAssignSelect" class="label-text"> Rol Principal</label>
+							<select class="form-control" id="roleAssignSelect" name="roleId" required>
+								<option value="">Seleccionar una opción</option>
+								<option th:each="option : ${roleCombo}" th:value="${option.roleId}" th:text="${option.roleName}"></option>
+							</select>
+						</div>
+						
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary" >Asignar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="removeRoleModal" tabindex="-1" role="dialog" aria-labelledby="removeRoleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="removeRoleModalLabel">Remover Rol</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="removeRoleForm">
+					<div class="modal-body modal-body-app ">
+						<div class="form-group">
+							<label for="removeRoleUserSelect" class="label-text"> Usuario</label>
+							<select class="form-control" id="removeRoleUserSelect" name="userId" required>
+								<option th:each="option : ${userCombo}" th:value="${option.userId}" th:text="${option.userName}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+							<div class="form-group">
+								<label for="removeRolSelect" class="label-text">Roles</label>
+								<select class="form-control" id="removeRolSelect" name="roleId" required></select>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-primary" >Guardar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:src="@{/js/administration/userAdministration.js}"></script>
+	</section>
+</body>
+</html>

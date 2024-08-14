@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ordenes de entrega</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>Ordenes de entrega <span th:text="${loggedUser.warehouseId}"></span></h1>
+			 <input type="text" class="form-control" id="sapNumber" hidden=true>
+		</div>
+		<input type="text" class="form-control" id="deliverOrderId" hidden=true>
+			<div class="container-table">
+			<table id="deliveryOrdersTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>Booking</th>
+						<th>Propietario</th>
+						<th>Tipo de Servicio</th>
+						<th>Unidades restantes para completar el booking</th>
+						<th>Opciones</th>
+						<th>assignmentID</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Booking</th>
+						<th>Propietario</th>
+						<th>Tipo de Servicio</th>
+						<th>Unidades restantes para completar el booking</th>
+						<th>Opciones</th>
+						<th>assignmentID</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div> 
+		
+	
+	<div class="modal fade" id="newDeliveryOrderlModal" tabindex="-1" role="dialog" aria-labelledby="newDeliveryOrderModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Crear una order de entrega</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newDeliveryOrderForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="billTo">Cobrar a</label>
+									<input type="text" class="form-control" id="billTo" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="carrierCompany">Compañia transportista</label>
+									<input type="text" class="form-control" id="carrierCompany" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="operator">Operador   </label>
+									<input type="text" class="form-control" id="operator">
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="economicNumber">Número del economico</label>
+									<input type="text" class="form-control" id="economicNumber">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="workOrder">Work Order / Carta Porte</label>
+									<input type="text" class="form-control" id="workOrder">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="quantityOfUnits">Cantidad de unidades</label>
+									<input type="number" class="form-control" id="quantityOfUnits">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Guardar</button>
+						<button type="button" class="btn btn-print" >Imprimir</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		<script type="text/javascript" th:src="@{/js/deliveryOrders/deliveryOrders.js}"></script>
+	</section>
+</body>
+</html>

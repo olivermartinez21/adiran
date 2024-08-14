@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Asignaciones</title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>Asignaciones <span th:text="${loggedUser.warehouseId}"></span></h1>
+		</div>
+		<select class="form-control" id="containerClasification"  hidden=true>
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+		<select class="form-control" id="containerCondition" hidden=true>
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+		<br>	
+		<div class="title-table">
+			<h2>Bookings / reserva </h2>
+		</div>
+		<div class="container-table" id="divAssigmentType">
+				<div class="row">
+					<div class="col-sm">
+						<div class="form-group">
+							<label for="orderListCmb">Tipo de asignaciones</label>
+							<select class="form-control" id="orderListCmb" name="orderList" onclick="showAssigments()">
+							<option>Selecciona una opcion</option>
+							<option>Asignaciones o booking</option>
+							<option>Asignaciones de unidades llenas</option>
+							</select>
+						</div>
+					</div>
+					</div>
+			</div>			
+			
+			<select class="form-control" id="statusSelect" name="orderList" hidden=true>
+							<option value=1>Abierto</option>
+							<option value=2>Autorizado</option>
+							<option value=3>Cancelado</option>
+							<option value=4>Cerrado</option>
+			</select>
+			<input type="text" class="form-control" id="assignmentId" hidden=true>
+		<div class="container-table"  id="divTableAssigment" hidden = true>
+			<table id="assignmentTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+					<th>ID</th>
+					<th>Tamaño de la unidad</th>
+					<th>Tipo de unidad</th>
+					<th>Booking </th>
+					<th>Propietario</th>
+					<th>Fecha de EDI</th>
+					<th>Fecha de vencimiento del booking</th>
+					<th>Cantidad de unidades</th>
+					<th>Estatus</th>
+					<th>Tecnologia</th>
+					<th>Ventilacion</th>
+					<th>Temperatura</th>
+					<th>Humedad</th>
+					<th>Co2</th>
+					<th>o2</th>
+					<th>Nitrogeno</th>
+					<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+					<th>ID</th>
+					<th>Tamaño de la unidad</th>
+					<th>Tipo de unidad</th>
+					<th>Booking </th>
+					<th>Propietario</th>
+					<th>Fecha de EDI</th>
+					<th>Fecha de vencimiento del booking</th>
+					<th>Cantidad de unidades</th>
+					<th>Estatus</th>
+					<th>Tecnologia</th>
+					<th>Ventilacion</th>
+					<th>Temperatura</th>
+					<th>Humedad</th>
+					<th>Co2</th>
+					<th>o2</th>
+					<th>Nitrogeno</th>
+					<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div> 
+		<br>
+		<!--<div class="title-table">
+			<h2>Ordenes de entrega </h2>
+		</div>
+		
+		 <div class="container-table">
+			<table id="deliveryOrdersTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>Booking</th>
+						<th>Propietario</th>
+						<th>Tipo de Servicio</th>
+						<th>Unidades restantes para completar el booking</th>
+						<th>Opciones</th>
+						<th>assignmentID</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Booking</th>
+						<th>Propietario</th>
+						<th>Tipo de Servicio</th>
+						<th>Unidades restantes para completar el booking</th>
+						<th>Opciones</th>
+						<th>assignmentID</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div> -->
+		
+		
+		<div class="container-table"  id="divTableAssigmentUnitFull" hidden = true>
+			<table id="assignmentUnitfullTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+					<th>ID</th>
+					<th>Número consecutivo</th>
+					<th>Unidad </th>
+					<th>Tamaño </th>
+					<th>planta-Destino</th>
+					<th>Anden</th>
+					<th>Fecha de entrega</th>
+					<th>Hora de entrega</th>
+					<th>Estatus</th>
+					<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+					<th>ID</th>
+					<th>Número consecutivo</th>
+					<th>Unidad </th>
+					<th>Tamaño </th>
+					<th>planta-Destino</th>
+					<th>Anden</th>
+					<th>Fecha de entrega</th>
+					<th>Hora de entrega</th>
+					<th>Estatus</th>
+					<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		
+		<div class="modal fade" id="newBookingModal" tabindex="-1" role="dialog" aria-labelledby="newBookingModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addBookinglLabel">Crear Booking o Reserva</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newBookingForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBooking">Booking</label>
+									<input type="text" class="form-control" id="newBooking" onkeyup="bookingValidation()">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippingConpanyBooking">Propietario</label>
+									<select class="form-control" id="newShippingConpanyBooking" disabled>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newFinalClientBooking">Cliente Final</label>
+									<select class="form-control" id="newFinalClientBooking">
+									<option th:each="option : ${catFinalClient}" th:value="${option.finalClientId}" th:text="${option.clientName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBilTo">Cobrar a</label>
+									<input type="text" class="form-control" id="newBilTo" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLocationBooking">Localidad</label>
+									<input type="text" class="form-control" id="newLocationBooking" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkOrderBooking">Work Order</label>
+									<input type="text" class="form-control" id="newWorkOrderBooking">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newExpirationDateBooking">Fecha de Expiracion</label>
+									<input type="date" class="form-control" id="newExpirationDateBooking">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newReleaseDateBooking">Fecha de Liberacion</label>
+									<input type="date" class="form-control" id="newReleaseDateBooking">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="newQuantityUnitsBookings">Cantidad de unidades</label>
+									<input type="number" class="form-control" id="newQuantityUnitsBookings">
+								</div>
+							</div>
+						</div>
+						<div class="container-table">
+							<table id="bookingInformation" class="table table-striped dt-responsive" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>ID</th>
+									<th>N°</th>
+									<th>Tipo </th>
+									<th>Tamaño </th>
+									<th>Calidad</th>
+									<th>Número de unidad</th>
+									<th>Temperatura (RF)</th>
+									<th>Ventilación (RF)</th>
+									<th>Humedad (RF)</th>
+									<th>CO2 (RF)</th>
+									<th>O2 (RF)</th>
+									<th>Nitrogeno</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+
+						<!-- <div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newQuantityUnits">Cantidad de unidades</label>
+									<input type="number" class="form-control" id="newQuantityUnits">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newFinalClient">Cliente Final</label>
+									<input type="text" class="form-control" id="newFinalClient">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLocation">Localidad</label>
+									<input type="text" class="form-control" id="newLocation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOwner">Propietario Cobrar a</label>
+									<input type="text" class="form-control" id="newOwner">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCondition">Estado</label>
+									<input type="text" class="form-control" id="newCondition">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWo">WO</label>
+									<input type="text" class="form-control" id="newWo">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newExpirationDate">Fecha de Expiracion</label>
+									<input type="date" class="form-control" id="newExpirationDate">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDateOfRelease">Fecha de Liberacion</label>
+									<input type="date" class="form-control" id="newDateOfRelease">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newObservations">Observaciones</label>
+									<input type="text" class="form-control" id="newObservations">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="technology">Tecnologia</label>
+									<input type="text" class="form-control" id="technology">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="ventilation">Ventilacion</label>
+									<input type="text" class="form-control" id="ventilation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="temperature">Temperatura</label>
+									<input type="text" class="form-control" id="temperature">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="humidity">Humedad</label>
+									<input type="text" class="form-control" id="humidity">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="co2">Co2</label>
+									<input type="text" class="form-control" id="co2">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="o2">O2</label>
+									<input type="text" class="form-control" id="o2">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="nitrogen">Nitrogeno</label>
+									<input type="text" class="form-control" id="nitrogen">
+								</div>
+							</div>
+						</div> -->
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="modal fade" id="newBookingFullModal" tabindex="-1" role="dialog" aria-labelledby="newBookingFullModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Crear Booking de unidad LLena</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newBookingFulForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="consecutiveNumber">Número consecutivo</label>
+									<input type="text" class="form-control" id="consecutiveNumber">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unit">Unidad</label>
+									<input type="text" class="form-control" id="unit">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="size">Tamaño</label>
+									<input type="text" class="form-control" id="size">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="plantDestination">planta-Destino</label>
+									<input type="text" class="form-control" id="plantDestination">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="platform">Anden</label>
+									<input type="text" class="form-control" id="platform">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="dateOfDelivery">Fecha de entrega</label>
+									<input type="date" class="form-control" id="dateOfDelivery">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="deliveryTime">Hora de entrega</label>
+									<input type="time" class="form-control" id="deliveryTime">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newDeliveryOrderlModal" tabindex="-1" role="dialog" aria-labelledby="newDeliveryOrderModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Crear una order de entrega</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newDeliveryOrderForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="billTo">Cobrar a</label>
+									<input type="text" class="form-control" id="billTo" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="carrierCompany">Compañia transportista</label>
+									<input type="text" class="form-control" id="carrierCompany" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="operator">Operador   </label>
+									<input type="text" class="form-control" id="operator">
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="economicNumber">Número del economico</label>
+									<input type="text" class="form-control" id="economicNumber">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="workOrder">Work Order / Carta Porte</label>
+									<input type="text" class="form-control" id="workOrder">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="quantityOfUnits">Cantidad de unidades</label>
+									<input type="number" class="form-control" id="quantityOfUnits">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+						<button type="button" class="btn btn-print" >Imprimir</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="modal fade" id="newAssigmentlModal" tabindex="-1" role="dialog" aria-labelledby="newAssigmentLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Assignar</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newAssigmentForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unitAssig">Unidad</label>
+									<input type="text" class="form-control" id="unitAssig">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="gradeQuality">Grado-Calidad</label>
+									<input type="text" class="form-control" id="gradeQuality">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="sizeAssig">Tamaño   </label>
+									<input type="text" class="form-control" id="sizeAssig">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="ventilationAssig">Ventilación </label>
+									<input type="text" class="form-control" id="ventilationAssig">
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="temperatureAssig">Temperatura</label>
+									<input type="text" class="form-control" id="temperatureAssig">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="humidityAssig">Humedad</label>
+									<input type="text" class="form-control" id="humidityAssig">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="co2Assig">CO2 </label>
+									<input type="text" class="form-control" id="co2Assig">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="o2Assig">O2 </label>
+									<input type="text" class="form-control" id="o2Assig">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+		<div class="modal fade" id="newBookingInformationModal" tabindex="-1" role="dialog" aria-labelledby="newBookingInformationLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Assignar</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newBookingInformationForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="noBookingInformation">N°</label>
+									<input type="text" class="form-control" id="noBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="typeBookingInformation">Tipo</label>
+									<input type="text" class="form-control" id="typeBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="sizeBookingInformation">Tamaño   </label>
+									<input type="text" class="form-control" id="sizeBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="qualityBookingInformation">Calidad</label>
+									<input type="text" class="form-control" id="qualityBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unitNumberBookingInformation">Numero de Unidad</label>
+									<input type="text" class="form-control" id="unitNumberBookingInformation">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="temperatureBookingInformation">Temperatura</label>
+									<input type="text" class="form-control" id="temperatureBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="ventilationBookingInformation">Ventilación </label>
+									<input type="text" class="form-control" id="ventilationBookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="humidityBookingInformation">Humedad</label>
+									<input type="text" class="form-control" id="humidityBookingInformation">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="co2BookingInformation">CO2 </label>
+									<input type="text" class="form-control" id="co2BookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="o2BookingInformation">O2 </label>
+									<input type="text" class="form-control" id="o2BookingInformation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="nitrogenBookingInformation">Nitrogeno </label>
+									<input type="text" class="form-control" id="nitrogenBookingInformation">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+		
+		<script type="text/javascript" th:src="@{/js/assignments/assignments.js}"></script>
+	</section>
+</body>
+</html>

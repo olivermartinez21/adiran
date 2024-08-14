@@ -1,0 +1,269 @@
+.modal-confirm {
+	color: #636363;
+	width: 325px;
+}
+
+.modal-confirm .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	background: #E0ECF8;
+}
+
+.modal-confirm .modal-header {
+	border-bottom: none;
+	position: relative;
+}
+
+.modal-confirm h4 {
+	text-align: center;
+	font-size: 26px;
+	margin: 30px 0 -15px;
+}
+
+.modal-confirm .form-control, .modal-confirm .btn {
+	min-height: 40px;
+	border-radius: 3px;
+}
+
+.modal-confirm .close {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+}
+
+.modal-confirm .modal-footer {
+	border: none;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 13px;
+}
+
+.modal-confirm .icon-box {
+	color: #fff;
+	position: absolute;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	top: -70px;
+	width: 95px;
+	height: 95px;
+	border-radius: 50%;
+	z-index: 9;
+	background: #82ce34;
+	padding: 15px;
+	text-align: center;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.modal-confirm .icon-box i {
+	font-size: 58px;
+	position: relative;
+	top: 3px;
+}
+
+.modal-confirm.modal-dialog {
+	margin-top: 80px;
+}
+
+.modal-confirm .btn {
+	color: #fff;
+	border-radius: 4px;
+	background: #82ce34;
+	text-decoration: none;
+	transition: all 0.4s;
+	line-height: normal;
+	border: none;
+}
+
+.modal-confirm .btn:hover, .modal-confirm .btn:focus {
+	background: #6fb32b;
+	outline: none;
+}
+
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+
+.modal-error {
+	color: #636363;
+	width: 325px;
+}
+
+.modal-error .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	background: #E0ECF8;
+}
+
+.modal-error .modal-header {
+	border-bottom: none;
+	position: relative;
+}
+
+.modal-error h4 {
+	text-align: center;
+	font-size: 26px;
+	margin: 30px 0 -15px;
+}
+
+.modal-error .form-control, .modal-error .btn {
+	min-height: 40px;
+	border-radius: 3px;
+}
+
+.modal-error .close {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+}
+
+.modal-error .modal-footer {
+	border: none;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 13px;
+}
+
+.modal-error .icon-box {
+	color: #fff;
+	position: absolute;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	top: -70px;
+	width: 95px;
+	height: 95px;
+	border-radius: 50%;
+	z-index: 9;
+	background: #ee0a63;
+	padding: 15px;
+	text-align: center;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.modal-error .icon-box i {
+	font-size: 58px;
+	position: relative;
+	top: 3px;
+}
+
+.modal-error.modal-dialog {
+	margin-top: 80px;
+}
+
+.modal-error .btn {
+	color: #fff;
+	border-radius: 4px;
+	background: #ee0a63;
+	text-decoration: none;
+	transition: all 0.4s;
+	line-height: normal;
+	border: none;
+}
+
+.modal-error .btn:hover, .modal-error .btn:focus {
+	background: red;
+	outline: none;
+}
+
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+
+.modal-body i {
+	font-size: 70%;
+	color: blue;
+}
+
+.modal-warning {
+	color: #636363;
+	width: 325px;
+}
+
+.modal-warning .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	background: #E0ECF8;
+}
+
+.modal-warning .modal-header {
+	border-bottom: none;
+	position: relative;
+}
+
+.modal-warning h4 {
+	text-align: center;
+	font-size: 26px;
+	margin: 30px 0 -15px;
+}
+
+.modal-warning .form-control, .modal-error .btn {
+	min-height: 40px;
+	border-radius: 3px;
+}
+
+.modal-warning .close {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+}
+
+.modal-warning .modal-footer {
+	border: none;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 13px;
+}
+
+.modal-warning .icon-box {
+	color: #fff;
+	position: absolute;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	top: -70px;
+	width: 95px;
+	height: 95px;
+	border-radius: 50%;
+	z-index: 9;
+	background: #edd400;
+	padding: 15px;
+	text-align: center;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.modal-warning .icon-box i {
+	font-size: 58px;
+	position: relative;
+	top: 3px;
+}
+
+.modal-warning.modal-dialog {
+	margin-top: 80px;
+}
+
+.modal-warning .btn {
+	color: #fff;
+	border-radius: 4px;
+	background: #edd400;
+	text-decoration: none;
+	transition: all 0.4s;
+	line-height: normal;
+	border: none;
+}
+
+.modal-warning .btn:hover, .modal-warning .btn:focus {
+	background: #c4a000;
+	outline: none;
+}
+
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+
+.btn-print {
+		background: #edd400;
+}

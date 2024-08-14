@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PRE GATE </title>
+</head>
+<body>
+	<section layout:fragment="content" th:remove="tag">
+		<div class="title-table">
+			<h1>PRE GATE <span th:text="${loggedUser.warehouseId}"></span></h1>
+			 <input type="text" class="form-control" id="sapNumber" hidden=true>
+			 <input type="text" class="form-control" id="response" hidden=true>
+			  <input type="text" class="form-control" id="dataINspectionTable" hidden=true>
+			  
+			  <input type="text" class="form-control" id="seccionSave" hidden=true>
+			  <input type="text" class="form-control" id="componentSave" hidden=true>
+			  <input type="text" class="form-control" id="damageSave" hidden=true>
+			  
+				<select class="form-control" id="newContainerType" hidden=true>
+									<option value="1">DRY CARGO</option>
+									<option value="2">REFEER</option>
+									<option value="3">GEN SET</option>
+				</select>
+				<select class="form-control" id="containerStatus" hidden=true>
+									<option value="1">POR INSPECCIONAR</option>
+									<option value="2">INSPECCIONADO</option>
+									<option value="3">EN TALLER</option>
+									<option value="4">LISTO</option>
+									<option value="5">VISTO BUENO</option>
+									<option value="7">PRUEBA TECNICA</option>
+									<option value="8">COMPLETO</option>
+				</select>
+				
+				<select class="form-control" id="newModelevent" hidden=true>
+									<option value=""></option>
+									<option value="1">Z20</option>
+									<option value="2">Z40</option>
+									<option value="3">22UT</option>
+									<option value="4">42UT</option>
+									<option value="5">22G1</option>
+									<option value="6">42G1</option>
+									<option value="7">30CL</option>
+									<option value="8">03CL</option> 
+									<option value="9">22R1</option> 
+									<option value="10">45R1</option> 
+									<option value="11">45G1</option> 
+					</select>
+					<select class="form-control" id="catComponent" hidden=true>
+					<option th:each="option : ${catComponent}" th:value="${option.componentId}" th:text="${option.component}"></option>
+					</select>			
+					
+					
+					<select class="form-control" id="catDamageNew" hidden=true>
+					<option th:each="option : ${catDamage}" th:value="${option.damageId}" th:text="${option.description}"></option>
+					</select>		
+					
+					<select class="form-control" id="newContainerTypeTable" hidden=true>
+									<option value="1">CHASSIS</option>
+									<option value="2">OPEN TOP</option>
+									<option value="3">DRY CARGO</option>
+									<option value="4">GENERATOR SET</option>
+									<option value="5">ISOTANQUES</option>
+									<option value="6">REEFER</option>
+									<option value="7">HIGH CUBE</option>
+					</select>
+					
+									
+		</div>
+			<div class="container-table">
+			<table id="containerTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+					<tr>
+						<th>containerId</th>
+						<th>Unidad</th>
+						<th>Tipo</th>
+						<th>Tamaño</th>
+						<th>Naviera</th>
+						<th>Estado</th>
+						<th>Clasificación</th>
+						<th>Estado</th>
+						<th>Opciones</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>containerId</th>
+						<th>Unidad</th>
+						<th>Tipo</th>
+						<th>Tamaño</th>
+						<th>Naviera</th>
+						<th>Estado</th>
+						<th>Clasificación</th>
+						<th>Estado</th>
+						<th>Opciones</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		
+		<div class="modal fade" id="inspectionModal" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel" aria-hidden="true" style="overflow-y: scroll;">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionModalLabel">Inspección</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="inspectionContainerForm">
+					<input type="text" id="appointmentId" hidden=true>
+					<input type="text" id="inspectionId" hidden=true>
+					<input type="text" id="operation" hidden=true>
+					<input type="text" id="containerId" hidden=true>
+					<input type="text" id="containerName" hidden=true>
+					<input type="text" id="containerType" hidden=true>
+					<input type="text" id="containerSize" hidden=true>
+					<input type="text" id="qualityEvent" hidden=true>
+					<div class="modal-body modal-body-app">
+						<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newDateInspection">Fecha</label>
+									<input type="date" class="form-control" id="newDateInspection"  min="">
+								</div>
+							</div>
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="containerConditionInspecction">Estado de la unidad</label>
+									<select class="form-control" id="containerConditionInspection" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="containerClasificationInspecction">Grado de la unidad</label>
+									<select class="form-control" id="containerClasificationInspection" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newModel">Nomenclatura</label>
+									<select class="form-control" id="newModel">
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divDiesel hidden=true>
+								<div class="form-group" >
+									<label for="newDiesel">Nivel de Diesel</label>
+									<input type="text" class="form-control" id="newDiesel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divVessel hidden=true>
+								<div class="form-group" >
+									<label for="newVessel">Buque</label>
+									<input type="text" class="form-control" id="newVessel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divTravel hidden=true>
+								<div class="form-group">
+									<label for="newTravel">Viaje</label>
+									<input type="text" class="form-control" id="newTravel" >
+								</div>
+							</div>
+							<div class="col-sm" id=divDestOrigin hidden=true>
+								<div class="form-group">
+									<label for="newTravel"><input name="cbipeliculas"  type="checkbox" id="destination" checked="checked" onchange="checkboxDestination()"/> Destino   
+									<input name="cbipeliculas" type="checkbox" id="origin" onchange="checkboxOrigin()"/> Procedencia</label>
+									<input type="text" class="form-control" id="newDestination" >
+									<input type="text" class="form-control" id="newOrigin" hidden=true>
+									
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+						<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newShippingCompany">Naviera</label>
+									<select class="form-control" id="newShippingCompany" disabled>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" id=divCms hidden=true>
+								<div class="form-group">
+									<label for="newCms">CMS</label>
+									<input type="text" class="form-control" id="newCms" >
+								</div>
+							</div>
+							<div class="col-sm" id=divAa hidden=true>
+								<div class="form-group">
+									<label for="newAa">AA</label>
+									<input type="text" class="form-control" id="newAa" >
+								</div>
+							</div>
+							<div class="col-sm" id=divDefinition hidden=true>
+								<div class="form-group">
+									<label for="newDefinition1">Definir</label>
+									<select class="form-control" id="newDefinition1">
+									<option value="1">ACERO</option>
+									<option value="2">STANDART</option>
+									<option value="3">FLAT</option>
+									<option value="4">REFORZADO</option>
+									<option value="5">OTRO</option>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row" id="refferInspectionData"hidden=true>
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newMarkInspection">Marca de frabricante</label>
+									<select class="form-control" id="newMarkInspection">
+									<option >Carrier</option>
+									<option >Termoking</option>
+									<option >Daikin</option>
+									<option >REStarCoolFORZADO</option>
+									<option >OTRO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="tecnologyInspection">Tecnologia </label>
+									<select class="form-control" id="tecnologyInspection">
+									<option >Estándar: Sin fabricantes</option>
+									<option >Atmosfera Controlada</option>
+									<option >XTEND FRESH</option>
+									<option >EXTRA FRESH</option>
+									<option >LIVENTUS</option>
+									<option >STARCARE</option>
+									<option >PURFRESH</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unitAsosiateInspection">Unidad Asociada</label>
+									<input type="text" class="form-control" id="unitAsosiateInspection" placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
+								</div>
+							</div>
+							
+						</div>
+						<div class="row" id="gensetInspectionData"hidden=true>
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newGenetatorTypeInspection">Tipo de generador</label>
+									<input type="text" class="form-control" id="newGenetatorTypeInspection" >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="horometroInspection">Horometro </label>
+									<input type="text" class="form-control" id="horometroInspection">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="dieselInpection">Diesel </label>
+									<input type="text" class="form-control" id="dieselInpection">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="unitAsosiateInspectiongenset">Unidad Asociada</label>
+									<input type="text" class="form-control" id="unitAsosiateInspectiongenset" placeholder="Ejem: XXXX1234567" size="11" maxlength="15" style="text-transform:uppercase">
+								</div>
+							</div>
+							
+						</div>
+						
+						<div class="row">
+						
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newYear">Año de la Unidad</label>
+									<input type="text" class="form-control" id="newYear">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newAptTo">Apto Para</label>
+									<input type="text" class="form-control" id="newAptTo">
+								</div>
+							</div>
+							
+						</div>
+							
+							
+						<div class="row" id="refferData" hidden=true>
+						<div class="col-sm" id=divChassis>
+								<div class="form-group">
+									<label for="newChasssis">Chassis</label>
+									<input type="text" class="form-control" id="newChasssis" >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newGenSet">GenSet</label>
+									<input type="text" class="form-control" id="newGenSet" >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newMark">Marca</label>
+									<input type="text" class="form-control" id="newMark" >
+								</div>
+							</div>
+							<div class="col-sm" id=divHours hidden=true>
+								<div class="form-group">
+									<label for="newHours">Horas</label>
+									<input type="text" class="form-control" id="newHours" >
+								</div>
+							</div>
+							<div class="col-sm" id=divSetPoint>
+								<div class="form-group">
+									<label for="newSetPoint">SetPoint</label>
+									<input type="text" class="form-control" id="newSetPoint" >
+								</div>
+							</div>
+							<div class="col-sm" id=divVentilation>
+								<div class="form-group">
+									<label for="newVentilation">Ventilacion</label>
+									<input type="text" class="form-control" id="newVentilation" >
+								</div>
+							</div>
+							</div>
+						<br>
+						<div class="inspecction-table">
+							<table id="inspectionTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>inspectionId</th>
+										<th>Sección</th>
+										<th>Componente</th>
+										<th>Daño</th>
+										<th>Localización</th>
+										<th>Método de reparación</th>
+										<th>Observaciones</th>
+										<th>Tipo de Cliente</th>
+										<th>Imagenes</th>
+										<th>largo</th>
+										<th>ancho</th>
+										<th>profundidad</th>
+										<th>largo</th>
+										<th>cantidad</th>
+										<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newComents">Comentarios</label>
+									<textarea class="form-control" id="newComents" ></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="name">Nombre del Operador</label>
+									<input type="text" class="form-control" id="name" required >
+								</div>
+							</div>
+														
+									<details id="appointmentNewData" class="contenedor">
+									<summary>Firma</summary>
+									<div class="contenedor">
+								
+										<div class="row">
+											<div class="col-sm">
+										 		<canvas id="draw-canvas" width="250" height="90" >No tienes un buen navegador.</canvas>
+										 	</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<input type="button" class="btn btn-dark" id="draw-submitBtn" value="Guardar Firma"></input>
+												<input type="button" class="btn btn-dark" id="draw-clearBtn" value="Limpiar Firma"></input>
+												<label hidden=true>Color</label >
+												<input type="color" id="color" hidden=true>
+												<label>Tamaño Puntero</label>
+												<input type="range" id="puntero" min="1"  max="5" width="10%">
+											</div>
+										</div>
+										<div class="row" hidden=true>
+											<div class="col-md-12">
+												<textarea id="draw-dataUrl" class="form-control" rows="5"></textarea>
+											</div>
+										</div>
+										<div class="contenedor"hidden=true>
+											<div class="col-md-12">
+												<img id="draw-image" src="" alt="Tu Imagen aparecera Aqui!"/>
+											</div>
+										</div>
+									</div>
+								</details>  
+							
+						</div>  
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button id="btnAceptar" type="submit" class="btn btn-success" disabled>Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="imageShowModal" tabindex="-1" role="dialog" aria-labelledby="imageShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: dark">
+						</button>
+					<form id="imageShowForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<img id="imagenPrevisualizacionForm" src="" width="100%" height="100%" >
+								</div>
+							</div>
+						</div>
+					</div>		
+					</form>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newContainerModal" tabindex="-1" role="dialog" aria-labelledby="newContainerModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Agregar Contenedor/Unidad</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newContainerForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group"  >
+									<label for="startDate">Fecha</label>
+									<input type="date" class="form-control" id="startDate"  min=""  disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerName">Unidad</label>
+									<input type="text" class="form-control" id="newContainerName" placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<button type="button" class="btn btn-primary" onclick="searchContainer()">Buscar unidad</button>
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newContainerSize" >Tamaño de la unidad</label>
+								<select class="form-control" id="newContainerSize" hidden=true>
+								<option>20</option>
+								<option>40</option>
+								</select>
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newMarca">Marca</label>
+									<input type="text" class="form-control" id="newMarca">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+						<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerDescription">Tipo de la unidad</label>
+									<select class="form-control" id="newContainerDescription" oninput="setDescription()" hidden=true>
+									<option value="1">CH</option>
+									<option value="2">OT</option>
+									<option value="3">DC</option>
+									<option value="4">GS</option>
+									<option value="5">IMO</option>
+									<option value="6">RF</option>
+									<option value="7">HC</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newContainerTypeSave">Descripción de la Unidad</label>
+									<select class="form-control" id="newContainerTypeSave" oninput="setCodeDescription()"  hidden=true>
+									<option value="1">CHASSIS</option>
+									<option value="2">OPEN TOP</option>
+									<option value="3">DRY CARGO</option>
+									<option value="4">GENERATOR SET</option>
+									<option value="5">ISOTANQUES</option>
+									<option value="6">REEFER</option>
+									<option value="7">HIGH CUBE</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newShippingConpanyContainer">Propietario</label>
+									<select class="form-control" id="newShippingConpanyContainer" hidden=true>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Vin no° Serie</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Motor</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Titulo</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Distan. Ejes.</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+						
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newStatus">Estado</label>
+									<input type="text" class="form-control" id="newStatus">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Placas</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">State</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Capacidad</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="addContainerlLabel">Nuevo Evento</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="newEventForm">
+					<div class="modal-body modal-body-app">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventType">Tipo de Evento</label>
+									<select class="form-control" id="newEventType">
+									<OPTION VALUE="1">GATE-IN</OPTION>
+									<OPTION VALUE="2">GATE-OUT</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerNameEvent">ID Unidad</label>
+									<input type="text" class="form-control" id="newContainerNameEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerTypeEvent">Tipo de unidad</label>
+									<select class="form-control" id="newContainerTypeEvent" disabled>
+									<option value="1">CHASSIS</option>
+									<option value="2">OPEN TOP</option>
+									<option value="3">DRY CARGO</option>
+									<option value="4">GENERATOR SET</option>
+									<option value="5">ISOTANQUES</option>
+									<option value="6">REEFER</option>
+									<option value="7">HIGH CUBE</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newModel">Nomenclatura</label>
+									<select class="form-control" id="newModel">
+									<!-- <option value="2">42G1</option>
+									<option value="3">45G1</option>
+									<option value="4">22R1</option>
+									<option value="5">45R1</option>
+									<option value="6">30CL</option>
+									<option value="7">Z20</option>
+									<option value="8">Z40</option> -->
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="shippingCompanyEvent">propietario</label>
+									<select class="form-control" id="newShippingCompany" disabled>
+									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEventDate">Fecha del evento</label>
+									<input type="date" class="form-control" id="newEventDate"  min="" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newWorkshop">Taller</label>
+									<input type="text" class="form-control" id="newWorkshop">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newNumEvent">NO° de Evento</label>
+									<input type="text" class="form-control" id="newNumEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">EIR</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransportCompany">Compañia Transportista</label>
+									<input type="text" class="form-control" id="newTransportCompany">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newYardLocation">Ubicación del patio</label>
+									<input type="text" class="form-control" id="newYardLocation">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newStatusEvent">Estado</label>
+									<input type="text" class="form-control" id="newStatusEvent" disabled>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDeliveryBy">Entregado por</label>
+									<input type="text" class="form-control" id="newDeliveryBy">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newCustomerType">Tipo de cliente</label>
+									<select class="form-control" id="newCustomerType">
+									<OPTION >Selecciona una opción</OPTION>
+									<OPTION VALUE="1">MERCHANT</OPTION>
+									<OPTION VALUE="2">CARRIER</OPTION>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newInspectedBy">Inspeccionado por</label>
+									<input type="text" class="form-control" id="newInspectedBy">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newBillTo">Cobrar a</label>
+									<input type="text" class="form-control" id="newBillTo">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newEstimateRequired">Estimado requ</label>
+									<select class="form-control" id="newEstimateRequired">
+									<OPTION VALUE="1">SI</OPTION>
+									<OPTION VALUE="2">NO</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newLabelAcep">Etiqueta ACEP </label>
+									<input type="text" class="form-control" id="newLabelAcep">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newPlatesCsc">Placas CSC</label>
+									<input type="text" class="form-control" id="newPlatesCsc">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorName">Nombre del Operador</label>
+									<input type="text" class="form-control" id="newOperatorName">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newNumPlates">Numero de Placas</label>
+									<input type="text" class="form-control" id="newNumPlates">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOperatorsLicence">Licencia del Operador</label>
+									<input type="text" class="form-control" id="newOperatorsLicence">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Unidad Asociada</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Unidad Alterna</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newContainerCondition">Estado de la unidad</label>
+									<select class="form-control" id="newContainerCondition" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerClasification">Grado de la unidad</label>
+									<select class="form-control" id="newContainerClasification" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Media Maniobra</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newContainerContent">Contenido del contenedor</label>
+									<select class="form-control" id="newContainerContent">
+									<OPTION VALUE="1">LLENO</OPTION>
+									<OPTION VALUE="2">VACIO</OPTION>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransmit">Transmitir</label>
+									<select class="form-control" id="newTransmit">
+									<OPTION VALUE="1">NO</OPTION>
+									<OPTION VALUE="2">SI</OPTION>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransportType">Tipo de Transporte</label>
+									<input type="text" class="form-control" id="newTransportType">
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newOriginPlace">Lugar de Origen</label>
+									<input type="text" class="form-control" id="newOriginPlace">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Horas Genset</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm"  hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Diesel CM</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Prdido de venta Sap</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+							<div class="col-sm" hidden=true>
+								<div class="form-group">
+									<label for="newContainer">Factura Sap</label>
+									<input type="text" class="form-control" id="newContainer">
+								</div>
+							</div>
+						</div>
+						
+					</div>		
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="estimateModal" tabindex="-1" role="dialog" aria-labelledby="estimateModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="estimateForm">
+					<div class="estimate-table">
+							<table id="estimateTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>Line</th>
+										<th>Dam.code </th>
+										<th>Loc</th>
+										<th>Comp</th>
+										<th>Repair</th>
+										<th>TLength</th>
+										<th>Width</th>
+										<th>UOM</th>
+										<th>Pty</th>
+										<th>Qty</th>
+										<th>Hrs</th>
+										<th>Labor</th>
+										<th>Material</th>
+										<th>Total</th>
+										<th>Moneda</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+									<th>Line</th>
+										<th>Dam</th>
+										<th>Loc</th>
+										<th>Comp</th>
+										<th>Repair</th>
+										<th>TLength</th>
+										<th>Width</th>
+										<th>UOM</th>
+										<th>Pty</th>
+										<th>Qty</th>
+										<th>Hrs</th>
+										<th>Labor</th>
+										<th>Material</th>
+										<th>Total</th>
+										<th>Moned</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+			<div class="modal fade" id="eventShowModal" tabindex="-1" role="dialog" aria-labelledby="eventShowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="eventForm">
+					<div class="event-table">
+							<table id="eventTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+									<th>eventId</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+									<th>eventId</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="conditionModel" tabindex="-1" role="dialog" aria-labelledby="conditionModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="conditionForm">
+					<div class="modal-body modal-body-app">
+					<div class="row">
+							<div class="col-sm" id=divConditionUnit>
+								<div class="form-group">
+									<label for="containerCondition">Estado de la unidad</label>
+									<select class="form-control" id="containerCondition" >
+									<option value="1">DISPONIBLE</option>
+									<option value="2">DAÑADO</option>
+									<option value="3">DAÑADO/PTI </option>
+									<option value="4">EVACUACION</option>
+									<option value="5">PTI</option>
+									<option value="6">BLOQUEADO/GX</option>
+									<option value="7">TOTAL LOOS</option>
+									<option value="8">VENTA</option>
+									<option value="9">ACCIDENTADO</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="containerClasification">Grado de la unidad</label>
+									<select class="form-control" id="containerClasification" >
+									<option value="1">A</option>
+									<option value="2">B</option>
+									<option value="3">C</option>
+									<option value="4">BL</option>
+									<option value="5">D</option>
+									<option value="6">FS</option>
+									<option value="7">FX</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="pregateModel" tabindex="-1" role="dialog" aria-labelledby="pregateModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="pregatelLabel">Pre Gate</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="pregateForm">
+					<div class="modal-body modal-body-app">
+					<div class="row">
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newCondition">Condición</label>
+									<select class="form-control" id="newCondition" >
+									<option>VACIO</option>
+									<option>LLENO</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="typeServicePregate">Tipo de servicio</label>
+									<select class="form-control" id="typeServicePregate" >
+									<option>MERCHANT</option>
+									<option>CARRIER</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newBillToPregate">Cobrar a</label>
+									<input type="text" class="form-control" id="newBillToPregate" name="example" list="newAgencyList">
+									<datalist id="newAgencyList" >
+									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm" hidden=true id="divOriginPregate">
+								<div class="form-group">
+									<label for="newOriginPregate">Origen</label>
+									<select class="form-control" id="newOriginPregate" >
+									<option>VERACRUZ</option>
+									<option>ALTAMIRA</option>
+									<option>MANZANILLO</option>
+									<option>TMM</option>
+									</select>
+								</div>
+							</div>
+					</div>
+					<div class="row">
+							<div class="col-sm" hidden=true id="divDestinityPregate">
+								<div class="form-group" >
+									<label for="newDestinyPregate">Planta-Destino</label>
+									<select class="form-control" id="newDestinyPregate" >
+									<option>NISSAN 1</option>
+									<option>NISSAN 2</option>
+									<option>JATCO 1</option>
+									<option>JATCO 2</option>
+									<option>COMPAS</option>
+									<option>INFINITI</option>
+									<option>DAIMLER</option>
+									<option>TMM</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newTransportCompanyPregate">Empresa Transportista</label>
+									<input type="text" class="form-control" id="newTransportCompanyPregate" name="example" list="newTransportCompanyList">
+									<datalist id="newTransportCompanyList" >
+									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+									</datalist>
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newBuquePregate">Buque</label>
+									<input type="text" class="form-control" id="newBuquePregate">
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newBlPregate">BL</label>
+									<input type="text" class="form-control" id="newBlPregate">
+								</div>
+							</div>
+					
+					</div>
+					<div class="row">
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newOperatorNamePregate">Nombre del Operador</label>
+									<input type="text" class="form-control" id="newOperatorNamePregate">
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newPlate">Placas del transporte</label>
+									<input type="text" class="form-control" id="newPlate">
+								</div>
+							</div>
+							<div class="col-sm"  >
+								<div class="form-group">
+									<label for="newEconomicNumber">Número del económico</label>
+									<input type="text" class="form-control" id="newEconomicNumber">
+								</div>
+							</div>
+					</div>
+						
+					</div>
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+		
+		<div class="modal fade" id="addNewDamageModel" tabindex="-1" role="dialog" aria-labelledby="addNewDamageLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="pregatelLabel">Daño</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="addNewDamageForm">
+					<div class="modal-body modal-body-app">
+						
+						<div class="row">
+							<div class="col-sm" id=divPart>
+								<div class="form-group">
+									<label for="newPart">Sección</label>
+									<select class="form-control" id="newPart" oninput="showComponents()" >
+									<option value="0">Selecciona una opcion</option>
+									</select> 
+								</div>
+							</div>
+							<div class="col-sm" id=divDamage>
+								<div class="form-group">
+									<label for="newComponentInspection">Componente</label>
+									<select class="form-control" id="newComponentInspection2" oninput="saveComponent()" hidden="true">
+									<option th:each="option : ${catComponent}" th:value="${option.componentId}" th:text="${option.component}"></option>
+									</select>	
+									
+									 <select class="form-control" id="newComponentInspection"  oninput="saveComponent()">
+									</select>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newDamage">Daño</label>
+									<select class="form-control" id="newDamage" oninput="saveDamage()">
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="newLocationInspection">Localización</label>
+									<input type="text" class="form-control" id="newLocationInspection" >
+								</div>
+							</div>
+							
+							
+						</div>
+						
+						
+							
+						<div class="row" >
+						
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newRepair">Métodos de Reparación</label>
+									<select class="form-control" id="newRepair">
+									<option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newReferent">Observaciones</label>
+									<input type="text" class="form-control" id="newReferent" >
+								</div>
+							</div>
+							
+							<div class="col-sm" id=divInspectionCustomerType>
+								<div class="form-group">
+									<label for="inspectionCustomerType">Responsabilidad del daño</label>
+									<select class="form-control" id="inspectionCustomerType" >
+									<OPTION >Selecciona una opción</OPTION>
+									<OPTION VALUE="1">MERCHANT</OPTION>
+									<OPTION VALUE="2">CARRIER</OPTION>
+									</select>
+								</div>
+							</div>
+						<div class="col-sm" >
+								<div class="form-group">
+									<label for="newImage">Foto</label>
+									<input type="file"  class="form-control"  id="newImageCode" accept="image/*"  multiple  oninput="addImageToTable()">
+								  <img id="imagenPrevisualizacion" src="" hidden=true>
+								  <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
+								</div>
+							</div>
+							</div>
+							
+							<div class="row" >
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="largeInspection">Largo (mm,cm,mts)</label>
+									<input type="text" class="form-control" id="largeInspection"   >
+								</div>
+							</div>
+							
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="heigthInspection">Ancho (mm,cm,mts)</label>
+									<input type="text" class="form-control" id="heigthInspection"  >
+									
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="depthInspection">Profundidad (mm,cm,mts)</label>
+									<input type="text" class="form-control" id="depthInspection"  >
+								</div>
+							</div>
+							
+							<div class="col-sm" >
+								<div class="form-group">
+									<label for="otherLargeInspection">Largo (mm,cm,mts)</label>
+									<input type="text" class="form-control" id="otherLargeInspection"  >
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="quantityInspection">Cantidad</label>
+									<input type="text" class="form-control" id="quantityInspection"  >
+								</div>
+							</div>
+						</div>
+						</div>
+						
+						<div class="inspecction-table">
+							<table id="imageTableInspection" class="table table-striped dt-responsive striped" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>inspectionId</th>
+										<th>Imagen</th>
+										<th>Archivo</th>
+										<th>Opciones</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+						
+					<div class="modal-footer modal-footer-app">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+						<button type="submit" id="btnDamage" class="btn btn-success" >Aceptar</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+		
+		
+		<script type="text/javascript" th:src="@{/js/containers/preGate.js}"></script>
+		<script type="text/javascript" th:src="@{/js/checkdigit.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/appointments/firma.js}"></script>
+	</section>
+</body>
+</html>

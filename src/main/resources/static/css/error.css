@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Luckiest+Guy|Oswald');
+
+body {
+  background-color: #333333;
+  width: 98%;
+  text-align: center;
+  color: #E34724;
+  font-family: Oswald;
+}
+h1 {
+  color: white;
+  font-size: 200px;
+  font-weight: 100;
+  margin-top: 25vh;
+  margin-bottom: 10px;
+  text-decoration: underline;  
+  font-family: Luckiest Guy;
+}
+
+h2 {
+  font-size: 50px;
+  margin-top: -10px;
+}
+
+h3 {
+  font-size: 30px;
+}
+
+h3 a {
+	color: black;
+}
+
+h4 {
+  font-size: 25px;
+}
+
+h4 a {
+  color: #00fffa;  
+}
+
+.container 
+{
+    height: 100%;
+    width:100%;
+    background-image: url("images/dinner-table-444434_1920.jpg");
+	background-size: cover;
+	background-repeat:no-repeat;    
+}
+.container-box
+{
+	display:inline-block; 
+	padding:10px; 
+	background: rgba(255, 255, 255, .8);
+	border: 1px solid #fff;	
+	position: fixed;
+  	top: 55%;
+  	left: 0;
+
+}
+
+.modal-content
+{
+	background: rgba(255, 255, 255, .7);	
+}
+
+
+.rotated
+{
+	-moz-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    -webkit-transform:rotate(-90deg);
+    transform-origin: top left;  
+}
+
+.contact-modal {
+	background: rgba(255, 255, 255, .7);	
+}
