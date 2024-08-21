@@ -292,18 +292,18 @@ function validationStatus(data){
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
 			
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "hola";
-					}},
-			{ data: "inspectionId", visible: false , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "hola";
+//					}},
+//			{ data: "inspectionId", visible: false , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},	
 			{ data: "inspectionId", visible: true , render : function(data) {
 						return "";
 					}},
@@ -691,7 +691,7 @@ function calcularLabor(){
 	var operacionLabor = preFloat*newFloat;
 	
 	console.log(operacionLabor)
-	$("#newLabor").val(operacionLabor);
+	$("#newLabor").val(Math.round(operacionLabor));
 	
 	calcularTarifa()
 }
@@ -707,5 +707,5 @@ function calcularTarifa(){
 	
 	var calcularTarifa = parseLabor+parseMaterial;
 	
-	$("#newTarifa").val(calcularTarifa);
+	$("#newTarifa").val(Math.round(calcularTarifa));
 }

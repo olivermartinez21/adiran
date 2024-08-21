@@ -139,7 +139,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Daños</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Daños Registrados a Unidad</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -183,10 +183,10 @@
 										<th>Responsabilidad Del Daño </th>
 										<th>Código De Localización</th> 
 										<th>Cantidad </th>
-										<th>Fabricante </th>
-										<th>Número De Parte Sap</th>
-										<th>Número De Parte</th>
-										<th>Descripcion De La Parte</th> 
+<!-- 										<th>Fabricante </th> -->
+<!-- 										<th>Número De Parte Sap</th> -->
+<!-- 										<th>Número De Parte</th> -->
+<!-- 										<th>Descripcion De La Parte</th>  -->
 										<th>Codigo De Trabajo </th>
 										<th>Descripción De La Reparación</th> 
 										<th>Hrs</th>
@@ -250,14 +250,14 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newRepairDescription">Descripcion de la reparacion</label>
-									<input type="text" class="form-control" id="newRepairDescription" >
+									<input type="text" class="form-control" id="newRepairDescription" disabled>
 								</div>
 							</div>
 							
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
 									<label for="newHours">HRS</label>
-									<input type="text" class="form-control" id="newHours" >
+									<input type="text" class="form-control" id="newHours" disabled>
 								</div>
 							</div>
 							
@@ -268,21 +268,21 @@
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
 									<label for="newLabor">LABOR</label>
-									<input type="text" class="form-control" id="newLabor" >
+									<input type="text" class="form-control" id="newLabor" disabled>
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newMaterial">$ MATERIAL</label>
-									<input type="text" class="form-control" id="newMaterial">
+									<input type="text" class="form-control" id="newMaterial" disabled>
 								</div>
 							</div>
 							
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
 									<label for="newTarifa">Tarifa</label>
-									<input type="text" class="form-control" id="newTarifa">
+									<input type="text" class="form-control" id="newTarifa" disabled>
 								</div>
 							</div>
 								<input type="text" class="form-control" id="newExchange" hidden=true>

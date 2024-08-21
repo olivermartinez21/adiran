@@ -632,7 +632,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="unitTypeEvent">Tipo</label>
-									<select class="form-control" id="unitTypeEvent">
+									<select class="form-control" id="unitTypeEvent" disabled>
 									<option value="1">CHASSIS</option>
 									<option value="2">OPEN TOP</option>
 									<option value="3">DRY CARGO</option>
@@ -646,7 +646,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="qualityevent">Calidad</label>
-									<select class="form-control" id="qualityevent" >
+									<select class="form-control" id="qualityevent" disabled>
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<option value="3">DAÑADO/PTI </option>
@@ -662,7 +662,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="conditionEvent">Condición</label>
-									<select class="form-control" id="conditionEvent" >
+									<select class="form-control" id="conditionEvent" disabled>
 									<option value="1">A</option>
 									<option value="2">B</option>
 									<option value="3">C</option>
@@ -678,7 +678,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="propietaryEvent">Propietario</label>
-									<select class="form-control" id="propietaryEvent">
+									<select class="form-control" id="propietaryEvent" disabled>
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>
 								</div>
@@ -710,14 +710,14 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="nomenclaturaEvent">Nomenclatura</label>
-										<select class="form-control" id="nomenclaturaEvent">
+										<select class="form-control" id="nomenclaturaEvent" disabled>
 									</select>
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="serviceTypeEvent">Tipo de servicio</label>
-									<select class="form-control" id="serviceTypeEvent">
+									<select class="form-control" id="serviceTypeEvent" disabled>
 									<OPTION >MERCHANT</OPTION>
 									<OPTION >CARRIER</OPTION>
 									</select>

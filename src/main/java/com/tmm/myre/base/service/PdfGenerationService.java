@@ -1277,8 +1277,8 @@ public class PdfGenerationService implements IPdfGenerationService {
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 			
-			Phrase p = new Phrase("Av. Paseo de la Reforma No.296 piso 19 Col. Juárez C.P.06600 Delegación:\r\n"
-					+ "Cuauhtémoc, Ciudad de México. Tel: (55) 5629 8866\r\n", regularBlack);
+			Phrase p = new Phrase("Carretera Panamericana km 74 Sur Parque industrial ALTEC \r\n"
+					+ "Aguascalientes, Aguascalientes C.P. 20290. TEL: (44) 9971 1252\r\n", regularBlack);
 			
 			hcell = new PdfPCell(p);
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);

@@ -456,6 +456,18 @@ function addNewContainer() {
 			});*/
 	eventDateValidator();
 	$("#newContainerName").val("")
+	
+				
+	
+				$("#newContainerSize").attr("hidden", true);
+				$("#newContainerDescription").attr("hidden", true);
+				$("#newShippingConpanyContainer").attr("hidden", true);
+				$("#newContainerTypeSave").attr("hidden", true);
+	
+				$("#newContainerSize").attr("disabled", false);
+				$("#newContainerDescription").attr("disabled", false);
+				$("#newShippingConpanyContainer").attr("disabled", false);
+				$("#newContainerTypeSave").attr("disabled", false);
 	$("#newContainerModal").modal("show");
 	}
 	
@@ -537,7 +549,7 @@ function configDataTablePregate(){
 				button:{
 					
 	                tag:"button",
-	                className:"btn btn-dark"
+	                className:"btn btn-info"
 	            },
 			}},
 			ajax: {
@@ -635,7 +647,7 @@ function configDataTable() {
 				button:{
 					
 	                tag:"button",
-	                className:"btn btn-dark"
+	                className:"btn btn-info"
 	            },
 			}},
 			ajax: {
@@ -1870,9 +1882,14 @@ function searchContainer(){
 				document.getElementById("newContainerTypeSave").removeAttribute("hidden");
 				document.getElementById("newShippingConpanyContainer").removeAttribute("hidden");
 				
-				$("#newContainerSize").val()
-				$("#newContainerDescription").val()
-				$("#newShippingConpanyContainer").val()
+				$("#newContainerSize").val();
+				$("#newContainerDescription").val();
+				$("#newShippingConpanyContainer").val();
+				
+				$("#newContainerSize").attr("disabled", false);
+				$("#newContainerDescription").attr("disabled", false);
+				$("#newShippingConpanyContainer").attr("disabled", false);
+				$("#newContainerTypeSave").attr("disabled", false);
 			
 			Swal.fire("", "No hay informacion de la unidad", "");
 			} else{
@@ -1880,10 +1897,13 @@ function searchContainer(){
 				document.getElementById("newContainerDescription").removeAttribute("hidden");
 				document.getElementById("newContainerTypeSave").removeAttribute("hidden");
 				document.getElementById("newShippingConpanyContainer").removeAttribute("hidden");
+				
+				
 			
-				$("#newContainerSize").val(response.containerSize)
-				$("#newContainerDescription").val(response.containerType)
-				$("#newShippingConpanyContainer").val(response.shippingCompany)
+				$("#newContainerSize").val(response.containerSize).attr("disabled", true);
+				$("#newContainerDescription").val(response.containerType).attr("disabled", true);
+				$("#newShippingConpanyContainer").val(response.shippingCompany).attr("disabled", true);
+				$("#newContainerTypeSave").attr("disabled", true);
 				
 			Swal.fire("", "Unidad encontrada", "");
 			setDescription()
