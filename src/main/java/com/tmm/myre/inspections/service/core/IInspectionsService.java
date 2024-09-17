@@ -36,4 +36,6 @@ public interface IInspectionsService {
 	ResponseManagement changeStatus(ContainerDto contianerDto)throws ConverterException;
 
 	ResponseManagement deleteInspection(String inspectionId) throws ConverterException;
+
+	ResponseManagement requestInspection(String containerId);
 }

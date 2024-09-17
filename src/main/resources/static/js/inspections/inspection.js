@@ -384,24 +384,24 @@ function newDamage(data){
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
 			
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: false , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: false , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},	
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},
+//			{ data: "inspectionId", visible: true , render : function(data) {
+//						return "";
+//					}},	
 			{ data: "inspectionId", visible: true , render : function(data) {
 						return "";
 					}},

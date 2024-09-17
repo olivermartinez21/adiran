@@ -74,10 +74,11 @@
 				<thead>
 					<tr>
 						<th>containerId</th>
+						<th>registerDate</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
 						<th>Tamaño</th>
-						<th>Naviera</th>
+						<th>Propietario</th>
 						<th>Estado</th>
 						<th>Clasificación</th>
 						<th>Estado</th>
@@ -87,10 +88,11 @@
 				<tfoot>
 					<tr>
 						<th>containerId</th>
+						<th>registerDate</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
 						<th>Tamaño</th>
-						<th>Naviera</th>
+						<th>Propietario</th>
 						<th>Estado</th>
 						<th>Clasificación</th>
 						<th>Estado</th>
@@ -132,10 +134,10 @@
 									<select class="form-control" id="containerConditionInspection" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
-									<option value="3">DAÑADO/PPTI </option>
-									<option value="5">PPTI</option>
+<!-- 									<option value="3">DAÑADO/PPTI </option> -->
+<!-- 									<option value="5">PPTI</option> -->
 									<option value="6">EVACUACION</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -295,7 +297,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="newYear">Año de la Unidad</label>
-									<input type="text" class="form-control" id="newYear">
+									<input type="number" min="1900" max="2100" step="1" pattern="\d{4}" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength)" class="form-control" id="newYear">
 								</div>
 							</div>
 							<div class="col-sm">
@@ -365,6 +367,10 @@
 										<th>profundidad</th>
 										<th>largo</th>
 										<th>cantidad</th>
+										<th>unidadLargo</th>
+										<th>unidadAncho</th>
+										<th>unidadProfundo</th>
+										<th>unidadLargo</th>
 										<th>Opciones</th>
 									</tr>
 								</thead>
@@ -421,11 +427,12 @@
 						</div>  
 						
 					</div>		
+					
+					</form>
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-						<button id="btnAceptar" type="submit" class="btn btn-success" disabled>Aceptar</button>
+						<button id="btnAceptar" type="button" class="btn btn-success" onclick="requestDamage()" disabled>Aceptar</button>
 					</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -1135,6 +1142,7 @@
 									<select class="form-control" id="newOriginPregate" >
 									<option>VERACRUZ</option>
 									<option>ALTAMIRA</option>
+									<option>LAZARO CARDENAS</option>
 									<option>MANZANILLO</option>
 									<option>TMM</option>
 									</select>
@@ -1153,6 +1161,9 @@
 									<option>COMPAS</option>
 									<option>INFINITI</option>
 									<option>DAIMLER</option>
+									<option>APRC</option>
+									<option>RETOÑO</option>
+									<option>MERCEDES BENZ</option>
 									<option>TMM</option>
 									</select>
 								</div>
@@ -1308,13 +1319,13 @@
 									<label for="largeInspection">Largo (mm,cm,mts)</label>
 									<input type="text" class="form-control" id="largeInspection"   >
 								</div>
+								
 							</div>
 							
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="heigthInspection">Ancho (mm,cm,mts)</label>
 									<input type="text" class="form-control" id="heigthInspection"  >
-									
 								</div>
 							</div>
 							
@@ -1329,6 +1340,16 @@
 								<div class="form-group">
 									<label for="otherLargeInspection">Largo (mm,cm,mts)</label>
 									<input type="text" class="form-control" id="otherLargeInspection"  >
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+								<label for="extentOtherLarge">Unidad de medida</label>
+									<select class="form-control" id="extentOtherLarge">
+									    <option value="1">mm</option>
+									    <option value="2">cm</option>
+									    <option value="3">mts</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm">

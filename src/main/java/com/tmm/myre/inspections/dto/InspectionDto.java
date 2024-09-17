@@ -41,6 +41,12 @@ public class InspectionDto implements ITransferObject{
 	private String  width;
 	private String  depth;
 	private String  otherLength;
+	
+	private Integer extentLarge;
+	private Integer extentHeigth;
+	private Integer extentDepth;
+	private Integer extentOtherLarge;
+	
 	private String  quantity;
 	private Integer  repairInspection;
 	

@@ -145,19 +145,21 @@ public class EventInformationService implements IEventInformationService {
 						.eventType("GATEIN")
 						.estimateRequired("Y")
 						.inspected("Y")
-						.inspectedBy(null)
+						.inspectedBy(container.getOperatorName()) //PERSONA QUE INSPECCIONO OPERADOR
 						.booking(container.getBokking())
 						.fillState(container.getConditionPregate()== "VACIO" ? container.getConditionPregate()== "RESERVADO" ? "F"  : "P" : "E" )
-						.alternateUnit(null)
+						.alternateUnit(null)//nulo
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")
-						.sapSaleOrder(null)
+						.sapSaleOrder(null)//nlo
 						.unitQuality(containerDto.getQualityEvent().length()>=10 ? containerDto.getQualityEvent().substring(0,9) : containerDto.getQualityEvent())
-						.sealNumber(null)
+						.sealNumber(null)//SELLO DE SEGURIDAD
 						.customerIdentifier(customer.getCode())
-						.type("CN")
+						.type(container.getContainerType() == 1 ? "CH":container.getContainerType() == 2 ? "OP":container.getContainerType() == 3 ? "DC": container.getContainerType()== 4 ? "GS":
+							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "HC": " ") //TIPO DE UNIDAD
 						.model(container.getNomenclatura())
-						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"VER" )
+						//DE DQUE LOCALIAD ES CONTENEDOR
+						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"AGS" )
 						.container(container.getContainer())
 						.modelYear(container.getModelYear())
 						.gateEventIdentifier(eventActivityRepository.getLast())

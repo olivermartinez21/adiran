@@ -60,6 +60,7 @@ public class QuoteService implements IQuoteService {
 				quote.setMaterial(quoteDto.getMaterial());
 				quote.setTarifa(quoteDto.getTarifa());
 				quote.setWorkCode(quoteDto.getWorkCode());
+				quote.setRepairDescription(quoteDto.getRepairDescription());
 				quote.setExchange(quoteDto.getExchange());
 				
 				quoteRepository.save(quote);

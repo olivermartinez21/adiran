@@ -1257,7 +1257,7 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newShippingCompanyOut">Propietario</label>
-									<select class="form-control" id="newShippingCompanyOut" >
+									<select class="form-control" id="newShippingCompanyOut" disabled>
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>	
 								</div>
@@ -1265,13 +1265,13 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="clientFinalOut">Cliente Final</label>
-									<input type="text" class="form-control" id="clientFinalOut">
+									<input type="text" class="form-control" id="clientFinalOut" disabled>
 								</div>
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
 									<label for="unitOut">Unidad</label>
-									<input type="text" class="form-control" id="unitOut">
+									<input type="text" class="form-control" id="unitOut" disabled>
 								</div>
 							</div>
 							<div class="col-sm" hidden=true >
@@ -1291,7 +1291,7 @@
 							<div class="col-sm"  >
 								<div class="form-group">
 									<label for="conditionOut">Condicion</label>
-									<select class="form-control" id="conditionOut" >
+									<select class="form-control" id="conditionOut" disabled>
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<option value="3">DAÑADO/PTI </option>
@@ -1308,7 +1308,7 @@
 							<div class="col-sm"  >
 								<div class="form-group">
 									<label for="qualityOut">Grado Calidad</label>
-									<select class="form-control" id="qualityOut" >
+									<select class="form-control" id="qualityOut" disabled>
 									<option value="1">A</option>
 									<option value="2">B</option>
 									<option value="3">C</option>
@@ -1322,7 +1322,7 @@
 							<div class="col-sm"  >
 								<div class="form-group">
 									<label for="bookingOut">Booking</label>
-									<input type="text" class="form-control" id="bookingOut">
+									<input type="text" class="form-control" id="bookingOut" disabled>
 								</div>
 							</div>
 					
@@ -1331,7 +1331,7 @@
 							<div class="col-sm"  >
 								<div class="form-group">
 									<label for="billToOut">Cobrar a</label>
-									<input type="text" class="form-control" id="billToOut">
+									<input type="text" class="form-control" id="billToOut" disabled>
 								</div>
 							</div>
 							<div class="col-sm"  >

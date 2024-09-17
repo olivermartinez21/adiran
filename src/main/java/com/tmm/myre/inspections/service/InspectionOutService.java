@@ -62,6 +62,7 @@ public class InspectionOutService implements IInspectionsOutService {
 		
 		ContainerModel containeEdit = containerRepository.getById(containerDto.getContainerId());
 		
+		containeEdit.setOperatorName(containerDto.getOperatorName());
 		containeEdit.setQualityStamp(containerDto.getQualityStamp());
 		containeEdit.setSecurityStamp(containerDto.getSecurityStamp());
 		int valor = containerRepository.getCountEirOut();

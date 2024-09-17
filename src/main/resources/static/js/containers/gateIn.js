@@ -647,6 +647,7 @@ function configDataTable() {
 		},
 		columns: [
 			{ data: "containerId",visible: false },
+			{ data: "registerDate",visible: false },
 			{ data: "nomenclatura",visible: false },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);

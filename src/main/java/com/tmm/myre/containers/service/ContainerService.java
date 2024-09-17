@@ -126,6 +126,7 @@ public class ContainerService implements IContainerService{
 	
 	
 	
+	
 	@Override
 	public List<ContainerDto> getContainers(String warehouse) throws ConverterException {
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
@@ -465,22 +466,28 @@ public class ContainerService implements IContainerService{
 	}
 
 	@Override
-	public List<ContainerDto> preGate(String appointmentId, Integer userId,String warehouse) throws ConverterException {
-		List<ContainerDto> list = new ArrayList<ContainerDto>();
+	public List<ContainerModel> preGate(String appointmentId, Integer userId,String warehouse) throws ConverterException {
+
+		List<ContainerModel> list = new ArrayList<ContainerModel>();
 		List<ContainerModel> entities;  
 		if(!appointmentId.isEmpty()) {
 			entities = containerRepository.findAllPreGate(appointmentId,warehouse); 
 			for(ContainerModel entity : entities) {
-				list.add(containerConverter.convert(entity));
+				list.add(entity);
 			}
 		}else {
 			entities = containerRepository.findAllbyWarehousePregate(warehouse);
 			for(ContainerModel entity : entities) {
-				list.add(containerConverter.convert(entity));
+				log.info(entity.getContainer().toString()+"-------");
+				log.info(entity.getContaierSize().toString()+"-------");
+				list.add(entity);
+				
 			}
 			
 		}
-	
+		
+		
+		
 		return list;
 	}
 
@@ -559,6 +566,7 @@ public class ContainerService implements IContainerService{
 			if(!assigment.getUnitNumber().isEmpty()) {
 				log.info("UNIT NUMBER NOT EMPTY" + assigment.getUnitNumber().toString());			
 				ContainerModel container = containerRepository.getByUnitAssigment(assigment.getUnitNumber());
+				log.info("Aqui paso--------------------------" + container.toString());
 					log.info(container.getContainer() +  "    "+container.getStatus().toString());		
 				if(container.getStatus()==5) {
 					log.info("Entro IF y e igualo estatus");
@@ -636,29 +644,67 @@ public class ContainerService implements IContainerService{
 			containerHistoricRepository.save(containerHistoric);
 			
 			if(containerDto.getTransmit()==2 ) { 
+				log.info(container.getClasification().toString()+"--------Clasifiacion "+containerDto.getQualityEvent()+"--------CalidadEvento ");
 				CatShippingCompanyModel customer = catShippingCompanyReposirtory.getById(container.getShippingCompany());
 				EventActivityModel activityEvent = EventActivityModel.builder()
 						.customerIdentifier(customer.getCode())
 						.build();
 				eventActivityRepository.save(activityEvent);
+				
+				String condicion = null;
+				switch (container.getClasification()) {
+				case "1":
+					condicion = "DISPONIBLE";
+					break;
+				case "2":
+					condicion = "DAÑADO";
+			        break;
+			    case "3":
+			    	condicion = "DAÑADO/PTI";
+			        break;
+			    case "4":
+			    	condicion = "EVACUACION";
+			        break;
+			    case "5":
+			    	condicion = "PTI";
+			        break;
+			    case "6":
+			    	condicion = "BLOQUEADO/GX";
+			        break;
+			    case "7":
+			    	condicion = "TOTAL LOOS";
+			        break;
+			    case "8":
+			    	condicion = "VENTA";
+			        break;
+			    case "9":
+			    	condicion = "ACCIDENTADO";
+			        break;
+				default:
+					break;
+				}
+				
+				log.info(condicion+"soy la condicion---------------");
 				IntegrationModel event = IntegrationModel.builder()
 						.eventDate(DateManagement.todayDate())
 						.eventType("GATEOUT")
 						.estimateRequired("Y")
 						.inspected("Y")
-						.inspectedBy(null)
+						.inspectedBy(container.getOperatorName())
 						.booking(container.getBokking())
 						.fillState(container.getConditionPregate()== "VACIO" ? container.getConditionPregate()== "RESERVADO" ? "F"  : "P" : "E" )
-						.alternateUnit(null)
+						.alternateUnit(null)//No hay dato
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")
-						.sapSaleOrder(null)
-						.unitQuality(container.getClasification().length()>=10 ? containerDto.getQualityEvent().substring(0,9) : container.getClasification())
-						.sealNumber(null)
+						.sapSaleOrder(null)//No hay dato
+						//NO muestra la calidad del contenedor
+						.unitQuality(condicion.toString())
+						.sealNumber(container.getSecurityStamp())
 						.customerIdentifier(customer.getCode())
-						.type("CN")
+						.type(container.getContainerType() == 1 ? "CH":container.getContainerType() == 2 ? "OP":container.getContainerType() == 3 ? "DC": container.getContainerType()== 4 ? "GS":
+							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "HC": " ")
 						.model(container.getNomenclatura())
-						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"VER" )
+						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"AGS" )
 						.container(container.getContainer())
 						.modelYear(container.getModelYear())
 						.gateEventIdentifier(eventActivityRepository.getLast())
@@ -667,6 +713,9 @@ public class ContainerService implements IContainerService{
 			}
 			containerRepository.save(container);
 			
+			
+			assignmentRepository.daleteUnit(container.getContainer());
+			log.info("Si paso");
 			containerRepository.deleteById(containerDto.getContainerId());
 			
 			

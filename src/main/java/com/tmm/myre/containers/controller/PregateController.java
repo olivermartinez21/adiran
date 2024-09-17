@@ -42,6 +42,7 @@ import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
 import com.tmm.myre.catalog.service.core.ICatTransportCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.dto.ContainerHistoricDto;
+import com.tmm.myre.containers.model.ContainerModel;
 import com.tmm.myre.containers.service.core.IContainerHistoricService;
 import com.tmm.myre.containers.service.core.IContainerService;
 import com.tmm.myre.event.dto.EventInformationDto;
@@ -118,7 +119,7 @@ public class PregateController extends AbstractMyreController{
 	
 	@GetMapping("getDataTable")
 	@ResponseBody
-	public List<ContainerDto> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
+	public List<ContainerModel> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
 		try {
 			log.info(getWarehouse()+"----------");
 			return containerService.preGate(appointmentId, userId,getWarehouse());
@@ -457,6 +458,7 @@ public class PregateController extends AbstractMyreController{
 	public ResponseManagement newInspectionContainer(@ModelAttribute("containerDto") ContainerDto containerDto) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
+			log.info("llegue al controller de Inspection");
 			return containerService.newInspectionContainer(containerDto);
 		} catch(Exception ex) {
 				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
@@ -509,6 +511,17 @@ public class PregateController extends AbstractMyreController{
 	public ResponseManagement deleteImage(@RequestParam("photoId") String photoId) {
 		try {
 			return photorService.deleteImage(photoId);
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
+	}
+	
+	@GetMapping("getRequestInspection")
+	@ResponseBody
+	public ResponseManagement getRequestInspection(@RequestParam("containerId") String containerId) {
+		try {
+			return inspectionsService.requestInspection(containerId);
 		} catch(Exception ex) {
 			log.error(ex.toString());
 			return null;

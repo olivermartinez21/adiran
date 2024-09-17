@@ -230,7 +230,7 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 			
 			int ordernum = deliveryOrderRepository.getcountpdf();
 			DeliveryOrderModel order = deliveryOrderRepository.getById(deliveryOrderId);
-			order.setFileName("VER-ODE-0"+(ordernum+1));
+			order.setFileName("AGS-ODE-0"+(ordernum+1));
 			order.setFileType(order.getFileName());
 			deliveryOrderRepository.save(order);
 			order.setFileContent(pdfGenerationService.pdfOrder(order));

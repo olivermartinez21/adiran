@@ -405,5 +405,23 @@ public class InspectionService implements IInspectionsService {
 		return response;
 	}
 
+	@Override
+	public ResponseManagement requestInspection(String containerId) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			int validationInspection = inspectoRepository.countInspectionsRequest(containerId);
+				if(validationInspection == 0) {
+					response.setSuccess(false);
+				}else {
+					response.setSuccess(true);
+				}
+		} catch (Exception e) {
+			response.setSuccess(false);
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
+		}
+		return response;
+	}
+
 
 }

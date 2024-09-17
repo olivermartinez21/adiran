@@ -193,7 +193,7 @@ function validationStatus(data){
 		data: {containerId : data},
 		success: function(response){
 			console.log(response)
-			if(response==1){
+			if(response != 0){
 				$("#statusQuoteEdit option[value=3]").prop("disabled", false);
 			}else{
 				$("#statusQuoteEdit option[value=3]").prop("disabled", true);

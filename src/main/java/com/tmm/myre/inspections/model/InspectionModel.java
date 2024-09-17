@@ -48,6 +48,13 @@ public class InspectionModel implements IModel {
 	@Column(name = "WIDTH")private String  width;
 	@Column(name = "DEPTH")private String  depth;
 	@Column(name = "OTHER_LENGTH")private String  otherLength;
+	
+	@Column(name = "EXTENT_LARGE") private Integer extentLarge;
+	@Column(name = "EXTENT_HEIGHT")private Integer extentHeight;
+	@Column(name = "EXTENT_DEPTH")private Integer extentDepth;
+	@Column(name = "EXTENT_OTHER_LENGTH")private Integer extentOtherLarge;
+
+	
 	@Column(name = "QUANTITY")private String  quantity;
 
 }

@@ -55,10 +55,10 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE CONTAINER=:container and STATUS=0", nativeQuery = true)
 	int serarchBdByStatus(String container);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 1 or  LOCATION=:warehouse and STATUS = 2", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 1 or  LOCATION=:warehouse and STATUS = 2 ORDER BY REGISTER_DATE DESC", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehousePregate(@Param("warehouse")String warehouse);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=1 or APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=2", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=1 or APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=2 ORDER BY REGISTER_DATE DESC", nativeQuery = true)
 	List<ContainerModel> findAllPreGate(String appointmentId, String warehouse);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and status = 4 or status = 5", nativeQuery = true)

@@ -21,6 +21,7 @@ public static final long serialVersionUID = 1L;
 	
 	private String quoteId;
 	private String workCode;
+	private String repairDescription;
 	private String hours;
 	private String labor;
 	private String material;

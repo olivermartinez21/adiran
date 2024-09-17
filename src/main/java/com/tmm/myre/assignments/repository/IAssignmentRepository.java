@@ -31,5 +31,11 @@ public interface IAssignmentRepository extends JpaRepository<AssignmentModel, St
 
 	@Query(value = "SELECT * FROM  MYRE_ASSIGNMENT WHERE UNITNUMBER=:containerId", nativeQuery = true)
 	AssignmentModel getbycontainer(String containerId);
+	
+	@Query(value = "SELECT * FROM  MYRE_ASSIGNMENT WHERE DELIVERY_ORDER_ID =:deliveryOrderId", nativeQuery = true)
+	AssignmentModel getAssignment(String deliveryOrderId);
+	
+	@Query(value = "DELETE FROM MYRE_ASSIGNMENT WHERE UNITNUMBER =unitNumber ", nativeQuery = true)
+	AssignmentModel daleteUnit(String unitNumber);
 
 }

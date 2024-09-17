@@ -9,6 +9,7 @@ import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.exception.ConverterException;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.dto.ResumentInformationDto;
+import com.tmm.myre.containers.model.ContainerModel;
 import com.tmm.myre.inspections.dto.InspecctionOutDto;
 import com.tmm.myre.inspections.dto.InspectionDto;
 
@@ -32,7 +33,7 @@ public interface IContainerService {
 
 	List<ContainerDto> getOut(String appointmentId, Integer userId,String warehouse)throws ConverterException;
 
-	List<ContainerDto> preGate(String appointmentId, Integer userId,String warehouse)throws ConverterException;
+	List<ContainerModel> preGate(String appointmentId, Integer userId,String warehouse)throws ConverterException;
 
 	ContainerDto getSingleData(String containerId) throws ConverterException;
 

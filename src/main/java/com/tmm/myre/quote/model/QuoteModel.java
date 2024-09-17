@@ -29,6 +29,7 @@ public class QuoteModel implements IModel{
 	@Id
 	@Column(name = "QUOTE_ID")private String quoteId;
 	@Column(name = "WORK_CODE")private String workCode;
+	@Column(name = "REPAIR_DESCRIPTION") private String repairDescription;
 	@Column(name = "HOURS")private String hours;
 	@Column(name = "LABOR")private String labor;
 	@Column(name = "MATERIAL")private String material;

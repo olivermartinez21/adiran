@@ -38,6 +38,9 @@ public interface IInspectionRepository extends JpaRepository<InspectionModel, St
 	
 	@Query(value = "SELECT * FROM MYRE_INSPECTIONS where INSPECTION_ID=:inspectionId", nativeQuery = true)
 	InspectionModel getInspectionForLabor(String inspectionId);
+	
+	@Query(value = "SELECT COUNT(*) FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId", nativeQuery = true)
+	int countInspectionsRequest(String containerId);
 
 
 

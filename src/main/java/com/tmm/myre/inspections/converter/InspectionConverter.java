@@ -29,6 +29,10 @@ public class InspectionConverter implements IConverter<InspectionModel, Inspecti
 				.width(to.getWidth())
 				.depth(to.getDepth())
 				.otherLength(to.getOtherLength())
+				.extentLarge(to.getExtentLarge())
+				.extentHeight(to.getExtentHeigth())
+				.extentDepth(to.getExtentDepth())
+				.extentOtherLarge(to.getExtentOtherLarge())
 				.quantity(to.getQuantity())
 				.build();
 		return entity;
@@ -54,6 +58,10 @@ public class InspectionConverter implements IConverter<InspectionModel, Inspecti
 				.width(entity.getWidth())
 				.depth(entity.getDepth())
 				.otherLength(entity.getOtherLength())
+				.extentLarge(entity.getExtentLarge())
+				.extentHeigth(entity.getExtentHeight())
+				.extentDepth(entity.getExtentDepth())
+				.extentOtherLarge(entity.getExtentOtherLarge())
 				.quantity(entity.getQuantity())
 				.build();
 		return to;
