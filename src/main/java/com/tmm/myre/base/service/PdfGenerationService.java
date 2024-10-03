@@ -812,8 +812,25 @@ public class PdfGenerationService implements IPdfGenerationService {
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table1.addCell(hcell);
 				
-				hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+", Ancho: "+ inspection.getWidth() + ", Profundo: " + 
-				inspection.getDepth() + " Largo: "+inspection.getOtherLength() , regularBlack));
+				String unidadMedida = null;
+				
+				switch (inspection.getExtentOtherLarge()) {
+				case 1:
+					unidadMedida = "mm";
+					break;
+				case 2:
+					unidadMedida = "cm";
+					break;
+				case 3:
+					unidadMedida = "mts";
+					break;
+
+				default:
+					break;
+				}
+				
+				hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+unidadMedida+", Ancho: "+ inspection.getWidth()+unidadMedida+ ", Profundo: "+inspection.getDepth()+unidadMedida+ 
+						" Largo: "+inspection.getOtherLength()+unidadMedida , regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table1.addCell(hcell);
 				

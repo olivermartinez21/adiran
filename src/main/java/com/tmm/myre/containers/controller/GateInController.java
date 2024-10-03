@@ -35,6 +35,7 @@ import com.tmm.myre.catalog.service.core.ICatRepairService;
 import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
 import com.tmm.myre.catalog.service.core.ICatTransportCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
+import com.tmm.myre.containers.model.ContainerModel;
 import com.tmm.myre.containers.service.core.IContainerService;
 import com.tmm.myre.event.dto.EventInformationDto;
 import com.tmm.myre.event.service.core.IEventInformationService;
@@ -104,7 +105,7 @@ public class GateInController extends AbstractMyreController{
 	
 	@GetMapping("getDataTable")
 	@ResponseBody
-	public List<ContainerDto> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
+	public List<ContainerModel> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
 		try {
 			
 			return containerService.getIn(appointmentId, userId,getWarehouse());

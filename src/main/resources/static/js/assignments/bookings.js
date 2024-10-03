@@ -462,12 +462,15 @@ function nexInput() {
 }
 	
 function getContainersEspecifications() {
-	
+	console.log($("#typeBookingInformation").val());
+	console.log($("#sizeBookingInformation").val())
+	console.log($("#qualityBookingInformation").val())
 	$.ajax({
 		type: "GET",
 		url: 'bookings/getUnitsFilter',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		data: {	type: $("#typeBookingInformation").val(),
+		data: {	
+			type: $("#typeBookingInformation").val(),
 			size: $("#sizeBookingInformation").val(),
 			clasification: $("#qualityBookingInformation").val()},
 		success: function(response){

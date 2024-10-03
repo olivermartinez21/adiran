@@ -211,8 +211,8 @@ function initComponents() {
 		});	
 	
 	
-	
-$("#inspectionContainerForm").submit(function () {
+	//Se deshabilito para dar paso a la pregunta
+/*$("#inspectionContainerForm").submit(function () {
 		
 		if($("#newModel").val()!="Selecciona una opción"){
 			var data = {
@@ -276,7 +276,7 @@ $("#inspectionContainerForm").submit(function () {
 		
 	
 				return false;
-	});	
+	});	*/
 
 $("#addNewDamageModel").submit(function () {
 	
@@ -307,6 +307,7 @@ $("#addNewDamageModel").submit(function () {
 			 width:  $("#heigthInspection").val(),
 			 depth: $("#depthInspection").val(),
 			 otherLength:  $("#otherLargeInspection").val(),
+			 extentOtherLarge: $("#extentOtherLarge").val(),
 			 quantity:  $("#quantityInspection").val(),
 	};
 	
@@ -324,7 +325,33 @@ $("#addNewDamageModel").submit(function () {
 		data :formData,
 		success : function(response) {
 			if(response.success==true){
-					Swal.fire("Proceso Exitoso", "", "success")
+				console.log(response)
+					Swal.fire({
+				        title: "¿Desea Registrar Daño?",
+				        text: " ",
+				        icon: 'warning',
+				        showCancelButton: true,
+				        confirmButtonText: "Si",
+				        cancelButtonText: "no",
+				    }).then(resultado => {
+				       if (resultado.value) {
+				            // Hicieron click en "Sí"
+							
+							addNewDamage();
+				        } else {
+				            // Dijeron que no
+							
+							$("#addNewDamageModel").modal("hide");
+							getInspectionsData()
+							self.location.reload();
+							console.log("no")
+				        }
+				    });
+				}else{
+					console.log("lLLEGO AL ELSE");
+					//saveInspection()
+				}
+					/*Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
 					$("#addNewDamageModel").modal("hide");
 					getInspectionsData()
@@ -334,7 +361,7 @@ $("#addNewDamageModel").submit(function () {
 				}else{
 					console.log("error")
 					Swal.fire("Error "+response.message, "", "error");
-				}
+				}*/
 		},
 		error : function() {
 			showAlert(3,"ERRO 902", "El documento no puede cargarse", "Intente nuevamente o contacte al equipo de desarrollo");
@@ -540,6 +567,7 @@ function configDataTablePregate(){
 		},
 		columns: [
 			{ data: "containerId",visible: false },
+			{ data: "registerDate",visible: true },
 			{ data: "nomenclatura",visible: false },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
@@ -550,7 +578,7 @@ function configDataTablePregate(){
 						$("#newContainerTypeSave").val(data);
 						return $("#newContainerTypeSave option:selected").html();
 					}}, 
-			{ data: "containerSize",visible: true },
+			{ data: "contaierSize",visible: true },
 			/*{ data: "containerSize", visible: true , render : function(data) {
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
@@ -606,6 +634,7 @@ function configDataTablePregate(){
 				
 			}},
 		],
+		order: [[1, 'desc']]
 	}).columns.adjust();
 }
 
@@ -647,7 +676,7 @@ function configDataTable() {
 		},
 		columns: [
 			{ data: "containerId",visible: false },
-			{ data: "registerDate",visible: false },
+			{ data: "registerDate",visible: true },
 			{ data: "nomenclatura",visible: false },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
@@ -658,7 +687,7 @@ function configDataTable() {
 						$("#newContainerTypeSave").val(data);
 						return $("#newContainerTypeSave option:selected").html();
 					}}, 
-			{ data: "containerSize",visible: true },
+			{ data: "contaierSize",visible: true },
 			/*{ data: "containerSize", visible: true , render : function(data) {
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
@@ -715,6 +744,8 @@ function configDataTable() {
 				
 			}},
 		],
+		
+		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 	
 		$("#inspectionTable").DataTable({
@@ -774,6 +805,9 @@ function configDataTable() {
 			{ data: "depth",visible: false },
 			{ data: "otherLength",visible: false },
 			{ data: "quantity",visible: false },
+			
+			{ data: "extentOtherLarge",visible: false },
+			
 			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
@@ -1171,6 +1205,9 @@ function getInspectionsData(){
 			{ data: "depth",visible: false },
 			{ data: "otherLength",visible: false },
 			{ data: "quantity",visible: false },
+			
+			{ data: "extentOtherLarge",visible: false },
+			
 			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
@@ -1193,7 +1230,7 @@ function inspectionContainer(data){
 	$("#inspectionTable").DataTable().clear().draw();
 	currentData = $("#containerTable").DataTable().row(data).data();
 	$("#containerType").val(currentData.containerType)
-	$("#containerSize").val(currentData.containerSize)
+	$("#containerSize").val(currentData.contaierSize)
 	$("#containerId").val(currentData.containerId)
 	
 	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
@@ -1264,6 +1301,21 @@ function addNewDamage(){
 
 	getSection(),
 	getDamageInfotmation($("#containerType").val())
+	
+	//Limpia los campos
+	$("#newPart").val(""),
+	$("#newComponentInspection2").val(""),
+	$("#newDamage").val(""),
+	$("#newLocationInspection").val(""),	
+	$("#newReferent").val(""),
+	$("#inspectionCustomerType").val("1"),
+	$("#newImageCode").val(""),
+	$("#largeInspection").val(""),
+	$("#heigthInspection").val(""),
+	$("#depthInspection").val(""),
+	$("#otherLargeInspection").val(""),
+	$("#extentOtherLarge").val("1"),
+	$("#quantityInspection").val(""),
 	
 	document.getElementById("btnDamage").removeAttribute("hidden");
 	$("#imageTableInspection").DataTable().clear().draw();
@@ -1725,6 +1777,9 @@ $("#depthInspection").val(table.depth)
 $("#otherLargeInspection").val(table.otherLength)
 $("#quantityInspection").val(table.quantity)		
 $("#inspectionId").val(table.inspectionId)
+
+$("#extentOtherLarge").val(table.extentOtherLarge)
+
 $("#imageTableInspection").DataTable().clear().draw();
 
 	var info = {
@@ -1885,6 +1940,120 @@ function deleteImage(data){
 		}
 	});
 	//$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
+	
+}
+
+function requestDamage(){
+	console.log($("#containerId").val());
+	$.ajax({
+		type: "GET",
+		url: 'preGate/getRequestInspection',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {containerId : $("#containerId").val()},
+		success: function(response){
+			console.log(response)
+			if(response.success==false){
+					Swal.fire({
+				        title: "No hay daño registrado",
+				        text: "¿Desea Registrar Daño?",
+				        icon: 'warning',
+				        showCancelButton: true,
+				        confirmButtonText: "Si",
+				        cancelButtonText: "no",
+				    }).then(resultado => {
+				       if (resultado.value) {
+				            // Hicieron click en "Sí"
+							//configDataTablePregate()
+							//inspectionContainer($("#containerId").val())
+							//configDataTablePregate()
+							console.log("si")
+							addNewDamage();
+				        } else {
+				            // Dijeron que no
+							//configDataTablePregate()
+							//self.location.reload();
+							console.log("no")
+				        }
+				    });
+				}else{
+					console.log("lLLEGO AL ELSE");
+					saveInspection()
+				}
+	
+		},
+		
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	}); 
+	
+}
+
+function saveInspection(){
+	console.log("ok saveInspection");
+	
+		if($("#newModel").val()!="Selecciona una opción"){
+			var data = {
+		containerId:$("#containerId").val(),
+		dateInspection:$("#newDateInspection").val(),
+		vessel:$("#newVessel").val().toUpperCase(),
+		travel:$("#newTravel").val().toUpperCase(),
+		aa:$("#newAa").val().toUpperCase(),
+		definition:$("#newComents").val(),
+		coments:$("#newComents").val().toUpperCase(),
+		user:$("#globalUserId").val(),
+		operation:$("#operation").val(),
+		destination:$("#newDestination").val(),
+		origin:$("#newOrigin").val(),
+		chassis:$("#newChasssis").val(),
+		genSet:$("#newGenSet").val(),
+		mark:$("#newMark").val(),
+		setPoint:$("#newSetPoint").val(),
+		ventilation:$("#newVentilation").val(),
+		condition:$("#containerConditionInspection").val(),
+		clasification:$("#containerClasificationInspection").val(),
+		modelYear:$("#newYear").val(),
+		aptTo:$("#newAptTo").val(),
+		technology:$("#tecnologyInspection").val(),
+		mark:$("#newMarkInspection").val(),
+		associateUnit:$("#unitAsosiateInspection").val().toUpperCase(),
+		associateUnitGenset:$("#unitAsosiateInspectiongenset").val().toUpperCase(),
+		horometro:$("#horometroInspection").val(),
+		generatorType:$("#newGenetatorTypeInspection").val(),
+		diesel:$("#dieselInpection").val(),
+		idUser:$("#globalUserId").val(),
+		nomenclatura:$("#newModel").val(),
+		dataUrl:$("#draw-dataUrl").val()
+	};
+	$.ajax({
+			type: "POST",
+			url: 'preGate/newInspectionContainer',
+			cache: false,
+			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data:data,
+			success: function(response){
+				console.log(response);
+				if(response.success==true){
+					window.open('preGate/PDF_EIR?containerId='+ response.pdf+'')
+					Swal.fire("Proceso Exitoso", "", "success")
+				.then(() => {
+					$("#inspectionModal").modal("hide");
+				configDataTablePregate()
+				});
+				}else{
+					Swal.fire("Error "+response.message, "", "warning");
+				}
+			}, 
+			error: function(){
+				alert("AJAX ERROR");
+			}
+			});
+		}else{
+			Swal.fire("Por favor selecciona la Nomenclatura", "", "warning");
+		}
+		
+	
+				return false;
 	
 }
 

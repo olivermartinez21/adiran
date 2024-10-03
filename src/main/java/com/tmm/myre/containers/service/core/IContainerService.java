@@ -29,7 +29,7 @@ public interface IContainerService {
 
 	ResponseManagement savePregate(ContainerDto containerDto) throws ConverterException;
 
-	List<ContainerDto> getIn(String appointmentId, Integer userId,String warehouse)throws ConverterException;
+	List<ContainerModel> getIn(String appointmentId, Integer userId,String warehouse)throws ConverterException;
 
 	List<ContainerDto> getOut(String appointmentId, Integer userId,String warehouse)throws ConverterException;
 

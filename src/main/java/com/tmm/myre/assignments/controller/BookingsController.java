@@ -389,6 +389,7 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 	public List<ContainerDto> getUnitsFilter(String type,String size, String clasification) {
 		
 		try {
+			log.info(type+" " +size+" "+clasification);
 			return containerService.getUnitsFilter(type,size,clasification,getWarehouse());
 		} catch(Exception ex) {
 			log.error(ex.toString());

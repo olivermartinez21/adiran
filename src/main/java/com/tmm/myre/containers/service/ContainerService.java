@@ -132,6 +132,12 @@ public class ContainerService implements IContainerService{
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
 		List<ContainerModel> entities = containerRepository.findAllbyWarehouse(warehouse);
 			for(ContainerModel entity : entities) {
+				
+				long diff = DateManagement.todayDate().getTime() - entity.getDateInspection().getTime() ;
+				TimeUnit time = TimeUnit.DAYS; 
+			    long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
+			    entity.setDaysStay(" "+diffrence);
+				
 				list.add(containerConverter.convert(entity));
 			
 		}
@@ -446,12 +452,13 @@ public class ContainerService implements IContainerService{
 	}
 
 	@Override
-	public List<ContainerDto> getIn(String appointmentId, Integer userId,String warehouse) throws ConverterException {
-		List<ContainerDto> list = new ArrayList<ContainerDto>();
+	public List<ContainerModel> getIn(String appointmentId, Integer userId,String warehouse) throws ConverterException {
+		List<ContainerModel> list = new ArrayList<ContainerModel>();
 		List<ContainerModel> entities =  containerRepository.findAllGateIn(warehouse ); 
 		for(ContainerModel entity : entities) {
-			list.add(containerConverter.convert(entity));
+			list.add(entity);
 		}
+		
 		return list;
 	}
 
@@ -1051,9 +1058,10 @@ public class ContainerService implements IContainerService{
 
 	@Override
 	public List<ContainerDto> getUnitsFilter(String type, String size, String clasification, String warehous) throws ConverterException {
+		log.info(warehous.toString()+"----"+ type.toString() +"----"+ size.toString() +"----"+ clasification.toString());
 		List<ContainerDto> containers = new ArrayList<ContainerDto>();
-		List<ContainerModel> entities = containerRepository.getUnitsFilter(type,size,clasification,warehous);
-		
+		List<ContainerModel> entities = containerRepository.getUnitsFilter(warehous,type,size,clasification);
+		log.info(entities.toString()+"-------------Entities");
 		for(ContainerModel container : entities) {
 			containers.add(containerConverter.convert(container));
 		}

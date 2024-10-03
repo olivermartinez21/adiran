@@ -63,12 +63,12 @@
 				<thead>
 					<tr>
 						<th>containerId</th>
-						<th>registerDate</th>
+						<th>Dia de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
 						<th>Tamaño</th>
-						<th>Naviera</th>
+						<th>Propietario</th>
 						<th>Estado</th>
 						<th>Clasificación</th>
 						<th>Estado</th>
@@ -80,12 +80,12 @@
 				<tfoot>
 					<tr>
 						<th>containerId</th>
-						<th>registerDate</th>
+						<th>Dia de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
 						<th>Tamaño</th>
-						<th>Naviera</th>
+						<th>Propietario</th>
 						<th>Estado</th>
 						<th>Clasificación</th>
 						<th>Estado</th>
@@ -101,7 +101,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionModalLabel">Inspeccion</h5>
+						<h5 class="modal-title" id="inspectionModalLabel">Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -140,11 +140,11 @@
 									<select class="form-control" id="containerConditionInspection" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
-									<option value="3">DAÑADO/PTI </option>
+<!-- 									<option value="3">DAÑADO/PTI </option> -->
 									<option value="4">EVACUACION</option>
-									<option value="5">PTI</option>
+<!-- 									<option value="5">PTI</option> -->
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -370,6 +370,7 @@
 										<th>ancho</th>
 										<th>profundidad</th>
 										<th>largo</th>
+										<th>unidadLargo</th>
 										<th>cantidad</th>
 										<th>Opciones</th>
 									</tr>
@@ -389,6 +390,7 @@
 										<th>ancho</th>
 										<th>profundidad</th>
 										<th>largo</th>
+										<th>unidadLargo</th>
 										<th>cantidad</th>
 										<th>Opciones</th>
 									</tr>
@@ -446,11 +448,12 @@
 						</div>  
 						
 					</div>		
+					
+					</form>
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-						<button id="btnAceptar" type="submit" class="btn btn-success" disabled>Aceptar</button>
+						<button id="btnAceptar" type="button" class="btn btn-success" onclick="requestDamage()" disabled>Aceptar</button>
 					</div>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -1444,6 +1447,16 @@
 								<div class="form-group">
 									<label for="otherLargeInspection">Largo (mm,cm,mts)</label>
 									<input type="text" class="form-control" id="otherLargeInspection"  >
+								</div>
+							</div>
+							<div class="col-sm" >
+								<div class="form-group">
+								<label for="extentOtherLarge">Unidad de medida</label>
+									<select class="form-control" id="extentOtherLarge">
+									    <option value="1">mm</option>
+									    <option value="2">cm</option>
+									    <option value="3">mts</option>
+									</select>
 								</div>
 							</div>
 							<div class="col-sm">

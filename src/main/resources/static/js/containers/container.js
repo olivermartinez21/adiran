@@ -393,6 +393,7 @@ function validationDate(){
 	document.getElementById("newEventDate").value = year+'-'+month+'-'+day; 
 }
 
+// REFRESH DATATABLE
 function dataTableRefresh(){
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
@@ -439,6 +440,8 @@ function dataTableRefresh(){
 		},
 		columns: [
 			{ data: "containerId",visible: false },
+			{ data: "dateInspection",visible: true },
+			{ data: "daysStay",visible: true },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
 						return $("#containerName").val();
@@ -452,6 +455,7 @@ function dataTableRefresh(){
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
 					}}, */
+			{ data: "conditionPregate",visible: true },
 			{ data: "shippingCompany", visible: true , render : function(data) {
 						$("#newShippingCompany").val(data);
 						return $("#newShippingCompany option:selected").html();
@@ -487,6 +491,7 @@ function dataTableRefresh(){
 				return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
 			}},
 		],
+		order: [[1, 'desc']]
 	}).columns.adjust();
 	$("#tableResumen").DataTable().destroy();
 	$("#tableResumen").DataTable({
@@ -584,6 +589,8 @@ function configDataTable() {
 
 		columns: [
 			{ data: "containerId",visible: false },
+			{ data: "dateInspection",visible: true },
+			{ data: "daysStay",visible: true },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
 						return $("#containerName").val();
@@ -597,6 +604,7 @@ function configDataTable() {
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
 					}}, */
+			{ data: "conditionPregate",visible: true },
 			{ data: "shippingCompany", visible: true , render : function(data) {
 						$("#newShippingCompany").val(data);
 						return $("#newShippingCompany option:selected").html();
@@ -639,6 +647,7 @@ function configDataTable() {
 				
 			}},
 		],
+		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 	
 		$("#inspectionTable").DataTable({

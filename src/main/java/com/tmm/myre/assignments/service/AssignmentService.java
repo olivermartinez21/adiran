@@ -80,7 +80,7 @@ public class AssignmentService implements IAssignmentService {
 	public ResponseManagement assignation(AssignmentDto assignmentDto) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().success(false).operation(KeyConstants.INSERT).build();
 		try {
-			
+			log.info(assignmentDto.toString()+"**********************");
 			AssignmentModel assignment = assignmentRepository.getById(assignmentDto.getId());
 			assignmentDto.setBookingId(assignment.getBookingId());
 			assignmentDto.setId(assignment.getId());
@@ -89,14 +89,20 @@ public class AssignmentService implements IAssignmentService {
 			assignmentDto.setStatus(assignment.getStatus());
 			assignment = assignmentConverter.convert(assignmentDto);
 			
+			log.info("Paso assignment  " + assignment.toString());
 			BookingModel booking = bookingRepository.getById(assignment.getBookingId());
 			
+			log.info("Paso SELECT BOOKING " + booking.getBooking().toString());
+			log.info("Paso antes del IF");
 			if(!assignment.getUnitNumber().isEmpty()) {
 				int num = containerRepository.existsBd(assignment.getUnitNumber());
 				if(num!=0) {
 					ContainerModel container = containerRepository.getByUnit(assignment.getUnitNumber());
+					log.info("Paso SELECT" + container.toString());
+					
 					container.setStatus(5);
 					container.setBokking(booking.getBooking());
+					log.info("Paso antes de los SAVE");
 					containerRepository.save(container);
 					assignmentRepository.save(assignment);
 					response.setSuccess(true);

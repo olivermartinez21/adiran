@@ -227,7 +227,7 @@ function initComponents() {
 	return false;
 		});	
 	
-	
+	//Se deshabilito para dar paso a la pregunta
 /*	
 	$("#inspectionContainerForm").submit(function () {
 		
@@ -346,6 +346,7 @@ $("#addNewDamageModel").submit(function () {
 		data :formData,
 		success : function(response) {
 			if(response.success==true){
+				console.log(response)
 					Swal.fire({
 				        title: "¿Desea Registrar Daño?",
 				        text: " ",
@@ -360,9 +361,10 @@ $("#addNewDamageModel").submit(function () {
 							addNewDamage();
 				        } else {
 				            // Dijeron que no
-							//configDataTablePregate()
-							//self.location.reload();
-							$("#inspectionModal").modal("hide");
+							
+							$("#addNewDamageModel").modal("hide");
+							getInspectionsData()
+							self.location.reload();
 							console.log("no")
 				        }
 				    });
@@ -603,7 +605,7 @@ function configDataTablePregate(){
 						$("#newContainerTypeTable").val(data);
 						return $("#newContainerTypeTable option:selected").html();
 					}}, 
-			{ data: "containerSize",visible: true },
+			{ data: "contaierSize",visible: true },
 			/*{ data: "containerSize", visible: true , render : function(data) {
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
