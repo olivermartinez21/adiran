@@ -20,6 +20,7 @@ public class QuoteDto extends AbstractManagement implements ITransferObject{
 public static final long serialVersionUID = 1L;
 	
 	private String quoteId;
+	private String jobcodeId;
 	private String workCode;
 	private String repairDescription;
 	private String hours;

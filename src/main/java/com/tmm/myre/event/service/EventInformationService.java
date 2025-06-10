@@ -124,10 +124,11 @@ public class EventInformationService implements IEventInformationService {
 			container.setShippingCompany(containerDto.getShippingCompany());
 			container.setNomenclatura(containerDto.getNomenclatura());
 			container.setTypeServicePregate(containerDto.getTypeServicePregate());
+			container.setDateGateIn(containerDto.getNewEventDate());
 			container.setStatus(4);
 			
 			if(container.getStatusQute()==null) {
-				container.setStatusQute(1);
+				//container.setStatusQute(1);
 			}
 			
 			//transmit
@@ -139,9 +140,11 @@ public class EventInformationService implements IEventInformationService {
 						.customerIdentifier(customer.getCode())
 						.build();
 				eventActivityRepository.save(activityEvent);
-				
+
+				log.info(containerDto.getQualityEvent()+"------------------");
+				log.info(containerDto.getQualityEvent().length()>=10 ? containerDto.getQualityEvent().substring(0,10) : containerDto.getQualityEvent());
 				IntegrationModel event = IntegrationModel.builder()
-						.eventDate(DateManagement.todayDate())
+						.eventDate(containerDto.getNewEventDate())
 						.eventType("GATEIN")
 						.estimateRequired("Y")
 						.inspected("Y")
@@ -151,12 +154,12 @@ public class EventInformationService implements IEventInformationService {
 						.alternateUnit(null)//nulo
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")
-						.sapSaleOrder(null)//nlo
-						.unitQuality(containerDto.getQualityEvent().length()>=10 ? containerDto.getQualityEvent().substring(0,9) : containerDto.getQualityEvent())
+						.sapSaleOrder(containerDto.getSapSaleOrder())//nlo
+						.unitQuality(containerDto.getQualityEvent().length()>=10 ? containerDto.getQualityEvent().substring(0,10) : containerDto.getQualityEvent())
 						.sealNumber(null)//SELLO DE SEGURIDAD
 						.customerIdentifier(customer.getCode())
 						.type(container.getContainerType() == 1 ? "CH":container.getContainerType() == 2 ? "OP":container.getContainerType() == 3 ? "DC": container.getContainerType()== 4 ? "GS":
-							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "HC": " ") //TIPO DE UNIDAD
+							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "DC": " ") //TIPO DE UNIDAD
 						.model(container.getNomenclatura())
 						//DE DQUE LOCALIAD ES CONTENEDOR
 						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"AGS" )
@@ -164,8 +167,10 @@ public class EventInformationService implements IEventInformationService {
 						.modelYear(container.getModelYear())
 						.gateEventIdentifier(eventActivityRepository.getLast())
 						.build();
-				
+
+				log.info(event.toString());
 				integrationRepository.save(event);
+				log.info("GUARDO EVENTO");
 			}
 			
 			  

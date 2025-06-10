@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +76,7 @@ public class InspectionService implements IInspectionsService {
 	
 	@Override
 	public List<InspectionDto> getInspectionsByContainer(String containerId) throws ConverterException {
+		log.info("Entrado a getInspectionsByContainer " + containerId);
 		List<InspectionModel> inspections = inspectoRepository.findAllByContainer(containerId);
 		List<InspectionDto> list = new ArrayList<InspectionDto>();
 		for(InspectionModel inspection: inspections ) {
@@ -248,13 +250,17 @@ public class InspectionService implements IInspectionsService {
 			ObjectMapper inspectionMapper = new ObjectMapper();
 			InspectionDto inspectionDto = inspectionMapper.readValue(inspectionUpdate, new TypeReference<InspectionDto>() { });
 			InspectionModel inspection = inspectoRepository.getById(inspectionDto.getInspectionId());
-			
+			log.info("llego servicio  --------------------------"+ inspection);
+			inspectionDto.setStatus(2);
+			if(inspectionDto.getCustomerType()==2){
+				inspectionDto.setCustomerName("CARRIER");
+			}
 			inspectoRepository.save(inspectionConverter.convert(inspectionDto));
 			
 			int Ins = inspectoRepository.getInspectionMerchant(inspection.getContainerId());
 			if(Ins==0) {
 				ContainerModel container = containeRrepository.getById(inspection.getContainerId());
-				container.setStatusQute(null);
+				container.setStatusQute(1);
 				containeRrepository.save(container);
 			}
 			
@@ -286,20 +292,22 @@ public class InspectionService implements IInspectionsService {
 	public ResponseManagement addDamage(List<MultipartFile> file, String inspection)throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
-			
 			ObjectMapper inspectionMapper = new ObjectMapper();
 			InspectionDto inspectionDto = inspectionMapper.readValue(inspection, new TypeReference<InspectionDto>() { });
 			List<PhotoModel> photo = new ArrayList<PhotoModel>();
 			
 			ContainerModel containerEdit = containeRrepository.getById(inspectionDto.getContainerId());
-			
+			log.info("+++++++++++++ " + containerEdit.toString());
+			if(inspectionDto.getCustomerType()==2){
+				inspectionDto.setCustomerName("CARRIER");
+			}
 			inspectionDto.setInspectionId(UuidProvider.getUUID());
 			inspectionDto.setStatus(2);
 			
 			int cantidad =	containeRrepository.getInspectionsMerchant(containerEdit.getContainerId());
 			
-			
-			if(inspectionDto.getCustomerType()==1) {
+
+			if(inspectionDto.getCustomerType()==1 || inspectionDto.getCustomerType()==2) {
 				containerEdit.setStatusQute(1);
 			}
 			
@@ -422,6 +430,51 @@ public class InspectionService implements IInspectionsService {
 		}
 		return response;
 	}
+
+	public List<InspectionWithQuoteDto> getInspectionsWithQuotes(String containerId) {
+		List<Object[]> rows = inspectoRepository.findInspectionsWithQuotes(containerId);
+		List<InspectionWithQuoteDto> result = new ArrayList<>();
+
+		for (Object[] row : rows) {
+			result.add(InspectionWithQuoteDto.builder()
+					.inspectionId((String) row[0])
+					.part((String) row[1])
+					.component((String) row[2])
+					.damage((Integer) row[3])
+					.location((String) row[4])
+					.repair((String) row[5])
+					.damageGenSet((String) row[6])
+					.damageCode((Integer) row[7])
+					.reference((String) row[8])
+					.customerType((Integer) row[9])
+					.customerName((String) row[10])
+					.photo((String) row[11])
+					.status((Integer) row[12])
+					.containerId((String) row[13])
+					.length((String) row[14])
+					.width((String) row[15])
+					.depth((String) row[16])
+					.otherLength((String) row[17])
+					.extentLarge((Integer) row[18])
+					.extentHeigth((Integer) row[19])
+					.extentDepth((Integer) row[20])
+					.extentOtherLarge((Integer) row[21])
+					.quantity((String) row[22])
+					.quoteId((String) row[23])
+					.workCode((String) row[24])
+					.repairDescription((String) row[25])
+					.hours((String) row[26])
+					.labor((String) row[27])
+					.material((String) row[28])
+					.tarifa((String) row[29])
+					.exchange((String) row[30])
+					.build()
+			);
+		}
+
+		return result;
+	}
+
 
 
 }

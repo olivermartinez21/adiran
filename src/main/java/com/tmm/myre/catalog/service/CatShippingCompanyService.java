@@ -4,7 +4,9 @@ package com.tmm.myre.catalog.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tmm.myre.catalog.model.CatComponentModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.tmm.myre.base.exception.ConverterException;
@@ -28,11 +30,17 @@ public class CatShippingCompanyService  implements ICatShippingCompanyService {
 	@Override
 	public List<CatShippingCompanyDto> catShipping() throws ConverterException {
 			List<CatShippingCompanyDto> list = new ArrayList<CatShippingCompanyDto>();
-			List<CatShippingCompanyModel> entities = catShippingCompanyReposirtory.findAll();
+			List<CatShippingCompanyModel> entities = catShippingCompanyReposirtory.findAll(Sort.by(Sort.Direction.ASC, "description"));
 			for(CatShippingCompanyModel entity : entities) {
 				list.add(catShippingCompanyConverter.convert(entity));
 			}
 			return list;
+	}
+
+	@Override
+	public CatShippingCompanyModel getLaborByShippingCompany(Integer shippingCompanyId) {
+
+        return catShippingCompanyReposirtory.getLabor(shippingCompanyId);
 	}
 
 

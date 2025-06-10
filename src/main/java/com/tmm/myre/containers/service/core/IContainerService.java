@@ -82,10 +82,8 @@ public interface IContainerService {
 
 	List<ContainerDto> getAllContainersQuote(String warehouse)throws ConverterException;
 
-	InspectionShippingDto getPreLabor(String inspectionId); 
+	InspectionShippingDto getPreLabor(String inspectionId);
 
 
-
-
-
+    void saveInvoiceNumber(String containerId, String invoiceNumber);
 }

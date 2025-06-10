@@ -268,6 +268,7 @@
 										<th>Área Cm2</th>
 										<th>Profunidad </th>
 										<th>Responsabilidad Del Daño </th>
+										<th>Cobrar a </th>
 										<th>Código De Localización</th> 
 										<th>Cantidad </th>
 <!-- 										<th>Fabricante </th> -->
@@ -397,6 +398,16 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<!--									Cambiar por Cobrar a-->
+									<label for="customerName">A quien se cobra:</label>
+									<input type="text" class="form-control" id="customerName" name="example" list="newAgencyDamageList">
+									<datalist id="newAgencyDamageList" >
+										<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
 						<div class="col-sm" >
 								<div class="form-group">
 									<label for="newImage">Foto</label>
@@ -507,7 +518,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Imagenes</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Cambio de Estatus por Reparación</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>

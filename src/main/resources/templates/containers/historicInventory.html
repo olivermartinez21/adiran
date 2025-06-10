@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Unidades </title>
+</head>
+<body>
+<section layout:fragment="content" th:remove="tag">
+
+    <div class="container-table">
+        <table id="historicInventoryTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+            <thead>
+            <tr>
+                <th>inventoryId</th>
+                <th>PROPIETARIO</th>
+                <th>UNIDAD</th>
+                <th>ESTADO DE LA UNIDAD</th>
+                <th>TIPO DE UNIDAD</th>
+                <th>TAMAÑO</th>
+                <th>CONDICION</th>
+                <th>LOCALIDAD</th>
+                <th>FECHA GATEIN</th>
+                <th>GRADO-CALIDAD</th>
+                <th>DIAS DE ESTADIA</th>
+                <th>FECHA FIN REPARACION</th>
+                <th>EDO. ESTIMADO NAVIERA</th>
+                <th>APTO PARA</th>
+                <th>MAQUINARIA DE UNIDAD (RF)</th>
+                <th>FECHA DE LLEGADA</th>
+                <th>OBVERVACIONES</th>
+                <th>DIA DE CAPTURA</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>inventoryId</th>
+                <th>PROPIETARIO</th>
+                <th>UNIDAD</th>
+                <th>ESTADO DE LA UNIDAD</th>
+                <th>TIPO DE UNIDAD</th>
+                <th>TAMAÑO</th>
+                <th>CONDICION</th>
+                <th>LOCALIDAD</th>
+                <th>FECHA GATEIN</th>
+                <th>GRADO-CALIDAD</th>
+                <th>DIAS DE ESTADIA</th>
+                <th>FECHA FIN REPARACION</th>
+                <th>EDO. ESTIMADO NAVIERA</th>
+                <th>APTO PARA</th>
+                <th>MAQUINARIA DE UNIDAD (RF)</th>
+                <th>FECHA DE LLEGADA</th>
+                <th>OBVERVACIONES</th>
+                <th>DIA DE CAPTURA</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+
+
+
+    <script type="text/javascript" th:src="@{/js/containers/historicInventory.js}"></script>
+    <script type="text/javascript" th:src="@{/js/checkdigit.min.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/js/appointments/firma.js}"></script>-->
+</section>
+</body>
+</html>

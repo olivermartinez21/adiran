@@ -2,6 +2,7 @@ package com.tmm.myre.inspections.service.core;
 
 import java.util.List;
 
+import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tmm.myre.base.dto.ResponseManagement;
@@ -38,4 +39,6 @@ public interface IInspectionsService {
 	ResponseManagement deleteInspection(String inspectionId) throws ConverterException;
 
 	ResponseManagement requestInspection(String containerId);
+
+	List<InspectionWithQuoteDto> getInspectionsWithQuotes(String containerId);
 }

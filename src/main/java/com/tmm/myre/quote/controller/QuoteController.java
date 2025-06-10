@@ -3,6 +3,7 @@ package com.tmm.myre.quote.controller;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -121,9 +122,16 @@ public class QuoteController extends AbstractMyreController {
 			return null;
 		}
 	}
-	
-	
-	
+
+	@GetMapping("dataTableInpectionComplete")
+	@ResponseBody
+	public List<InspectionWithQuoteDto> getTableInspections(@RequestParam String containerId) {
+		return inspectionsService.getInspectionsWithQuotes(containerId);
+	}
+
+
+
+
 
 	@ModelAttribute("catComponent")
 	List<CatComponentDto> catComponent() {
@@ -155,12 +163,13 @@ public class QuoteController extends AbstractMyreController {
 			return null;
 		}
 	}
-	
-	@ModelAttribute("catJobcode")
-	List<CatJobcodeDto> catJobcode() {
+
+	@GetMapping("catJobcode")
+	@ResponseBody
+	List<CatJobcodeDto> catJobcode(String shippingCompanyId) {
 		try {
-			log.info("Entrando a controller Jobcodeeeeeeeeeeeeeeeeeeeeeeeee");
-			return catJobcodeService.catJobcode();
+			log.info("Entrando a controller Jobcodeeeeeeeeeeeeeeeeeeeeeeeee" + shippingCompanyId);
+			return catJobcodeService.catJobcode(shippingCompanyId);
 		} catch(Exception ex) {
 			log.error(ex.toString());
 			return null;
@@ -352,8 +361,34 @@ public class QuoteController extends AbstractMyreController {
 		  		return containerService.getPreLabor(inspectionId); 
 		  	} catch(Exception ex) {
 		  		return null; 
-	  } }
-	 
-		
+	  }
+	}
+
+	@GetMapping("getQuoteDetail")
+	@ResponseBody
+	public QuoteDto getQuoteDetail(@RequestParam("inspectionId") String inspectionId) {
+		try {
+			return quoteService.getQuoteDetail(inspectionId);
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
+	}
+
+	@PostMapping("saveInvoiceNumber")
+	@ResponseBody
+	public ResponseManagement saveInvoiceNumber(@RequestParam String containerId, @RequestParam String invoiceNumber) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			containerService.saveInvoiceNumber(containerId, invoiceNumber);
+			response.setSuccess(true);
+			response.setMessage("Factura guardada correctamente");
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
+			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
+		}
+		return response;
+	}
+
 	
 }

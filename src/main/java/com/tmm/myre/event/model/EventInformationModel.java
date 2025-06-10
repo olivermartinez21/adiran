@@ -2,6 +2,7 @@ package com.tmm.myre.event.model;
 
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -37,7 +38,7 @@ public class EventInformationModel implements IModel{
 	@Id
 	@Column(name = "EVENT_ID")private String eventId;
 	@Column(name = "EVENT_TYPE")private String eventType; 
-	@Column(name = "EVENT_DATE")private Date eventDate;
+	@Column(name = "EVENT_DATE")private LocalDateTime eventDate;
 	@Column(name = "ESTIMATE_REQUIRED")private String estimateRequired;
 	@Column(name = "INSPECTED")private String inspected; 
 	@Column(name = "INSPECTED_BY")private String inspectedBy; 

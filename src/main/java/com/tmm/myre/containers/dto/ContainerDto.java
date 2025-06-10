@@ -1,6 +1,7 @@
 package com.tmm.myre.containers.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 
@@ -13,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -25,7 +27,8 @@ public class ContainerDto extends AbstractManagement implements ITransferObject{
 private static final long serialVersionUID = 1L;
 	
 	private String  containerId;
-	private Date  registerDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime registerDate;
 	private String  location;
 	private String  container;
 	private Integer  containerType;
@@ -122,13 +125,21 @@ private static final long serialVersionUID = 1L;
 	private String dataUrl;
 	
 	private String originPregate;
+	private String destinyPregate;
+
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime newEventDate;
+	private String sapSaleOrder;
+
+	private String noInvoice;
 	
 	
 	
 	
 	@Builder
 	public ContainerDto( 
-			Integer idUser, String operation, Date managmentDate, String log, String containerId, String container, Integer containerType, String containerSize, String shippingCompany, String appointmentId, Date dateInspection, String vessel, String origin, String aa, String definition, String coments, String inspectionList, String travel, Integer status, String destination, String chassis, String associateUnit, String mark, String setPoint, String ventilation, String clasification, String modelYear, String bookingQuantity, String condition, String typeServicePregate, String billTo, String transportId, String buque, String bl, String operatorName, String plate, String economicNumber, String conditionPregate, String aptTo, String nomenclatura, Integer transmit, String location, String containerTypeEvent, String qualityEvent, String associateUnitGenset, byte[] eir, String eirName, int num, String dataUrl, String temperature, String humiity, String co2, String eirOutName, String ni, String o2, String securityStamp, String qualityStamp, byte[] eirOut, String imageList, Integer statusQute, String quoteName, byte[] quote, String assignedTo, String startDate, String finalDate, String daysStay, String booking, String comnetsQuote, Date  aprovedQuote, String originPregate) {
+			Integer idUser, String operation, Date managmentDate, String log, String containerId, String container, Integer containerType, String containerSize, String shippingCompany, String appointmentId, Date dateInspection, String vessel, String origin, String aa, String definition, String coments, String inspectionList, String travel, Integer status, String destination, String chassis, String associateUnit, String mark, String setPoint, String ventilation, String clasification, String modelYear, String bookingQuantity, String condition, String typeServicePregate, String billTo, String transportId, String buque, String bl, String operatorName, String plate, String economicNumber, String conditionPregate, String aptTo, String nomenclatura, Integer transmit, String location, String containerTypeEvent, String qualityEvent, String associateUnitGenset, byte[] eir, String eirName, int num, String dataUrl, String temperature, String humiity, String co2, String eirOutName, String ni, String o2, String securityStamp, String qualityStamp, byte[] eirOut, String imageList, Integer statusQute, String quoteName, byte[] quote, String assignedTo, String startDate, String finalDate, String daysStay, String booking, String comnetsQuote, Date  aprovedQuote, String originPregate, String destinyPregate,
+				LocalDateTime newEventDate, String sapSaleOrder, String noInvoice) {
 		
 		super(idUser, operation, managmentDate, log);
 		
@@ -200,6 +211,10 @@ private static final long serialVersionUID = 1L;
 		this.aprovedQuote = aprovedQuote;
 		
 		this.originPregate=originPregate;
+		this.destinyPregate=destinyPregate;
+		this.newEventDate=newEventDate;
+		this.sapSaleOrder=sapSaleOrder;
+		this.noInvoice = noInvoice;
 		
 	}
 	

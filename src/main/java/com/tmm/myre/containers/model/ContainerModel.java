@@ -2,6 +2,8 @@ package com.tmm.myre.containers.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +34,7 @@ public class ContainerModel implements IModel{
 	
 	@Id
 	@Column(name = "CONTAINER_ID")private String containerId;
-	@Column(name = "REGISTER_DATE")private Date  registerDate;
+	@Column(name = "REGISTER_DATE")private LocalDateTime registerDate;
 	@Column(name = "LOCATION")private String  location;
 	@Column(name = "CONTAINER")private String container;
 	@Column(name = "CONTAINER_TYPE")private Integer containerType;
@@ -114,8 +116,13 @@ public class ContainerModel implements IModel{
 	private byte[] quote;	
 	
 	@Column(name = "ORIGIN_PREGATE")private String originPregate;
-	
-	
-	
-	
+	@Column(name = "DESTINY_PREGATE")private String destinyPregate;
+	@Column(name = "DATE_GATEIN")private LocalDateTime dateGateIn;
+	@Column(name = "DATE_GATEOUT")private LocalDateTime dateGateOut;
+	@Column(name = "NO_INVOICE")private String noInvoice;
+
+
+
+
+
 }

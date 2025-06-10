@@ -93,21 +93,24 @@ public class AssignmentService implements IAssignmentService {
 			BookingModel booking = bookingRepository.getById(assignment.getBookingId());
 			
 			log.info("Paso SELECT BOOKING " + booking.getBooking().toString());
-			log.info("Paso antes del IF");
-			if(!assignment.getUnitNumber().isEmpty()) {
+			log.info("Paso antes del IF"+ assignment.getUnitNumber());
+			if(assignment.getUnitNumber().isEmpty()) {
+				log.info("cadena vacia");
+				assignmentRepository.save(assignment);
+				response.setMessage("Reserva provisional creada correctamente");
+			}else {
+
 				int num = containerRepository.existsBd(assignment.getUnitNumber());
 				if(num!=0) {
 					ContainerModel container = containerRepository.getByUnit(assignment.getUnitNumber());
 					log.info("Paso SELECT" + container.toString());
-					
+
 					container.setStatus(5);
 					container.setBokking(booking.getBooking());
 					log.info("Paso antes de los SAVE");
 					containerRepository.save(container);
 					assignmentRepository.save(assignment);
 					response.setSuccess(true);
-				}else {
-					response.setMessage("no se encontro la unidad asignada asegurate que este disponible para asignar");
 				}
 				
 			}

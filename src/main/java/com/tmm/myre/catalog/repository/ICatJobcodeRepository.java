@@ -2,10 +2,15 @@ package com.tmm.myre.catalog.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tmm.myre.catalog.model.CatJobcodeModel;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository("ICatJobcodeRepository")
 public interface ICatJobcodeRepository extends JpaRepository<CatJobcodeModel, String>{
@@ -13,4 +18,13 @@ public interface ICatJobcodeRepository extends JpaRepository<CatJobcodeModel, St
 	@Query(value = "SELECT * FROM  MYRE_CAT_JOBCODES WHERE JOBCODE_ID = :jobcodeId ;", nativeQuery = true)
 	CatJobcodeModel jobcodeDescription(String jobcodeId);
 
+	@Query(value = "SELECT * FROM  MYRE_CAT_JOBCODES WHERE JOBCODE_SHIPPINGID = :shippingCompanyId ;", nativeQuery = true)
+    List<CatJobcodeModel> findByShippingId(String shippingCompanyId);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE MYRE_CAT_JOBCODES SET JOBCODE_EXCHANGE = :exchange WHERE JOBCODE_SHIPPINGID = :shippingCompanyId", nativeQuery = true)
+	int updateExchange(@Param("shippingCompanyId") String shippingCompanyId, @Param("exchange") String exchange);
+
+	CatJobcodeModel findFirstByJobcodeShippingIdOrderByJobcodeIdAsc(String shippingCompanyId);
 }

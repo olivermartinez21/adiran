@@ -24,8 +24,8 @@
 			<select class="form-control" id="shippingCompanyCatalog" hidden=true>
 				<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 			</select>									
-						<input type="text" class="form-control" id="assignmentId" hidden=true>			
-						<input type="text" class="form-control" id="assigmentType" hidden=true>			
+						<input type="text" class="form-control" id="assignmentId" hidden=true>
+						<input type="text" class="form-control" id="assigmentType" hidden=true>
 							
 							
 			<select class="form-control" id="containerTypeBooking" hidden=true>
@@ -295,7 +295,7 @@
 								<div class="form-group">
 									<label for="typeBookingInformation">Tipo de la unidad</label>
 									<select class="form-control" id="typeBookingInformation" onInput="showMoreInformation()">
-									<option >Selecciona una opción</option>
+									<option value="0">Selecciona una opción</option>
 									<option value="1">CH</option>
 									<option value="2">OT</option>
 									<option value="3">DC</option>
@@ -310,7 +310,7 @@
 								<div class="form-group">
 								<label for="sizeBookingInformation">Tamaño de la unidad</label>
 								<select class="form-control" id="sizeBookingInformation"  onInput="nexInput()" disabled>
-								<option >Selecciona una opción</option>
+								<option value="0">Selecciona una opción</option>
 								<option>20</option>
 								<option>40</option>
 								</select>
@@ -320,7 +320,7 @@
 								<div class="form-group">
 									<label for="qualityBookingInformation">Grado de la unidad</label>
 									<select class="form-control" id="qualityBookingInformation" onInput="getContainersEspecifications()" disabled>
-									<option >Selecciona una opción</option>
+									<option value="0">Selecciona una opción</option>
 									<option value="1">A</option>
 									<option value="2">B</option>
 									<option value="3">C</option>

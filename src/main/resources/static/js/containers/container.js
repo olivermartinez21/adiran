@@ -328,12 +328,136 @@ $("#conditionModel").submit(function () {
 		return false;
 	});	
 	
-	
-	
+	//Formulario de busqueda*************************
+	$("#filterInventoryForm").submit( () => {
+		data = {
+			shippingCompany : $("#filterShippingCompany").val(),
+			dateInit : $("#filterDateInit").val(),
+			dateEnd : $("#filterDateEnd").val(),
 
+		}
+		console.log("soy data" + JSON.stringify(data));
+		$.ajax({
+			type: "GET",
+			url: "container/generateManeuverReport",
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			xhrFields: {
+				responseType: 'blob' // Set response type to blob to handle binary data
+			},
+			success: (data, status, xhr) => {
+				// Create a new Blob object using the response data
+				const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+				// Create a link element
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob); // Create a URL for the blob
+				link.download = 'ReporteManiobras.xlsx'; // Set the file name
+
+				// Append to the body and trigger the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				setTimeout(() => {
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(link.href);
+				}, 100);
+			},
+			error: (xhr, status, error) => {
+				console.error('Error generating Excel report:', error);
+				alert('Error generating report. Please try again.');
+			}
+		});
+		return false;
+	});
+
+	$("#filterShippingForm").submit( () => {
+		data = {
+			shippingCompany : $("#filterShippingCompany2").val(),
+			dateInit : $("#filterDateInit2").val(),
+			dateEnd : $("#filterDateEnd2").val(),
+		}
+		console.log("soy data" + JSON.stringify(data));
+		$.ajax({
+			type: "GET",
+			url: "container/generateInventoryReport",
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			xhrFields: {
+				responseType: 'blob' // Set response type to blob to handle binary data
+			},
+			success: (data, status, xhr) => {
+				// Create a new Blob object using the response data
+				const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+				// Create a link element
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob); // Create a URL for the blob
+				link.download = 'ReporteInventario.xlsx'; // Set the file name
+
+				// Append to the body and trigger the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				setTimeout(() => {
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(link.href);
+				}, 100);
+			},
+			error: (xhr, status, error) => {
+				console.error('Error generating Excel report:', error);
+				alert('Error generating report. Please try again.');
+			}
+		});
+		return false;
+	});
+
+	$("#filterAdsForm").submit( () => {
+		data = {
+			dateInit : $("#filterAdsDateInit").val(),
+			dateEnd : $("#filterAdsDateEnd").val(),
+		}
+		console.log("soy data" + JSON.stringify(data));
+		$.ajax({
+			type: "GET",
+			url: "container/generateAdsReport",
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			xhrFields: {
+				responseType: 'blob' // Set response type to blob to handle binary data
+			},
+			success: (data, status, xhr) => {
+				// Create a new Blob object using the response data
+				const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+				// Create a link element
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob); // Create a URL for the blob
+				link.download = 'ReporteHapag.xlsx'; // Set the file name
+
+				// Append to the body and trigger the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				setTimeout(() => {
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(link.href);
+				}, 100);
+			},
+			error: (xhr, status, error) => {
+				console.error('Error generating Excel report:', error);
+				alert('Error generating report. Please try again.');
+			}
+		});
+		return false;
+	});
 	
 
 }
+
 function addNewContainer() {
 	eventDateValidator();
 	$("#newContainerModal").modal("show");
@@ -409,19 +533,15 @@ function dataTableRefresh(){
 		},
 		buttons: {
 			buttons: [
-				{extend: 'excelHtml5', title: 'Unidades'},
-				/*{ //text: 'Alta de contenedores', action: function() { addNewContainer()}
-				}*/],
-			dom: {
-				
-				button:{
-					
-	                tag:"button",
-	                className:"btn btn-dark"
-	            },
-			}},
+				//{extend: 'excelHtml5', title: 'Unidades'},
+				//{text: 'Descargar Inventario Excel', className: 'btn btn-dark', action: function() { downloadInventoryReport()}},
+				{text: 'Busqueda Cliente Inventario', className: 'btn btn-info', action: function() { filterShippigModal(); } },
+				//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
+				{text: 'Busqueda Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
+			],
+		},
 				createdRow: function( row, data ) {
-				if(data.status==5){
+				if(data.status==5 || data.status==6){
 				$(row).addClass('yellow');
 				}
         		
@@ -556,17 +676,14 @@ function configDataTable() {
 		},
 		buttons: {
 			buttons: [
-				{extend: 'excelHtml5', title: 'Unidades'},
-				/*{ //text: 'Alta de contenedores', action: function() { addNewContainer()}
-				}*/],
-			dom: {
-				
-				button:{
-					
-	                tag:"button",
-	                className:"btn btn-dark"
-	            },
-			}},
+				//{extend: 'excelHtml5', title: 'Unidades'},
+				//{text: 'Descargar Inventario Excel', className: 'btn btn-dark', action: function() { downloadInventoryReport()}},
+				{text: 'Busqueda Cliente Inventario', className: 'btn btn-info', action: function() { filterShippigModal(); } },
+				//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
+				{text: 'Busqueda Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
+				{text: 'Anuncios HAPAG', className: 'btn btn-info', action: function() { filtersAds(); } },
+			],
+			},
 			ajax: {
 			url: "container/getDataTable",
 			type: 'GET',
@@ -580,7 +697,7 @@ function configDataTable() {
 		},
 		
 		createdRow: function( row, data ) {
-				if(data.status==5){
+				if(data.status==5 || data.status==6){
 				$(row).addClass('yellow');
 				}
         		
@@ -1404,7 +1521,29 @@ function showInspections(data) {
 		],
 	}).columns.adjust();
 	
-} 
+}
+
+function downloadInventoryReport(){
+	let url = 'container/generateInventoryReport'
+	const a = document.createElement('a')
+	a.href = url
+
+	a.download = url.split('/').pop()
+	document.body.appendChild(a)
+	a.click()
+	document.body.removeChild(a)
+}
+
+function downloadManeuverReport(){
+	let url = 'container/generateManeuverReport'
+	const a = document.createElement('a')
+	a.href = url
+
+	a.download = url.split('/').pop()
+	document.body.appendChild(a)
+	a.click()
+	document.body.removeChild(a)
+}
 
 function convertToBase64() {
         //Read File
@@ -1458,4 +1597,16 @@ function gateOut(){
 function openEir(data){
 	
 	window.open('container/PDF_EIR?containerId='+ data+'')
+}
+
+function filtersModal(){
+	$("#filterInventoryModel").modal("show");
+	}
+
+function filterShippigModal(){
+	$("#filterShippingModel").modal("show");
+}
+
+function filtersAds(){
+	$("#filterAdsModel").modal("show");
 }

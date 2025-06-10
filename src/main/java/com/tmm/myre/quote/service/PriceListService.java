@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,12 +13,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.tmm.myre.catalog.converter.JobcodeHistoricConverter;
+import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
+import com.tmm.myre.catalog.dto.JobcodeHistoricDto;
+import com.tmm.myre.catalog.model.CatJobcodeModel;
+import com.tmm.myre.catalog.model.CatShippingCompanyModel;
+import com.tmm.myre.catalog.model.JobcodeHistoricModel;
+import com.tmm.myre.catalog.repository.ICatJobcodeRepository;
+import com.tmm.myre.catalog.repository.ICatShippingCompanyReposirtory;
+import com.tmm.myre.catalog.repository.IJobcodeHistoricRepository;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +45,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service("priceListService")
 public class PriceListService implements IPriceListService {
+
+	@Autowired
+	private ICatJobcodeRepository catJobcodeRepository;
+
+	@Autowired
+	private ICatShippingCompanyReposirtory catShippingCompanyRepository;
+
+	@Autowired
+	private IJobcodeHistoricRepository jobcodeHistoricRepository;
+
+	@Autowired
+	private JobcodeHistoricConverter jobcodeHistoricConverter;
+
+
 	@Override
 	public ResponseManagement createLisprice(MultipartFile file, String type) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();	
@@ -171,6 +196,82 @@ public class PriceListService implements IPriceListService {
 		
 		return response;
 	}
-	
+
+	@Override
+	public void updateJobcode(Map<String, Object> data) {
+		String jobcodeId = (String) data.get("jobcodeId");
+		CatJobcodeModel jobcode = catJobcodeRepository.findById(jobcodeId)
+				.orElseThrow(() -> new IllegalArgumentException("Registro no encontrado"));
+
+		// 1. Guarda el estado anterior en histórico
+		JobcodeHistoricModel historicDto = JobcodeHistoricModel.builder()
+				.jobcodeId(jobcode.getJobcodeId())
+				.jobcodeRepair(jobcode.getJobcodeRepair())
+				.jobcodeDescription(jobcode.getJobcodeDescription())
+				.jobcodeMaterial(jobcode.getJobcodeMaterial())
+				.jobcodeHh(jobcode.getJobcodeHh())
+				.jobcodeExchange(jobcode.getJobcodeExchange())
+				.jobcodeShippingId(jobcode.getJobcodeShippingId())
+				.build();
+
+		jobcodeHistoricRepository.save(historicDto);
+
+		// Actualiza todos los campos recibidos (excepto el id)
+		data.forEach((key, value) -> {
+			if (!key.equals("jobcodeId")) {
+				try {
+					Field field = CatJobcodeModel.class.getDeclaredField(key);
+					field.setAccessible(true);
+					field.set(jobcode, value != null ? value.toString() : null);
+				} catch (Exception e) {
+					// Puedes loggear si algún campo no existe
+				}
+			}
+		});
+
+		catJobcodeRepository.save(jobcode);
+	}
+
+//	@Override
+//	public ResponseManagement updateLaborByShippingCompanyId(CatShippingCompanyDto catShippingCompanyDto) throws ConverterException{
+//		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+//		try {
+//			CatShippingCompanyModel shippingCompany = catShippingCompanyRepository.getById(catShippingCompanyDto.getShippingCompanyId());
+//
+//			shippingCompany.setLabor(catShippingCompanyDto.getLabor());
+//			catShippingCompanyRepository.save(shippingCompany);
+//			response.setSuccess(true);
+//		} catch (Exception e) {
+//			log.error("Error al obtener la compañía de envío: " + e.getMessage());
+//			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+//			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
+//			return response;
+//		}
+//		return response;
+//	}
+
+	@Override
+	public String getExchangeByShippingCompanyId(String shippingCompanyId) {
+	    CatJobcodeModel jobcodeModel = catJobcodeRepository.findFirstByJobcodeShippingIdOrderByJobcodeIdAsc(shippingCompanyId);
+	    return jobcodeModel != null ? jobcodeModel.getJobcodeExchange() : null;
+	}
+
+	@Override
+	public ResponseManagement updateLaborAndExchangeByShippingCompanyId(String shippingCompanyId, String labor, String exchange) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			CatShippingCompanyModel shippingCompany = catShippingCompanyRepository.getById(shippingCompanyId);
+			shippingCompany.setLabor(labor);
+			catShippingCompanyRepository.save(shippingCompany);
+			catJobcodeRepository.updateExchange(shippingCompanyId, exchange);
+
+			response.setSuccess(true);
+		} catch (Exception e) {
+			log.error("Error al actualizar labor y exchange: " + e.getMessage());
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
+		}
+		return response;
+	}
 
 }

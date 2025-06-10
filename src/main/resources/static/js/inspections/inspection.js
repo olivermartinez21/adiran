@@ -326,7 +326,7 @@ function newDamage(data){
 	            },
 			}},
 		ajax: {
-			url: "inspection/dataTableInpection",
+			url: "inspection/dataTableInpectionComplete",
 			type: 'GET',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			dataSrc: '',
@@ -361,12 +361,12 @@ function newDamage(data){
 						return $("#repair option:selected").html();
 					}}, 
 			{ data: "length", visible: true , render : function(data) {
-					$("#largeInspection").val(data);
+					$("#largeInspection").val();
 						return data;
 						
 					}},
 			{ data: "width", visible: true , render : function(data) {
-					$("#heigthInspection").val(data);
+					$("#heigthInspection").val();
 						return data;
 						
 					}},
@@ -380,7 +380,8 @@ function newDamage(data){
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName", visible: true},
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
 			
@@ -402,24 +403,16 @@ function newDamage(data){
 //			{ data: "inspectionId", visible: true , render : function(data) {
 //						return "";
 //					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},			
+			{ data: "hours", visible: true},
+			{ data: "labor", visible: true },
+			{ data: "material", visible: true},
+			{ data: "tarifa", visible: true},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				$("#imagenData").val(data)
 				//return '<a onclick="showPhoto(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}},
-			{ data: "inspectionId", visible: true , render : function(data) {
+			{ data: "inspectionId", visible: false , render : function(data) {
 						return "";
 					}},	
 			{ data: "status", visible: false , render : function(data) {
@@ -437,6 +430,7 @@ function newDamage(data){
 	
 	}
 function addNewDamage(){
+	console.log("Paso 1 agrega danio")
 	$("#newDamageAddModel").modal("show")
 }
 
@@ -532,6 +526,7 @@ $("#newDamageAddModel").submit(function () {
 			 repair: $("#newRepair").val(),
 			 reference: $("#newReferent").val(),
 			 customerType: $("#inspectionCustomerType").val(),
+			 customerName: $("#customerName").val(),
 			 //photo: item.photo,
 			 length: $("#largeInspection").val(),
 			 width:  $("#heigthInspection").val(),

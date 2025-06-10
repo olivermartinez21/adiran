@@ -25,6 +25,7 @@
 									<option value="3">EN TALLER</option>
 									<option value="4">LISTO</option>
 									<option value="5">VISTO BUENO</option>
+									<option value="6">LISTO PARA SALIR</option>
 									<option value="7">PRUEBA TECNICA</option>
 									<option value="8">COMPLETO</option>
 				</select>
@@ -94,7 +95,7 @@
 						<th>Condicion(Vacio/Lleno)</th>
 						<th>Propietario</th>
 						<th>Estado</th>
-						<th>Clasificación</th>
+						<th>Grado - Calidad</th>
 						<th>Estado</th>
 						<th>Opciones</th>
 					</tr>
@@ -111,7 +112,7 @@
 						<th>Condicion(Vacio/Lleno)</th>
 						<th>Propietario</th>
 						<th>Estado</th>
-						<th>Clasificación</th>
+						<th>Grado - Calidad</th>
 						<th>Estado</th>
 						<th>Opciones</th>
 					</tr>
@@ -1251,9 +1252,131 @@
 				</div>
 			</div>
 		</div>
-	
-	
-		
+
+		<div class="modal fade" id="filterInventoryModel" tabindex="-1" role="dialog" aria-labelledby="filterInventoryModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Reporte de Maniobras por Cliente</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="filterInventoryForm">
+						<div class="modal-body modal-body-app">
+							<div class="row">
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="filterShippingCompany">Cliente</label>
+										<select class="form-control" id="filterShippingCompany">
+											<option value="null">Todos los clientes</option>
+											<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="filterDateInit">Fecha Evento Inicio </label>
+										<input type="date" class="form-control" id="filterDateInit" >
+									</div>
+								</div>
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="filterDateEnd">Fecha Evento Fin</label>
+										<input type="date" class="form-control" id="filterDateEnd" >
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success" >Aceptar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="filterShippingModel" tabindex="-1" role="dialog" aria-labelledby="filterShippingModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="inspectionlLabel">Reporte de Inventario por Cliente</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="filterShippingForm">
+						<div class="modal-body modal-body-app">
+							<div class="row">
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="filterShippingCompany2">Cliente</label>
+										<select class="form-control" id="filterShippingCompany2">
+											<option value="null">Todos los Clientes</option>
+											<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+										</select>
+									</div>
+								</div>
+<!--								<div class="col-sm" >-->
+<!--									<div class="form-group">-->
+<!--										<label for="filterDateInit2">Fecha Inicio </label>-->
+<!--										<input type="date" class="form-control" id="filterDateInit2" >-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-sm" >-->
+<!--									<div class="form-group">-->
+<!--										<label for="filterDateEnd2">Fecha Fin</label>-->
+<!--										<input type="date" class="form-control" id="filterDateEnd2" >-->
+<!--									</div>-->
+<!--								</div>-->
+
+							</div>
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success" >Aceptar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="filterAdsModel" tabindex="-1" role="dialog" aria-labelledby="filterAdsModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="filterAdsLabel">Anuncios HAPAG</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="filterAdsForm">
+						<div class="modal-body modal-body-app">
+							<div class="row">
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="filterAdsDateInit">Fecha Evento Inicio </label>
+										<input type="date" class="form-control" id="filterAdsDateInit" >
+									</div>
+								</div>
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="filterAdsDateEnd">Fecha Evento Fin</label>
+										<input type="date" class="form-control" id="filterAdsDateEnd" >
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success" >Aceptar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 		
 		
 		

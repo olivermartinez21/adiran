@@ -16,7 +16,7 @@
 		<input type="text" class="form-control" id="width" hidden=true >
 		<input type="text" id="containerType" hidden=true>
 		
-		<select class="form-control" id="inspectionCustomerType" hidden=true>
+		<select class="form-control" id="inspectionCustomerTypeEscondido" hidden=true>
 									<option value="1">MERCHANT</option>
 									<option value="2">CARRIER</option>
 		</select>
@@ -91,6 +91,7 @@
 									<tr>
 										<Th>N° </Th>
 										<Th>Unidad </Th>
+										<Th>Fecha de Registro </Th>
 										<Th>Tipo De Unidad </Th>
 										<Th>Nomenclatura </Th>
 										<Th>Propietario </Th>
@@ -112,6 +113,7 @@
 									<tr>
 										<Th>N° </Th>
 										<Th>Unidad </Th>
+										<Th>Fecha de Registro </Th>
 										<Th>Tipo De Unidad </Th>
 										<Th>Nomenclatura </Th>
 										<Th>Propietario </Th>
@@ -181,6 +183,7 @@
 										<th>Área Cm2</th>
 										<th>Profunidad </th>
 										<th>Responsabilidad Del Daño </th>
+										<th>Cobrar a:</th>
 										<th>Código De Localización</th> 
 										<th>Cantidad </th>
 <!-- 										<th>Fabricante </th> -->
@@ -192,7 +195,7 @@
 										<th>Hrs</th>
 										<th>Labor</th>
 										<th>$ Material </th>
-										<th>Tarifa </th>
+										<th>Subtotal </th>
 										<th>Fotos </th>
 										<th>Observaciones</th>
 										<th>status</th>
@@ -223,27 +226,21 @@
 					</div>
 					<form id="inspectionCapModelForm">
 					<div class="modal-body modal-body-app">
-					<input type="text" class="form-control" id="inspectionIdent" hidden="true">
-					<input type="text" class="form-control" id="preLabor" hidden="true">
+					<input type="hidden" class="form-control" id="inspectionIdent" >
+					<input type="hidden" class="form-control" id="preLabor" >
+					<input type="hidden" class="form-control" id="shippingCompanyIdRef" >
+					<input type="hidden" class="form-control" id="jobcodeId" >
 					<div class="row">
 					
 							<div class="col-sm" id=divConditionUnit>
-<!-- 								<div class="form-group"> -->
-<!-- 									<label for="newWorkCode">Codigo de trabajo</label> -->
-<!-- <!-- 			Comentario Momentaneo						<input type="text" class="form-control" id="newWorkCode" > -->
-<!-- 									<select class="form-control" name="select"> -->
-<!-- 									  <option value="786" selected>IW0 40Y</option> -->
-<!-- 									  <option value="789" >LCDHL</option> -->
-<!-- 									  <option value="790">LCDHLR</option> -->
-<!-- 									</select> -->
-<!-- 								</div> -->
-								
+
+
 								<div class="form-group">
-									<label for="newJobcode">Codigo de trabajo</label>
-									<input type="text" class="form-control" id="newWorkCode" name="example" list="newJobcodeList" onchange="myFunction()">
-									<datalist id="newJobcodeList"  >
-									 <option th:each="option : ${catJobcode}" th:value="${option.jobcodeRepair}" th:text="${option.jobcodeDescription}" th:data-id="${option.jobcodeId}" ></option>
-									</datalist>
+									<label for="newWorkCode">Busqueda Codigo/Descripcion</label>
+									<input type="text" class="form-control"
+										   id="newWorkCode"
+										   list="newJobcodeList" onchange="myFunction()">
+									<datalist id="newJobcodeList"></datalist>
 								</div>
 							</div>
 							
@@ -500,7 +497,33 @@
 				</div>
 			</div>
 		</div>
-		
+
+		<div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<form id="invoiceForm">
+						<div class="modal-header modal-header-app">
+							<h5 class="modal-title" id="invoiceModalLabel">Número de Factura</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" style="color: #A4FFFE">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body modal-body-app">
+							<input type="hidden" id="invoiceContainerId" name="containerId">
+							<div class="form-group">
+								<label for="invoiceNumberInput">Factura</label>
+								<input type="text" class="form-control" id="invoiceNumberInput" name="invoiceNumber" required>
+							</div>
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success">Guardar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
 		<script type="text/javascript" th:src="@{/js/quotes/quote.js}"></script>
 	</section>
 </body>

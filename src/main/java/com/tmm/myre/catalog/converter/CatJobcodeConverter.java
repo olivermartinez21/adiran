@@ -19,6 +19,7 @@ public class CatJobcodeConverter implements IConverter<CatJobcodeModel, CatJobco
 				.jobcodeMaterial(to.getJobcodeMaterial())
 				.jobcodeHh(to.getJobcodeHh())
 				.jobcodeExchange(to.getJobcodeExchange())
+				.jobcodeShippingId(to.getJobcodeShippingId())
 				.build();
 		return entity;
 	}
@@ -32,6 +33,7 @@ public class CatJobcodeConverter implements IConverter<CatJobcodeModel, CatJobco
 				.jobcodeMaterial(entity.getJobcodeMaterial())
 				.jobcodeHh(entity.getJobcodeHh())
 				.jobcodeExchange(entity.getJobcodeExchange())
+				.jobcodeShippingId(entity.getJobcodeShippingId())
 				.build();
 		return to;
 	}

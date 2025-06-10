@@ -8,8 +8,14 @@ package com.tmm.myre.base.service;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.tmm.myre.assignments.dto.PreOrderDeliveryRequestDto;
+import com.tmm.myre.catalog.model.CatComponentModel;
+import com.tmm.myre.catalog.model.CatDamageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +85,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 	private ICatRepairRepository catRepairRepository;
 	
 	@Autowired
-	private IQuoteRepository quoteRepositry;
+	private IQuoteRepository quoteRepository;
 	
 	@Autowired
 	private IAssignmentRepository assignmentRepository;
@@ -748,107 +754,113 @@ public class PdfGenerationService implements IPdfGenerationService {
 			table1.setWidths(new float[] {2,2,2,2});
 			
 			//-------------------------------------------------------------------------------
-			List<InspectionModel> listInspections = inspectionRepository.getAllInspectionsByContainerId(containerId);
-			
-			for(InspectionModel inspection : listInspections) {
-				
-				log.info(inspection.toString()+" ---------------- Esta escribiendo--------");
-				
-				hcell = new PdfPCell(new Phrase("SECCION", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("COMPONENTE", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("DAÑO", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("LOCALIZACION", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase(inspection.getPart()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(catComponentRepository.getById(inspection.getComponent()).getComponent()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(catDamageRepository.getById(inspection.getDamage().toString()).getDescription()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				 
-				hcell = new PdfPCell(new Phrase(inspection.getLocation()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase("MÉTODO DE REPARACIÓN" , bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("MEDIDAS", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("RESPONSABILIDAD", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("COMENTARIOS", bold));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase(catRepairRepository.getById(inspection.getRepair()).getRepairDescription()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				String unidadMedida = null;
-				
-				switch (inspection.getExtentOtherLarge()) {
-				case 1:
-					unidadMedida = "mm";
-					break;
-				case 2:
-					unidadMedida = "cm";
-					break;
-				case 3:
-					unidadMedida = "mts";
-					break;
+			if(container.getCondition().equals("1")){
+				log.info("El contenedor no necsita mostrar inspecciones");
+			}else {
+				log.info("El contenedor si necsita mostrar inspecciones" + containerId);
+				List<InspectionModel> listInspections = inspectionRepository.getAllInspectionsByContainerId(containerId);
 
-				default:
-					break;
+				for(InspectionModel inspection : listInspections) {
+
+					log.info(inspection.toString()+" ---------------- Esta escribiendo--------");
+
+					hcell = new PdfPCell(new Phrase("SECCION", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					hcell.setBackgroundColor(BaseColor.YELLOW);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("COMPONENTE", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("DAÑO", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("LOCALIZACION", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					//-------------------------------------------------------------------------------
+
+					hcell = new PdfPCell(new Phrase(inspection.getPart()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase(catComponentRepository.getById(inspection.getComponent()).getComponent()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase(catDamageRepository.getById(inspection.getDamage().toString()).getDescription()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase(inspection.getLocation()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					//-------------------------------------------------------------------------------
+
+					hcell = new PdfPCell(new Phrase("MÉTODO DE REPARACIÓN" , bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("MEDIDAS", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("RESPONSABILIDAD", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase("COMENTARIOS", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					//-------------------------------------------------------------------------------
+
+					hcell = new PdfPCell(new Phrase(catRepairRepository.getById(inspection.getRepair()).getRepairDescription()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					String unidadMedida = null;
+
+					switch (inspection.getExtentOtherLarge()) {
+						case 1:
+							unidadMedida = "mm";
+							break;
+						case 2:
+							unidadMedida = "cm";
+							break;
+						case 3:
+							unidadMedida = "mts";
+							break;
+
+						default:
+							break;
+					}
+
+					hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+unidadMedida+", Ancho: "+ inspection.getWidth()+unidadMedida+ ", Profundo: "+inspection.getDepth()+unidadMedida+
+							" Largo: "+inspection.getOtherLength()+unidadMedida , regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase(inspection.getCustomerType() == 1 ? "MERCHANT" : "CARRIER"+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					hcell = new PdfPCell(new Phrase(inspection.getReference()+"\n ", regularBlack));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table1.addCell(hcell);
+
+					log.info(" ---------------- termino escribiendo--------");
 				}
-				
-				hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+unidadMedida+", Ancho: "+ inspection.getWidth()+unidadMedida+ ", Profundo: "+inspection.getDepth()+unidadMedida+ 
-						" Largo: "+inspection.getOtherLength()+unidadMedida , regularBlack));
+				//-------------------------------------------------------------------------------
+				hcell = new PdfPCell(new Phrase("TOTAL" , regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(inspection.getCustomerType() == 1 ? "MERCHANT" : "CARRIER"+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(inspection.getReference()+"\n ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table1.addCell(hcell);
-				
-				
 			}
-			//-------------------------------------------------------------------------------
-			hcell = new PdfPCell(new Phrase("TOTAL" , regularBlack));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table1.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase(" ", regularBlack));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table1.addCell(hcell);
@@ -1309,6 +1321,333 @@ public class PdfGenerationService implements IPdfGenerationService {
 				
 			document.close();
 			
+		} catch (Exception ex) {
+			log.error(ex.toString());
+		}
+		return out.toByteArray();
+	}
+
+	@Override
+	public byte[] pdfPreOrderDelivery(PreOrderDeliveryRequestDto request) {
+
+		Document document = new Document(PageSize.A4, 15f, 15f, 30f, 25f);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		Image logo = null;
+		log.info(request.getAssignmentId()+"Paso 1----------------");
+
+		try {
+			byte[] imagenAdemsa = Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("static/images/LogoTMMLogisticsPixel.png").toURI()));
+			logo = Image.getInstance(imagenAdemsa);
+		} catch(Exception ex) {
+			log.error(ex.toString());
+		}
+		log.info("Paso 1----------------");
+		AssignmentModel assignmentSearch = assignmentRepository.getAssignmentById(request.getAssignmentId());
+
+		log.info(assignmentSearch.getUnitNumber() + "Numero de unidad----------------");
+
+		log.info("Paso 2---------------" + assignmentSearch.getUnitNumber());
+		ContainerModel containerList = containerRepository.getPreLabor(assignmentSearch.getUnitNumber());
+
+		try {
+
+			PdfWriter.getInstance(document, out);
+			Font bold = new Font(FontFamily.COURIER, 7.5f, Font.BOLD);
+			Font regularBlack = new Font(FontFamily.COURIER, 7.5f, Font.NORMAL);
+
+			Font regular = new Font(FontFamily.COURIER, 7.5f, Font.NORMAL);
+			Font regularWhite = new Font(FontFamily.COURIER, 10f, Font.BOLD,BaseColor.WHITE);
+
+			Font tiltle = new Font(FontFamily.COURIER, 12f, Font.NORMAL);
+
+			log.info("Paso 3---------------");
+			document.open();
+
+
+			/***********************************************************************************************************************/
+			PdfPTable table = new PdfPTable(2);
+			table.setWidthPercentage(102);
+			table.setWidths(new float[] {2,2});
+
+			logo.scalePercent(50);
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBorder(Rectangle.NO_BORDER);
+			hcell.addElement(logo);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+			log.info("Paso 4---------------");
+			Phrase p = new Phrase("ORDEN: SIN VALIDES", tiltle);
+			hcell = new PdfPCell(p);
+			hcell.setBorder(Rectangle.NO_BORDER);
+			hcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			table.addCell(hcell);
+
+
+			document.add(table);
+			/***********************************************************************************************************************/
+			document.add(new Paragraph(" \n"));
+			table = new PdfPTable(1);
+			table.setWidthPercentage(102);
+			table.setWidths(new float[] {2});
+
+			log.info("Paso 5---------------");
+			hcell = new PdfPCell(new Phrase("LOCALIDAD: AGUASCALIENTES", tiltle));
+			hcell.setBorder(Rectangle.NO_BORDER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+
+			document.add(table);
+			/***********************************************************************************************************************/
+			document.add(new Paragraph(" \n"));
+			document.add(new Paragraph(" \n"));
+			table = new PdfPTable(1);
+			table.setWidthPercentage(102);
+			table.setWidths(new float[] {2});
+
+			hcell = new PdfPCell(new Phrase("PRE ORDEN DE ENTREGA DE UNIDADES VACIAS ", tiltle));
+			hcell.setBorder(Rectangle.NO_BORDER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			document.add(table);
+
+			/***********************************************************************************************************************/
+			document.add(new Paragraph(" \n"));
+			table = new PdfPTable(2);
+			table.setWidthPercentage(102);
+			table.setWidths(new float[] {2,2});
+
+			hcell = new PdfPCell(new Phrase("BOOKING: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getBookingOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("PROPIETARIO: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getShippingCompany(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("TIPO DE SERVICIO: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getTypeServiceOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			//Descomentar si se quiere mostrar las unidades restantes
+			/*hcell = new PdfPCell(new Phrase("UNIDADES RESTANTES: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+assignmentSearch.get, regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);*/
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("COBRAR A: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getBillOrderTo(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("EMPRESA TRANSPORTISTA: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getCarrierCompanyOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			String contType = null;
+
+			log.info("Switch------------------1");
+			switch (assignmentSearch.getType()) {
+				case "1":
+					contType = "CH";
+					break;
+				case "2":
+					contType = "OT";
+					break;
+				case "3":
+					contType = "DC";
+					break;
+				case "4":
+					contType = "GS";
+					break;
+				case "5":
+					contType = "IMO";
+					break;
+				case "6":
+					contType = "RF";
+					break;
+				case "7":
+					contType = "HC";
+					break;
+
+			}
+
+			hcell = new PdfPCell(new Phrase("TIPO DE UNIDAD: " , regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+ contType, regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("TAMAÑO: " , regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+ assignmentSearch.getSize(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+			/*String descripcionEstado = null;
+
+			log.info("Switch------------------2");
+			switch (containerList.getCondition()) {
+				case "1":
+					descripcionEstado = "DISPONIBLE";
+					break;
+				case "2":
+					descripcionEstado = "DAÑADO";
+					break;
+				case "3":
+					descripcionEstado = "DAÑADO/PTI";
+					break;
+				case "4":
+					descripcionEstado = "EVACUACION";
+					break;
+				case "5":
+					descripcionEstado = "PPTI";
+					break;
+				case "6":
+					descripcionEstado = "BLOQUEADO/GX";
+					break;
+				case "7":
+					descripcionEstado = "TOTAL LOOS";
+					break;
+				case "8":
+					descripcionEstado = "VENTA";
+					break;
+				case "9":
+					descripcionEstado = "ACCIDENTADO";
+					break;
+				default:
+					descripcionEstado = "Estado inválido";
+					break;
+			}
+
+			hcell = new PdfPCell(new Phrase("CONDICION: " , regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("" + descripcionEstado, regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);*/
+//-------------------------------------------------------------------------------------:
+
+
+			hcell = new PdfPCell(new Phrase("OPERADOR: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getOperatorOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("WORK ORDER: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getWorkOrderOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("ECONOMICO: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+request.getEconomicNumberOrder(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+			//Descomentar si se quiere mostrar las unidades a entregar
+			/*hcell = new PdfPCell(new Phrase("UNIDADES A ENTREGAR: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase(""+order.getQuantityOfUnits(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);*/
+//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("UNIDADES PREASIGNADAS: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("" , regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+//-------------------------------------------------------------------------------------
+
+
+			document.add(table);
+
+			/***********************************************************************************************************************/
+
+			document.close();
+
 		} catch (Exception ex) {
 			log.error(ex.toString());
 		}
@@ -1809,602 +2148,256 @@ public class PdfGenerationService implements IPdfGenerationService {
 		Document document = new Document(PageSize.A4, 15f, 15f, 30f, 25f);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		Image logo = null;
-		Image eirDry = null;
-		Image firma = null;
-		ContainerModel container  = containerRepository.getById(containerId) ;
-		
-		
+		ContainerModel container = containerRepository.getById(containerId);
+
+		// Carga el logo
 		try {
-			byte[] imagenAdemsa = Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("static/images/LogoTMMLogisticsPixel.png").toURI()));
-			logo = Image.getInstance(imagenAdemsa);
-		} catch(Exception ex) {
-			log.error(ex.toString());
+			byte[] logoBytes = Files.readAllBytes(
+					Paths.get(getClass().getClassLoader()
+							.getResource("static/images/LogoTMMLogisticsPixel.png").toURI()));
+			logo = Image.getInstance(logoBytes);
+		} catch (Exception ex) {
+			// log.error("No se pudo cargar el logo: " + ex);
 		}
-		
-		
-			try {
-				/***********************************************************************************************************************/
-				log.info("Si genero");
-				PdfWriter.getInstance(document, out);
-				Font bold = new Font(FontFamily.COURIER, 7.5f, Font.BOLD);
-				Font regularBlack = new Font(FontFamily.COURIER, 7.5f, Font.NORMAL);	
-				
-				Font regular = new Font(FontFamily.COURIER, 7.5f, Font.NORMAL);	
-				Font regularWhite = new Font(FontFamily.COURIER, 10f, Font.BOLD,BaseColor.WHITE);	
-				
-				Font regularBlackBig = new Font(FontFamily.COURIER, 26f, Font.NORMAL);
-				
-				 document.open();
-				 
-				 log.info("Abre Documento");
-	            /***********************************************************************************************************************/
-	            PdfPTable table = new PdfPTable(2);
-				table.setWidthPercentage(102);
-				table.setWidths(new float[] {2,6});
-				
-				
-				PdfPCell hcell = new PdfPCell();
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.addElement(logo);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table.addCell(hcell);
-				
-				Phrase p = new Phrase("ESTIMADO DE REPARACION", regularBlackBig);
-				
-				hcell = new PdfPCell(p);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table.addCell(hcell);
-			
-				document.add(table);
-	            /***********************************************************************************************************************/
-				 document.add(new Paragraph(" \n"));
-				table = new PdfPTable(2);
-				table.setWidthPercentage(102);
-				table.setWidths(new float[] {6,6});
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase("", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table.addCell(hcell);
-				log.info("primera parte antes del get");
-				hcell = new PdfPCell(new Phrase("NÚMERO DEL ESTIMADO:" + container.getQuoteName().toString(), regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				log.info("segunda parte antes del get");
-				hcell = new PdfPCell(new Phrase("", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("FECHA DEL ESTIMADO:" + container.getDateInspection().toString(), regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				document.add(table);
-				
-				/***********************************************************************************************************************/
-				PdfPTable table1 = new PdfPTable(2);
-				table1.setWidthPercentage(100);
-				table1.setWidths(new float[] {3,3});
-				
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("CLIENTE:  " + container.getBillTo().toString() , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				
-				String shipingCompany = null;
-				
-				switch (container.getShippingCompany()) {
-				case "1":
-					shipingCompany = "COSCO SHIPPING LINES MEXICO";
-					break;
-				case "2":
-					shipingCompany = "MAERSK";
-					break;
-				case "3":
-					shipingCompany = "HAPAG LLOYD";
-					break;
-				case "4":
-					shipingCompany = "HAMBURG-SUD";
-					break;
-				case "5":
-					shipingCompany = "MEDITERRANEAN SHIPPING CO";
-					break;
-				case "6":
-					shipingCompany = "OCEAN NETWORK EXPRESS";
-					break;
-				case "7":
-					shipingCompany = "CMA-CGM";
-					break;
-				case "8":
-					shipingCompany = "CONTAINER SUDAMERICA";
-					break;
-				case "9":
-					shipingCompany = "HANJIN SHIPPING CO";
-					break;
 
-				
+		try {
+			PdfWriter.getInstance(document, out);
+
+			Font fontLabel      = new Font(Font.FontFamily.COURIER, 7.5f, Font.BOLD);
+			Font fontValue      = new Font(Font.FontFamily.COURIER, 7.5f, Font.NORMAL);
+			Font fontTitle      = new Font(Font.FontFamily.COURIER, 12f,  Font.BOLD);
+			document.open();
+
+			// --- Encabezado con logo y título ---
+			PdfPTable encabezado = new PdfPTable(2);
+			encabezado.setWidthPercentage(100);
+			encabezado.setWidths(new float[]{2, 6});
+
+			PdfPCell cellLogo = new PdfPCell();
+			cellLogo.setBorder(Rectangle.NO_BORDER);
+			if (logo != null) cellLogo.addElement(logo);
+			encabezado.addCell(cellLogo);
+
+			PdfPCell title = new PdfPCell(new Phrase("ESTIMADO DE REPARACION", fontTitle));
+			title.setBorder(Rectangle.NO_BORDER);
+			title.setHorizontalAlignment(Element.ALIGN_LEFT);
+			encabezado.addCell(title);
+			document.add(encabezado);
+			document.add(new Paragraph("\n"));
+
+			// Agrupar inspecciones por responsable
+			Map<String, List<InspectionModel>> byResp = inspections.stream()
+					.collect(Collectors.groupingBy(InspectionModel::getCustomerName));
+
+			boolean firstGroup = true;
+			for (Map.Entry<String, List<InspectionModel>> entry : byResp.entrySet()) {
+				if (!firstGroup) {
+					document.newPage();
+					// repetir encabezado de documento en página nueva
+					document.add(encabezado);
+					document.add(new Paragraph("\n"));
 				}
-				
-				hcell = new PdfPCell(new Phrase("PROPIETARIO:  " + shipingCompany, regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("RESPONSABLE DEL DAÑO:  " + container.getTypeServicePregate(), regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("UNIDAD:  " + container.getContainer().toString() , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("TAMAÑO:  " + container.getContaierSize() , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("TIPO DE EQUIPO: DC"  , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("NOMENCLATURA:  " + container.getNomenclatura() , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("EN TERMINAL: Si" , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table1.addCell(hcell);
-				log.info("paso datos");
-				//-------------------------------------------------------------------------------
-				
-				 /***********************************************************************************************************************/
-				
-				/***********************************************************************************************************************/
-				PdfPTable table2 = new PdfPTable(2);
-				table2.setWidthPercentage(100);
-				table2.setWidths(new float[] {3,3});
-				
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("FECHA DE AUTORIZACION: ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase("NUMERO DE AUTORIZACION" , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase("FECHA DE INICIO DE REPARACION" , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("FECHA FIN DE REPARACION" , regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table2.addCell(hcell);
-				log.info("paso datos 2");
-				//-------------------------------------------------------------------------------
-				
-				 /***********************************************************************************************************************/
-				
-				
-				/***********************************************************************************************************************/
-				PdfPTable table3 = new PdfPTable(1);
-				table3.setWidthPercentage(100);
-				table3.setWidths(new float[] {3});
-				
-				
-				//-------------------------------------------------------------------------------
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell();
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.addElement(table2);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table3.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-				
-				hcell = new PdfPCell(new Phrase("\n\n DEPOSITO M&R", regularBlack));
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setVerticalAlignment(Element.ALIGN_CENTER);
-				table3.addCell(hcell);
-				
-				
-				
-				 /***********************************************************************************************************************/
-				
-				document.add(new Paragraph(" \n"));
-				
-				table = new PdfPTable(2);
-				table.setWidthPercentage(102);
-				table.setWidths(new float[] {(float) 4,4});
-				
-				
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell();
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.addElement(table1);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table.addCell(hcell);
-				
-				hcell = new PdfPCell();
-				hcell.addElement(table3);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				table.addCell(hcell);
-				//-------------------------------------------------------------------------------
-				document.add(table);
-				
-				 /***********************************************************************************************************************/
-				PdfPTable table4 = new PdfPTable(13);
-				table4.setWidthPercentage(100);
-				table4.setWidths(new float[] {2,2,2,2,2,2,2,2,2,2,2,2,2});
-				 /***********************************************************************************************************************/
-				
-				//-------------------------------------------------------------------------------
-				hcell = new PdfPCell(new Phrase("Daño", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				firstGroup = false;
 
-				hcell = new PdfPCell(new Phrase("Codigo de localizacion", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				String responsable = entry.getKey();
 
-				hcell = new PdfPCell(new Phrase("Componente", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				// Título de responsable
+				PdfPTable grpHdr = new PdfPTable(1);
+				grpHdr.setWidthPercentage(100);
+				PdfPCell ghCell = new PdfPCell(
+						new Phrase("NÚMERO ESTIMADO: " + container.getQuoteName()+
+								"\n FECHA ESTIMADO: "+container.getDateInspection().toString(), fontValue));
+				ghCell.setBorder(Rectangle.NO_BORDER);
+				ghCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				grpHdr.addCell(ghCell);
+				document.add(grpHdr);
+				document.add(new Paragraph("\n"));
 
-				hcell = new PdfPCell(new Phrase("Metodo de reparacion", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				// Construir info contenedor y autorizaciones lado a lado
+				PdfPTable wrapper = new PdfPTable(2);
+				wrapper.setWidthPercentage(100);
+				wrapper.setWidths(new float[]{6,6});
 
-				hcell = new PdfPCell(new Phrase("Largo cm", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				// Izquierda: datos del contenedor (2 columnas)
+				PdfPTable contInfo = new PdfPTable(2);
+				contInfo.setWidthPercentage(100);
+				contInfo.setWidths(new float[]{3,7});
+				contInfo.addCell(cell("NÚMERO ESTIMADO:", fontLabel, null));
+				contInfo.addCell(cell(container.getQuoteName(), fontValue, null));
+				contInfo.addCell(cell("FECHA ESTIMADO:", fontLabel, null));
+				contInfo.addCell(cell(container.getDateInspection().toString(), fontValue, null));
+				contInfo.addCell(cell("CLIENTE:", fontLabel, null));
+				contInfo.addCell(cell(container.getBillTo(), fontValue, null));
+				contInfo.addCell(cell("PROPIETARIO:", fontLabel, null));
+				contInfo.addCell(cell(mapShipping(container.getShippingCompany()), fontValue, null));
+				contInfo.addCell(cell("RESPONSABLE DANO:", fontLabel, null));
+				contInfo.addCell(cell(responsable, fontValue, null));
+				contInfo.addCell(cell("UNIDAD:", fontLabel, null));
+				contInfo.addCell(cell(container.getContainer(), fontValue, null));
+				contInfo.addCell(cell("TAMAÑO:", fontLabel, null));
+				contInfo.addCell(cell(container.getContaierSize(), fontValue, null));
+				contInfo.addCell(cell("TIPO EQUIPO:", fontLabel, null));
+				contInfo.addCell(cell("DC", fontValue, null));
+				contInfo.addCell(cell("NOMENCLATURA:", fontLabel, null));
+				contInfo.addCell(cell(container.getNomenclatura(), fontValue, null));
+				contInfo.addCell(cell("EN TERMINAL:", fontLabel, null));
+				contInfo.addCell(cell("Sí", fontValue, null));
 
-				hcell = new PdfPCell(new Phrase("Ancho cm", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				PdfPCell left = new PdfPCell();
+				left.setBorder(Rectangle.NO_BORDER);
+				left.addElement(contInfo);
+				wrapper.addCell(left);
 
-				hcell = new PdfPCell(new Phrase("Area cm", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				// Derecha: autorizaciones
+				PdfPTable authTable = new PdfPTable(1);
+				authTable.setWidthPercentage(100);
+				authTable.addCell(cell("FECHA DE AUTORIZACIÓN:", fontLabel, null));
+				authTable.addCell(cell("", fontValue, null));
+				authTable.addCell(cell("NÚMERO DE AUTORIZACIÓN:", fontLabel, null));
+				authTable.addCell(cell("", fontValue, null));
+				authTable.addCell(cell("FECHA INICIO DE REPARACIÓN:", fontLabel, null));
+				authTable.addCell(cell("", fontValue, null));
+				authTable.addCell(cell("FECHA FIN DE REPARACIÓN:", fontLabel, null));
+				authTable.addCell(cell("", fontValue, null));
 
-				hcell = new PdfPCell(new Phrase("Cantidad", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Horas" , regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Labor", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Material", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Total", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				PdfPCell right = new PdfPCell();
+				right.setBorder(Rectangle.NO_BORDER);
+				right.addElement(authTable);
+				wrapper.addCell(right);
 
-				hcell = new PdfPCell(new Phrase("Moneda", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				log.info("Antes del al for");
+				document.add(wrapper);
+				document.add(new Paragraph("\n"));
 
-				//-------------------------------------------------------------------------------
-				for(InspectionModel inspection : inspections) {
-					
-					CatShippingCompanyModel labor = catShippingCompanyReposirtory.getLabor(container.getShippingCompany());
-					
-					log.info("Entra al for");
-					QuoteModel quote = quoteRepositry.getByInspectionId(inspection.getInspectionId());
+				// Tabla de detalles
+				PdfPTable table = new PdfPTable(13);
+				table.setWidthPercentage(100);
+				table.setWidths(new float[]{2,2,2,2,2,2,2,2,2,2,2,2,2});
+				addTableHeaders(table, fontLabel);
 
-					hcell = new PdfPCell(new Phrase(catDamageRepository.getById(inspection.getDamage().toString()).getDescription(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					hcell = new PdfPCell(new Phrase(inspection.getLocation(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
+				List<String> horas    = new ArrayList<>();
+				List<String> labor    = new ArrayList<>();
+				List<String> material = new ArrayList<>();
+				List<String> quoteSum = new ArrayList<>();
+				List<String> exchange = new ArrayList<>();
 
-					hcell = new PdfPCell(new Phrase(catComponentRepository.getById(inspection.getComponent()).getComponent(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-
-					hcell = new PdfPCell(new Phrase(quote.getRepairDescription(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-
-					hcell = new PdfPCell(new Phrase(inspection.getLength(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-
-					hcell = new PdfPCell(new Phrase(inspection.getWidth(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-
-					hcell = new PdfPCell(new Phrase(inspection.getDepth(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					hcell = new PdfPCell(new Phrase(inspection.getQuantity(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					hcell = new PdfPCell(new Phrase(quote.getHours(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					double sumLabor = Double.parseDouble(labor.getLabor());
-					double sumHh = Double.parseDouble(quote.getHours());
-					
-					double totalLabor = sumLabor+sumHh;
-					
-					String totalLaborStr = Double.toString(totalLabor);
-					
-					log.info(totalLaborStr + "totalLabor********************************");
-					
-					hcell = new PdfPCell(new Phrase(totalLaborStr.toString(), 	regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					hcell = new PdfPCell(new Phrase(quote.getMaterial(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-
-					double valUno = Double.parseDouble(quote.getHours());
-					double valDos = Double.parseDouble(quote.getLabor());
-					double valTres = Double.parseDouble(quote.getMaterial());
-					
-					double quoteSum =  valUno + valDos + valTres;
-					
-					String quoteStr = Double.toString(quoteSum);
-					
-					hcell = new PdfPCell(new Phrase(quoteStr, regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-
-					hcell = new PdfPCell(new Phrase(quote.getExchange(), regularBlack));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					hcell.setBorder(Rectangle.NO_BORDER);
-					table4.addCell(hcell);
-					
-					
-					
+				for (InspectionModel insp : entry.getValue()) {
+					QuoteModel q = quoteRepository.getByInspectionId(insp.getInspectionId());
+					addInspectionRow(table, insp, q, container, fontValue);
+					horas.add(q.getHours());
+					labor.add(computeLabor(insp, q));
+					material.add(q.getMaterial());
+					quoteSum.add(computeQuote(q));
+					exchange.add(q.getExchange());
 				}
-				//-------------------------------------------------------------------------------
-				
 
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
+				addTotalsRow(table, horas, labor, material, quoteSum, exchange, fontLabel);
+				document.add(table);
+			}
 
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("TOTAL" , regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase(" ", regularBlack));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.GRAY);
-				hcell.setBorder(Rectangle.NO_BORDER);
-				table4.addCell(hcell);
-				
-				//-------------------------------------------------------------------------------
-
-				
-				document.add(table4);
-				
-				log.info("Termino de generar");
-				
-				/***********************************************************************************************************************/
 			document.close();
-			
-			
-			
-			
-			} catch (DocumentException ex) {
-			        	log.error(ex.toString());
-			} 
-			return out.toByteArray();
+		} catch (Exception e) {
+			// log.error("Error generando PDF: " + e);
+		}
+
+		return out.toByteArray();
+	}
+
+	private void addTableHeaders(PdfPTable t, Font font) {
+		String[] titles = {"Daño","Codigo de localizacion","Componente",
+				"Metodo de reparacion","Largo cm","Ancho cm","Area cm","Cantidad",
+				"Horas","Labor","Material","Total","Moneda"};
+		for (String title : titles) {
+			PdfPCell h = new PdfPCell(new Phrase(title, font));
+			h.setHorizontalAlignment(Element.ALIGN_CENTER);
+			h.setBackgroundColor(BaseColor.GRAY);
+			h.setBorder(Rectangle.NO_BORDER);
+			t.addCell(h);
+		}
+	}
+
+	private void addInspectionRow(PdfPTable t, InspectionModel insp,
+								  QuoteModel q, ContainerModel c, Font font) {
+
+		CatDamageModel damageModel = catDamageRepository.getById(String.valueOf(insp.getDamage()));
+		CatComponentModel componentModel = catComponentRepository.getById(String.valueOf(insp.getComponent()));
+
+		t.addCell(cell(damageModel.getDescription(), font));
+		t.addCell(cell(insp.getLocation(), font));
+		t.addCell(cell(componentModel.getComponent(), font));
+		t.addCell(cell(q.getRepairDescription(), font));
+		t.addCell(cell(insp.getLength(), font));
+		t.addCell(cell(insp.getWidth(), font));
+		t.addCell(cell(insp.getDepth(), font));
+		t.addCell(cell(insp.getQuantity(), font));
+		t.addCell(cell(q.getHours(), font));
+		t.addCell(cell(computeLabor(insp, q), font));
+		t.addCell(cell(q.getMaterial(), font));
+		t.addCell(cell(computeQuote(q), font));
+		t.addCell(cell(q.getExchange(), font));
+	}
+
+	private void addTotalsRow(PdfPTable t,
+							  List<String> horas, List<String> labor,
+							  List<String> material, List<String> quote,
+							  List<String> exchange, Font font) {
+		// 7 celdas vacías hasta TOTAL
+		for (int i = 0; i < 7; i++) t.addCell(cell("", font));
+		PdfPCell tot = new PdfPCell(new Phrase("TOTAL", font));
+		tot.setHorizontalAlignment(Element.ALIGN_CENTER);
+		tot.setBorder(Rectangle.NO_BORDER);
+		t.addCell(tot);
+
+		// Sumas con dos decimales
+		t.addCell(cell(String.format("%.2f", sum(horas)), font, BaseColor.GRAY));
+		t.addCell(cell(String.format("%.2f", sum(labor)), font, BaseColor.GRAY));
+		t.addCell(cell(String.format("%.2f", sum(material)), font, BaseColor.GRAY));
+		t.addCell(cell(String.format("%.2f", sum(quote)), font, BaseColor.GRAY));
+
+		// Última moneda
+		String lastEx = exchange.isEmpty() ? "" : exchange.get(exchange.size()-1);
+		t.addCell(cell(lastEx, font, BaseColor.GRAY));
+	}
+
+	private PdfPCell cell(String text, Font font) {
+		return cell(text, font, null);
+	}
+	private PdfPCell cell(String text, Font font, BaseColor bg) {
+		PdfPCell c = new PdfPCell(new Phrase(text != null ? text : "", font));
+		c.setHorizontalAlignment(Element.ALIGN_CENTER);
+		c.setBorder(Rectangle.NO_BORDER);
+		if (bg != null) c.setBackgroundColor(bg);
+		return c;
+	}
+
+	private double sum(List<String> values) {
+		return values.stream()
+				.mapToDouble(v -> Double.parseDouble(v))
+				.sum();
+	}
+
+	private String computeLabor(InspectionModel insp, QuoteModel q) {
+		double base = Double.parseDouble(q.getLabor());
+		return String.valueOf(base);
+	}
+
+	private String computeQuote(QuoteModel q) {
+		double l = Double.parseDouble(q.getLabor());
+		double m = Double.parseDouble(q.getMaterial());
+		return String.format("%.2f",  l + m);
+	}
+	private String mapShipping(String code) {
+		switch (code) {
+			case "1": return "COSCO SHIPPING LINES MEXICO";
+			case "2": return "MAERSK";
+			case "3": return "HAPAG LLOYD";
+			case "4": return "HAMBURG-SUD";
+			case "5": return "MEDITERRANEAN SHIPPING CO";
+			case "6": return "OCEAN NETWORK EXPRESS";
+			case "7": return "CMA-CGM";
+			case "8": return "CONTAINER SUDAMERICA";
+			case "9": return "HANJIN SHIPPING CO";
+			default:  return "";
+		}
 	}
 	
 	

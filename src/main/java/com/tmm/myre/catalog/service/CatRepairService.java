@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.tmm.myre.base.exception.ConverterException;
@@ -25,7 +26,7 @@ public class CatRepairService implements ICatRepairService{
 	@Override
 	public List<CatRepairDto> getRepairInformation() throws ConverterException {
 		List<CatRepairDto> list = new ArrayList<CatRepairDto>();
-		List<CatRepairModel> entities = catRepairRepository.findAll();
+		List<CatRepairModel> entities = catRepairRepository.findAll(Sort.by(Sort.Direction.ASC, "repairDescription"));
 		for(CatRepairModel entity : entities) {
 			list.add(catRepairConverter.convert(entity));
 		}

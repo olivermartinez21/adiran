@@ -177,6 +177,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>myre</finalName>
 	</build>
 
 </project>

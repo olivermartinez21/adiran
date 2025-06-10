@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="~{fragments/layout}">
 <head>
@@ -361,6 +362,7 @@
 										<th>Método de reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
+										<th>Cobrar a</th>
 										<th>Imagenes</th>
 										<th>largo</th>
 										<th>ancho</th>
@@ -470,7 +472,7 @@
 							<div class="col-sm">
 								<div class="form-group"  >
 									<label for="startDate">Fecha</label>
-									<input type="date" class="form-control" id="startDate"  min=""  disabled>
+									<input type="datetime-local" class="form-control" id="startDate"  min=""  disabled>
 								</div>
 							</div>
 							<div class="col-sm">
@@ -806,7 +808,7 @@
 									<option value="4">EVACUACION</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -1065,7 +1067,7 @@
 									<option value="4">EVACUACION</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -1154,17 +1156,17 @@
 								<div class="form-group" >
 									<label for="newDestinyPregate">Planta-Destino</label>
 									<select class="form-control" id="newDestinyPregate" >
-									<option>NISSAN 1</option>
-									<option>NISSAN 2</option>
-									<option>JATCO 1</option>
-									<option>JATCO 2</option>
-									<option>COMPAS</option>
-									<option>INFINITI</option>
-									<option>DAIMLER</option>
-									<option>APRC</option>
-									<option>RETOÑO</option>
-									<option>MERCEDES BENZ</option>
-									<option>TMM</option>
+										<option>APRC</option>
+										<option>COMPAS</option>
+										<option>DAIMLER</option>
+										<option>INFINITI</option>
+										<option>JATCO 1</option>
+										<option>JATCO 2</option>
+										<option>MERCEDES BENZ</option>
+										<option>NISSAN 1</option>
+										<option>NISSAN 2</option>
+										<option>RETOÑO</option>
+										<option>TMM</option>
 									</select>
 								</div>
 							</div>
@@ -1303,6 +1305,16 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<!--									Cambiar por Cobrar a-->
+									<label for="customerName">A quien se cobra:</label>
+									<input type="text" class="form-control" id="customerName" name="example" list="newAgencyDamageList">
+									<datalist id="newAgencyDamageList" >
+										<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
 						<div class="col-sm" >
 								<div class="form-group">
 									<label for="newImage">Foto</label>
@@ -1316,7 +1328,7 @@
 							<div class="row" >
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="largeInspection">Largo (mm,cm,mts)</label>
+									<label for="largeInspection">Largo  </label>
 									<input type="text" class="form-control" id="largeInspection"   >
 								</div>
 								
@@ -1324,21 +1336,21 @@
 							
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="heigthInspection">Ancho (mm,cm,mts)</label>
+									<label for="heigthInspection">Ancho  </label>
 									<input type="text" class="form-control" id="heigthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="depthInspection">Profundidad (mm,cm,mts)</label>
+									<label for="depthInspection">Profundidad  </label>
 									<input type="text" class="form-control" id="depthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="otherLargeInspection">Largo (mm,cm,mts)</label>
+									<label for="otherLargeInspection">Largo  </label>
 									<input type="text" class="form-control" id="otherLargeInspection"  >
 								</div>
 							</div>

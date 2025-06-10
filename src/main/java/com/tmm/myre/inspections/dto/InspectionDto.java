@@ -1,10 +1,5 @@
 package com.tmm.myre.inspections.dto;
 
-
-
-
-
-
 import com.tmm.myre.base.dto.ITransferObject;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +28,7 @@ public class InspectionDto implements ITransferObject{
 	private Integer  damageCode;
 	private String  reference;
 	private Integer  customerType;
+	private String customerName;
 	private String  photo;
 	private Integer  status;
 	private String  containerId;
@@ -51,7 +47,5 @@ public class InspectionDto implements ITransferObject{
 	private Integer  repairInspection;
 	
 	private String labor;
-	
-	
 	
 }

@@ -3,11 +3,14 @@ package com.tmm.myre.assignments.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tmm.myre.assignments.model.AssignmentModel;
 import com.tmm.myre.assignments.model.AssignmentsModel;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository("assignmentRepository")
 public interface IAssignmentRepository extends JpaRepository<AssignmentModel, String> {
@@ -34,8 +37,13 @@ public interface IAssignmentRepository extends JpaRepository<AssignmentModel, St
 	
 	@Query(value = "SELECT * FROM  MYRE_ASSIGNMENT WHERE DELIVERY_ORDER_ID =:deliveryOrderId", nativeQuery = true)
 	AssignmentModel getAssignment(String deliveryOrderId);
-	
-	@Query(value = "DELETE FROM MYRE_ASSIGNMENT WHERE UNITNUMBER =unitNumber ", nativeQuery = true)
-	AssignmentModel daleteUnit(String unitNumber);
+
+	@Query(value = "SELECT * FROM  MYRE_ASSIGNMENT WHERE ASSIGNMENT_ID =:assignmentId", nativeQuery = true)
+	AssignmentModel getAssignmentById(String assignmentId);
+
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM MYRE_ASSIGNMENT WHERE UNITNUMBER = :unitNumber", nativeQuery = true)
+	int deleteUnit(@Param("unitNumber") String unitNumber);
 
 }

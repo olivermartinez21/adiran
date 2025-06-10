@@ -8,8 +8,9 @@ import com.tmm.myre.containers.dto.ContainerHistoricDto;
 
 public interface ICatJobcodeService {
 
-	List<CatJobcodeDto> catJobcode() throws ConverterException;
+	List<CatJobcodeDto> catJobcode(String shippingCompanyId) throws ConverterException;
 
 	CatJobcodeDto getJobcodeDescription(String jobcodeId) throws ConverterException;
 
+	List<CatJobcodeDto> findAll() throws ConverterException;
 }

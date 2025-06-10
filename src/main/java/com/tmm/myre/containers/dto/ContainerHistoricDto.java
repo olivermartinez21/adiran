@@ -1,6 +1,8 @@
 package com.tmm.myre.containers.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.tmm.myre.base.dto.AbstractManagement;
 import com.tmm.myre.base.dto.ITransferObject;
@@ -11,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -23,7 +26,8 @@ public class ContainerHistoricDto extends AbstractManagement implements ITransfe
 private static final long serialVersionUID = 1L;
 	
 	private String  containerId;
-	private Date  registerDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime registerDate;
 	private String  location;
 	private String  container;
 	private Integer  containerType;

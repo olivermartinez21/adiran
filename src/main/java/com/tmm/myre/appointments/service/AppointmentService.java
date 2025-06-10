@@ -1,6 +1,7 @@
 package com.tmm.myre.appointments.service;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,7 +141,7 @@ public class AppointmentService implements IAppointmentService {
 			for(ContainerDto container : containers) {
 				if(containerRepository.serarchBd(container.getContainer())==0) {
 					container.setContainerId(UuidProvider.getUUID());
-					container.setRegisterDate(DateManagement.todayDate());
+					container.setRegisterDate(LocalDateTime.now());
 					container.setAppointmentId(newAppointment.getAppointmentId());
 					container.setEventType(newAppointment.getEventType());
 					container.setLocation(appointmentDto.getWarehouse());

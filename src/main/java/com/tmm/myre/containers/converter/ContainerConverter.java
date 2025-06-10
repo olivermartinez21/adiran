@@ -68,6 +68,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.comnetsQuote(to.getComnetsQuote())
 				.aprovedQuote(to.getAprovedQuote())
 				.originPregate(to.getOriginPregate())
+				.destinyPregate(to.getDestinyPregate())
+				.noInvoice(to.getNoInvoice())
 				.build();
 		
 		return entity;
@@ -129,6 +131,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.comnetsQuote(entity.getComnetsQuote())
 				.aprovedQuote(entity.getAprovedQuote())
 				.originPregate(entity.getOriginPregate())
+				.destinyPregate(entity.getDestinyPregate())
+				.noInvoice(entity.getNoInvoice())
 				.build();
 		return to;
 	}

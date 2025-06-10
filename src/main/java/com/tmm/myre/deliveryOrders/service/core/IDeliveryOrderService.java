@@ -20,6 +20,8 @@ public interface IDeliveryOrderService {
 
 	List<DeliveryOrderDto> getDataTableByAssignmentID(String assigntmentId)throws ConverterException;
 
+	DeliveryOrderDto getInfoOrdersByBookingId(String assigntmentId)throws ConverterException;
+
 	ResponseManagement deleteDeliveryOrder(String deliveryOrderId)throws ConverterException;
 
 	ResponseManagement printDeliveryOrder(String deliveryOrderId)throws ConverterException;

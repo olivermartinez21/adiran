@@ -1,6 +1,7 @@
 package com.tmm.myre.event.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 
@@ -26,7 +27,7 @@ public class EventInformationDto extends AbstractManagement implements ITransfer
 	//private Integer eventDetailsIdentifier;
 	private String eventId;
 	private String eventType; 
-	private Date eventDate;
+	private LocalDateTime eventDate;
 	private String estimateRequired;
 	private String inspected; 
 	private String inspectedBy; 

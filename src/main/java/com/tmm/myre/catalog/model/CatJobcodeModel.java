@@ -33,5 +33,6 @@ public class CatJobcodeModel implements IModel{
 	@Column(name = "JOBCODE_MATERIAL")private String  jobcodeMaterial;
 	@Column(name = "JOBCODE_HH")private String  jobcodeHh;
 	@Column(name = "JOBCODE_EXCHANGE")private String  jobcodeExchange;
+	@Column(name = "JOBCODE_SHIPPINGID")private String  jobcodeShippingId;
 	
 }

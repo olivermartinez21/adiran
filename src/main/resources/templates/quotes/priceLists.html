@@ -13,7 +13,7 @@
 			<h1>CARGA DE LISTA DE PRECIOS <span th:text="${loggedUser.warehouseId}"></span></h1>
 		</div>
 		
-		<div class="container-table" id="divAssigmentType">
+		<!--<div class="container-table" id="divAssigmentType">
 				<div class="row">
 					<div class="col-sm">
 						<div class="form-group">
@@ -35,11 +35,87 @@
 					</div>
 					<div class="col-sm-2">
 						<div class="form-group">
-						<label for="orderListCmb">--</label>
+						<label for="orderListCmb">&#45;&#45;</label>
 							<button type="button" class="btn btn-success form-control" onclick="chargeDoc()" >CARGAR</button>
 						</div>
 					</div>
 					</div>
+		</div>-->
+		<div class="container-table" id="filterTypeClient">
+			<div class="row">
+
+				<div class="col-sm">
+					<div class="form-group">
+						<label for="file">Archivo</label>
+						<input type="file" class="form-control" id="file">
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<button type="button" class="btn btn-success form-control" onclick="chargeJobcodes()" >CARGAR</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm">
+					<div class="form-group">
+						<label for="newShippingConpanyInspection">Linea Naviera</label>
+						<select class="form-control" id="newShippingConpanyInspection">
+							<option value="0">Todas las navieras</option>
+							<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm">
+					<div class="form-group">
+						<label for="jobcodeLabor">Mano de Obra</label>
+						<input type="text" class="form-control" id="jobcodeLabor" placeholder="$$$" >
+					</div>
+				</div>
+				<div class="col-sm">
+					<div class="form-group">
+						<label for="jobcodeLabor">Tipo de cambio</label>
+						<input type="text" class="form-control" id="exchangeLabor" placeholder="USD/MXN" >
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<button type="button" class="btn btn-success form-control" id="updateLabor" onclick="updateLabor()" >Actualizar</button>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="container-table">
+			<table id="jobcodesTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+				<thead>
+				<tr>
+					<th>jobcodeId</th>
+					<th>Codigo de Trabajo</th>
+					<th>Description</th>
+					<th>Material</th>
+					<th>HH</th>
+					<th>Exchange</th>
+					<th>JOBCODE_SHIPPINGID</th>
+					<th>opciones</th>
+				</tr>
+				</thead>
+				<tfoot>
+				<tr>
+					<th>jobcodeId</th>
+					<th>Codigo de Trabajo</th>
+					<th>Description</th>
+					<th>Material</th>
+					<th>HH</th>
+					<th>Exchange</th>
+					<th>JOBCODE_SHIPPINGID</th>
+					<th>opciones</th>
+				</tr>
+				</tfoot>
+			</table>
 		</div>
 		<script type="text/javascript" th:src="@{/js/quotes/priceLists.js}"></script>
 	</section>

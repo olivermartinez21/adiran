@@ -1,20 +1,25 @@
 package com.tmm.myre.containers.controller;
 
 import java.io.ByteArrayInputStream;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 
+import com.tmm.myre.base.service.core.IExcelUtils;
+import com.tmm.myre.containers.dto.ReportFilterDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import com.tmm.myre.base.controller.AbstractMyreController;
 import com.tmm.myre.base.dto.ResponseManagement;
@@ -80,6 +85,9 @@ public class ContainerController extends AbstractMyreController{
 	
 	@Autowired
 	private ICatCustomerService catCustomerService;
+
+	@Autowired
+	private IExcelUtils excelUtils;
 	
 	/*@ModelAttribute("catShipping")
 	List<CatCustomerDto> catShipping() {
@@ -90,6 +98,13 @@ public class ContainerController extends AbstractMyreController{
 			return null;
 		}
 	}*/
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 	
 	@GetMapping("getDataTable")
 	@ResponseBody
@@ -327,6 +342,55 @@ public class ContainerController extends AbstractMyreController{
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.toString());
+			return null;
+		}
+	}
+
+	@RequestMapping("/generateInventoryReport")
+	public ResponseEntity<Resource> generateInventoryReport(@ModelAttribute ReportFilterDto reportFilterDto) {
+		try {
+
+			ByteArrayInputStream body = new ByteArrayInputStream(excelUtils.inventoryExcel(reportFilterDto));
+
+			return ResponseEntity
+					.ok()
+					.header("Content-Disposition",  "attachment; filename=Inventario.xlsx")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(new InputStreamResource(body));
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
+	}
+
+	@RequestMapping("/generateManeuverReport")
+	public ResponseEntity<Resource> generateManeuverReport(@ModelAttribute ReportFilterDto reportFilterDto) {
+		try {
+			ByteArrayInputStream body = new ByteArrayInputStream(excelUtils.maneuverExcel(reportFilterDto));
+
+			return ResponseEntity
+					.ok()
+					.header("Content-Disposition",  "attachment; filename=ReporteManiobras.xlsx")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(new InputStreamResource(body));
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
+	}
+
+	@RequestMapping("/generateAdsReport")
+	public ResponseEntity<Resource> generateAdsReport(@ModelAttribute ReportFilterDto reportFilterDto) {
+		try {
+			ByteArrayInputStream body = new ByteArrayInputStream(excelUtils.hapagAds(reportFilterDto));
+
+			return ResponseEntity
+					.ok()
+					.header("Content-Disposition",  "attachment; filename=ReporteHapAg.xlsx")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(new InputStreamResource(body));
+		} catch(Exception ex) {
+			log.error(ex.toString());
 			return null;
 		}
 	}

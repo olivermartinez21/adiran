@@ -337,6 +337,7 @@ public class GateInController extends AbstractMyreController{
 	@ResponseBody
 	public List<CatNomenclaturaDto> getNomenclatura(@RequestParam(required = true) String containerType,String size ) {
 		try {
+			log.info("containerType: "+containerType + " size: "+size);
 			return catNomenclaturaService.getNomenclaturaByContainerType(containerType,size);
 		} catch(Exception ex) {
 			log.info(ex.toString());

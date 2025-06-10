@@ -8,4 +8,5 @@ public interface IQuoteService {
 
 	ResponseManagement saveInformationQuote(QuoteDto quoteDto) throws ConverterException;
 
+	QuoteDto getQuoteDetail(String inspectionId) throws ConverterException;
 }

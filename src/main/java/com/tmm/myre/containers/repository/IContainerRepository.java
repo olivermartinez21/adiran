@@ -3,15 +3,14 @@ package com.tmm.myre.containers.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.tmm.myre.appointments.model.AppointmentModel;
-import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.model.ContainerModel;
 @Repository("containerRepository")
-public interface IContainerRepository extends JpaRepository<ContainerModel, String> {
+public interface IContainerRepository extends JpaRepository<ContainerModel, String>, JpaSpecificationExecutor<ContainerModel> {
 
 	
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId AND STATUS=1", nativeQuery = true)
@@ -61,10 +60,10 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=1 or APPOINTMENT_ID=:appointmentId and LOCATION=:warehouse and STATUS=2 ORDER BY REGISTER_DATE DESC", nativeQuery = true)
 	List<ContainerModel> findAllPreGate(String appointmentId, String warehouse);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and status = 4 or status = 5", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and status = 4 or status = 5 or status = 6", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouse(String warehouse);
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and status = 4 and CONTAINER_CONDITION = 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 4 and CONTAINER_CONDITION = 1", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouseStock(String warehouse);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE SHIPPING_COMPANY=:shippingId", nativeQuery = true)
@@ -84,6 +83,9 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CONTAINER_CONDITION=:condition and STATUS =4 ", nativeQuery = true)
 	Integer getCount(String location, String containerType, String Nomenclatura, Integer condition);
+
+	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CLASIFICATION=:clasification and STATUS =4 ", nativeQuery = true)
+	Integer getCountClasifiaction(String location, String containerType, String Nomenclatura, Integer clasification);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER = :unit AND STATUS=4", nativeQuery = true)
 	ContainerModel getByUnit(String unit);
@@ -120,7 +122,7 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	//@Query(value = "SELECT CONTAINER_ID,CONTAINER_TYPE,CONTAINER_ZISE,CONTAINER_CONDITION FROM MYRE_CONTAINERS WHERE CONTAINER=:containerId", nativeQuery = true)
 	ContainerModel getContainerInformation(String containerId);
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehous and CONTAINER_TYPE=:type and CONTAINER_ZISE=:size and CONTAINER_CONDITION =1 and CLASIFICATION=:clasification", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehous and CONTAINER_TYPE=:type and CONTAINER_ZISE=:size and CONTAINER_CONDITION =1 and CLASIFICATION=:clasification and STATUS =4", nativeQuery = true)
 	List<ContainerModel> getUnitsFilter(String warehous,String type, String size, String clasification);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId and STATUS_QUOTE=2", nativeQuery = true)
@@ -132,8 +134,13 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER=:containerId", nativeQuery = true)
 	ContainerModel getPreLabor(String containerId);
 
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE STATUS >= 2 AND STATUS <= 6;", nativeQuery = true)
+	List<ContainerModel> getAllAndStatus();
 
+	//Nuevos metodos de filtrado para resumen en ExelUtil
+	@Query(value = "SELECT DISTINCT CONTAINER_TYPE FROM MYRE_CONTAINERS WHERE LOCATION = :location AND SHIPPING_COMPANY = :shippingCompany", nativeQuery = true)
+	List<String> getContainerTypesFiltered(@Param("location") String location, @Param("shippingCompany") String shippingCompany);
 
-	
-
+	@Query(value = "SELECT DISTINCT NOMENCALTURA FROM MYRE_CONTAINERS WHERE LOCATION = :location AND CONTAINER_TYPE = :containerType AND SHIPPING_COMPANY = :shippingCompany", nativeQuery = true)
+	List<String> getNomenclaturasFiltered(@Param("location") String location, @Param("containerType") String containerType, @Param("shippingCompany") String shippingCompany);
 }

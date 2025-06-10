@@ -2,6 +2,7 @@ package com.tmm.myre.containers.service;
 
 import java.io.File;
 import java.sql.Blob;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
@@ -281,8 +282,11 @@ public class ContainerService implements IContainerService{
 			containerValidation.setStatus(containerValidation.getStatus());
 			containerValidation.setCondition(condition);
 			containerValidation.setClasification(clasification);
+
+			containerValidation.setEir(pdfGenerationService.pdfEir(containerId, ""));
 			containerRepository.save(containerValidation);
-			
+
+
 			int container = containerRepository.countContainersByVistoBueno(containerId);
 			
 			if(container==0&&containerValidation.getAppointmentId()!=null) {
@@ -311,7 +315,7 @@ public class ContainerService implements IContainerService{
 			ContainerModel container =  containerRepository.getById(containerId);
 			IntegrationModel integration = new IntegrationModel();
 			
-			integration.setEventDate(container.getDateInspection());
+			integration.setEventDate(container.getDateGateIn());
 			integration.setEventType(container.getEventType() == 1 ? "ENTRADA" : "SALIDA" );
 			integration.setEstimateRequired("");
 			integration.setInspected("");
@@ -344,9 +348,11 @@ public class ContainerService implements IContainerService{
 	public ResponseManagement saveContainer(ContainerDto containerDto , String warehouse) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();
 		try {
+			log.info("Entrando a guardar Save Container");
 			containerDto.setContainerId(UuidProvider.getUUID());
 			containerDto.setStatus(1);
 			containerDto.setLocation(warehouse);
+			containerDto.setRegisterDate(containerDto.getRegisterDate());
 			ContainerModel newContainer = containerConverter.convert(containerDto);
 			
 			if(containerRepository.serarchBd(containerDto.getContainer())==0) {
@@ -435,6 +441,8 @@ public class ContainerService implements IContainerService{
 				containeredit.setOperatorName(containerDto.getOperatorName());
 				containeredit.setPlate(containerDto.getPlate());
 				containeredit.setEconomicNumber(containerDto.getEconomicNumber());
+				containeredit.setDestinyPregate(containerDto.getDestinyPregate());
+
 				if(containerDto.getNum()!=1) {
 					containeredit.setStatus(2);
 				}
@@ -487,6 +495,7 @@ public class ContainerService implements IContainerService{
 			for(ContainerModel entity : entities) {
 				log.info(entity.getContainer().toString()+"-------");
 				log.info(entity.getContaierSize().toString()+"-------");
+				log.info(entity.getRegisterDate().toString()+"-------");
 				list.add(entity);
 				
 			}
@@ -528,27 +537,29 @@ public class ContainerService implements IContainerService{
 
 	@Override
 	public List<ResumentInformationDto> getDataResumenUsers(Integer userId, String location) {
-		List<ResumentInformationDto> list = new ArrayList<ResumentInformationDto>();
-		List<?> distinct = containerRepository.getContainerTypes(location);
-		
-		for (int i = 0; i < distinct.size(); i++) {
-			List<?> nomenclaturas = containerRepository.getNomenclaturas(location,distinct.get(i).toString());
-			
-			for (int j = 0; j < nomenclaturas.size(); j++) {
-				
-				list.add(ResumentInformationDto.builder()
-						.tipo(distinct.get(i).toString())
-						.nomenclatura(nomenclaturas.get(j).toString())
-						.disponibles(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
-						.dañados(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
-						.ppti(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
-						.total(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7))
-						.suma(0)
-						.build());
+			List<ResumentInformationDto> list = new ArrayList<ResumentInformationDto>();
+			List<?> distinct = containerRepository.getContainerTypes(location);
+			log.info("DISTINCT"+distinct);
+
+			for (int i = 0; i < distinct.size(); i++) {
+				List<?> nomenclaturas = containerRepository.getNomenclaturas(location,distinct.get(i).toString());
+				log.info("NOMENCLATURAS "+nomenclaturas);
+				for (int j = 0; j < nomenclaturas.size(); j++) {
+
+					list.add(ResumentInformationDto.builder()
+							.tipo(distinct.get(i).toString())
+							.nomenclatura(nomenclaturas.get(j).toString())
+							.disponibles(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
+							.dañados(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
+							.ppti(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
+							.total(containerRepository.getCount(location, distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7))
+							.suma(0)
+							.build());
+				}
+
 			}
-			
-		}
-		return list;
+			log.info("LISTA "+list);
+			return list;
 	}
 
 	@Override
@@ -596,7 +607,7 @@ public class ContainerService implements IContainerService{
 			
 			ContainerHistoricModel containerHistoric = ContainerHistoricModel.builder()
 					.containerId(container.getContainerId())
-					.registerDate(container.getRegisterDate())
+					.registerDate(LocalDateTime.now())
 					.location(container.getLocation())
 					.container(container.getContainer())
 					.containerType(container.getContainerType())
@@ -646,6 +657,9 @@ public class ContainerService implements IContainerService{
 					.finalDate(container.getFinalDate())
 					.assignedTo(container.getAssignedTo())
 					.comnetsQuote(container.getComnetsQuote())
+					.aprovedQuote(container.getAprovedQuote())
+					.destinyPregate(container.getDestinyPregate())
+					.originPregate(container.getOriginPregate())
 					.build();
 			
 			containerHistoricRepository.save(containerHistoric);
@@ -659,7 +673,7 @@ public class ContainerService implements IContainerService{
 				eventActivityRepository.save(activityEvent);
 				
 				String condicion = null;
-				switch (container.getClasification()) {
+				switch (container.getCondition()) {
 				case "1":
 					condicion = "DISPONIBLE";
 					break;
@@ -679,7 +693,7 @@ public class ContainerService implements IContainerService{
 			    	condicion = "BLOQUEADO/GX";
 			        break;
 			    case "7":
-			    	condicion = "TOTAL LOOS";
+			    	condicion = "TOTAL LOSS";
 			        break;
 			    case "8":
 			    	condicion = "VENTA";
@@ -693,7 +707,7 @@ public class ContainerService implements IContainerService{
 				
 				log.info(condicion+"soy la condicion---------------");
 				IntegrationModel event = IntegrationModel.builder()
-						.eventDate(DateManagement.todayDate())
+						.eventDate(containerDto.getNewEventDate())
 						.eventType("GATEOUT")
 						.estimateRequired("Y")
 						.inspected("Y")
@@ -703,13 +717,13 @@ public class ContainerService implements IContainerService{
 						.alternateUnit(null)//No hay dato
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")
-						.sapSaleOrder(null)//No hay dato
+						.sapSaleOrder(containerDto.getSapSaleOrder())//No hay dato
 						//NO muestra la calidad del contenedor
-						.unitQuality(condicion.toString())
+						.unitQuality(condicion)
 						.sealNumber(container.getSecurityStamp())
 						.customerIdentifier(customer.getCode())
 						.type(container.getContainerType() == 1 ? "CH":container.getContainerType() == 2 ? "OP":container.getContainerType() == 3 ? "DC": container.getContainerType()== 4 ? "GS":
-							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "HC": " ")
+							container.getContainerType()== 5 ? "IS":container.getContainerType() == 6 ? "RF":container.getContainerType() == 7 ? "DC": " ")
 						.model(container.getNomenclatura())
 						.location(container.getLocation()=="VERACRUZ" ? container.getLocation()=="AGUASCALIENTES" ? container.getLocation()=="ALTAMIRA" ? container.getLocation()=="ENSENADA" ?  container.getLocation()=="PANTACO" ?"ZLO" : "PTO": "ESE" : "ATM": "AGS" :"AGS" )
 						.container(container.getContainer())
@@ -721,7 +735,7 @@ public class ContainerService implements IContainerService{
 			containerRepository.save(container);
 			
 			
-			assignmentRepository.daleteUnit(container.getContainer());
+			assignmentRepository.deleteUnit(container.getContainer());
 			log.info("Si paso");
 			containerRepository.deleteById(containerDto.getContainerId());
 			
@@ -757,9 +771,12 @@ public class ContainerService implements IContainerService{
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
 		List<ContainerModel> entities = containerRepository.findAllbyWarehouseStatus2(warehouse);
 			for(ContainerModel entity : entities) {
+				log.info(entity.getContainer());
+				log.info(entity.getCondition());
 				list.add(containerConverter.convert(entity));
 			
 		}
+
 		return list;
 	}
 
@@ -1002,18 +1019,14 @@ public class ContainerService implements IContainerService{
 			containeredit.setStatus(3); 
 			containerDto.setStatusQute(containeredit.getStatusQute());
 			
-			
-			if(containeredit.getTypeServicePregate().equals("MERCHANT")) {
-				//containeredit.setStatus(50); 
-				containeredit.setStatusQute(1);
-			}else {
+			//Solo se asigna statusQuote (osea danio) debe de ser 1
+
 				int cantidad=	containerRepository.getInspectionsMerchant(containeredit.getContainerId());
-				
+				//log.info("Entro Else 1 y e igualo estatus");
 				if(cantidad!=0) {
+					log.info("Entro IF y e igualo estatus");
 					containeredit.setStatusQute(1);
 				}
-				
-			}
 			
 			
 			if(containeredit.getAppointmentId()!=null) {
@@ -1061,7 +1074,6 @@ public class ContainerService implements IContainerService{
 		log.info(warehous.toString()+"----"+ type.toString() +"----"+ size.toString() +"----"+ clasification.toString());
 		List<ContainerDto> containers = new ArrayList<ContainerDto>();
 		List<ContainerModel> entities = containerRepository.getUnitsFilter(warehous,type,size,clasification);
-		log.info(entities.toString()+"-------------Entities");
 		for(ContainerModel container : entities) {
 			containers.add(containerConverter.convert(container));
 		}
@@ -1105,14 +1117,18 @@ public class ContainerService implements IContainerService{
 	@Override
 	public List<ContainerDto> getAllContainersQuote(String warehouse) throws ConverterException {
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
+		log.info("Entrando a guardar Container"+ " "+warehouse);
 		List<ContainerModel> entities = containerRepository.findAllcontainersQuote(warehouse);
+		log.info("Paso el query");
 			for(ContainerModel entity : entities) {
-				
+
 				long diff = DateManagement.todayDate().getTime() - entity.getDateInspection().getTime() ;
-				TimeUnit time = TimeUnit.DAYS; 
+				TimeUnit time = TimeUnit.DAYS;
 			    long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
 			    entity.setDaysStay(" "+diffrence);
-			    
+
+				log.info(entity.getDaysStay()+"-----------------");
+
 				list.add(containerConverter.convert(entity));
 			
 		}
@@ -1120,41 +1136,72 @@ public class ContainerService implements IContainerService{
 	}
 
 	
-		  @Override 
-		  public InspectionShippingDto getPreLabor(String inspectionId) {
-			  	
-			  		CatShippingCompanyModel infoPreLabor = catShippingCompanyReposirtory.getPreLaborFinalFinal(inspectionId);
-			
-			  		log.info(infoPreLabor.getLabor()+"--------4-----------");
+		@Override
+		public InspectionShippingDto getPreLabor(String inspectionId) {
+
+		InspectionModel inspection = inspectorRepository.getById(inspectionId);
+
+			String companyInfo = null;
+			String laborInfo = null;
+		if(inspection.getCustomerType()==1){
+
+			CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
+			companyInfo = infoPreLaborMerchant.getShippingCompanyId();
+			laborInfo = infoPreLaborMerchant.getLabor();
+		}else{
+
+			CatShippingCompanyModel infoPreLabor = catShippingCompanyReposirtory.getPreLaborFinalFinal(inspectionId);
+
+			if(infoPreLabor.getLabor()==null) {
+				log.info("No hay informacion de pre labor");
+				CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
+				companyInfo = infoPreLaborMerchant.getShippingCompanyId();
+				laborInfo = infoPreLaborMerchant.getLabor();
+			} else {
+				log.info("Si hay informacion de pre labor");
+				companyInfo = infoPreLabor.getShippingCompanyId();
+				laborInfo = infoPreLabor.getLabor();
+			}
+		}
+
 			  		InspectionShippingDto entity = InspectionShippingDto.builder()
-			  				.labor(infoPreLabor.getLabor())
+							.shippingCompany(companyInfo)
+			  				.labor(laborInfo)
 			  				.build();
 			 
 					/*
 					 * List<InspectionShippingDto> list = new ArrayList<InspectionShippingDto>();
 					 * List<InspectionModel> inspectionInfo =
 					 * inspectorRepository.getInspectionForLabor(inspectionId);
-					 * 
+					 *
 					 * for(InspectionModel entity : inspectionInfo) {
-					 * 
+					 *
 					 * List<ContainerModel> infoPreContainer =
 					 * containerRepository.getPreLabor(entity.getContainerId());
-					 * 
+					 *
 					 * for(ContainerModel listEntity : infoPreContainer) {
-					 * 
+					 *
 					 * CatShippingCompanyModel infoPreLabor =
 					 * catShippingCompanyReposirtory.getPreLaborFinal(listEntity.getShippingCompany(
 					 * ));
-					 * 
+					 *
 					 * list.add(infoPreLabor.getLabor().toArray()); }
-					 * 
-					 * 
+					 *
+					 *
 					 * }
 					 */
 			  		log.info(entity.getLabor()+"-----------5--------");
 		  
 		  return entity; 
 		  }
-	 
+
+	@Override
+	public void saveInvoiceNumber(String containerId, String invoiceNumber) {
+		ContainerModel container = containerRepository.findById(containerId).orElse(null);
+		if (container != null) {
+			container.setNoInvoice(invoiceNumber);
+			containerRepository.save(container);
+		}
+	}
 
 }

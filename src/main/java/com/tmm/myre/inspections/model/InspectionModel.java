@@ -36,6 +36,7 @@ public class InspectionModel implements IModel {
 	@Column(name = "DAMAGE_GENSET")private String damageGenSet;
 	@Column(name = "REFERENCE")private String reference;
 	@Column(name = "CUSTOMER_TYPE")private Integer customerType;
+	@Column(name = "CUSTOMER_NAME")private String customerName;
 	@Column(name = "IMAGE")private String photo;
 	@Column(name = "STATUS")private Integer status;
 	@Column(name = "CONTAINER_ID")private String containerId;

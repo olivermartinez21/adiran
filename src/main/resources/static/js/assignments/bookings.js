@@ -73,6 +73,7 @@ function configDataTable() {
 			}},
 			
 		],
+			order: [[8, 'desc']]
 	}).columns.adjust();
 	
 	$("#bookingInformation").DataTable({
@@ -445,6 +446,7 @@ function addInformationBooking() {
 }
 
 function showMoreInformation() {
+	console.log("entra a showMoreInformation")
 	if($("#typeBookingInformation").val()=="RF"){
 		document.getElementById("divReffer1").removeAttribute("hidden");
 		document.getElementById("divReffer").removeAttribute("hidden");
@@ -509,7 +511,9 @@ function newDeliveryOrder(data){
 		currentData = $("#bookignTable").DataTable().row(data).data();
 		if(currentData.expirationDate>date){
 		bookingTableOrder(currentData.bookingId)
+			console.log("Entra a buscar delivry oirder")
 		tableDelivery(currentData.bookingId);
+		infoOrder(currentData.bookingId)
 		$("#bookingId").val(currentData.bookingId)
 		$("#newBookingOrder").val(currentData.booking);
 		$("#newUnitRemainingOrder").val(currentData.quantityUnits);
@@ -521,6 +525,7 @@ function newDeliveryOrder(data){
 		
 		}else{
 			Swal.fire("El booking Expiro","", "warning")
+			console.log(currentData)
 		}
 		
 }
@@ -564,28 +569,38 @@ function bookingTableOrder(data){
 		 { data: "no",visible: true },
 	 	 { data: "unitNumber",visible: true },
 		 { data: "type", visible: true , render : function(data) {
-						console.log(data)
-						if(data!=' '){
-							return data;
-						}else{
-							$("#containerTypeBooking").val(data);
-							return $("#containerTypeBooking option:selected").html();
-						}
+
+							switch(data) {
+								case "1": return "CH";
+								case "2": return "OT";
+								case "3": return "DC";
+								case "4": return "GS";
+								case "5": return "IMO";
+								case "6": return "RF";
+								case "7": return "HC";
+								default: return " ";
+							}
+
 						
 					}}, 
 		 { data: "size",visible: true },
 		 { data: "quality", visible: true , render : function(data) {
-					
-						if(data!=' '){
-							return data;
-						}else{
-								$("#containerQualityBooking").val(data);
-							return $("#containerQualityBooking option:selected").html();
-						}
+
+				 switch(data) {
+					 case "1": return "A";
+					 case "2": return "B";
+					 case "3": return "C";
+					 case "4": return "BL";
+					 case "5": return "D";
+					 case "6": return "FS";
+					 case "7": return "FX";
+					 default: return " ";
+				 }
 						
 					}}, 
 		 { data: "id", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Unidad" onclick="unitCap(\'' +meta.row  + '\');"><i class="fas fa-check"></i></button>&nbsp'+
+					'<button type="button" class="btn btn-outline-dark btn-sm" title="Imprimir Orden de entrega " onclick="preOrderDelivery(\'' +data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 				'<input class="form-check-input" value='+data+' type="checkbox" id="checkRow'+meta.row+'" style="margin-left:auto; margin-right:auto;">';
 			}},
 		],
@@ -594,6 +609,11 @@ function bookingTableOrder(data){
 //style="overflow-y: scroll;"
 
 function unitCap(data){
+		console.log("entra unitCap "+ $("#newTypeUnitOrder").val())
+		console.log("ENTRA TIPO"+$("#typeBookingInformation").val())
+		console.log("ENTRA TAMANIO"+$("#sizeBookingInformation").val())
+		console.log("ENTRA GRADO"+$("#qualityBookingInformation").val())
+
 	    currentData = $("#bookingInformationOrder").DataTable().row(data).data();
 		$("#newUnitInformation").val(currentData.unitNumber);
 		$("#assignmentId").val(currentData.id);
@@ -612,6 +632,10 @@ function unitCap(data){
 			alert("AJAX ERROR");
 		}
 	});
+	selectedValue = document.getElementById('newTypeUnitOrder').value;
+	document.getElementById('typeBookingInformation').value = selectedValue;
+	$("#typeBookingInformation").prop( "disabled", true );
+	showMoreInformation();
 		$("#newBookingInformationModal").modal('show')
 		//$("#newDeliveryOrderlinformationModal").modal('show')
 		
@@ -626,9 +650,31 @@ function selectContainer(){
 		data:{containerId :  $("#unitNumberBookingInformation").val()},	
 		success: function(response){
 			console.log(response)
-			$("#typeBookingInformation").val(response.containerType)
+
+			if ($("#sizeBookingInformation").val() == 0 && $("#qualityBookingInformation").val() == 0){
+
+				if (response.containerType == $("#typeBookingInformation").val()){
+					$("#typeBookingInformation").val(response.containerType)
+					$("#sizeBookingInformation").val(response.containerSize)
+					$("#qualityBookingInformation").val(response.clasification)
+
+					$("#qualityBookingInformation").prop( "disabled", false );
+
+				}
+
+			} else {
+				if (response.containerType == $("#typeBookingInformation").val() && response.containerSize == $("#sizeBookingInformation").val() && response.clasification == $("#qualityBookingInformation").val()){
+					$("#typeBookingInformation").val(response.containerType)
+					$("#sizeBookingInformation").val(response.containerSize)
+					$("#qualityBookingInformation").val(response.clasification)
+				} else {
+					Swal.fire("La unidad no cumple con las especificaciones del contenedor", "", "warning");
+					$("#unitNumberBookingInformation").val(" ")
+				}
+			}
+			/*$("#typeBookingInformation").val(response.containerType)
 			$("#sizeBookingInformation").val(response.containerSize)
-			$("#qualityBookingInformation").val(response.clasification)
+			$("#qualityBookingInformation").val(response.clasification)*/
 		},
 		error: function(){
 			alert("AJAX ERROR");
@@ -691,6 +737,92 @@ function tableDelivery(data){
 			
 		],
 	}).columns.adjust();
+}
+
+function infoOrder(data){
+	$.ajax({
+		type: "GET",
+		url: 'bookings/getInfoOrdersByBookingId',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data:  {bookingId : data},
+		success: function(response){
+			console.log(response)
+			$("#newTypeUnitOrder").val(response.containerType)
+			$("#newCarrierCompanyOrder").val(response.carrierCompany)
+			$("#newOperatorOrder").val(response.operator)
+			$("#newEconomicNumberOrder").val(response.economicNumber)
+			$("#newWorkOrderOrder").val(response.workOrder)
+
+
+			if(response.carrierCompany != null){
+				$("#newTypeUnitOrder").prop( "disabled", true );
+				$("#newCarrierCompanyOrder").prop( "disabled", true );
+				$("#newOperatorOrder").prop( "disabled", true );
+				$("#newEconomicNumberOrder").prop( "disabled", true );
+				$("#newWorkOrderOrder").prop( "disabled", true );
+			} else{
+				$("#newTypeUnitOrder").prop( "disabled", false );
+				$("#newCarrierCompanyOrder").prop( "disabled", false );
+				$("#newOperatorOrder").prop( "disabled", false );
+				$("#newEconomicNumberOrder").prop( "disabled", false );
+				$("#newWorkOrderOrder").prop( "disabled", false );
+			}
+
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
+}
+
+function preOrderDelivery(data) {
+	console.log("entra a preOrderDelivery " + data);
+
+	var requestData = {
+		assignmentId: data,
+		bookingOrder: $("#newBookingOrder").val(),
+		shippingCompany: $("#newShippngCompanyOrder").val(),
+		typeServiceOrder: $("#newTypeServiceOrder").val(),
+		billOrderTo: $("#newBillToOrder").val(),
+		typeUnitOrder: $("#newTypeUnitOrder").val(),
+		carrierCompanyOrder: $("#newCarrierCompanyOrder").val(),
+		operatorOrder: $("#newOperatorOrder").val(),
+		economicNumberOrder: $("#newEconomicNumberOrder").val(),
+		workOrderOrder: $("#newWorkOrderOrder").val()
+	};
+
+	// Validación de campos vacíos
+	for (var key in requestData) {
+		if (!requestData[key] || requestData[key].toString().trim() === "") {
+			alert("Por favor, llena todos los campos obligatorios.");
+			return;
+		}
+	}
+
+	$.ajax({
+		type: "POST",
+		url: 'bookings/printPreOrderDelivery',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: requestData,
+		xhrFields: {
+			responseType: 'blob'
+		},
+		success: function(blob) {
+			if (blob.type === "application/pdf") {
+				var url = window.URL.createObjectURL(blob);
+				window.open(url, '_blank');
+			} else {
+				var reader = new FileReader();
+				reader.onload = function() {
+					alert("Error al generar el PDF: " + reader.result);
+				};
+				reader.readAsText(blob);
+			}
+		},
+		error: function() {
+			alert("AJAX ERROR");
+		}
+	});
 }
 
 function printOrder(data){

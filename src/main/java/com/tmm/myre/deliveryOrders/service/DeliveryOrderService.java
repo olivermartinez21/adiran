@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import com.tmm.myre.containers.model.ContainerModel;
+import com.tmm.myre.containers.repository.IContainerRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 	
 	@Autowired
 	private IAssignmentRepository assignmentRepository;
+
+	@Autowired
+	private IContainerRepository containerRepository;
 	
 	@Autowired
 	private IBookingRepository bookingRepository;
@@ -84,30 +89,42 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 			}else {
 				
 				if(deliveryOrderDto.getAssignmentList() != null) {
-					
-					int remain = Integer.parseInt(assignment.getQuantityUnits())-use;
-					deliveryOrderDto.setBooking(assignment.getBooking());
-					//deliveryOrderDto.setOwner(assignment.getShippingCompany());
-					deliveryOrderDto.setRemainingUnits(String.valueOf(remain));
-					deliveryOrderDto.setDeliveryOrderId(UuidProvider.getUUID());
-					deliveryOrderRepository.save(deliveryOrderConverter.convert(deliveryOrderDto));
-					
-					List<DeliveryOrderModel> actualizar = deliveryOrderRepository.getOrderByAssignmentId(deliveryOrderDto.getAssignmentId());
-					
-					for(DeliveryOrderModel entity : actualizar) {
-						entity.setRemainingUnits(String.valueOf(remain));
-						deliveryOrderRepository.save(entity);
-						
+
+					for (String infoValidation : deliveryOrderDto.getAssignmentList()){
+						AssignmentModel assignmetValidation = assignmentRepository.getById(infoValidation);
+						if(assignmetValidation.getUnitNumber() == null || assignmetValidation.getUnitNumber().isEmpty()) {
+							response.setMessage("Asigna una unidad para esta orden");
+							response.setSuccess(false);
+							return response;
+						} else {
+
+							int remain = Integer.parseInt(assignment.getQuantityUnits())-use;
+							deliveryOrderDto.setBooking(assignment.getBooking());
+							//deliveryOrderDto.setOwner(assignment.getShippingCompany());
+							deliveryOrderDto.setRemainingUnits(String.valueOf(remain));
+							deliveryOrderDto.setDeliveryOrderId(UuidProvider.getUUID());
+							deliveryOrderRepository.save(deliveryOrderConverter.convert(deliveryOrderDto));
+
+							List<DeliveryOrderModel> actualizar = deliveryOrderRepository.getOrderByAssignmentId(deliveryOrderDto.getAssignmentId());
+
+							for(DeliveryOrderModel entity : actualizar) {
+								entity.setRemainingUnits(String.valueOf(remain));
+								deliveryOrderRepository.save(entity);
+
+							}
+
+							for(String assignmentSelect : deliveryOrderDto.getAssignmentList()) {
+								AssignmentModel assignmet = assignmentRepository.getById(assignmentSelect);
+								assignmet.setStatus(2);
+								assignmet.setDeliveryOrderId(deliveryOrderDto.getDeliveryOrderId());
+								assignmentRepository.save(assignmet);
+							}
+
+							response.setSuccess(true);
+						}
 					}
 					
-					for(String assignmentSelect : deliveryOrderDto.getAssignmentList()) {
-						AssignmentModel assignmet = assignmentRepository.getById(assignmentSelect);
-						assignmet.setStatus(2);
-						assignmet.setDeliveryOrderId(deliveryOrderDto.getDeliveryOrderId());
-						assignmentRepository.save(assignmet);
-					}
-					
-					response.setSuccess(true);	
+
 				}else {
 					response.setMessage("Por favor Selecciona las unidades para esta Orden");
 					response.setSuccess(false);
@@ -185,11 +202,22 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 	public List<DeliveryOrderDto> getDataTableByAssignmentID(String bookingId) throws ConverterException {
 		List<DeliveryOrderDto> list = new ArrayList<DeliveryOrderDto>();
 		 List<DeliveryOrderModel> entities = deliveryOrderRepository.getOrderByAssignmentId(bookingId);
+
 			 for(DeliveryOrderModel entity : entities) {
 					list.add(deliveryOrderConverter.convert(entity));
 				}
 		 
 		return list;
+	}
+
+	@Override
+	public DeliveryOrderDto getInfoOrdersByBookingId(String bookingId) throws ConverterException {
+		List<DeliveryOrderModel> entities = deliveryOrderRepository.getOrderByAssignmentId(bookingId);
+		if (!entities.isEmpty()) {
+			return deliveryOrderConverter.convert(entities.get(0)); // Toma el primer elemento y lo convierte
+		} else {
+			return null; // Manejo en caso de que la lista esté vacía
+		}
 	}
 
 
@@ -202,18 +230,33 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 			List<AssignmentModel> assignments = assignmentRepository.getAssignmentByDeliveryId(deliveryOrderId);
 			
 			for(AssignmentModel assignment :assignments ) {
+				ContainerModel container = containerRepository.getContainerInformation(assignment.getUnitNumber());
+				container.setStatus(4);
+				containerRepository.save(container);
+
+				BookingModel booking = bookingRepository.getById(assignment.getBookingId());
+				int use = Integer.parseInt(booking.getQuantityUnitsUse())-1;
+				booking.setQuantityUnitsUse(String.valueOf(use));
+				bookingRepository.save(booking);
+
+
 				assignment.setStatus(1);
 				assignment.setDeliveryOrderId("");
+				assignment.setUnitNumber("");
+				assignment.setQuality("");
+				assignment.setSize("");
+				assignment.setType("");
 				assignmentRepository.save(assignment);
+
+
 			}
 			
-			
-			
 			deliveryOrderRepository.deleteById(deliveryOrderId);
-			
-			
-			
-			
+
+
+
+
+
 		} catch (Exception ex) {
 			response.setSuccess(false);
 			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);

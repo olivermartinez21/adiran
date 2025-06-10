@@ -26,4 +26,13 @@ public class ResumentInformationDto  extends AbstractManagement implements ITran
 	private Integer  ppti;
 	private Integer  total;
 	private Integer  suma;
+
+	// Nuevos campos con prefijo "tot"
+	private Integer totA;
+	private Integer totB;
+	private Integer totC;
+	private Integer totBL;
+	private Integer totD;
+	private Integer totFS;
+	private Integer totFX;
 }

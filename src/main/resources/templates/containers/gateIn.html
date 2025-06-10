@@ -365,6 +365,7 @@
 										<th>Método de reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
+										<th>Cobrar a</th>
 										<th>Imagen</th>
 										<th>largo</th>
 										<th>ancho</th>
@@ -385,6 +386,7 @@
 										<th>Método de reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
+										<th>Cobrar a</th>
 										<th>Imagen</th>
 										<th>largo</th>
 										<th>ancho</th>
@@ -654,11 +656,11 @@
 									<select class="form-control" id="qualityevent" disabled>
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
-									<option value="3">DAÑADO/PTI </option>
+									<!--<option value="3">DAÑADO/PTI </option>-->
 									<option value="4">EVACUACION</option>
-									<option value="5">PTI</option>
+									<!--<option value="5">PTI</option>-->
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -703,15 +705,7 @@
 						</div>
 						
 						<div class="row">
-						<div class="col-sm">
-								<div class="form-group">
-									<label for="newTransmit">Transmitir</label>
-									<select class="form-control" id="newTransmit">
-									<OPTION VALUE="1">NO</OPTION>
-									<OPTION VALUE="2">SI</OPTION>
-									</select>
-								</div>
-							</div>
+
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="nomenclaturaEvent">Nomenclatura</label>
@@ -728,6 +722,32 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="newTransmit">Transmitir</label>
+									<select class="form-control" id="newTransmit">
+										<OPTION VALUE="1">NO</OPTION>
+										<OPTION VALUE="2">SI</OPTION>
+									</select>
+								</div>
+							</div>
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="sapSaleOrder">Pedido de venta SAP</label>
+<!--										<input type="text" class="form-control" id="sapSaleOrder">-->
+										<select class="form-control" id="sapSaleOrder">
+											<option value="I">Importación (I)</option>
+											<option value="E">Exportación (E)</option>
+											<option value="V">Evacuación (V)</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="newEventDate">Fecha del evento</label>
+										<input type="datetime-local" class="form-control" id="newEventDate"   >
+									</div>
+								</div>
 						</div>
 					</div>
 					<!-- <div class="modal-body modal-body-app">
@@ -917,7 +937,7 @@
 									<option value="4">EVACUACION</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -1172,11 +1192,11 @@
 									<select class="form-control" id="containerCondition" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
-									<option value="3">DAÑADO/PTI </option>
+									<!--<option value="3">DAÑADO/PTI </option>-->
 									<option value="4">EVACUACION</option>
-									<option value="5">PTI</option>
+									<!--<option value="5">PTI</option>-->
 									<option value="6">BLOQUEADO/GX</option>
-									<option value="7">TOTAL LOOS</option>
+									<option value="7">TOTAL LOSS</option>
 									<option value="8">VENTA</option>
 									<option value="9">ACCIDENTADO</option>
 									</select>
@@ -1395,6 +1415,16 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-sm">
+								<div class="form-group">
+<!--									Cambiar por Cobrar a-->
+									<label for="customerName">A quien se cobra:</label>
+									<input type="text" class="form-control" id="customerName" name="example" list="newAgencyDamageList">
+									<datalist id="newAgencyDamageList" >
+										<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+									</datalist>
+								</div>
+							</div>
 						<div class="col-sm" >
 								<div class="form-group">
 									<label for="newImage">Foto</label>
@@ -1402,7 +1432,7 @@
 								  <img id="imagenPrevisualizacion" src="" hidden=true>
 								  <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
 								</div>
-							</div>
+						</div>
 							
 						<!-- 	<div class="col-sm">
 								<div class="form-group">
@@ -1424,28 +1454,28 @@
 							<div class="row" >
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="largeInspection">Largo (mm,cm,mts)</label>
+									<label for="largeInspection">Largo </label>
 									<input type="text" class="form-control" id="largeInspection"   >
 								</div>
 							</div>
 							
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="heigthInspection">Ancho (mm,cm,mts)</label>
+									<label for="heigthInspection">Ancho </label>
 									<input type="text" class="form-control" id="heigthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="depthInspection">Profundidad (mm,cm,mts)</label>
+									<label for="depthInspection">Profundidad </label>
 									<input type="text" class="form-control" id="depthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="otherLargeInspection">Largo (mm,cm,mts)</label>
+									<label for="otherLargeInspection">Largo </label>
 									<input type="text" class="form-control" id="otherLargeInspection"  >
 								</div>
 							</div>

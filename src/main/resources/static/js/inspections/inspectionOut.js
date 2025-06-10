@@ -143,7 +143,8 @@ function initComponents(){
 			horometro: $("#newHorometro").val(),
 			associateUnit: $("#newAsocieteUnit").val(), 
 			
-			operatorName: $("#name").val(), 
+			operatorName: $("#name").val(),
+			clasification: $("#newCondition").val(),
 			dataUrl : $("#draw-dataUrl").val(),
 	};
 	

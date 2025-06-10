@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.tmm.myre.inspections.model.InspectionModel;
@@ -41,6 +42,20 @@ public interface IInspectionRepository extends JpaRepository<InspectionModel, St
 	
 	@Query(value = "SELECT COUNT(*) FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId", nativeQuery = true)
 	int countInspectionsRequest(String containerId);
+
+	//Union de tablas
+	@Query(value = "SELECT i.INSPECTION_ID, i.PART, i.COMPONET, i.DAMAGE, i.LOCATION, i.REPAIR, " +
+			"i.DAMAGE_GENSET, i.DAMAGE_CODE, i.REFERENCE, i.CUSTOMER_TYPE, i.CUSTOMER_NAME, i.IMAGE, i.STATUS, " +
+			"i.CONTAINER_ID, i.LENGTH, i.WIDTH, i.DEPTH, i.OTHER_LENGTH, i.EXTENT_LARGE, " +
+			"i.EXTENT_HEIGHT, i.EXTENT_DEPTH, i.EXTENT_OTHER_LENGTH, i.QUANTITY, " +
+			"q.QUOTE_ID, q.WORK_CODE, q.REPAIR_DESCRIPTION, q.HOURS, q.LABOR, q.MATERIAL, q.TARIFA, q.EXCHANGE " +
+			"FROM MYRE.MYRE_INSPECTIONS i " +
+			"LEFT JOIN MYRE.MYRE_QUOTES q ON i.INSPECTION_ID = q.INSPECTION_ID " +
+			"WHERE i.CONTAINER_ID = :containerId",
+			nativeQuery = true)
+	List<Object[]> findInspectionsWithQuotes(@Param("containerId") String containerId);
+
+
 
 
 

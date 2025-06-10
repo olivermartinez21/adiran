@@ -65,6 +65,7 @@ public class InspectionOutService implements IInspectionsOutService {
 		containeEdit.setOperatorName(containerDto.getOperatorName());
 		containeEdit.setQualityStamp(containerDto.getQualityStamp());
 		containeEdit.setSecurityStamp(containerDto.getSecurityStamp());
+		containeEdit.setClasification(containerDto.getClasification());
 		int valor = containerRepository.getCountEirOut();
 		containeEdit.setEirOutName("EIR-OUT-"+containeEdit.getLocation()+"-0"+valor);
 		containeEdit.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));

@@ -8,6 +8,7 @@ package com.tmm.myre.base.service.core;
 import java.util.List;
 
 import com.tmm.myre.appointments.dto.AppointmentDto;
+import com.tmm.myre.assignments.dto.PreOrderDeliveryRequestDto;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.deliveryOrders.model.DeliveryOrderModel;
 import com.tmm.myre.inspections.dto.InspectionDto;
@@ -32,6 +33,8 @@ public interface IPdfGenerationService {
 	byte[] pdfEir(String containerId, String dataUrl);
 
 	byte[] pdfOrder(DeliveryOrderModel deliveryOrderId);
+
+	byte[] pdfPreOrderDelivery(PreOrderDeliveryRequestDto request);
 
 	byte[] pdfEirOut(String containerId, String dataUrl);
 

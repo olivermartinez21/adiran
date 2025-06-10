@@ -128,6 +128,8 @@ function initComponents() {
 			shippingCompany: $("#propietaryEvent").val(),
 			nomenclatura: $("#nomenclaturaEvent").val(),
 			typeServicePregate: $("#serviceTypeEvent").val(),
+			sapSaleOrder: $("#sapSaleOrder").val(),
+			newEventDate: $("#newEventDate").val(),
 			containerTypeEvent: document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text,
 			
 			qualityEvent:  document.getElementById("qualityevent").options[$("#qualityevent").val()-1].text,
@@ -172,7 +174,7 @@ function initComponents() {
 	}else {
 		var data = {
 			container: $("#newContainerName").val().toUpperCase(),
-			registerDate : $("#startDate").val(),
+			registerDateregisterDate : $("#startDate").val(),
 			containerType: $("#newContainerTypeSave").val(),
 			containerSize: $("#newContainerSize").val(),
 			shippingCompany: $("#newShippingConpanyContainer").val(),
@@ -302,6 +304,7 @@ $("#addNewDamageModel").submit(function () {
 			 repair: $("#newRepair").val(),
 			 reference: $("#newReferent").val(),
 			 customerType: $("#inspectionCustomerType").val(),
+			 customerName: $("#customerName").val(),
 			 //photo: item.photo,
 			 length: $("#largeInspection").val(),
 			 width:  $("#heigthInspection").val(),
@@ -343,7 +346,7 @@ $("#addNewDamageModel").submit(function () {
 							
 							$("#addNewDamageModel").modal("hide");
 							getInspectionsData()
-							self.location.reload();
+							// self.location.reload();
 							console.log("no")
 				        }
 				    });
@@ -403,6 +406,8 @@ $("#addNewDamageModel").submit(function () {
 			 depth: $("#depthInspection").val(),
 			 otherLength:  $("#otherLargeInspection").val(),
 			 quantity:  $("#quantityInspection").val(),
+			extentOtherLarge: $("#extentOtherLarge").val(),
+			customerName: $("#customerName").val(),
 	};
 		formData.append('inspectionUpdate',JSON.stringify(data));
 		
@@ -487,19 +492,32 @@ function addNewContainer() {
 		return false
 	}
 }
-	
-	
+
+
 function addNewEvent(data) {
-	
 	currentData = $("#containerTable").DataTable().row(data).data();
-	$("#eventEir").val(currentData.eirName)
-	$("#containerType").val(currentData.containerType)
-	$("#containerSize").val(currentData.containerSize)
-	$("#containerId").val(currentData.containerId)
-	getNomenclatura()
-	getSingleData(currentData.containerId)
+	$("#eventEir").val(currentData.eirName);
+	$("#containerType").val(currentData.containerType);
+	$("#containerSize").val(currentData.contaierSize);
+	$("#containerId").val(currentData.containerId);
+
+	// Obtener la fecha y hora actual y formatearla a YYYY-MM-DDTHH:MM
+	var now = new Date();
+	var year = now.getFullYear();
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var day = ("0" + now.getDate()).slice(-2);
+	var hours = ("0" + now.getHours()).slice(-2);
+	var minutes = ("0" + now.getMinutes()).slice(-2);
+	var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+// Establecer el valor y el máximo del input newEventDate
+	document.getElementById("newEventDate").value = formattedDateTime;
+	document.getElementById("newEventDate").max = formattedDateTime;
+
+	getNomenclatura();
+	getSingleData(currentData.containerId);
 	$("#newEventModal").modal("show");
-	}
+}
 	
 function setDescription() {
 	$("#newContainerTypeSave").val($("#newContainerDescription").val());
@@ -622,7 +640,7 @@ function configDataTablePregate(){
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm" disabled title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+						'<button tydpe="button" class="btn btn-outline-dark btn-sm"  title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
@@ -728,11 +746,11 @@ function configDataTable() {
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
 				console.log($("#containerStatus").val())
-				if($("#statusQute").val()==1||$("#statusQute").val()==2){
+				if($("#statusQute").val()>=1||$("#statusQute").val()==2){
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm" disabled title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+						'<button tydpe="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
@@ -794,7 +812,8 @@ function configDataTable() {
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName",visible: false },
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				console.log(data)
 				$("#imagenData").val(data)
@@ -960,11 +979,13 @@ function getNomenclatura(){
 			url: 'gateIn/getNomenclatura',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerType : textContainer,
-			size : $("#containerSize").val()},
+					size : $("#containerSize").val()
+					},
 			success: function(response){
 				//clearCombo(document.getElementById("newPart"));
 				fillComboNomenclatura(document.getElementById("newModel"),response);
 				fillComboNomenclatura(document.getElementById("nomenclaturaEvent"),response);
+				console.log(response)
 			},
 			error: function(){
 				alert("AJAX ERROR");
@@ -1188,7 +1209,8 @@ function getInspectionsData(){
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName", visible: true },
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 				/*if(typeof data != null){
@@ -1345,6 +1367,7 @@ function addInspection(){
 				"damageCode": "",
 				"reference": $("#newReferent").val().toUpperCase(),
 				"customerType": "",
+				"customerName": "",
 				"photo": dataUrl,
 				"length": $("#largeInspection").val(),
 				"width": $("#heigthInspection").val(),
@@ -1365,6 +1388,7 @@ function addInspection(){
 				"damageCode": "",
 				"reference": $("#newReferent").val().toUpperCase(),
 				"customerType": $("#inspectionCustomerType").val(),
+				"customerName": $("#customerName").val(),
 				"photo": dataUrl,
 				"length": $("#largeInspection").val(),
 				"width": $("#heigthInspection").val(),
@@ -1387,6 +1411,7 @@ function addInspection(){
 				"damageCode": "",
 				"reference": $("#newReferent").val(),
 				"customerType": $("#inspectionCustomerType").val(),
+				"customerName": $("#customerName").val(),
 				"photo": dataUrl,
 				"length": $("#largeInspection").val(),
 				"width": $("#heigthInspection").val(),
@@ -1777,6 +1802,7 @@ $("#depthInspection").val(table.depth)
 $("#otherLargeInspection").val(table.otherLength)
 $("#quantityInspection").val(table.quantity)		
 $("#inspectionId").val(table.inspectionId)
+$("#customerName").val(table.customerName)
 
 $("#extentOtherLarge").val(table.extentOtherLarge)
 
@@ -1843,7 +1869,7 @@ $("#largeInspection").val(table.length)
 $("#heigthInspection").val(table.width)
 $("#depthInspection").val(table.depth)
 $("#otherLargeInspection").val(table.otherLength)
-$("#quantityInspection").val(table.quantity)		
+$("#quantityInspection").val(table.quantity)
 
 //$('#inspectionTable').DataTable().row('.selected').remove().draw(false);
 		document.getElementById("btnDamage").setAttribute("hidden",true);
@@ -1926,6 +1952,7 @@ function urltoFile(url, filename, mimeType){
 function deleteImage(data){
 	
 	console.log(data)
+	$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
 	$.ajax({
 		type: "POST",
 		url: 'gateIn/deleteImage',
@@ -1933,7 +1960,7 @@ function deleteImage(data){
 		data: {photoId : data},
 		success: function(response){
 			console.log(response)
-			alert("Se borro la imagen")		
+			alert("Se borro la imagen")
 		},
 		error: function(){
 			alert("AJAX ERROR");
@@ -1973,6 +2000,7 @@ function requestDamage(){
 							//configDataTablePregate()
 							//self.location.reload();
 							console.log("no")
+						   saveInspection()
 				        }
 				    });
 				}else{

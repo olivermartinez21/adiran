@@ -11,16 +11,16 @@ import com.tmm.myre.catalog.model.CatDamageModel;
 @Repository("ICatDamageRepository")
 public interface ICatDamageRepository extends JpaRepository<CatDamageModel, String>{
 	
-	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where DC='p';", nativeQuery = true)
+	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where DC='p' ORDER BY DESCRIPTION ASC;", nativeQuery = true)
 	List<CatDamageModel> findAllbycontainerDC();
 
-	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where RF='p';", nativeQuery = true)
+	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where RF='p' ORDER BY DESCRIPTION ASC;", nativeQuery = true)
 	List<CatDamageModel> findAllbycontainerRF();
 
-	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where GD='p';", nativeQuery = true)
+	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where GD='p' ORDER BY DESCRIPTION ASC;", nativeQuery = true)
 	List<CatDamageModel> findAllbycontainerGD();
 
-	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where CH='p';", nativeQuery = true)
+	@Query(value = "SELECT * FROM  MYRE_CAT_DAMAGE where CH='p' ORDER BY DESCRIPTION ASC;", nativeQuery = true)
 	List<CatDamageModel> findAllbycontainerCH();
 
 	@Query(value = "SELECT DESCRIPTION FROM  MYRE_CAT_DAMAGE where DAMAGE_ID = :damage", nativeQuery = true)

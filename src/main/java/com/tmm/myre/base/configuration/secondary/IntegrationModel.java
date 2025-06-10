@@ -2,6 +2,7 @@ package com.tmm.myre.base.configuration.secondary;
 
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class IntegrationModel implements IModel{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "eventDetailsIdentifier")private Integer eventDetailsIdentifier;
 	@Column(name = "eventType")private String eventType; 
-	@Column(name = "eventDate")private Date eventDate;
+	@Column(name = "eventDate")private LocalDateTime eventDate;
 	@Column(name = "estimateRequired")private String estimateRequired;
 	@Column(name = "inspected")private String inspected; 
 	@Column(name = "inspectedBy")private String inspectedBy; 

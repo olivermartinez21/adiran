@@ -41,6 +41,8 @@ function initComponents() {
 			containerId: $("#containerId").val(),
 			location: $("#globalWarehouse").val(),
 			transmit: $("#eventTransmitOut").val(),
+			sapSaleOrder: $("#sapSaleOrderOut").val(),
+			newEventDate: $("#newEventDateOut").val(),
 			}
 			
 			$.ajax({
@@ -740,6 +742,19 @@ function gatOut(data){
 	$("#bookingOut").val(currentData.booking);
 	$("#billToOut").val(currentData.billTo);
 	//$("#typeDeliveryOut").val(currentData.);
+
+	// Obtain the current date and time and format it to YYYY-MM-DDTHH:MM
+	var now = new Date();
+	var year = now.getFullYear();
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var day = ("0" + now.getDate()).slice(-2);
+	var hours = ("0" + now.getHours()).slice(-2);
+	var minutes = ("0" + now.getMinutes()).slice(-2);
+	var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+	// Set the value and maximum of newEventDate input
+	document.getElementById("newEventDateOut").value = formattedDateTime;
+	document.getElementById("newEventDateOut").max = formattedDateTime;
 	$("#gateOutModel").modal("show");
 }
 function validation(data) {

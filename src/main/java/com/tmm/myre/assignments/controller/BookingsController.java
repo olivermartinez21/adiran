@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 
+import com.tmm.myre.assignments.dto.PreOrderDeliveryRequestDto;
+import com.tmm.myre.base.service.PdfGenerationService;
+import com.tmm.myre.base.service.core.IPdfGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +53,9 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingsController extends AbstractMyreController{
 
 public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
-	
+    @Autowired
+    private IPdfGenerationService pdfGenerationService;
+
 	@GetMapping(EMPTY)
 	public String onLoadHome() {
 		return HOME;
@@ -123,7 +128,20 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 	@ResponseBody
 	public List<DeliveryOrderDto> getDataTableOrdersByBookingId(@RequestParam(required = true) String bookingId) {
 		try {
+			log.info(bookingId);
 			return deliveryOrderService.getDataTableByAssignmentID(bookingId);
+		} catch(Exception ex) {
+			log.info(ex.toString());
+			return null;
+		}
+	}
+
+	@GetMapping("getInfoOrdersByBookingId")
+	@ResponseBody
+	public DeliveryOrderDto getInfoOrdersByBookingId(@RequestParam(required = true) String bookingId) {
+		try {
+			log.info(bookingId);
+			return deliveryOrderService.getInfoOrdersByBookingId(bookingId);
 		} catch(Exception ex) {
 			log.info(ex.toString());
 			return null;
@@ -352,6 +370,26 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 			}
 			return response;
 		}
+
+	@PostMapping(value = "printPreOrderDelivery", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<InputStreamResource> printPreOrderDelivery(@ModelAttribute PreOrderDeliveryRequestDto request) {
+	    try {
+	        byte[] pdfBytes = pdfGenerationService.pdfPreOrderDelivery(request);
+	        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdfBytes));
+
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("Content-Disposition", "inline; filename=preorder_delivery.pdf");
+
+	        return ResponseEntity
+	                .ok()
+	                .headers(headers)
+	                .contentType(MediaType.APPLICATION_PDF)
+	                .body(resource);
+	    } catch (Exception ex) {
+	        log.error(ex.toString());
+	        return ResponseEntity.internalServerError().build();
+	    }
+	}
 	
 	@RequestMapping(value = "/PDF_order", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> certificateView(@RequestParam(required = true) String deliveryOrderId) {

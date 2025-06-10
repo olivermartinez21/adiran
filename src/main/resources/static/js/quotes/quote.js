@@ -7,6 +7,31 @@ $(document).ready( function() {
 	$('#loading').hide();
 	configDataTable();
 	initComponents();
+
+    // Evento para guardar factura
+    $("#invoiceForm").submit(function(e) {
+        e.preventDefault();
+        var containerId = $("#invoiceContainerId").val();
+        var invoiceNumber = $("#invoiceNumberInput").val();
+        $.ajax({
+            type: "POST",
+            url: 'quote/saveInvoiceNumber',
+            contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+            data: {containerId: containerId, invoiceNumber: invoiceNumber},
+            success: function(response){
+                if(response.success){
+                    $("#invoiceModal").modal("hide");
+                    Swal.fire("Factura guardada", "", "success");
+                    configDataTable();
+                } else {
+                    Swal.fire(response.message+" Error", "", "warning");
+                }
+            },
+            error: function(){
+                alert("AJAX ERROR");
+            }
+        });
+    });
 });
 function configDataTable() {
 	$("#quoteTable").DataTable().destroy();
@@ -48,6 +73,7 @@ function configDataTable() {
 		columns: [
 			{ data: "containerId",visible: false },
 			{ data: "container",visible: true },
+			{ data: "dateInspection",visible: true },
 			{ data: "containerType", visible: true , render : function(data) {
 						$("#containerDescriptionQuote").val(data);
 						return $("#containerDescriptionQuote option:selected").html();
@@ -73,7 +99,8 @@ function configDataTable() {
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						return  $("#containerDescriptionQuoteCatalog option:selected").html() +"<br>"+ 
 						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="newQuote(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>'+
-						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambair status" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>';
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambair status" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>'+
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="#Factura" onclick="noQuote(\'' + data + '\');"><i class="fas fa-file-invoice-dollar"></i></button>';
 					}},
 			{ data: "containerId", visible: false , render : function(data) {
 						return "";
@@ -87,11 +114,10 @@ function configDataTable() {
 			{ data: "containerId", visible: true , render : function(data) {
 						return "";
 					}},
-			{ data: "containerId", visible: true , render : function(data) {
-						return "";
-					}},
+			{ data: "noInvoice", visible: true },
 			{ data: "containerId",visible: false },
 		],
+		order: [[2, 'desc']]
 	}).columns.adjust();
 	
 	$("#imageTableInspection").DataTable().destroy();
@@ -235,7 +261,7 @@ function validationStatus(data){
 	            },
 			}},
 		ajax: {
-			url: "quote/dataTableInpection",
+			url: "quote/dataTableInpectionComplete",
 			type: 'GET',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			dataSrc: '',
@@ -282,13 +308,12 @@ function validationStatus(data){
 						return $("#length").val()*$("#width").val();
 						
 					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
+			{ data: "otherLength", visible: true },
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName",visible: true },
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
 			
@@ -304,30 +329,18 @@ function validationStatus(data){
 //			{ data: "inspectionId", visible: true , render : function(data) {
 //						return "";
 //					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data) {
-						return "";
-					}},				
+			{ data: "workCode", visible: true},
+			{ data: "repairDescription", visible: true},
+			{ data: "hours", visible: true},
+			{ data: "labor", visible: true },
+			{ data: "material", visible: true},
+			{ data: "tarifa", visible: true},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				$("#imagenData").val(data)
 				//return '<a onclick="showPhoto(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}},
-			{ data: "inspectionId", visible: true , render : function(data) {
+			{ data: "inspectionId", visible: false , render : function(data) {
 						return "";
 					}},	
 			{ data: "status", visible: false , render : function(data) {
@@ -358,7 +371,10 @@ function inspectionCap(data){
 			console.log(response)
 			
 				$("#preLabor").val(response.labor)
-			
+				$("#shippingCompanyIdRef").val(response.shippingCompany)
+			loadJobcodes(response.shippingCompany);
+
+
 			
 		},
 		
@@ -366,15 +382,34 @@ function inspectionCap(data){
 			alert("AJAX ERROR");
 		}
 	});
+
+	$.ajax({
+		type: "GET",
+		url: 'quote/getQuoteDetail',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {inspectionId : data},
+
+		success: function(response){
+
+			console.log(response)
+
+			$("#newWorkCode").val(response.workCode)
+			$("#newRepairDescription").val(response.repairDescription)
+			$("#newHours").val(response.hours)
+			$("#newLabor").val(response.labor)
+			$("#newMaterial").val(response.material)
+			$("#newTarifa").val(response.tarifa)
+
+		},
+
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
 	
-	$("#newWorkCode").val(""), 
-	$("#newRepairDescription").val(""), 
-	$("#newHours").val(""),
-	$("#newLabor").val(""),
-	$("#newMaterial").val(""),
-	$("#newTarifa").val(""),
+
 	$("#inspectionId").val(data)
-		$("#inspectionCapModel").modal("show")
+	$("#inspectionCapModel").modal("show")
 		
 	}
 	
@@ -393,7 +428,8 @@ function showPhoto(data){
 function initComponents(){
 	$("#inspectionCapModel").submit(function () {
 		var data = {
-			workCode: $("#newWorkCode").val(), 
+			jobcodeId: $("#jobcodeId").val(),
+			workCode: $("#newWorkCode").val(),
 			repairDescription : $("#newRepairDescription").val(), 
 			hours : $("#newHours").val(),
 			labor : $("#newLabor").val(),
@@ -527,7 +563,8 @@ $("#largeInspection").val(table.length)
 $("#heigthInspection").val(table.width)
 $("#depthInspection").val(table.depth)
 $("#otherLargeInspection").val(table.otherLength)
-$("#quantityInspection").val(table.quantity)		
+$("#quantityInspection").val(table.quantity)
+$("#inspectionCustomerType").val(table.customerType)
 $("#inspectionId").val(table.inspectionId)
 $("#imageTableInspection").DataTable().clear().draw();
 
@@ -630,6 +667,35 @@ function showComponents(){
 	//fillComboComponent(document.getElementById("newComponentInspection"), $("#containerType").val(),data);
 }
 
+function loadJobcodes(data){
+	console.log(data)
+	$.ajax({
+		type: "GET",
+		url: 'quote/catJobcode',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {shippingCompanyId: data},
+		success: function(response) {
+			console.log('Jobcodes recibidos:', response);
+
+			// Vacía las opciones previas
+			var $datalist = $('#newJobcodeList');
+			$datalist.empty();
+
+			// Recorre el array y añade <option> por cada elemento
+			$.each(response, function(i, opt) {
+				$('<option>')
+					.val(opt.jobcodeRepair)
+					.text(opt.jobcodeDescription)
+					.attr('data-id', opt.jobcodeId)
+					.appendTo($datalist);
+			});
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
+}
+
 console.log(newJobcodeList)
 document.getElementById("newJobcodeList").addEventListener("change", myFunction);
 
@@ -655,7 +721,8 @@ function myFunction() {
 				
 			alert("No se encontro registro")
 			} else{
-			
+
+				$("#jobcodeId").val(response.jobcodeId)
 				$("#newRepairDescription").val(response.jobcodeDescription)
 				$("#newHours").val(response.jobcodeHh)
 				$("#newMaterial").val(response.jobcodeMaterial)
@@ -691,7 +758,7 @@ function calcularLabor(){
 	var operacionLabor = preFloat*newFloat;
 	
 	console.log(operacionLabor)
-	$("#newLabor").val(Math.round(operacionLabor));
+	$("#newLabor").val(Math.round(operacionLabor * 100) / 100);
 	
 	calcularTarifa()
 }
@@ -707,5 +774,25 @@ function calcularTarifa(){
 	
 	var calcularTarifa = parseLabor+parseMaterial;
 	
-	$("#newTarifa").val(Math.round(calcularTarifa));
+	$("#newTarifa").val(Math.round(calcularTarifa * 100) / 100);
 }
+
+function noQuote(containerId) {
+    // Obtener datos actuales de la fila
+    var rowData = $("#quoteTable").DataTable().rows().data().toArray().find(function(row) {
+        return row.containerId == containerId;
+    });
+    if(rowData && rowData.invoiceNumber) {
+        $("#invoiceNumberInput").val(rowData.invoiceNumber);
+        $("#invoiceNumberInput").prop("readonly", false);
+    } else if(rowData && rowData.noInvoice) {
+        $("#invoiceNumberInput").val(rowData.noInvoice);
+        $("#invoiceNumberInput").prop("readonly", false);
+    } else {
+        $("#invoiceNumberInput").val("");
+        $("#invoiceNumberInput").prop("readonly", false);
+    }
+    $("#invoiceContainerId").val(containerId);
+    $("#invoiceModal").modal("show");
+}
+

@@ -29,14 +29,24 @@ public class CatJobcodeService implements  ICatJobcodeService{
 	
 	
 	@Override
-	public List<CatJobcodeDto> catJobcode() throws ConverterException {
+	public List<CatJobcodeDto> catJobcode(String shippingCompanyId) throws ConverterException {
+		List<CatJobcodeDto> list = new ArrayList<CatJobcodeDto>();
+		List<CatJobcodeModel> entities = catJobcodeRepository.findByShippingId(shippingCompanyId);
+		for(CatJobcodeModel entity : entities) {
+			list.add(catJobcodeConverter.convert(entity));
+		}
+		return list;
+	}
+
+	@Override
+	public List<CatJobcodeDto> findAll() throws ConverterException {
 		List<CatJobcodeDto> list = new ArrayList<CatJobcodeDto>();
 		List<CatJobcodeModel> entities = catJobcodeRepository.findAll();
 		for(CatJobcodeModel entity : entities) {
 			list.add(catJobcodeConverter.convert(entity));
 		}
 		return list;
-}
+	}
 
 
 	@Override

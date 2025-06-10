@@ -54,6 +54,7 @@ function initComponents() {
 			plate: $("#newPlate").val(),
 			economicNumber: $("#newEconomicNumber").val(),
 			containerId: $("#containerId").val(),
+			newDestinyPregate : $("#newDestinyPregate").val(),
 			
 			}
 			
@@ -320,6 +321,7 @@ $("#addNewDamageModel").submit(function () {
 			 repair: $("#newRepair").val(),
 			 reference: $("#newReferent").val(),
 			 customerType: $("#inspectionCustomerType").val(),
+			 customerName: $("#customerName").val(),
 			 //photo: item.photo,
 			 length: $("#largeInspection").val(),
 			 width:  $("#heigthInspection").val(),
@@ -348,7 +350,7 @@ $("#addNewDamageModel").submit(function () {
 			if(response.success==true){
 				console.log(response)
 					Swal.fire({
-				        title: "¿Desea Registrar Daño?",
+				        title: "¿Desea Registrar Otro Daño?",
 				        text: " ",
 				        icon: 'warning',
 				        showCancelButton: true,
@@ -364,7 +366,7 @@ $("#addNewDamageModel").submit(function () {
 							
 							$("#addNewDamageModel").modal("hide");
 							getInspectionsData()
-							self.location.reload();
+							//self.location.reload();
 							console.log("no")
 				        }
 				    });
@@ -418,12 +420,14 @@ $("#addNewDamageModel").submit(function () {
 			 repair: $("#newRepair").val(),
 			 reference: $("#newReferent").val(),
 			 customerType: $("#inspectionCustomerType").val(),
+			 customerName: $("#customerName").val(),
 			 //photo: item.photo,
 			 length: $("#largeInspection").val(),
 			 width:  $("#heigthInspection").val(),
 			 depth: $("#depthInspection").val(),
 			 otherLength:  $("#otherLargeInspection").val(),
 			 quantity:  $("#quantityInspection").val(),
+			extentOtherLarge: $("#extentOtherLarge").val(),
 	};
 		formData.append('inspectionUpdate',JSON.stringify(data));
 		
@@ -486,6 +490,15 @@ function addNewContainer() {
 			}
 			});*/
 	eventDateValidator();
+	var now = new Date();
+	var year = now.getFullYear();
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var day = ("0" + now.getDate()).slice(-2);
+	var hours = ("0" + now.getHours()).slice(-2);
+	var minutes = ("0" + now.getMinutes()).slice(-2);
+	var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+	document.getElementById("startDate").value = formattedDateTime;
 	$("#newContainerName").val("")
 	
 				
@@ -654,6 +667,7 @@ function configDataTablePregate(){
 				}
 			}},
 		],
+		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 }
 
@@ -801,7 +815,8 @@ function configDataTable() {
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName",visible: true},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				//return data;
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
@@ -1006,7 +1021,8 @@ function getInspectionsData(){
 			{ data: "customerType",visible: true , render : function(data) {
 						$("#inspectionCustomerType").val(data);
 						return $("#inspectionCustomerType option:selected").html();
-					}}, 
+					}},
+			{ data: "customerName", visible: true },
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 				
@@ -1180,7 +1196,8 @@ function getNomenclatura(){
 			 resolve(response)
 		console.log(response)
 			//$("#appointmentId").val(response.appointmentId),
-			$("#newCondition").val(response.conditionPregate), 
+			// $("#containerConditionInspection").val(response.condition),
+			// $("#containerClasificationInspection").val(response.clasification),
 			$("#typeServicePregate").val(response.typeServicePregate), 
 			$("#newBillToPregate").val(response.billTo),
 			$("#newTransportCompanyPregate").val(response.transportId),
@@ -1350,6 +1367,18 @@ async  function inspectionContainer(data){
 	eventDateValidator()
 	getDamageInfotmation($("#newContainerDescription").val())
 	getInspectionsData()
+
+	// Configura el campo de fecha para evitar fechas futuras
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = (now.getMonth() + 1).toString().padStart(2, '0');
+	const day = now.getDate().toString().padStart(2, '0');
+	const formattedDate = `${year}-${month}-${day}`;
+
+	const dateInput = document.getElementById("newDateInspection");
+	dateInput.max = formattedDate; // Establece la fecha máxima como la fecha actual
+	dateInput.value = formattedDate;
+
 	$("#inspectionModal").modal("show");
 	$("#operation").val("UPDATE")
 	
@@ -1366,6 +1395,7 @@ function getDamageInfotmation(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {containerType : data},
 		success: function(response){
+			console.log("Aqui llega el newDamage")
 			clearCombo(document.getElementById("newDamage"))
 			fillComboDamage(document.getElementById("newDamage"),response)
 		},
@@ -1413,6 +1443,7 @@ function addNewDamage(){
 	$("#newLocationInspection").val(""),	
 	$("#newReferent").val(""),
 	$("#inspectionCustomerType").val("1"),
+	$("#customerName").val(""),
 	$("#newImageCode").val(""),
 	$("#largeInspection").val(""),
 	$("#heigthInspection").val(""),
@@ -1587,6 +1618,7 @@ function deleteInspection(data){
 		data: {inspectionId : data},
 		success: function(response){
 			console.log(response)
+			getInspectionsData()
 			alert("Se borro la inspeccion")		
 		},
 		error: function(){
@@ -1599,6 +1631,7 @@ function deleteInspection(data){
 function deleteImage(data){
 	
 	console.log(data)
+	$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
 	$.ajax({
 		type: "POST",
 		url: 'preGate/deleteImage',
@@ -1606,7 +1639,7 @@ function deleteImage(data){
 		data: {photoId : data},
 		success: function(response){
 			console.log(response)
-			alert("Se borro la imagen")		
+			alert("Se borro la imagen")
 		},
 		error: function(){
 			alert("AJAX ERROR");
@@ -1905,26 +1938,20 @@ function convertToBase64data(data){
 
 
 function eventDateValidator(){
-	 fecha = new Date();
-     year = fecha.getFullYear();
-     day = fecha.getDate();
-     month = fecha.getMonth();
-     month = month + 1;
-	if(day<10){
-		var day = "0" + day;
-	}
-    if (month < 10){ 
-	var month = "0" + month;
-	}
-    else{ 
-	var month = month;
-	}
-	
-    document.getElementById("startDate").min = year+'-'+month+'-'+day; 
-	document.getElementById("startDate").value = year+'-'+month+'-'+day; 
-	
-	 document.getElementById("newDateInspection").min = year+'-'+month+'-'+day; 
-	document.getElementById("newDateInspection").value = year+'-'+month+'-'+day; 
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = (now.getMonth() + 1).toString().padStart(2, '0');
+	const day = now.getDate().toString().padStart(2, '0');
+	const hours = now.getHours().toString().padStart(2, '0');
+	const minutes = now.getMinutes().toString().padStart(2, '0');
+
+	const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+	document.getElementById("startDate").min = formattedDateTime;
+	document.getElementById("startDate").value = formattedDateTime;
+
+	document.getElementById("newDateInspection").min = formattedDateTime;
+	document.getElementById("newDateInspection").value = formattedDateTime;
 	
 }
 
@@ -2013,7 +2040,8 @@ function requestDamage(){
 				            // Dijeron que no
 							//configDataTablePregate()
 							//self.location.reload();
-							console.log("no")
+							console.log("No")
+						   	saveInspection()
 				        }
 				    });
 				}else{

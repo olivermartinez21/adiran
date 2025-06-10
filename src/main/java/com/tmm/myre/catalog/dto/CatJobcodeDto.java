@@ -26,4 +26,5 @@ public class CatJobcodeDto extends AbstractManagement implements ITransferObject
 	private String  jobcodeMaterial;
 	private String  jobcodeHh;
 	private String  jobcodeExchange;
+	private String  jobcodeShippingId;
 }

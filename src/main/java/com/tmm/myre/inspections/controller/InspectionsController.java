@@ -3,6 +3,9 @@ package com.tmm.myre.inspections.controller;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.tmm.myre.catalog.dto.*;
+import com.tmm.myre.catalog.service.core.*;
+import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tmm.myre.base.controller.AbstractMyreController;
 import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.utils.KeyConstants;
-import com.tmm.myre.catalog.dto.CatComponentDto;
-import com.tmm.myre.catalog.dto.CatDamageDto;
-import com.tmm.myre.catalog.dto.CatRepairDto;
-import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
-import com.tmm.myre.catalog.service.core.ICatComponentService;
-import com.tmm.myre.catalog.service.core.ICatDamageService;
-import com.tmm.myre.catalog.service.core.ICatRepairService;
-import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.service.core.IContainerService;
 import com.tmm.myre.inspections.dto.InspectionDto;
@@ -69,6 +64,9 @@ public class InspectionsController extends AbstractMyreController {
 	
 	@Autowired
 	private IPhotorService photorService;
+
+	@Autowired
+	private ICatCustomerService catCustomerService;
 	
 	@Autowired
 	private IInspectionRepository inspectionRepository;
@@ -81,6 +79,16 @@ public class InspectionsController extends AbstractMyreController {
 			return containerService.getAllContainersQuote(getWarehouse());
 			//return containerService.getContainersQuote(getWarehouse(),2);
 		} catch(Exception ex) {
+			return null;
+		}
+	}
+
+	@ModelAttribute("catClients")
+	List<CatCustomerDto> catClients() {
+		try {
+			return catCustomerService.catClients();
+		} catch(Exception ex) {
+			log.error(ex.toString());
 			return null;
 		}
 	}
@@ -159,6 +167,11 @@ public class InspectionsController extends AbstractMyreController {
 		} catch(Exception ex) {
 			return null;
 		}
+	}
+	@GetMapping("dataTableInpectionComplete")
+	@ResponseBody
+	public List<InspectionWithQuoteDto> getTableInspections(@RequestParam String containerId) {
+		return inspectionsService.getInspectionsWithQuotes(containerId);
 	}
 	
 	@PostMapping("saveInformationRepair")

@@ -1,6 +1,7 @@
 package com.tmm.myre.catalog.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,10 @@ public class CatFinalClientService implements ICatFinalClientService{
 
 	@Override
 	public List<CatFinalClientDto> catFinalClient() throws ConverterException{
-		List<CatFinalClientDto> list = new ArrayList<CatFinalClientDto>();
+		List<CatFinalClientDto> list = new ArrayList<>();
 		List<CatFinalClientModel> entities = catFinalClientRepository.findAll();
-		for(CatFinalClientModel entity : entities) {
+		entities.sort(Comparator.comparing(CatFinalClientModel::getClientName));
+		for (CatFinalClientModel entity : entities) {
 			list.add(catFinalClientConverter.convert(entity));
 		}
 		return list;
