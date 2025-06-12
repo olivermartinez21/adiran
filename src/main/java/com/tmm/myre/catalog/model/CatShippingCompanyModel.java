@@ -31,4 +31,5 @@ private static final long serialVersionUID = 1L;
 	@Column(name = "DESCRIPTION")private String  description;
 	@Column(name = "CODE")private String  code;
 	@Column(name = "LABOR")private String  labor;
+	@Column(name = "MANEUVER_COST") private String  maneuverCost;
 }

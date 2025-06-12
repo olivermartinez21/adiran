@@ -116,10 +116,10 @@ public class PriceListrsController extends AbstractMyreController {
 
 	@PostMapping("updateLaborAndExchangeByShippingCompany")
 	@ResponseBody
-	public ResponseManagement updateLaborAndExchangeByShippingCompany(@RequestParam String shippingCompanyId, @RequestParam String labor, @RequestParam String exchange) {
+	public ResponseManagement updateLaborAndExchangeByShippingCompany(@RequestParam String shippingCompanyId, @RequestParam String maneuverCost, @RequestParam String labor, @RequestParam String exchange) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
-			priceListService.updateLaborAndExchangeByShippingCompanyId(shippingCompanyId, labor, exchange);
+			priceListService.updateLaborAndExchangeByShippingCompanyId(shippingCompanyId, maneuverCost, labor, exchange);
 			response.setSuccess(true);
 			response.setMessage("Actualización exitosa");
 		} catch(Exception ex) {

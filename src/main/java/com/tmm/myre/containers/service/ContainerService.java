@@ -283,7 +283,7 @@ public class ContainerService implements IContainerService{
 			containerValidation.setCondition(condition);
 			containerValidation.setClasification(clasification);
 
-			containerValidation.setEir(pdfGenerationService.pdfEir(containerId, ""));
+			//containerValidation.setEir(pdfGenerationService.pdfEir(containerId, ""));
 			containerRepository.save(containerValidation);
 
 

@@ -97,6 +97,7 @@ public class AssignmentService implements IAssignmentService {
 			if(assignment.getUnitNumber().isEmpty()) {
 				log.info("cadena vacia");
 				assignmentRepository.save(assignment);
+				response.setSuccess(true);
 				response.setMessage("Reserva provisional creada correctamente");
 			}else {
 
@@ -111,6 +112,7 @@ public class AssignmentService implements IAssignmentService {
 					containerRepository.save(container);
 					assignmentRepository.save(assignment);
 					response.setSuccess(true);
+					response.setMessage("Se asigno la unidad");
 				}
 				
 			}

@@ -15,6 +15,7 @@ public class CatShippingCompanyConverter  implements IConverter<CatShippingCompa
 				.shippingCompanyId(to.getShippingCompanyId())
 				.description(to.getDescription())
 				.labor(to.getDescription())
+				.maneuverCost(to.getManeuverCost())
 				.build();
 		return entity;
 	}
@@ -25,6 +26,7 @@ public class CatShippingCompanyConverter  implements IConverter<CatShippingCompa
 				.shippingCompanyId(entity.getShippingCompanyId())
 				.description(entity.getDescription())
 				.labor(entity.getDescription())
+				.maneuverCost(entity.getManeuverCost())
 				.build();
 		return to;
 	}

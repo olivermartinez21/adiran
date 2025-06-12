@@ -153,7 +153,7 @@ function initComponents() {
 				console.log(response);
 				if(response.success==true){
 					$("#newBookingInformationModal").modal('hide');
-					Swal.fire("Se asigno la unidad","", "success")
+					Swal.fire(response.message,"", "success")
 				.then(() => {
 					bookingTableOrder($("#bookingId").val())
 					bookingTableOrderEdit()

@@ -24,4 +24,5 @@ public class CatShippingCompanyDto extends AbstractManagement implements ITransf
 	private String  shippingCompanyId;
 	private String  description;
 	private String  labor;
+	private String  maneuverCost;
 }

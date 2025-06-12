@@ -257,11 +257,12 @@ public class PriceListService implements IPriceListService {
 	}
 
 	@Override
-	public ResponseManagement updateLaborAndExchangeByShippingCompanyId(String shippingCompanyId, String labor, String exchange) {
+	public ResponseManagement updateLaborAndExchangeByShippingCompanyId(String shippingCompanyId, String maneuverCost, String labor, String exchange) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
 			CatShippingCompanyModel shippingCompany = catShippingCompanyRepository.getById(shippingCompanyId);
 			shippingCompany.setLabor(labor);
+			shippingCompany.setManeuverCost(maneuverCost);
 			catShippingCompanyRepository.save(shippingCompany);
 			catJobcodeRepository.updateExchange(shippingCompanyId, exchange);
 

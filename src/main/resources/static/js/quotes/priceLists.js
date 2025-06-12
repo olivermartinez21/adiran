@@ -18,6 +18,7 @@ $(document).ready( function() {
 				data: { shippingCompanyId: selectedId },
 				success: function(response) {
 					$('#jobcodeLabor').val(response.labor);
+					$('#maneuverCost').val(response.maneuverCost);
 				},
 				error: function() {
 					$('#jobcodeLabor').val('');
@@ -38,6 +39,7 @@ $(document).ready( function() {
             });
 		} else {
 			$('#jobcodeLabor').val('');
+			$('#maneuverCost').val('');
             $('#exchangeLabor').val('');
 		}
 	});
@@ -88,7 +90,7 @@ function configDataTable(shippingCompanyId = 0) {
 			{ data: "jobcodeDescription", visible: true, createdCell: function(td) { $(td).addClass('editable'); } },
 			{ data: "jobcodeMaterial", visible: true, createdCell: function(td) { $(td).addClass('editable'); } },
 			{ data: "jobcodeHh", visible: true, createdCell: function(td) { $(td).addClass('editable'); } },
-			{ data: "jobcodeExchange", visible: true, createdCell: function(td) { $(td).addClass('editable'); } },
+			{ data: "jobcodeExchange", visible: true },
 			{ data: "jobcodeShippingId", visible: true},
 			{
 				data: null,
@@ -152,10 +154,11 @@ function configDataTable(shippingCompanyId = 0) {
 
 function updateLabor() {
 	var shippingCompanyId = $('#newShippingConpanyInspection').val();
+	var maneuverCost = $('#maneuverCost').val();
 	var labor = $('#jobcodeLabor').val();
     var exchange = $('#exchangeLabor').val();
 
-	if (shippingCompanyId == 0 || labor.trim() === "" || exchange.trim() === "") {
+	if (shippingCompanyId == 0 || labor.trim() === "" || exchange.trim() === "" || maneuverCost.trim() === "") {
 		Swal.fire("Error", "Selecciona una naviera y escribe el valor de mano de obra y tipo de cambio", "warning");
 		return;
 	}
@@ -165,6 +168,7 @@ function updateLabor() {
 		type: 'POST',
 		data: {
 			shippingCompanyId: shippingCompanyId,
+			maneuverCost: maneuverCost,
 			labor: labor,
             exchange: exchange
 		},

@@ -17,7 +17,7 @@ public interface IPriceListService {
 
     //ResponseManagement updateLaborByShippingCompanyId(CatShipping CompanyDto catShippingCompanyDto) throws ConverterException;
 
-    ResponseManagement updateLaborAndExchangeByShippingCompanyId(String shippingCompanyId, String jobcodeId, String laborRate) throws ConverterException;
+    ResponseManagement updateLaborAndExchangeByShippingCompanyId(String shippingCompanyId, String maneuverCost, String jobcodeId, String laborRate) throws ConverterException;
 
     String getExchangeByShippingCompanyId(String shippingCompanyId);
 
