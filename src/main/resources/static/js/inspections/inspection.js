@@ -89,8 +89,15 @@ function configDataTable() {
 						return data;
 					}},
 			{ data: "finalDate", visible: true , render : function(data) {
-						return data;
-					}},
+				let finalResponse;
+    		if (data === null || data === undefined || data === "") {
+        		finalResponse = "En Proceso";
+    		} else {
+        		finalResponse = data;
+			}
+
+				return finalResponse;
+			}},
 			{ data: "condition", visible: false , render : function(data) {
 						$("#containerConditionInspecction").val(data);
 						return   $("#containerConditionInspecction option:selected").html() + '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-pen"></i></button>';
@@ -131,6 +138,7 @@ function configDataTable() {
 					
 			
 		], 
+		order: [[6, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 	$("#imageTableInspectionView").DataTable().destroy();
 	$("#imageTableInspectionView").DataTable({

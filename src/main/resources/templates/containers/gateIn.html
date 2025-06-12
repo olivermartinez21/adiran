@@ -70,7 +70,7 @@
 						<th>Tamaño</th>
 						<th>Propietario</th>
 						<th>Estado</th>
-						<th>Clasificación</th>
+						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
 						<th>Estado del estimado</th>
@@ -87,7 +87,7 @@
 						<th>Tamaño</th>
 						<th>Propietario</th>
 						<th>Estado</th>
-						<th>Clasificación</th>
+						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
 						<th>Estado del estimado</th>
@@ -704,7 +704,7 @@
 							</div>
 						</div>
 						
-						<div class="row">
+						<div class="row" style="align-items: flex-end">
 
 							<div class="col-sm">
 								<div class="form-group">
@@ -733,9 +733,10 @@
 							</div>
 								<div class="col-sm">
 									<div class="form-group">
-										<label for="sapSaleOrder">Pedido de venta SAP</label>
+										<label for="sapSaleOrder">Tipo de Movimiento Aduanal</label>
 <!--										<input type="text" class="form-control" id="sapSaleOrder">-->
 										<select class="form-control" id="sapSaleOrder">
+											<option value="" selected>No Aplica</option>
 											<option value="I">Importación (I)</option>
 											<option value="E">Exportación (E)</option>
 											<option value="V">Evacuación (V)</option>
