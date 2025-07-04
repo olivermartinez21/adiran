@@ -43,6 +43,9 @@ function initComponents() {
 			transmit: $("#eventTransmitOut").val(),
 			sapSaleOrder: $("#sapSaleOrderOut").val(),
 			newEventDate: $("#newEventDateOut").val(),
+			economicNumber: $("#noEconomico").val(),
+			operatorName: $("#operatorName").val(),
+			//TODO agregar el operador y economico asignar regla para que no sobre escriba en los vacios
 			}
 			
 			$.ajax({
@@ -525,7 +528,7 @@ function configDataTable() {
 						$("#containerStatus").val(data);
 						return data;
 					}},
-			
+			{data: "conditionPregate", visible: true },
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
 				return  '<button type="button" class="btn btn-outline-dark btn-sm" title="Gate Out" onclick="gatOut(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
@@ -741,7 +744,20 @@ function gatOut(data){
 	$("#qualityOut").val(currentData.clasification);
 	$("#bookingOut").val(currentData.booking);
 	$("#billToOut").val(currentData.billTo);
+	console.log(currentData.conditionPregate);
 	//$("#typeDeliveryOut").val(currentData.);
+
+	if (currentData.conditionPregate === "LLENO") {
+	    document.getElementById("noEconomico").hidden = false;
+	    document.querySelector("label[for='noEconomico']").hidden = false;
+	    document.getElementById("operatorName").hidden = false;
+	    document.querySelector("label[for='operatorName']").hidden = false;
+	} else {
+	    document.getElementById("noEconomico").hidden = true;
+	    document.querySelector("label[for='noEconomico']").hidden = true;
+	    document.getElementById("operatorName").hidden = true;
+	    document.querySelector("label[for='operatorName']").hidden = true;
+	}
 
 	// Obtain the current date and time and format it to YYYY-MM-DDTHH:MM
 	var now = new Date();

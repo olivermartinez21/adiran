@@ -491,7 +491,7 @@
 									<label for="newContainerSize" >Tamaño de la unidad</label>
 								<select class="form-control" id="newContainerSize" hidden=true>
 								<option>20</option>
-								<option>40</option>
+								<option selected>40</option>
 								</select>
 								</div>
 							</div>
@@ -513,7 +513,7 @@
 									<option value="4">GS</option>
 									<option value="5">IMO</option>
 									<option value="6">RF</option>
-									<option value="7">HC</option>
+									<option value="7" selected>HC</option>
 									</select>
 								</div>
 							</div>
@@ -527,7 +527,7 @@
 									<option value="4">GENERATOR SET</option>
 									<option value="5">ISOTANQUES</option>
 									<option value="6">REEFER</option>
-									<option value="7">HIGH CUBE</option>
+									<option value="7" selected>HIGH CUBE</option>
 									</select>
 								</div>
 							</div>
@@ -1114,7 +1114,7 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newCondition">Condición</label>
-									<select class="form-control" id="newCondition" >
+									<select class="form-control" id="newCondition" onchange="fullEntry()">
 									<option>VACIO</option>
 									<option>LLENO</option>
 									</select>
@@ -1212,6 +1212,13 @@
 									<input type="text" class="form-control" id="newEconomicNumber">
 								</div>
 							</div>
+						<div class="col-sm"  >
+							<div class="form-group">
+								<label for="fullNomenclatura" id="fullNomenclaturaLb" hidden="true">Nomenclaatura</label>
+								<select class="form-control" id="fullNomenclatura" hidden="true">
+								</select>
+							</div>
+						</div>
 					</div>
 						
 					</div>

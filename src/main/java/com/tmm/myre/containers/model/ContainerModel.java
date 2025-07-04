@@ -120,6 +120,7 @@ public class ContainerModel implements IModel{
 	@Column(name = "DATE_GATEIN")private LocalDateTime dateGateIn;
 	@Column(name = "DATE_GATEOUT")private LocalDateTime dateGateOut;
 	@Column(name = "NO_INVOICE")private String noInvoice;
+	@Column(name = "EXIT_DATETIME")private LocalDateTime exitDateTime;
 
 
 

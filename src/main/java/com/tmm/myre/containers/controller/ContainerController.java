@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -393,6 +395,37 @@ public class ContainerController extends AbstractMyreController{
 			log.error(ex.toString());
 			return null;
 		}
+	}
+
+	@RequestMapping("/generateExitDateReport")
+	public ResponseEntity<Resource> generateExitDateReport(@ModelAttribute ReportFilterDto reportFilterDto) {
+		try {
+			ByteArrayInputStream body = new ByteArrayInputStream(excelUtils.exitDateReport(reportFilterDto));
+
+			return ResponseEntity
+					.ok()
+					.header("Content-Disposition",  "attachment; filename=ReporteHapAg.xlsx")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(new InputStreamResource(body));
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
+	}
+
+	@PostMapping("saveExitDate")
+	@ResponseBody
+	public ResponseManagement saveExitDate(@RequestParam String containerId, @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime exitDateTime,
+										   @RequestParam String fullObservation, @RequestParam String destinyPregate) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			return containerService.saveExitDate(containerId, exitDateTime, fullObservation, destinyPregate);
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
+			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
+			response.setOperation(KeyConstants.UPDATE);
+		}
+		return response;
 	}
 
 }

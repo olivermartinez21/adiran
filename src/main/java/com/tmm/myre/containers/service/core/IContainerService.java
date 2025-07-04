@@ -1,7 +1,9 @@
 package com.tmm.myre.containers.service.core;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tmm.myre.base.dto.InspectionShippingDto;
@@ -16,6 +18,8 @@ import com.tmm.myre.inspections.dto.InspectionDto;
 public interface IContainerService {
 
 	List<ContainerDto> getContainers(String warehouse) throws ConverterException;
+
+	List<ContainerDto> getContainersFull(String warehouse) throws ConverterException;
 
 	ResponseManagement saveUpdateContainer(ContainerDto containerDto);
 
@@ -86,4 +90,6 @@ public interface IContainerService {
 
 
     void saveInvoiceNumber(String containerId, String invoiceNumber);
+
+	ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate);
 }

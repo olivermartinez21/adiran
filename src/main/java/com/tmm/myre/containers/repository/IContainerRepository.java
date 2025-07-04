@@ -1,5 +1,7 @@
 package com.tmm.myre.containers.repository;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -62,6 +64,9 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and status = 4 or status = 5 or status = 6", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouse(String warehouse);
+
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and CONTAINER_CONDITION_PREGATE = 'LLENO'", nativeQuery = true)
+	List<ContainerModel> findAllbyWarehouseAndConditionPregate(String warehouse);
 	
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 4 and CONTAINER_CONDITION = 1", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouseStock(String warehouse);
@@ -143,4 +148,8 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 
 	@Query(value = "SELECT DISTINCT NOMENCALTURA FROM MYRE_CONTAINERS WHERE LOCATION = :location AND CONTAINER_TYPE = :containerType AND SHIPPING_COMPANY = :shippingCompany", nativeQuery = true)
 	List<String> getNomenclaturasFiltered(@Param("location") String location, @Param("containerType") String containerType, @Param("shippingCompany") String shippingCompany);
+
+	// En IContainerRepository.java
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE EXIT_DATETIME BETWEEN :start AND :end", nativeQuery = true)
+	List<ContainerModel> findByExitDateTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

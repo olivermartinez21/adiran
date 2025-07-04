@@ -758,25 +758,29 @@ public class PdfGenerationService implements IPdfGenerationService {
 				log.info("El contenedor si necsita mostrar inspecciones" + containerId);
 				List<InspectionModel> listInspections = inspectionRepository.getAllInspectionsByContainerId(containerId);
 
+				int contador = 1;
 				for(InspectionModel inspection : listInspections) {
 
 					log.info(inspection.toString()+" ---------------- Esta escribiendo--------");
 
-					hcell = new PdfPCell(new Phrase("SECCION", bold));
+					hcell = new PdfPCell(new Phrase(contador+".-"+ "SECCION", bold));
+					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					hcell.setBackgroundColor(BaseColor.YELLOW);
+					table1.addCell(hcell);
+					contador++;
+					hcell = new PdfPCell(new Phrase("COMPONENTE", bold));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					hcell.setBackgroundColor(BaseColor.YELLOW);
 					table1.addCell(hcell);
 
-					hcell = new PdfPCell(new Phrase("COMPONENTE", bold));
-					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					table1.addCell(hcell);
-
 					hcell = new PdfPCell(new Phrase("DAÑO", bold));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					hcell.setBackgroundColor(BaseColor.YELLOW);
 					table1.addCell(hcell);
 
 					hcell = new PdfPCell(new Phrase("LOCALIZACION", bold));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					hcell.setBackgroundColor(BaseColor.YELLOW);
 					table1.addCell(hcell);
 
 					//-------------------------------------------------------------------------------
@@ -839,9 +843,10 @@ public class PdfGenerationService implements IPdfGenerationService {
 					}
 
 					hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+unidadMedida+", Ancho: "+ inspection.getWidth()+unidadMedida+ ", Profundo: "+inspection.getDepth()+unidadMedida+
-							" Largo: "+inspection.getOtherLength()+unidadMedida , regularBlack));
+							" Largo: "+inspection.getOtherLength()+unidadMedida +" Cantidad: " + inspection.getQuantity() , regularBlack));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table1.addCell(hcell);
+
 
 					hcell = new PdfPCell(new Phrase(inspection.getCustomerType() == 1 ? "MERCHANT" : "CARRIER"+"\n ", regularBlack));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1205,7 +1210,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table.addCell(hcell);
 				
-				hcell = new PdfPCell(new Phrase(""+ containerList.getNomenclatura(), regularBlack));
+				hcell = new PdfPCell(new Phrase(""+ containerList.getContaierSize(), regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
 //-------------------------------------------------------------------------------------
@@ -1244,14 +1249,44 @@ public class PdfGenerationService implements IPdfGenerationService {
 	                descripcionEstado = "Estado inválido";
 	                break;
 	        }
+
+			String descripcionClasificacion = null;
+
+
+			switch (containerList.getClasification()) {
+				case "1":
+					descripcionClasificacion = "A";
+					break;
+				case "2":
+					descripcionClasificacion = "B";
+					break;
+				case "3":
+					descripcionClasificacion = "C";
+					break;
+				case "4":
+					descripcionClasificacion = "BL";
+					break;
+				case "5":
+					descripcionClasificacion = "D";
+					break;
+				case "6":
+					descripcionClasificacion = "FS";
+					break;
+				case "7":
+					descripcionClasificacion = "FX";
+					break;
+				default:
+					descripcionClasificacion = "Estado inválido";
+					break;
+			}
 				
-				hcell = new PdfPCell(new Phrase("CONDICION: " , regularWhite));
+				hcell = new PdfPCell(new Phrase("GRADO-CALIDAD: " , regularWhite));
 		
 				hcell.setBackgroundColor(BaseColor.DARK_GRAY);
 				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table.addCell(hcell);
 				
-				hcell = new PdfPCell(new Phrase("" + descripcionEstado, regularBlack));
+				hcell = new PdfPCell(new Phrase("" + descripcionEstado+" "+descripcionClasificacion, regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
 //-------------------------------------------------------------------------------------: 
@@ -2226,8 +2261,12 @@ public class PdfGenerationService implements IPdfGenerationService {
 				contInfo.addCell(cell(container.getBillTo(), fontValue, null));
 				contInfo.addCell(cell("PROPIETARIO:", fontLabel, null));
 				contInfo.addCell(cell(mapShipping(container.getShippingCompany()), fontValue, null));
-				contInfo.addCell(cell("RESPONSABLE DANO:", fontLabel, null));
-				contInfo.addCell(cell(responsable, fontValue, null));
+				contInfo.addCell(cell("FACTURAR A:", fontLabel, null));
+				if ("CARRIER".equals(responsable)) {
+					contInfo.addCell(cell(mapShipping(container.getShippingCompany()), fontValue, null));
+				} else {
+					contInfo.addCell(cell(responsable, fontValue, null));
+				}
 				contInfo.addCell(cell("UNIDAD:", fontLabel, null));
 				contInfo.addCell(cell(container.getContainer(), fontValue, null));
 				contInfo.addCell(cell("TAMAÑO:", fontLabel, null));

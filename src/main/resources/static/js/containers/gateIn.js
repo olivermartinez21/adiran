@@ -634,13 +634,13 @@ function configDataTablePregate(){
 						$("#statusQute").val(data);
 						return data;
 					}},
+			{data: "conditionPregate", visible: false},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-				$("#containerId").val(data);
-				if($("#statusQute").val()==1||$("#statusQute").val()==2){ 
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm"  title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+					$("#containerId").val(data);
+					var conditionPregate = full.conditionPregate;
+					console.log($("#containerStatus").val())
+					if (conditionPregate === "LLENO"){
+						return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
@@ -743,19 +743,18 @@ function configDataTable() {
 						$("#statusQute").val(data);
 						return data;
 					}},
+			{data: "conditionPregate", visible: false},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
+				var conditionPregate = full.conditionPregate;
 				console.log($("#containerStatus").val())
-				if($("#statusQute").val()>=1||$("#statusQute").val()==2){
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+					if (conditionPregate === "LLENO"){
+					return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+						'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}
 						
 					
@@ -828,7 +827,7 @@ function configDataTable() {
 			{ data: "extentOtherLarge",visible: false },
 			
 			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Daño" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],

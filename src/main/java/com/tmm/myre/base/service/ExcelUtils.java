@@ -13,11 +13,14 @@ import com.tmm.myre.containers.dto.ReportFilterDto;
 import com.tmm.myre.containers.dto.ResumentInformationDto;
 import com.tmm.myre.containers.model.ContainerHistoricModel;
 import com.tmm.myre.containers.model.ContainerModel;
+import com.tmm.myre.containers.model.ReporteManiobraModel;
 import com.tmm.myre.containers.repository.IContainerHistoricRepository;
 import com.tmm.myre.containers.repository.IContainerRepository;
+import com.tmm.myre.containers.repository.IReporteManiobraRepository;
 import com.tmm.myre.containers.specifications.ContainerSpecification;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -27,8 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,6 +58,8 @@ public class ExcelUtils  implements IExcelUtils {
 
     @Autowired
     private IMandREmptyContainerReleaseRepository mandREmptyContainerReleaseRepository;
+    @Autowired
+    private IReporteManiobraRepository reporteManiobraRepository;
 
     @Override
     public byte[] inventoryExcel(ReportFilterDto reportFilterDto) {
@@ -310,7 +317,7 @@ public class ExcelUtils  implements IExcelUtils {
 
     @Override
     public byte[] maneuverExcel(ReportFilterDto reportFilterDto) {
-        Specification<ContainerModel> specification = ContainerSpecification.byFilter(reportFilterDto);
+        Specification<ReporteManiobraModel> specification = ContainerSpecification.byFilter(reportFilterDto);
         Specification<ContainerHistoricModel> specificationHistoric = ContainerSpecification.byShippingCompany(reportFilterDto);
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -391,78 +398,47 @@ public class ExcelUtils  implements IExcelUtils {
 
             int rowNum = 3;
 
-            List<ContainerModel> records = containerRepository.findAll(specification);
+            List<ReporteManiobraModel> records = reporteManiobraRepository.findAll(specification);
 
-            for (ContainerModel record : records) {
+            for (ReporteManiobraModel record : records) {
                 Row row = sheet.createRow(rowNum++);
                 List<CatShippingCompanyModel> shippingCompany = catShippingCompanyReposirtory.getShippingDesc(record.getShippingCompany());
 
-                createStyledCell(row, 0, record.getLocation(), cellStyle);
+                createStyledCell(row, 0, record.getLocalidad(), cellStyle);
 
-                String typeActivity;
-                switch (record.getStatus()) {
-                    case 1: typeActivity = "ENTRADA"; break;
-                    case 2:
-                    case 3: typeActivity = "PREGATE"; break;
-                    case 4: typeActivity = "GATEIN"; break;
-                    case 5: typeActivity = "REPARACION"; break;
-                    case 7: typeActivity = "GATEOUT"; break;
-                    default: typeActivity = "UNKNOWN"; break;
-                }
-                createStyledCell(row, 1, typeActivity, cellStyle);
-                createStyledCell(row, 2, record.getConditionPregate(), cellStyle);
-                createStyledCell(row, 3, record.getEirName(), cellStyle);
-                createStyledCell(row, 4, record.getDateInspection() == null ? "PENDIENTE" : record.getDateInspection().toString(), cellStyle);
-                createStyledCell(row, 5, record.getContainer(), cellStyle);
+                createStyledCell(row, 1, record.getTipoActividad(), cellStyle);
+                createStyledCell(row, 2, record.getTipoUnidad(), cellStyle);
+                createStyledCell(row, 3, record.getEir(), cellStyle);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+                String fechaEventoStr = record.getFechaEvento() == null ? "PENDIENTE" : record.getFechaEvento().format(formatter);
+                createStyledCell(row, 4, fechaEventoStr, cellStyle);
+                createStyledCell(row, 5, record.getUnidad(), cellStyle);
 
-                String clasification;
-                switch (record.getClasification() != null ? record.getClasification() : "null") {
-                    case "1": clasification = "A"; break;
-                    case "2": clasification = "B"; break;
-                    case "3": clasification = "C"; break;
-                    case "4": clasification = "BL"; break;
-                    case "5": clasification = "D"; break;
-                    case "6": clasification = "FS"; break;
-                    case "7": clasification = "FX"; break;
-                    case "null": clasification = "PENDIENTE"; break;
-                    default: clasification = "UNKNOWN"; break;
-                }
-                createStyledCell(row, 6, clasification, cellStyle);
-                createStyledCell(row, 7, record.getBokking(), cellStyle);
+                createStyledCell(row, 6, record.getGradoCalidad(), cellStyle);
+                createStyledCell(row, 7, record.getNumeroBooking(), cellStyle);
 
-                String containerType;
-                switch (record.getContainerType()) {
-                    case 1: containerType = "CH"; break;
-                    case 2: containerType = "OT"; break;
-                    case 3: containerType = "DC"; break;
-                    case 4: containerType = "GS"; break;
-                    case 5: containerType = "IMO"; break;
-                    case 6: containerType = "RF"; break;
-                    case 7: containerType = "HC"; break;
-                    default: containerType = "UNKNOWN"; break;
-                }
-                createStyledCell(row, 8, containerType, cellStyle);
-                createStyledCell(row, 9, record.getContaierSize(), cellStyle);
+                createStyledCell(row, 8, record.getTipoUnidad2(), cellStyle);
+                createStyledCell(row, 9, record.getTamano(), cellStyle);
 
-                List<CatNomenclaturaModel> nomenclatura = catNomencalturaRepository.findBYTransportType(containerType, record.getContaierSize());
-                createStyledCell(row, 10, nomenclatura.isEmpty() ? " " : nomenclatura.get(0).getNomenclatura(), cellStyle);
+                //List<CatNomenclaturaModel> nomenclatura = catNomencalturaRepository.findBYTransportType(containerType, record.getContaierSize());
+                createStyledCell(row, 10, record.getNomenclatura(), cellStyle);
+                createStyledCell(row, 11, "", cellStyle);
+                createStyledCell(row, 12, "", cellStyle);
+                createStyledCell(row, 13, record.getCostoManiobra(), cellStyle);
 
-                for (int i = 11; i <= 21; i++) createStyledCell(row, i, " ", cellStyle);
+                for (int i = 14; i <= 21; i++) createStyledCell(row, i, " ", cellStyle);
 
-                if (!shippingCompany.isEmpty()) {
-                    createStyledCell(row, 22, shippingCompany.get(0).getDescription(), cellStyle);
-                } else {
-                    createStyledCell(row, 22, " ", cellStyle);
-                }
+                createStyledCell(row, 22, record.getPropietario(), cellStyle);
 
-                createStyledCell(row, 23, record.getBillTo(), cellStyle);
-                createStyledCell(row, 24, record.getTypeServicePregate(), cellStyle);
-                createStyledCell(row, 25, record.getTransportId(), cellStyle);
-                createStyledCell(row, 26, record.getOperatorName(), cellStyle);
-                createStyledCell(row, 27, record.getPlate(), cellStyle);
-                createStyledCell(row, 28, record.getEconomicNumber(), cellStyle);
-                createStyledCell(row, 29, record.getOriginPregate(), cellStyle);
-                createStyledCell(row, 30, record.getDestinyPregate(), cellStyle);
+
+                createStyledCell(row, 23, record.getCobrarA(), cellStyle);
+                createStyledCell(row, 24, record.getTipoServicio(), cellStyle);
+                createStyledCell(row, 25, record.getCompaniaTransportista(), cellStyle);
+                createStyledCell(row, 26, record.getNombreOperador(), cellStyle);
+                createStyledCell(row, 27, record.getPlacasTransporte(), cellStyle);
+                createStyledCell(row, 28, record.getNumeroEconomico(), cellStyle);
+                createStyledCell(row, 29, record.getOrigen(), cellStyle);
+                createStyledCell(row, 30, record.getPlantaDestino(), cellStyle);
                 createStyledCell(row, 31, " ", cellStyle);
                 createStyledCell(row, 32, " ", cellStyle);
             }
@@ -488,7 +464,9 @@ public class ExcelUtils  implements IExcelUtils {
                 createStyledCell(row, 1, typeActivity, cellStyle);
                 createStyledCell(row, 2, record.getConditionPregate(), cellStyle);
                 createStyledCell(row, 3, record.getEirOutName(), cellStyle);
-                createStyledCell(row, 4, record.getDateInspection() == null ? "PENDIENTE" : record.getDateInspection().toString(), cellStyle);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+                String dateGateOutStr = record.getDateGateOut() == null ? "PENDIENTE" : record.getDateGateOut().format(formatter);
+                createStyledCell(row, 4, dateGateOutStr, cellStyle);
                 createStyledCell(row, 5, record.getContainer(), cellStyle);
 
                 String clasification;
@@ -720,6 +698,136 @@ public class ExcelUtils  implements IExcelUtils {
         } catch (IOException ex) {
             ex.printStackTrace();
             log.error(ex.toString());
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] exitDateReport(ReportFilterDto reportFilterDto) {
+        // TODO: sustituye ExitModel y ExitSpecification por tus clases reales
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("EXIT_REPORT");
+
+            // --- Estilos ---
+            CellStyle style = workbook.createCellStyle();
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            XSSFColor lilac = new XSSFColor(new java.awt.Color(200, 160, 255), new DefaultIndexedColorMap());
+            ((XSSFCellStyle) style).setTopBorderColor(lilac);
+            ((XSSFCellStyle) style).setBottomBorderColor(lilac);
+            ((XSSFCellStyle) style).setLeftBorderColor(lilac);
+            ((XSSFCellStyle) style).setRightBorderColor(lilac);
+
+            CellStyle headerStyle = workbook.createCellStyle();
+            headerStyle.cloneStyleFrom(style);
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            CellStyle titleStyle = workbook.createCellStyle();
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 14);
+            titleStyle.setFont(titleFont);
+            titleStyle.setAlignment(HorizontalAlignment.CENTER);
+            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            CellStyle dateStyle = workbook.createCellStyle();
+            Font dateFont = workbook.createFont();
+            dateFont.setItalic(true);
+            dateStyle.setFont(dateFont);
+            dateStyle.setAlignment(HorizontalAlignment.CENTER);
+            dateStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            // --- Encabezados según tu imagen ---
+            String[] headers = {
+                    "CONTENEDOR", "NAVIERA", "TAM", "DESTINO", "COMENTARIOS", "HRCITA"
+                    //, "CAMPO_EXTRA1", "CAMPO_EXTRA2" // añade más si los necesitas
+            };
+
+            // 1. Título
+            Row titleRow = sheet.createRow(0);
+            Cell titleCell = titleRow.createCell(0);
+            titleCell.setCellValue("Reporte de Salida");
+            titleCell.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
+
+            // 2. Fecha y rango
+            Row dateRow = sheet.createRow(1);
+            Cell dateCell = dateRow.createCell(0);
+            String ahora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            dateCell.setCellValue(
+                    "Generado: " + ahora +
+                            " | Busqueda: " + reportFilterDto.getDateInit()
+            );
+            dateCell.setCellStyle(dateStyle);
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, headers.length - 1));
+
+            // 3. Encabezados de columna
+            Row headerRow = sheet.createRow(2);
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // 4. Datos
+            int rowNum = 3;
+            // TODO: inyecta o llama a tu repository real
+            LocalDate date = reportFilterDto.getDateInit().toLocalDate();
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(23, 59, 59);
+
+            List<ContainerModel> lista = containerRepository.findByExitDateTimeBetween(start, end);
+            for (ContainerModel e : lista) {
+                Row row = sheet.createRow(rowNum++);
+                int col = 0;
+
+                row.createCell(col).setCellValue(e.getContainer());
+                row.getCell(col++).setCellStyle(style);
+
+                CatShippingCompanyModel naviera = catShippingCompanyReposirtory.getPreLaborFinal(e.getShippingCompany());
+                row.createCell(col).setCellValue(naviera.getDescription());
+                row.getCell(col++).setCellStyle(style);
+
+                row.createCell(col).setCellValue(e.getNomenclatura());
+                row.getCell(col++).setCellStyle(style);
+
+                row.createCell(col).setCellValue(e.getDestinyPregate());
+                row.getCell(col++).setCellStyle(style);
+
+                row.createCell(col).setCellValue(e.getComents());
+                row.getCell(col++).setCellStyle(style);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+                String exitDateTimeStr = e.getExitDateTime() != null ? e.getExitDateTime().format(formatter) : "";
+                row.createCell(col).setCellValue(exitDateTimeStr);
+                row.getCell(col++).setCellStyle(style);
+
+
+                // TODO: añade aquí más celdas si agregas más columnas
+            }
+
+            // 5. Auto-ajuste
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // 6. Escritura
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+            return out.toByteArray();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            log.error("Error generando Excel", ex);
             return null;
         }
     }

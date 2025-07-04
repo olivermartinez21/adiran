@@ -3,6 +3,7 @@ package com.tmm.myre.containers.specifications;
 import com.tmm.myre.containers.dto.ReportFilterDto;
 import com.tmm.myre.containers.model.ContainerHistoricModel;
 import com.tmm.myre.containers.model.ContainerModel;
+import com.tmm.myre.containers.model.ReporteManiobraModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Slf4j
 public class ContainerSpecification {
 
-    public static Specification<ContainerModel> byFilter(ReportFilterDto reportFilterDto) {
+    public static Specification<ReporteManiobraModel> byFilter(ReportFilterDto reportFilterDto) {
         return (root, query, cb) -> {
 
             // Lista de condiciones
@@ -32,8 +33,6 @@ public class ContainerSpecification {
                 predicates.add(cb.equal(root.get("shippingCompany"), reportFilterDto.getShippingCompany()));
             }
 
-            // Filtro para excluir status = 1
-            predicates.add(cb.notEqual(root.get("status"), 1));
 
             // Filtrado por rango de fechas para RegisterDate (Date)
             if (reportFilterDto.getDateInit() != null && reportFilterDto.getDateEnd() != null) {
@@ -41,7 +40,7 @@ public class ContainerSpecification {
                 LocalDateTime endDateTime = setEndOfDay(convertToLocalDateTime(reportFilterDto.getDateEnd()));
                 log.info("startDateTime: " + startDateTime);
                 log.info("endDateTime: " + endDateTime);
-                predicates.add(cb.between(root.get("registerDate"), startDateTime, endDateTime));
+                predicates.add(cb.between(root.get("fechaEvento"), startDateTime, endDateTime));
             }
 
             // Combinar las condiciones con AND

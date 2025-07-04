@@ -144,6 +144,23 @@ public class ContainerService implements IContainerService{
 		}
 		return list;
 	}
+
+	@Override
+	public List<ContainerDto> getContainersFull(String warehouse) throws ConverterException {
+		List<ContainerDto> list = new ArrayList<ContainerDto>();
+		List<ContainerModel> entities = containerRepository.findAllbyWarehouseAndConditionPregate(warehouse);
+		for(ContainerModel entity : entities) {
+
+			long diff = DateManagement.todayDate().getTime() - entity.getDateInspection().getTime() ;
+			TimeUnit time = TimeUnit.DAYS;
+			long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
+			entity.setDaysStay(" "+diffrence);
+
+			list.add(containerConverter.convert(entity));
+
+		}
+		return list;
+	}
 	
 	@Override
 	public List<ContainerDto> getContainersStock(String warehouse) throws ConverterException {
@@ -446,7 +463,17 @@ public class ContainerService implements IContainerService{
 				if(containerDto.getNum()!=1) {
 					containeredit.setStatus(2);
 				}
-				
+
+				if(containerDto.getConditionPregate().equals("LLENO")) {
+					containeredit.setDateInspection(DateManagement.todayDate());
+					containeredit.setNomenclatura(containerDto.getNomenclatura());
+					containeredit.setClasification("3");
+					containeredit.setCondition("1");
+					int valor = containerRepository.getCountEir();
+					valor=valor +1;
+					containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
+					containeredit.setStatus(3);
+				}
 				
 				containerRepository.save(containeredit);
 				response.setSuccess(true);
@@ -604,6 +631,16 @@ public class ContainerService implements IContainerService{
 		try {
 			ContainerModel container= containerRepository.getById(containerDto.getContainerId());
 			container.setStatus(7);
+
+			String nombreOperador;
+			String numeroEconomico;
+			if(container.getConditionPregate().equals("LLENO")){
+				nombreOperador = containerDto.getConditionPregate();
+				numeroEconomico = containerDto.getEconomicNumber();
+			} else{
+				nombreOperador = container.getOperatorName();
+				numeroEconomico = container.getEconomicNumber();
+			}
 			
 			ContainerHistoricModel containerHistoric = ContainerHistoricModel.builder()
 					.containerId(container.getContainerId())
@@ -641,9 +678,9 @@ public class ContainerService implements IContainerService{
 					.transportId(container.getTransportId())
 					.buque(container.getBuque())
 					.bl(container.getBl())
-					.operatorName(container.getOperatorName())
+					.operatorName(nombreOperador)
 					.plate(container.getPlate())
-					.economicNumber(container.getEconomicNumber())
+					.economicNumber(numeroEconomico)
 					.aptTo(container.getAptTo())
 					.eir(container.getEir())
 					.eirName(container.getEirName())
@@ -660,6 +697,7 @@ public class ContainerService implements IContainerService{
 					.aprovedQuote(container.getAprovedQuote())
 					.destinyPregate(container.getDestinyPregate())
 					.originPregate(container.getOriginPregate())
+					.dateGateOut(containerDto.getNewEventDate())
 					.build();
 			
 			containerHistoricRepository.save(containerHistoric);
@@ -732,6 +770,9 @@ public class ContainerService implements IContainerService{
 						.build();
 				integrationRepository.save(event);
 			}
+
+			container.setOperatorName(nombreOperador);
+			container.setEconomicNumber(numeroEconomico);
 			containerRepository.save(container);
 			
 			
@@ -1202,6 +1243,27 @@ public class ContainerService implements IContainerService{
 			container.setNoInvoice(invoiceNumber);
 			containerRepository.save(container);
 		}
+	}
+
+	@Override
+	public ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate){
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			// Lógica para actualizar la fecha de salida del contenedor
+			ContainerModel containerModel = containerRepository.findById(containerId).orElse(null);
+			containerModel.setExitDateTime(exitDateTime);// Asegúrate de tener este setter
+			containerModel.setComents(fullObservation);
+			containerModel.setDestinyPregate(destinyPregate);
+			containerModel.setStatus(6);
+			containerRepository.save(containerModel);
+			response.setSuccess(true);
+			response.setOperation(KeyConstants.UPDATE);
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + ex.toString());
+			response.setOperation(KeyConstants.UPDATE);
+		}
+		return response;
 	}
 
 }

@@ -3,6 +3,8 @@ package com.tmm.myre.event.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tmm.myre.containers.model.ReporteManiobraModel;
+import com.tmm.myre.containers.repository.IReporteManiobraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,8 @@ public class EventInformationService implements IEventInformationService {
 	
 	@Autowired
 	private ICatShippingCompanyReposirtory catShippingCompanyReposirtory;
+    @Autowired
+    private IReporteManiobraRepository reporteManiobraRepository;
 
 	@Override
 	public ResponseManagement saveEventInformation(EventInformationDto eventInformationDto) {
@@ -130,10 +134,87 @@ public class EventInformationService implements IEventInformationService {
 			if(container.getStatusQute()==null) {
 				//container.setStatusQute(1);
 			}
-			
+
+
 			//transmit
-			
 			containerRepository.save(container);
+
+			String clasification;
+			switch (containerDto.getClasification() != null ? containerDto.getClasification() : "null") {
+				case "1": clasification = "A"; break;
+				case "2": clasification = "B"; break;
+				case "3": clasification = "C"; break;
+				case "4": clasification = "BL"; break;
+				case "5": clasification = "D"; break;
+				case "6": clasification = "FS"; break;
+				case "7": clasification = "FX"; break;
+				case "null": clasification = "PENDIENTE"; break;
+				default: clasification = "UNKNOWN"; break;
+			}
+
+			String containerType;
+			switch (containerDto.getContainerType()) {
+				case 1: containerType = "CH"; break;
+				case 2: containerType = "OT"; break;
+				case 3: containerType = "DC"; break;
+				case 4: containerType = "GS"; break;
+				case 5: containerType = "IMO"; break;
+				case 6: containerType = "RF"; break;
+				case 7: containerType = "HC"; break;
+				default: containerType = "UNKNOWN"; break;
+			}
+
+			List<CatShippingCompanyModel> shippingCompany = catShippingCompanyReposirtory.getShippingDesc(containerDto.getShippingCompany());
+
+			String shippingCompanyName = null;
+			if(!shippingCompany.isEmpty()) {
+				shippingCompanyName = shippingCompany.get(0).getDescription();
+
+			} else {
+				shippingCompanyName = "PENDIENTE";
+			}
+
+			ReporteManiobraModel registerManiobra = ReporteManiobraModel.builder()
+					.containerId(container.getContainerId())
+					.localidad(container.getLocation())
+					.tipoActividad("GATEIN")
+					.tipoUnidad(container.getConditionPregate())
+					.eir(container.getEirName())
+					.fechaEvento(containerDto.getNewEventDate())
+					.unidad(container.getContainer())
+					.gradoCalidad(clasification)
+					.numeroBooking(container.getBokking() == null ? "PENDIENTE" : container.getBokking())
+					.tipoUnidad2(containerType)
+					.tamano(container.getContaierSize())
+					.nomenclatura(containerDto.getNomenclatura())
+					//Inicio datos vacios
+					.autorizacionCliente(null)
+					.facturaSap(null)
+					.costoManiobra(shippingCompany.get(0).getManeuverCost())
+					.moneda(null)
+					.selloCalidad(null)
+					.selloSeguridad(null)
+					.transmitirEdi(null)
+					.estatusEdi(null)
+					.regInsertadoTablaEdi(null)
+					.regEnviadoEdi(null)
+					.archivoEdi(null)
+					//Final datos vacios
+					.propietario(shippingCompanyName)
+					.cobrarA(container.getBillTo())
+					.tipoServicio(containerDto.getTypeServicePregate())
+					.companiaTransportista(container.getTransportId())
+					.nombreOperador(container.getOperatorName())
+					.placasTransporte(container.getPlate())
+					.numeroEconomico(container.getEconomicNumber())
+					.origen(container.getOriginPregate())
+					.plantaDestino(containerDto.getDestinyPregate())
+					.anden(null)
+					.tipoEntrega(null)
+					.shippingCompany(containerDto.getShippingCompany())
+					.build();
+
+			reporteManiobraRepository.save(registerManiobra);
 			CatShippingCompanyModel customer = catShippingCompanyReposirtory.getById(containerDto.getShippingCompany());
 			if(containerDto.getTransmit()==2 ) {
 				EventActivityModel activityEvent = EventActivityModel.builder()

@@ -117,5 +117,7 @@ public class ContainerHistoricModel implements IModel{
 	@Lob
 	private byte[] quote;
 
+	@Column(name = "DATE_GATEOUT")private LocalDateTime dateGateOut;
+
 
 }

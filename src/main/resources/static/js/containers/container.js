@@ -454,7 +454,80 @@ $("#conditionModel").submit(function () {
 		});
 		return false;
 	});
-	
+
+	$("#searchExitDateForm").submit( () => {
+		data = {
+			dateInit : $("#searchExitDate").val(),
+		}
+		console.log("soy data" + JSON.stringify(data));
+		$.ajax({
+			type: "GET",
+			url: "container/generateExitDateReport",
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			xhrFields: {
+				responseType: 'blob' // Set response type to blob to handle binary data
+			},
+			success: (data, status, xhr) => {
+				// Create a new Blob object using the response data
+				const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+				// Create a link element
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob); // Create a URL for the blob
+				link.download = 'ContenedoresLlenos.xlsx'; // Set the file name
+
+				// Append to the body and trigger the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				setTimeout(() => {
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(link.href);
+				}, 100);
+			},
+			error: (xhr, status, error) => {
+				console.error('Error generating Excel report:', error);
+				alert('Error generating report. Please try again.');
+			}
+		});
+		return false;
+	});
+
+	$("#exitDateForm").submit(function () {
+		let exitDateTime = $("#exitDateTime").val();
+		if (exitDateTime.length === 16) { // formato 'yyyy-MM-ddTHH:mm'
+			exitDateTime += ":00";
+		}
+			var data = {
+				exitDateTime: exitDateTime,
+				containerId: $("#containerExitId").val(), // Asegúrate de tener este campo en tu modal o contexto
+				fullObservation: $("#fullObservation").val(),
+				destinyPregate: $("#destinyPregate").val(),
+			};
+			$.ajax({
+				type: "POST",
+				url: "container/saveExitDate",
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				data: data,
+				success: function(response) {
+					if (response.success == true) {
+						Swal.fire("Hora de salida asignada", "", "success")
+							.then(() => {
+								$("#exitDateModal").modal("hide");
+								self.location.reload();
+							});
+					} else {
+						Swal.fire("Error al guardar", "", "error");
+					}
+				},
+				error: function() {
+					alert("AJAX ERROR");
+				}
+			});
+			return false;
+		});
 
 }
 
@@ -682,6 +755,8 @@ function configDataTable() {
 				//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
 				{text: 'Busqueda Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
 				{text: 'Anuncios HAPAG', className: 'btn btn-info', action: function() { filtersAds(); } },
+				{text: 'Salidas Llenos', className: 'btn btn-dark', action: function() { searchDateExit(); } }
+
 			],
 			},
 			ajax: {
@@ -751,13 +826,18 @@ function configDataTable() {
 						$("#containerStatus").val(data);
 						return $("#containerStatus option:selected").html();
 					}},
-			
+			{ data: "destinyPregate", visible: false},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
+				var destinyPregate = full.destinyPregate;
+				var conditionPregate = full.conditionPregate;
 				if($("#containerStatus").val()==5){
 					return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" disabled onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+"ASIGNADO"+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
 				}else{
+					if (conditionPregate === "LLENO"){
+						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Hora" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+					}
 					return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
 				}
@@ -1609,4 +1689,14 @@ function filterShippigModal(){
 
 function filtersAds(){
 	$("#filterAdsModel").modal("show");
+}
+
+function searchDateExit(){
+	$("#searchExitDateModal").modal("show");
+}
+
+function exitDate(data, destinyPregate){
+	$("#destinyPregate").val(destinyPregate);
+	$("#containerExitId").val(data);
+	$("#exitDateModal").modal("show");
 }

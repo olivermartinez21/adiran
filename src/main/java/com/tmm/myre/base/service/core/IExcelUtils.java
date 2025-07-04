@@ -13,4 +13,6 @@ public interface IExcelUtils {
     byte[] maneuverExcel(ReportFilterDto reportFilterDto);
 
     byte[] hapagAds(ReportFilterDto reportFilterDto);
+
+    byte[] exitDateReport(ReportFilterDto reportFilterDto);
 }

@@ -39,12 +39,12 @@ function intermodalInformation() {
 	}
 }
 function initComponents() {
-		
+
 	$("#pregateModel").submit(function () {
 		$("#pregateModel").modal("hide");
 		var data = {
-			conditionPregate: $("#newCondition").val(), 
-			typeServicePregate : $("#typeServicePregate").val(), 
+			conditionPregate: $("#newCondition").val(),
+			typeServicePregate : $("#typeServicePregate").val(),
 			billTo : $("#newBillToPregate").val(),
 			transportId : $("#newTransportCompanyPregate").val(),
 			originPregate: $("#newOriginPregate").val(),
@@ -54,54 +54,29 @@ function initComponents() {
 			plate: $("#newPlate").val(),
 			economicNumber: $("#newEconomicNumber").val(),
 			containerId: $("#containerId").val(),
-			newDestinyPregate : $("#newDestinyPregate").val(),
-			
-			}
-			
-			$.ajax({
-			type: "POST",
-			url: 'preGate/savePregate',
-			cache: false,
-			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-			data:data,
-			success: function(response){
-				console.log(response.success);
-				if(response.success==true){
-					Swal.fire({
-				        title: "Proceso Exitoso",
-				        text: "¿Desea Comenzar con la inspeccion?",
-				        icon: 'success',
-				        showCancelButton: true,
-				        confirmButtonText: "Si",
-				        cancelButtonText: "no",
-				    }).then(resultado => {
-				       if (resultado.value) {
-				            // Hicieron click en "Sí"
-							//configDataTablePregate()
-							inspectionContainer($("#containerId").val())
-							configDataTablePregate()
-				        } else {
-				            // Dijeron que no
-							configDataTablePregate()
-							//self.location.reload();
-				        }
-				    });
-					/*Swal.fire("Proceso Exitoso", "", "success")
-				.then(() => {
-				self.location.reload();
-				});*/
-				}else{
-					Swal.fire(response.message+" Error", "", "warning");
+			destinyPregate : $("#newDestinyPregate").val(),
+			nomenclatura: $("#fullNomenclatura").val()
+		};
+
+		if ($("#newCondition").val() === "LLENO") {
+			Swal.fire({
+				title: "Esta a punto de realizar la entrada de una unidad llena",
+				text: "¿Desea continuar?",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Si",
+				cancelButtonText: "No"
+			}).then((resultado) => {
+				if (resultado.isConfirmed) {
+					enviarAjaxPregate(data, true);
 				}
-			}, 
-			error: function(){
-				alert("AJAX ERROR");
-			}
 			});
-			
-			return false;
-			
-		});
+		} else {
+			enviarAjaxPregate(data, false);
+		}
+
+		return false;
+	});
 		
 		$("#conditionModel").submit(function () {
 			$.ajax({
@@ -467,7 +442,45 @@ $("#addNewDamageModel").submit(function () {
 
 }
 
-
+function enviarAjaxPregate(data, esLleno) {
+	$.ajax({
+		type: "POST",
+		url: 'preGate/savePregate',
+		cache: false,
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: data,
+		success: function(response){
+			if(response.success==true){
+				if (!esLleno) {
+					Swal.fire({
+						title: "Proceso Exitoso",
+						text: "¿Desea Comenzar con la inspeccion?",
+						icon: 'success',
+						showCancelButton: true,
+						confirmButtonText: "Si",
+						cancelButtonText: "no",
+					}).then(resultado => {
+						if (resultado.value) {
+							inspectionContainer($("#containerId").val())
+							configDataTablePregate()
+						} else {
+							configDataTablePregate()
+						}
+					});
+				} else {
+					Swal.fire("Proceso Exitoso", "", "success").then(() => {
+						configDataTablePregate();
+					});
+				}
+			} else {
+				Swal.fire(response.message+" Error", "", "warning");
+			}
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
+}
 
 function addNewContainer() {
 	//$("#newContainerTypeSave").val($("#newContainerDescription").val());
@@ -828,7 +841,7 @@ function configDataTable() {
 			{ data: "otherLength",visible: false },
 			{ data: "quantity",visible: false },
 			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Daño" onclick="deleteInspection(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],
@@ -1982,8 +1995,8 @@ function searchContainer(){
 				$("#newContainerDescription").attr("disabled", false);
 				$("#newShippingConpanyContainer").attr("disabled", false);
 				$("#newContainerTypeSave").attr("disabled", false);
-			
-			Swal.fire("", "No hay informacion de la unidad", "");
+
+				Swal.fire("No hay informacion registrada de la unidad", "", "question");
 			} else{
 				document.getElementById("newContainerSize").removeAttribute("hidden");
 				document.getElementById("newContainerDescription").removeAttribute("hidden");
@@ -1996,8 +2009,9 @@ function searchContainer(){
 				$("#newContainerDescription").val(response.containerType).attr("disabled", true);
 				$("#newShippingConpanyContainer").val(response.shippingCompany).attr("disabled", true);
 				$("#newContainerTypeSave").attr("disabled", true);
-				
-			Swal.fire("", "Unidad encontrada", "");
+
+
+				Swal.fire("Unidad encontrada", "", "success");
 			setDescription()
 			
 			}
@@ -2124,4 +2138,36 @@ function saveInspection(){
 	
 				return false;
 	
+}
+
+function fullEntry() {
+	if ($("#newCondition").val() === "LLENO") {
+		$("#typeServicePregate").val("CARRIER");
+		$("#newBillToPregate").val("CARRIER");
+
+		document.getElementById("fullNomenclaturaLb").removeAttribute("hidden");
+		document.getElementById("fullNomenclatura").removeAttribute("hidden");
+
+		clearCombo(document.getElementById("fullNomenclatura"))
+		textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
+		$.ajax({
+			type: "GET",
+			url: 'preGate/getNomenclatura',
+			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: {containerType : textContainer,
+				size : $("#containerSize").val()},
+			success: function(response){
+				//clearCombo(document.getElementById("newPart"));
+				fillComboNomenclatura(document.getElementById("fullNomenclatura"),response);
+			},
+			error: function(){
+				alert("AJAX ERROR");
+			}
+		});
+	} else {
+		$("#newBillToPregate").val("");
+		$("#fullNomenclatura").val("")
+		document.getElementById("fullNomenclaturaLb").setAttribute("hidden", true);
+		document.getElementById("fullNomenclatura").setAttribute("hidden", true);
+	}
 }
