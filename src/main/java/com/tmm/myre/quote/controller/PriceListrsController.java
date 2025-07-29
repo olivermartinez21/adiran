@@ -132,10 +132,10 @@ public class PriceListrsController extends AbstractMyreController {
 
 	@PostMapping("upload")
 	@ResponseBody
-	public ResponseManagement uploadFile(@RequestParam("file") MultipartFile file, String type) {
+	public ResponseManagement uploadFile(@RequestParam("file") MultipartFile file) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();	
 		try {
-			return priceListService.createLisprice(file,type);
+			return priceListService.createLisprice(file);
 	} catch(Exception ex) {
 			log.error(ex.toString());
 			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);

@@ -963,7 +963,7 @@ function configDataTable() {
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
 				if(data.length==36){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Daño" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}else{
 				return '<a onclick="showPhotoOther(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>'
 			}	
@@ -1053,7 +1053,7 @@ function getInspectionsData(){
 			{ data: "extentOtherLarge",visible: false },
 			
 			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteInspection(\'' + data + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Daño" onclick="deleteInspection(\'' + data + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],

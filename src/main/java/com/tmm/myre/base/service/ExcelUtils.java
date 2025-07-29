@@ -38,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -115,11 +116,13 @@ public class ExcelUtils  implements IExcelUtils {
             titleCell.setCellStyle(titleStyle);
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 15));
 
+            // Obtener el nombre del propietario si se ha especificado un ID
+
             // Fila 1: Fecha
             Row dateRow = sheet.createRow(1);
             Cell dateCell = dateRow.createCell(0);
             String fechaActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-            dateCell.setCellValue("Fecha de generación: " + fechaActual + " Fecha de Rango:" + reportFilterDto.getDateInit() + " - " + reportFilterDto.getDateEnd());
+            dateCell.setCellValue("Fecha de generación: " + fechaActual);
             dateCell.setCellStyle(dateStyle);
             sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 15));
 
@@ -128,7 +131,7 @@ public class ExcelUtils  implements IExcelUtils {
             // Encabezado del bloque resumen
             Row summaryHeader = sheet.createRow(rowNum++);
             String[] summaryTitles = {"TIPO", "NOMENCLATURA", "DISPONIBLES", "DAÑADOS", "PPTI", "A", "B", "C", "BL", "D",
-                    "FS", "FX", "TOTAL", "SUMA"};
+                    "FS", "FX"};
             for (int i = 0; i < summaryTitles.length; i++) {
                 Cell cell = summaryHeader.createCell(i);
                 cell.setCellValue(summaryTitles[i]);
@@ -137,28 +140,59 @@ public class ExcelUtils  implements IExcelUtils {
 
             // Generación de resumen
             List<ResumentInformationDto> list = new ArrayList<>();
-            List<?> distinct = containerRepository.getContainerTypes("AGUASCALIENTES");
-            for (int i = 0; i < distinct.size(); i++) {
-                List<?> nomenclaturas = containerRepository.getNomenclaturas("AGUASCALIENTES", distinct.get(i).toString());
-                for (int j = 0; j < nomenclaturas.size(); j++) {
-                    list.add(ResumentInformationDto.builder()
-                            .tipo(distinct.get(i).toString())
-                            .nomenclatura(nomenclaturas.get(j).toString())
-                            .disponibles(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
-                            .dañados(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
-                            .ppti(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
-                            .totA(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
-                            .totB(containerRepository.getCountClasifiaction( "AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
-                            .totC(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 3))
-                            .totBL(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 4))
-                            .totD(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
-                            .totFS(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 6))
-                            .totFX(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7))
-                            .total(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7))
-                            .suma(0)
-                            .build());
+
+            //Filtro para AGUASCALIENTES por propietario
+            log.info("----------" + reportFilterDto.getShippingCompany());
+            if (reportFilterDto.getShippingCompany() == null
+                    || "null".equalsIgnoreCase(reportFilterDto.getShippingCompany().trim())
+                    || reportFilterDto.getShippingCompany().trim().isEmpty()) {
+
+                List<?> distinct = containerRepository.getContainerTypes("AGUASCALIENTES");
+                for (int i = 0; i < distinct.size(); i++) {
+                    List<?> nomenclaturas = containerRepository.getNomenclaturas("AGUASCALIENTES", distinct.get(i).toString());
+                    for (int j = 0; j < nomenclaturas.size(); j++) {
+                        list.add(ResumentInformationDto.builder()
+                                .tipo(distinct.get(i).toString())
+                                .nomenclatura(nomenclaturas.get(j).toString())
+                                .disponibles(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
+                                .dañados(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
+                                .ppti(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
+                                .totA(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1))
+                                .totB(containerRepository.getCountClasifiaction( "AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
+                                .totC(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 3))
+                                .totBL(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 4))
+                                .totD(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
+                                .totFS(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 6))
+                                .totFX(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7))
+                                .build());
+                    }
+                }
+
+
+            } else{
+                //Filtro para contar todos los contenedores de AGUASCALIENTES
+                List<?> distinct = containerRepository.getContainerTypesAndShippingCompany("AGUASCALIENTES" , reportFilterDto.getShippingCompany());
+                for (int i = 0; i < distinct.size(); i++) {
+                    List<?> nomenclaturas = containerRepository.getNomenclaturas("AGUASCALIENTES", distinct.get(i).toString());
+                    for (int j = 0; j < nomenclaturas.size(); j++) {
+                        list.add(ResumentInformationDto.builder()
+                                .tipo(distinct.get(i).toString())
+                                .nomenclatura(nomenclaturas.get(j).toString())
+                                .disponibles(containerRepository.getCountByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1, reportFilterDto.getShippingCompany()))
+                                .dañados(containerRepository.getCountByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2, reportFilterDto.getShippingCompany()))
+                                .ppti(containerRepository.getCountByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5, reportFilterDto.getShippingCompany()))
+                                .totA(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 1, reportFilterDto.getShippingCompany()))
+                                .totB(containerRepository.getCountClasifiactionByShippingCompany( "AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2, reportFilterDto.getShippingCompany()))
+                                .totC(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 3, reportFilterDto.getShippingCompany()))
+                                .totBL(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 4, reportFilterDto.getShippingCompany()))
+                                .totD(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5, reportFilterDto.getShippingCompany()))
+                                .totFS(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 6, reportFilterDto.getShippingCompany()))
+                                .totFX(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 7, reportFilterDto.getShippingCompany()))
+                                .build());
+                    }
                 }
             }
+
 
             for (ResumentInformationDto dto : list) {
                 Row row = sheet.createRow(rowNum++);
@@ -186,8 +220,6 @@ public class ExcelUtils  implements IExcelUtils {
                         String.valueOf(dto.getTotD()),
                         String.valueOf(dto.getTotFS()),
                         String.valueOf(dto.getTotFX()),
-                        String.valueOf(dto.getTotal()),
-                        String.valueOf(dto.getSuma())
                 };
 
                 for (int i = 0; i < values.length; i++) {
@@ -195,6 +227,49 @@ public class ExcelUtils  implements IExcelUtils {
                     cell.setCellValue(values[i]);
                     cell.setCellStyle(style);
                 }
+            }
+            // Paso 1: Inicializa los acumuladores
+            int totalDisponibles = 0, totalDañados = 0, totalPpti = 0, totalA = 0, totalB = 0, totalC = 0, totalBL = 0, totalD = 0, totalFS = 0, totalFX = 0;
+
+            // Paso 2: Suma los valores mientras recorres la lista
+            for (ResumentInformationDto dto : list) {
+                totalDisponibles += dto.getDisponibles();
+                totalDañados += dto.getDañados();
+                totalPpti += dto.getPpti();
+                totalA += dto.getTotA();
+                totalB += dto.getTotB();
+                totalC += dto.getTotC();
+                totalBL += dto.getTotBL();
+                totalD += dto.getTotD();
+                totalFS += dto.getTotFS();
+                totalFX += dto.getTotFX();
+                // ... (tu código para crear filas)
+            }
+
+            // Paso 3: Crea la fila de totales
+            Row totalRow = sheet.createRow(rowNum++);
+            int col = 0;
+            Cell totalLabelCell = totalRow.createCell(col++);
+            totalLabelCell.setCellValue("TOTALES");
+            totalLabelCell.setCellStyle(headerStyle); // o el estilo que prefieras
+
+            totalRow.createCell(col++).setCellValue(""); // NOMENCLATURA vacía
+            Cell[] totalCells = new Cell[] {
+                    totalRow.createCell(col++), // DISPONIBLES
+                    totalRow.createCell(col++), // DAÑADOS
+                    totalRow.createCell(col++), // PPTI
+                    totalRow.createCell(col++), // A
+                    totalRow.createCell(col++), // B
+                    totalRow.createCell(col++), // C
+                    totalRow.createCell(col++), // BL
+                    totalRow.createCell(col++), // D
+                    totalRow.createCell(col++), // FS
+                    totalRow.createCell(col++), // FX
+            };
+            int[] totals = { totalDisponibles, totalDañados, totalPpti, totalA, totalB, totalC, totalBL, totalD, totalFS, totalFX };
+            for (int i = 0; i < totals.length; i++) {
+                totalCells[i].setCellValue(totals[i]);
+                totalCells[i].setCellStyle(headerStyle); // o el estilo que prefieras
             }
 
             // Separación entre bloques
@@ -287,6 +362,7 @@ public class ExcelUtils  implements IExcelUtils {
                     case 7: estado = "Actualizado"; break;
                     case 8: estado = "Rechazado"; break;
                     case 9: estado = "Cerrado"; break;
+                    case 10: estado = "N/A"; break;
                 }
                 row.createCell(cellIndex).setCellValue(estado); row.getCell(cellIndex++).setCellStyle(style);
 

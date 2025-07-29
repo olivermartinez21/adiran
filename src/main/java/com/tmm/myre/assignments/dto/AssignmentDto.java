@@ -36,6 +36,14 @@ public class AssignmentDto extends AbstractManagement implements ITransferObject
 	private String nitrogen;
 	private String bookingId;
 	private String deliveryOrderId;
+
 	private int status;
+	//Datos para guardar en Booking
+	private Integer unitType;
+	private String carrierCompany;
+	private String operator;
+	private String economicNumber;
+	private String workOrder;
+
 		
 }

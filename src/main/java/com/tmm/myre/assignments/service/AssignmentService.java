@@ -91,6 +91,12 @@ public class AssignmentService implements IAssignmentService {
 			
 			log.info("Paso assignment  " + assignment.toString());
 			BookingModel booking = bookingRepository.getById(assignment.getBookingId());
+			booking.setUnitType(assignmentDto.getUnitType());
+			booking.setCarrierCompany(assignmentDto.getCarrierCompany());
+			booking.setOperator(assignmentDto.getOperator());
+			booking.setEconomicNumber(assignmentDto.getEconomicNumber());
+			booking.setWorkOrder(assignmentDto.getWorkOrder());
+			bookingRepository.save(booking);
 			
 			log.info("Paso SELECT BOOKING " + booking.getBooking().toString());
 			log.info("Paso antes del IF"+ assignment.getUnitNumber());

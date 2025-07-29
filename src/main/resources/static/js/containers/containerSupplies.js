@@ -727,26 +727,27 @@ function configDataTable() {
 
         columns: [
             { data: "containerId",visible: false },
-            { data: "dateInspection",visible: true },
-            { data: "daysStay",visible: true },
+            { data: "dateInspection",visible: false },
+            { data: "daysStay",visible: false },
             { data: "container",visible: true , render : function(data) {
                     $("#containerName").val(data);
                     return $("#containerName").val();
                 }},
-            { data: "containerType",visible: true , render : function(data) {
-                    $("#newContainerTypeSave").val(data);
-                    return $("#newContainerTypeSave option:selected").html();
-                }},
-            { data: "containerSize",visible: true },
-            /*{ data: "containerSize", visible: true , render : function(data) {
-                        $("#newModelevent").val(data);
-                        return $("#newModelevent option:selected").html();
-                    }}, */
-            { data: "conditionPregate",visible: true },
             { data: "shippingCompany", visible: true , render : function(data) {
                     $("#newShippingCompany").val(data);
                     return $("#newShippingCompany option:selected").html();
                 }},
+            { data: "nomenclatura",visible: true },
+            { data: "containerType",visible: true , render : function(data) {
+                    $("#newContainerTypeSave").val(data);
+                    return $("#newContainerTypeSave option:selected").html();
+                }},
+            /*{ data: "containerSize", visible: true , render : function(data) {
+                        $("#newModelevent").val(data);
+                        return $("#newModelevent option:selected").html();
+                    }}, */
+            { data: "conditionPregate",visible: false },
+
             { data: "clasification", visible: false , render : function(data) {
                     if(data!=null){
                         $("#containerClasification").val(data);
@@ -756,7 +757,7 @@ function configDataTable() {
                     }
 
                 }},
-            { data: "condition", visible: true , render : function(data) {
+            { data: "condition", visible: false , render : function(data) {
                     if(data!=null){
                         var combo = document.getElementById("containerClasification");
                         var selected = combo.options[combo.selectedIndex].text;
@@ -772,7 +773,16 @@ function configDataTable() {
                     $("#containerStatus").val(data);
                     return $("#containerStatus option:selected").html();
                 }},
-            { data: "destinyPregate", visible: false},
+            { data: "destinyPregate", visible: true},
+            { data: "coments", visible: true},
+            { data: "exitDateTime", visible: true, render : function(data) {
+                if(data != null && data !== "") {
+                    return moment(data).format("YYYY-MM-DD HH:mm:ss");
+                } else {
+                    return "Por Asignar";
+                }
+
+            }},
             { data: "containerId", visible: true , render : function(data, type, full, meta) {
                     $("#containerId").val(data);
                     var destinyPregate = full.destinyPregate;

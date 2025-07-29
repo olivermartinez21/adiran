@@ -40,6 +40,12 @@ private static final long serialVersionUID = 1L;
 	private Date releaseDate;
 	private String asignmentList;
 	private Date creationDate;
+
+	// Datos para guardar en Booking
+	private Integer unitType;
+	private String carrierCompany;
+	private String operator;
+	private String economicNumber;
 	
 
 }

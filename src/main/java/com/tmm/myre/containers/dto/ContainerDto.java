@@ -132,6 +132,8 @@ private static final long serialVersionUID = 1L;
 	private String sapSaleOrder;
 
 	private String noInvoice;
+
+	private LocalDateTime exitDateTime;
 	
 	
 	
@@ -139,7 +141,7 @@ private static final long serialVersionUID = 1L;
 	@Builder
 	public ContainerDto( 
 			Integer idUser, String operation, Date managmentDate, String log, String containerId, String container, Integer containerType, String containerSize, String shippingCompany, String appointmentId, Date dateInspection, String vessel, String origin, String aa, String definition, String coments, String inspectionList, String travel, Integer status, String destination, String chassis, String associateUnit, String mark, String setPoint, String ventilation, String clasification, String modelYear, String bookingQuantity, String condition, String typeServicePregate, String billTo, String transportId, String buque, String bl, String operatorName, String plate, String economicNumber, String conditionPregate, String aptTo, String nomenclatura, Integer transmit, String location, String containerTypeEvent, String qualityEvent, String associateUnitGenset, byte[] eir, String eirName, int num, String dataUrl, String temperature, String humiity, String co2, String eirOutName, String ni, String o2, String securityStamp, String qualityStamp, byte[] eirOut, String imageList, Integer statusQute, String quoteName, byte[] quote, String assignedTo, String startDate, String finalDate, String daysStay, String booking, String comnetsQuote, Date  aprovedQuote, String originPregate, String destinyPregate,
-				LocalDateTime newEventDate, String sapSaleOrder, String noInvoice) {
+				LocalDateTime newEventDate, String sapSaleOrder, String noInvoice, LocalDateTime exitDateTime) {
 		
 		super(idUser, operation, managmentDate, log);
 		
@@ -215,6 +217,7 @@ private static final long serialVersionUID = 1L;
 		this.newEventDate=newEventDate;
 		this.sapSaleOrder=sapSaleOrder;
 		this.noInvoice = noInvoice;
+		this.exitDateTime = exitDateTime;
 		
 	}
 	

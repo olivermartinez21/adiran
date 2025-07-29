@@ -9,6 +9,7 @@
 </head>
 <body>
 <section layout:fragment="content" th:remove="tag">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <div class="title-table">
         <h1>Unidades <span th:text="${loggedUser.warehouseId}"></span></h1>
         <input type="text" class="form-control" id="sapNumber" hidden=true>
@@ -57,14 +58,16 @@
                 <th>GateIn</th>
                 <th>Dias estadia</th>
                 <th>Unidad</th>
-                <th>Tipo</th>
-                <th>Tamaño</th>
-                <th>Condicion(Vacio/Lleno)</th>
                 <th>Propietario</th>
+                <th>Tamaño</th>
+                <th>Tipo</th>
+                <th>Condicion(Vacio/Lleno)</th>
                 <th>Estado</th>
                 <th>Grado - Calidad</th>
                 <th>Estado</th>
                 <th>Planta/Destino</th>
+                <th>Comentarios</th>
+                <th>Dia salida</th>
                 <th>Opciones</th>
             </tr>
             </thead>
@@ -83,6 +86,8 @@
                 <th>Grado - Calidad</th>
                 <th>Estado</th>
                 <th>Planta/Destino</th>
+                <th>Comentarios</th>
+                <th>Dia salida</th>
                 <th>Opciones</th>
             </tr>
             </tfoot>
@@ -677,7 +682,7 @@
                             <div class="col-sm">
                                 <div class="form-group">
                                     <label for="shippingCompanyEvent">propietario</label>
-                                    <select class="form-control" id="newShippingCompany" disabled>
+                                    <select class="form-control" id="newShippingCompanyEvent" disabled>
                                         <option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
                                     </select>
                                 </div>
@@ -1433,6 +1438,7 @@
     <script type="text/javascript" th:src="@{/js/containers/containerSupplies.js}"></script>
     <script type="text/javascript" th:src="@{/js/checkdigit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/appointments/firma.js}"></script>
+
 </section>
 </body>
 </html>

@@ -1,9 +1,6 @@
 package com.tmm.myre.catalog.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.tmm.myre.base.model.IModel;
 

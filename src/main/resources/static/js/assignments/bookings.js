@@ -66,7 +66,22 @@ function configDataTable() {
 						return $("#shippingCompanyCatalog option:selected").html();
 					}}, 
 			{ data: "quantityUnits",visible: true },
-			{ data: "creationDate",visible: true }, 
+			{ data: "creationDate",visible: true },
+			{ data: "unitType", visible: true , render: function(data) {
+					switch(data) {
+						case 1: return "CH";
+						case 2: return "OT";
+						case 3: return "DC";
+						case 4: return "GS";
+						case 5: return "IMO";
+						case 6: return "RF";
+						case 7: return "HC";
+						default: return "";
+					}
+				}},
+			{ data: "carrierCompany",visible: true },
+			{ data: "operator",visible: true },
+			{ data: "economicNumber",visible: true },
 			{ data: "bookingId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="newDeliveryOrder(\'' +meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
 				 //'<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar" onclick="newAssigment(\'' + meta.row + '\');"><i class="fas fa-book"></i></button>&nbsp';
@@ -143,6 +158,12 @@ function initComponents() {
 				 co2: $("#co2BookingInformation").val(),
 				 o2: $("#o2BookingInformation").val(), 
 				 nitrogen: $("#nitrogenBookingInformation").val(),
+
+				unitType:  $("#newTypeUnitOrder").val(),
+				carrierCompany:  $("#newCarrierCompanyOrder").val(),
+				operator:  $("#newOperatorOrder").val(),
+				economicNumber: $("#newEconomicNumberOrder").val(),
+				workOrder: $("#newWorkOrderOrder").val(),
 				};
 				$.ajax({
 			type: "POST",
@@ -513,12 +534,17 @@ function newDeliveryOrder(data){
 		bookingTableOrder(currentData.bookingId)
 			console.log("Entra a buscar delivry oirder")
 		tableDelivery(currentData.bookingId);
-		infoOrder(currentData.bookingId)
+		//infoOrder(currentData.bookingId)
 		$("#bookingId").val(currentData.bookingId)
 		$("#newBookingOrder").val(currentData.booking);
 		$("#newUnitRemainingOrder").val(currentData.quantityUnits);
 		$("#newBillToOrder").val(currentData.billTo);
 		$("#shippingCompanyCatalog").val(currentData.shippingCompany);
+		$("#newTypeUnitOrder").val(currentData.unitType);
+		$("#newCarrierCompanyOrder").val(currentData.carrierCompany);
+		$("#newOperatorOrder").val(currentData.operator);
+		$("#newEconomicNumberOrder").val(currentData.economicNumber);
+		$("#newWorkOrderOrder").val(currentData.workOrder);
 		$("#newShippngCompanyOrder").val( $("#shippingCompanyCatalog option:selected").html());
 			
 		$("#newDeliveryOrderlModal").modal('show');
@@ -788,7 +814,7 @@ function preOrderDelivery(data) {
 		carrierCompanyOrder: $("#newCarrierCompanyOrder").val(),
 		operatorOrder: $("#newOperatorOrder").val(),
 		economicNumberOrder: $("#newEconomicNumberOrder").val(),
-		workOrderOrder: $("#newWorkOrderOrder").val()
+		workOrder: $("#newWorkOrderOrder").val()
 	};
 
 	// Validación de campos vacíos

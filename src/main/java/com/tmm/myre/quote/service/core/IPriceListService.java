@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface IPriceListService {
 
-    ResponseManagement createLisprice(MultipartFile file, String type) throws ConverterException;
+    ResponseManagement createLisprice(MultipartFile file) throws ConverterException;
 
     void updateJobcode(Map<String, Object> payload);
 

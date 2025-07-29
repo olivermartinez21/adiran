@@ -130,10 +130,6 @@ public class EventInformationService implements IEventInformationService {
 			container.setTypeServicePregate(containerDto.getTypeServicePregate());
 			container.setDateGateIn(containerDto.getNewEventDate());
 			container.setStatus(4);
-			
-			if(container.getStatusQute()==null) {
-				//container.setStatusQute(1);
-			}
 
 
 			//transmit
@@ -231,7 +227,10 @@ public class EventInformationService implements IEventInformationService {
 						.inspected("Y")
 						.inspectedBy(container.getOperatorName()) //PERSONA QUE INSPECCIONO OPERADOR
 						.booking(container.getBokking())
-						.fillState(container.getConditionPregate()== "VACIO" ? container.getConditionPregate()== "RESERVADO" ? "F"  : "P" : "E" )
+						.fillState(
+								"LLENO".equals(container.getConditionPregate()) ? "F" :
+										"VACIO".equals(container.getConditionPregate()) ? "E" : null
+						)
 						.alternateUnit(null)//nulo
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")

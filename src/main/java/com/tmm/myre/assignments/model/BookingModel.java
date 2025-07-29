@@ -46,4 +46,8 @@ public class BookingModel implements IModel{
 	@Column(name = "EXPIRATION_DATE")private Date expirationDate;
 	@Column(name = "RELEASE_DATE")private Date releaseDate;
 	@Column(name = "CREATION_DATE")private Date creationDate;
+	@Column(name = "UNIT_TYPE")private Integer unitType;
+	@Column(name = "CARRIER_COMPANY")private String carrierCompany;
+	@Column(name = "OPERATOR")private String operator;
+	@Column(name = "ECONOMIC_NUMBER")private String economicNumber;
 }

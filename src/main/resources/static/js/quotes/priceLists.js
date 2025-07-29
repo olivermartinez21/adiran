@@ -182,11 +182,9 @@ function updateLabor() {
 	});
 }
 
-function chargeDoc(){
-	if( $("#orderListCmb").val()!="Selecciona una opcion"){
+function chargeJobcodes(){
 	var formData = new FormData();
 	formData.append('file', $("#file").prop('files')[0]);
-	formData.append('type', $("#orderListCmb").val());
 		$.ajax({
 		type : "POST",
 		url : 'priceLists/upload',
@@ -194,16 +192,14 @@ function chargeDoc(){
 		contentType : false,
 		processData : false,
 		data : formData,
-		success : function() {
-			Swal.fire("INFORMACION GUARDADA","", "success")
+		success : function(response) {
+			Swal.fire("INFORMACION GUARDADA", response.message, "success")
+			configDataTable();
 		},
 		error : function() {
 			Swal.fire("ERRO 902","el documento no pudo cargarse", "warning")
 		}
 	});
-	}else{
-		Swal.fire("Selecciona una opcion","", "warning")
-	}
 	
 }
 

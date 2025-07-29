@@ -1,15 +1,14 @@
 package com.tmm.myre.containers.controller;
 
 import com.tmm.myre.base.controller.AbstractMyreController;
+import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
+import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.service.core.IContainerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +27,19 @@ public class ContainerSuppliesController extends AbstractMyreController {
 
     @Autowired
     private IContainerService containerService;
+
+    @Autowired
+    private ICatShippingCompanyService catShippingCompanyService;
+
+    @ModelAttribute("catShipping")
+    List<CatShippingCompanyDto> catShipping() {
+        try {
+            return catShippingCompanyService.catShipping();
+        } catch(Exception ex) {
+            log.error(ex.toString());
+            return null;
+        }
+    }
 
     @GetMapping("getDataTable")
     @ResponseBody

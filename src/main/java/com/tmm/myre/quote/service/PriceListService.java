@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.poiji.bind.Poiji;
+import com.poiji.exception.PoijiExcelType;
 import com.tmm.myre.catalog.converter.JobcodeHistoricConverter;
 import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
 import com.tmm.myre.catalog.dto.JobcodeHistoricDto;
@@ -22,6 +24,7 @@ import com.tmm.myre.catalog.model.JobcodeHistoricModel;
 import com.tmm.myre.catalog.repository.ICatJobcodeRepository;
 import com.tmm.myre.catalog.repository.ICatShippingCompanyReposirtory;
 import com.tmm.myre.catalog.repository.IJobcodeHistoricRepository;
+import com.tmm.myre.quote.dto.PriceListExcelDto;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -60,134 +63,60 @@ public class PriceListService implements IPriceListService {
 
 
 	@Override
-	public ResponseManagement createLisprice(MultipartFile file, String type) throws ConverterException {
+	public ResponseManagement createLisprice(MultipartFile file) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();	
 		try {
-			
-			int firstRow=1, sheetSelected = 0;;
-			if(type.equals("Thermo King") ) {
-				firstRow=4;
-				sheetSelected=1;
-			}
-			if(type.equals("Star Cool") ) {
-				firstRow=2;
-			}
-			
-			List<CatListPriceCarrierDto> cat = new ArrayList<CatListPriceCarrierDto>();
-			CatListPriceCarrierDto lista = new CatListPriceCarrierDto();
-			
-			
-			List<String> datos = new ArrayList<String>();
-			InputStream inp =  new BufferedInputStream(file.getInputStream());
-			Workbook workbook = WorkbookFactory.create(inp);
-			Sheet sheet = workbook.getSheetAt(sheetSelected);
-			int  count= 0;
-			for(int i = firstRow; i <= sheet.getLastRowNum(); i++) {
-				Row row = sheet.getRow(i);
-				datos.clear();
-				count=0;
-					for(int j = 0; j <= row.getLastCellNum(); j++) {
-						Cell cell = row.getCell(j); 
-						
-						switch (j) {
-						case 0:
-							
-							break;
-						case 1:
-							
-							break;
-						case 2:
-							
-							break;
-						case 3:
-							
-							break;
-						case 4:
-							
-							break;
-						case 5:
-							
-							break;
-						case 6:
-							
-							break;
-						case 7:
-							
-							break;
-						case 8:
-							
-							break;
-						case 9:
-							
-							break;
-						case 10:
-							
-							break;
-						case 11:
-							
-							break;
-						case 12:
-							
-							break;
-						case 13:
-							
-							break;
-							
+			List<PriceListExcelDto> priceList = Poiji.fromExcel(file.getInputStream(), PoijiExcelType.XLSX, PriceListExcelDto.class);
+			log.info("Price List Size: " + priceList.size());
 
-						default:
-							break;
-						}
-						
+			for (PriceListExcelDto dto : priceList) {
+				if (dto.getId() == null || dto.getId().trim().isEmpty()) {
+					// Nuevo código de trabajo
+					Long maxId = catJobcodeRepository.findMaxJobcodeId();
+					String newId = String.valueOf((maxId != null ? maxId : 0) + 1);
+
+					CatJobcodeModel newJobcode = CatJobcodeModel.builder()
+					    .jobcodeId(newId)
+					    .jobcodeRepair(dto.getJobCodeRepair())
+					    .jobcodeDescription(dto.getJobCodeDescription())
+					    .jobcodeMaterial(dto.getJobCodeMaterial())
+					    .jobcodeHh(dto.getJobCodeHours() != null ? dto.getJobCodeHours().toString() : null)
+					    .jobcodeExchange(dto.getJobCodeCurrency())
+					    .jobcodeShippingId(dto.getJobCodeClient())
+					    .build();
+					catJobcodeRepository.save(newJobcode);
+				} else {
+					// Modificación: buscar el registro existente
+					CatJobcodeModel oldJobcode = catJobcodeRepository.findById(dto.getId()).orElse(null);
+					if (oldJobcode != null) {
+						// Guardar en histórico
+						JobcodeHistoricModel historic = JobcodeHistoricModel.builder()
+								.jobcodeId(oldJobcode.getJobcodeId())
+								.jobcodeRepair(oldJobcode.getJobcodeRepair())
+								.jobcodeDescription(oldJobcode.getJobcodeDescription())
+								.jobcodeMaterial(oldJobcode.getJobcodeMaterial())
+								.jobcodeHh(oldJobcode.getJobcodeHh())
+								.jobcodeExchange(oldJobcode.getJobcodeExchange())
+								.jobcodeShippingId(oldJobcode.getJobcodeShippingId())
+								.build();
+						jobcodeHistoricRepository.save(historic);
 					}
-					
-					
-					if(count>=4) {
-						break;
-					}
+
+					// Actualizar el registro existente
+					CatJobcodeModel newJobcode = CatJobcodeModel.builder()
+					    .jobcodeId(dto.getId()) // Usar el mismo ID para actualizar el registro existente
+					    .jobcodeRepair(dto.getJobCodeRepair())
+					    .jobcodeDescription(dto.getJobCodeDescription())
+					    .jobcodeMaterial(dto.getJobCodeMaterial())
+					    .jobcodeHh(dto.getJobCodeHours() != null ? dto.getJobCodeHours().toString() : null)
+					    .jobcodeExchange(dto.getJobCodeCurrency())
+					    .jobcodeShippingId(dto.getJobCodeClient())
+					    .build();
+					catJobcodeRepository.save(newJobcode);
+				}
 			}
-			
-			/*List<CatListPriceCarrierDto> cat = new ArrayList<CatListPriceCarrierDto>();
-			List<List<String>> lista = new ArrayList<List<String>>();
-			List<String> datos = new ArrayList<String>();
-			InputStream inp =  new BufferedInputStream(file.getInputStream());
-			Workbook workbook = WorkbookFactory.create(inp);
-			Sheet sheet = workbook.getSheetAt(sheetSelected);
-			int  count= 0,count2=0;
-			for(int i = firstRow; i <= sheet.getLastRowNum(); i++) {
-				Row row = sheet.getRow(i);
-				datos.clear();
-				count=0;
-					for(int j = 0; j <= row.getLastCellNum(); j++) {
-						Cell cell = row.getCell(j); 
-						
-						if(cell!=null) {
-							String value = "";
-							try {
-								 value = cell.getStringCellValue();
-							} catch(Exception ex) {
-								 value = String.valueOf((cell.getNumericCellValue()));
-							}
-							datos.add(value);
-							   if(value=="") {
-								   count++;
-							   	}
-						}else {
-							datos.add("");
-						}
-						
-						
-						
-					}
-					lista.add(new ArrayList<String>(datos));
-					if(count>=4) {
-						count2++;
-						break;
-					}
-			}
-			
-			log.info(cat+"------------------");*/
-			
-			
+			response.setSuccess(true);
+			response.setMessage("Carga y actualización completada");
 		} catch (Exception e) {
 			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
 			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());

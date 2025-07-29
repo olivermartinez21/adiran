@@ -228,6 +228,7 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 	public ResponseManagement assignation(@ModelAttribute("assignmentDto") AssignmentDto assignmentDto) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).success(false).build();
 		try {
+			log.info(assignmentDto.toString());
 			return assignmentService.assignation(assignmentDto);
 		} catch(Exception ex) {
 				log.error(ex.toString());

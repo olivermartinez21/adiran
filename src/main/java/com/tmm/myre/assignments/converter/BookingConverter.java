@@ -31,6 +31,10 @@ public class BookingConverter implements IConverter<BookingModel, BookingDto>{
 				.expirationDate(to.getExpirationDate())
 				.releaseDate(to.getReleaseDate())
 				.creationDate(to.getCreationDate())
+				.unitType(to.getUnitType())
+				.carrierCompany(to.getCarrierCompany())
+				.operator(to.getOperator())
+				.economicNumber(to.getEconomicNumber())
 				.build();
 		return entity;
 	}
@@ -54,6 +58,10 @@ public class BookingConverter implements IConverter<BookingModel, BookingDto>{
 				.expirationDate(entity.getExpirationDate())
 				.releaseDate(entity.getReleaseDate())
 				.creationDate(entity.getCreationDate())
+				.unitType(entity.getUnitType())
+				.carrierCompany(entity.getCarrierCompany())
+				.operator(entity.getOperator())
+				.economicNumber(entity.getEconomicNumber())
 				.build();
 		return to;
 	}

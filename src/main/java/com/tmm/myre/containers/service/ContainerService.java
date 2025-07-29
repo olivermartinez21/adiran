@@ -469,6 +469,7 @@ public class ContainerService implements IContainerService{
 					containeredit.setNomenclatura(containerDto.getNomenclatura());
 					containeredit.setClasification("3");
 					containeredit.setCondition("1");
+					containeredit.setStatusQute(10);
 					int valor = containerRepository.getCountEir();
 					valor=valor +1;
 					containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
@@ -751,7 +752,10 @@ public class ContainerService implements IContainerService{
 						.inspected("Y")
 						.inspectedBy(container.getOperatorName())
 						.booking(container.getBokking())
-						.fillState(container.getConditionPregate()== "VACIO" ? container.getConditionPregate()== "RESERVADO" ? "F"  : "P" : "E" )
+						.fillState(
+								"LLENO".equals(container.getConditionPregate()) ? "F" :
+										"VACIO".equals(container.getConditionPregate()) ? "E" : null
+						)
 						.alternateUnit(null)//No hay dato
 						.associatedUnit(container.getAssociateUnit())
 						.transportType("TRUCK")

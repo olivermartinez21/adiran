@@ -27,4 +27,8 @@ public interface ICatJobcodeRepository extends JpaRepository<CatJobcodeModel, St
 	int updateExchange(@Param("shippingCompanyId") String shippingCompanyId, @Param("exchange") String exchange);
 
 	CatJobcodeModel findFirstByJobcodeShippingIdOrderByJobcodeIdAsc(String shippingCompanyId);
+
+	// En ICatJobcodeRepository.java
+	@Query("SELECT MAX(CAST(j.jobcodeId AS long)) FROM CatJobcodeModel j")
+	Long findMaxJobcodeId();
 }

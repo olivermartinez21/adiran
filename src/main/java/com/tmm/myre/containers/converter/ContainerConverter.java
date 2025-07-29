@@ -70,6 +70,7 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.originPregate(to.getOriginPregate())
 				.destinyPregate(to.getDestinyPregate())
 				.noInvoice(to.getNoInvoice())
+				.exitDateTime(to.getExitDateTime())
 				.build();
 		
 		return entity;
@@ -133,6 +134,7 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.originPregate(entity.getOriginPregate())
 				.destinyPregate(entity.getDestinyPregate())
 				.noInvoice(entity.getNoInvoice())
+				.exitDateTime(entity.getExitDateTime())
 				.build();
 		return to;
 	}
