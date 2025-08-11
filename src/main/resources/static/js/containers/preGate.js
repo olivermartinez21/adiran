@@ -2179,3 +2179,24 @@ function fullEntry() {
 		document.getElementById("fullNomenclatura").setAttribute("hidden", true);
 	}
 }
+/* Cobrar a la misma empresa transportista */
+document.getElementById('sameAsTransporter').addEventListener('change', function() {
+  const cobrarInput = document.getElementById('newBillToPregate');
+  const transportInput = document.getElementById('newTransportCompanyPregate');
+  
+  if(this.checked) {
+    // Copiar y bloquear el campo "Cobrar a"
+    cobrarInput.value = transportInput.value;
+  } else {
+    // Habilitar el campo para editar
+    cobrarInput.removeAttribute('readonly');
+    cobrarInput.value = '';
+  }
+});
+// si cambias la empresa transportista y el checkbox está marcado, actualizar el campo cobrar a automáticamente
+document.getElementById('newTransportCompanyPregate').addEventListener('input', function() {
+  const checkbox = document.getElementById('sameAsTransporter');
+  if(checkbox.checked) {
+    document.getElementById('newBillToPregate').value = this.value;
+  }
+});

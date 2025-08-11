@@ -10,7 +10,11 @@ $(document).ready( function() {
 	$('#loading').hide();
 	configDataTable();
 	initComponents();
-	validationCode($("#newContainerName")) 
+	validationCode($("#newContainerName"))
+	$('#destinyPregate').select2({
+		width: '100%',
+		placeholder: 'Buscar destino...'
+	}); 
 });
 
 function GetURLParameter(sParam) {
