@@ -103,6 +103,14 @@ function initComponents() {
 			});
 			
 	$("#newEventModal").submit(function () {
+
+		var prop = $("#propietaryEvent").val();
+		var sap = $("#sapSaleOrder").val();
+		if ((prop === "2" || prop === "5" || prop === "6") && sap === "") {
+			Swal.fire("Debes seleccionar Importación, Exportación o Evacuación.", "", "warning");
+			return false;
+		}
+
 		var data = {
 			//eventType: $("#newEventType").val(), 
 			//eventDate: $("#newEventDate").val(),

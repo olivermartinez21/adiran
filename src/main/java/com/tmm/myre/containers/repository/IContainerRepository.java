@@ -126,7 +126,7 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	int getCountQuote(String containerId);
 	
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE IS NOT NULL ORDER BY REGISTER_DATE DESC ", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE IS NOT NULL and STATUS_QUOTE !=10 ORDER BY REGISTER_DATE DESC ", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouseStatus2(String warehouse);
 
 	@Query(value = " SELECT Count(*) FROM MYRE_CONTAINERS where CONTAINER_ID=:containerId AND STATUS_QUOTE=1 ", nativeQuery = true)
@@ -142,7 +142,7 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId and STATUS_QUOTE=2", nativeQuery = true)
 	List<ContainerModel> getUnitsValidationAppointment(String appointmentId);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE!=1 and STATUS_QUOTE!=2 and STATUS_QUOTE!=4", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE!=1 and STATUS_QUOTE!=2 and STATUS_QUOTE!=4 and STATUS_QUOTE!=10", nativeQuery = true)
 	List<ContainerModel> findAllcontainersQuote(String warehouse);
 	
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER=:containerId", nativeQuery = true)

@@ -16,6 +16,10 @@ $(document).ready( function() {
 	//validationCode($("#unitAsosiateInspectiongenset")) 
 	$("#globalWarehouse").val()
 	intermodalInformation();
+	$('#newDestinyPregate').select2({
+		width: '100%',
+		placeholder: 'Buscar destino...'
+	});
 });
 
 function GetURLParameter(sParam) {
@@ -41,6 +45,10 @@ function intermodalInformation() {
 function initComponents() {
 
 	$("#pregateModel").submit(function () {
+		if ($("#newCondition").val() === "LLENO" && $("#fullNomenclatura").val() === "Selecciona una opción") {
+			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
+			return false;
+		}
 		$("#pregateModel").modal("hide");
 		var data = {
 			conditionPregate: $("#newCondition").val(),

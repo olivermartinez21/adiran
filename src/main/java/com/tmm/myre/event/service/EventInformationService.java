@@ -130,10 +130,11 @@ public class EventInformationService implements IEventInformationService {
 			container.setTypeServicePregate(containerDto.getTypeServicePregate());
 			container.setDateGateIn(containerDto.getNewEventDate());
 			container.setStatus(4);
+			container.setStatusQute(10);
 
 
 			//transmit
-			containerRepository.save(container);
+			//containerRepository.save(container);
 
 			String clasification;
 			switch (containerDto.getClasification() != null ? containerDto.getClasification() : "null") {

@@ -31,6 +31,14 @@ function initComponents() {
 	
 		
 		$("#gateOutModel").submit(function () {
+
+			var prop = $("#newShippingCompanyOut").val();
+			var sap = $("#sapSaleOrderOut").val();
+			if ((prop === "2" || prop === "5" || prop === "6") && sap === "") {
+				Swal.fire("Debes seleccionar Importación, Exportación o Evacuación.", "", "warning");
+				return false;
+			}
+
 		var data = {
 			condition: $("#newCondition").val(), 
 			typeServicePregate : $("#typeServicePregate").val(), 
