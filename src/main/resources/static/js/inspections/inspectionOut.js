@@ -132,6 +132,7 @@ function initComponents(){
 			containerId: $("#containerId").val(),
 			qualityStamp: $("#newqualityStamp").val(),
 			securityStamp: $("#newSecurityStamp").val(),
+            billTo: $("#newFinalClient").val(),
 			dateInspection: $("#newDateInspection").val(),
 			ventilation: $("#newVentilation").val(),
 			temperature: $("#newTemperature").val(),
