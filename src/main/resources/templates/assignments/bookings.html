@@ -207,9 +207,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="newFinalClientBooking">Cliente Final</label>
-									<select class="form-control" id="newFinalClientBooking">
-									<option th:each="option : ${catFinalClient}" th:value="${option.finalClientId}" th:text="${option.clientName}"></option>
-									</select>
+									<input type="text" class="form-control" id="newFinalClientBooking" name="Cliente Final">
 								</div>
 							</div>
 							<div class="col-sm">

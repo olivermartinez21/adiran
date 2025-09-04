@@ -218,6 +218,12 @@ function initComponents() {
 			});	
 			
 $("#newBookingModal").submit(function () {
+
+	if (!$("#newFinalClientBooking").val() || !$("#newBilTo").val() || !$("#newQuantityUnitsBookings").val() || !$("#newBooking").val()) {
+		Swal.fire("Los campos 'Cliente Final', 'Bill To', 'Cantidad de unidades' y 'Booking' son obligatorios.", "", "warning");
+		return false;
+	}
+
 				if($("#bookingInformation").DataTable().rows().count()!=$("#newQuantityUnitsBookings").val()){
 					count =  $("#bookingInformation").DataTable().rows().data().count()
 					filas = $("#newQuantityUnitsBookings").val() - count
