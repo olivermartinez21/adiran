@@ -460,6 +460,7 @@ public class ContainerService implements IContainerService{
 				containeredit.setEconomicNumber(containerDto.getEconomicNumber());
 				containeredit.setDestinyPregate(containerDto.getDestinyPregate());
 
+
 				if(containerDto.getNum()!=1) {
 					containeredit.setStatus(2);
 				}
@@ -474,6 +475,7 @@ public class ContainerService implements IContainerService{
 					valor=valor +1;
 					containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
 					containeredit.setStatus(3);
+					containeredit.setModelYear(containerDto.getModelYear());
 				}
 				
 				containerRepository.save(containeredit);
@@ -632,6 +634,7 @@ public class ContainerService implements IContainerService{
 		try {
 			ContainerModel container= containerRepository.getById(containerDto.getContainerId());
 			container.setStatus(7);
+			container.setBokking(containerDto.getBooking());
 
 			String nombreOperador;
 			String numeroEconomico;

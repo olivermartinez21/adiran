@@ -49,6 +49,13 @@ function initComponents() {
 			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
 		}
+		if (
+			$("#shippingCompanyRef").val() === "7" &&
+			($("#modelYear").val() === null || $("#modelYear").val() === "")
+		) {
+			Swal.fire("Debes ingresar el año del modelo para unidades de CMA.", "", "warning");
+			return false;
+		}
 		$("#pregateModel").modal("hide");
 		var data = {
 			conditionPregate: $("#newCondition").val(),
@@ -63,7 +70,8 @@ function initComponents() {
 			economicNumber: $("#newEconomicNumber").val(),
 			containerId: $("#containerId").val(),
 			destinyPregate : $("#newDestinyPregate").val(),
-			nomenclatura: $("#fullNomenclatura").val()
+			nomenclatura: $("#fullNomenclatura").val(),
+			modelYear: $("#modelYear").val()
 		};
 
 		if ($("#newCondition").val() === "LLENO") {
@@ -778,10 +786,10 @@ function configDataTable() {
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
 				if($("#containerStatus").val()==2){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';	
 				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
 				}
 				
 				
@@ -1252,12 +1260,18 @@ function getNomenclatura(){
    
 			
 		}
-function pregate(data){	
+function pregate(data , shippingCompany){
+	console.log(shippingCompany)
 	getSingleData(data)
-	$("#containerId").val(data),
+	$("#containerId").val(data);
 	$("#pregateModel").modal("show");
 	$("#operation").val("UPDATE")
-
+	$("#shippingCompanyRef").val(shippingCompany);
+	$("#newCondition").val("VACIO");
+	document.getElementById("fullNomenclatura").setAttribute("hidden", true);
+	document.getElementById("fullNomenclaturaLb").setAttribute("hidden", true);
+	document.getElementById("modelYear").setAttribute("hidden", true);
+	document.getElementById("modelYearLb").setAttribute("hidden", true);
 	
 	}
 	
@@ -2153,6 +2167,10 @@ function fullEntry() {
 		$("#typeServicePregate").val("CARRIER");
 		$("#newBillToPregate").val("CARRIER");
 
+		if($("#shippingCompanyRef").val()  === "7"){
+			document.getElementById("modelYearLb").removeAttribute("hidden");
+			document.getElementById("modelYear").removeAttribute("hidden");
+		}
 		document.getElementById("fullNomenclaturaLb").removeAttribute("hidden");
 		document.getElementById("fullNomenclatura").removeAttribute("hidden");
 
@@ -2174,7 +2192,10 @@ function fullEntry() {
 		});
 	} else {
 		$("#newBillToPregate").val("");
-		$("#fullNomenclatura").val("")
+		$("#fullNomenclatura").val("");
+		$("#modelYear").val("");
+		document.getElementById("modelYearLb").setAttribute("hidden", true);
+		document.getElementById("modelYear").setAttribute("hidden", true);
 		document.getElementById("fullNomenclaturaLb").setAttribute("hidden", true);
 		document.getElementById("fullNomenclatura").setAttribute("hidden", true);
 	}

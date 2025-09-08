@@ -38,6 +38,10 @@ function initComponents() {
 				Swal.fire("Debes seleccionar Importación, Exportación o Evacuación.", "", "warning");
 				return false;
 			}
+			if(prop === "6" && $("#bookingOut").val() === ""){
+				Swal.fire("Debes ingresar el No. de Booking.", "", "warning");
+				return false;
+			}
 
 		var data = {
 			condition: $("#newCondition").val(), 
@@ -53,6 +57,7 @@ function initComponents() {
 			newEventDate: $("#newEventDateOut").val(),
 			economicNumber: $("#noEconomico").val(),
 			operatorName: $("#operatorName").val(),
+			booking: $("#bookingOut").val(),
 			//TODO agregar el operador y economico asignar regla para que no sobre escriba en los vacios
 			}
 			
@@ -765,6 +770,12 @@ function gatOut(data){
 	    document.querySelector("label[for='noEconomico']").hidden = true;
 	    document.getElementById("operatorName").hidden = true;
 	    document.querySelector("label[for='operatorName']").hidden = true;
+	}
+
+	if(currentData.shippingCompany === "3"){
+		document.getElementById("bookingOut").removeAttribute("disabled");
+	} else {
+		document.getElementById("bookingOut").setAttribute("disabled", true);
 	}
 
 	// Obtain the current date and time and format it to YYYY-MM-DDTHH:MM
