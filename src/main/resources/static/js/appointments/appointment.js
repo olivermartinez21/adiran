@@ -132,6 +132,7 @@ function searchAppointmentByDate() {
 		$("#appointmentTable").DataTable().destroy();
 		
 		$("#appointmentTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -246,6 +247,7 @@ function searchAppointmentByDate() {
 function configDataTable() {
 		$("#appointmentTable").DataTable().destroy();
 	$("#appointmentTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -362,6 +364,7 @@ function configDataTable() {
 	
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -413,6 +416,7 @@ function configDataTable() {
 	
 	$("#inspectionTable").DataTable().destroy();
 	$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -461,6 +465,7 @@ function refresh(){
 	
 	$("#appointmentTable").DataTable().destroy();
 	$("#appointmentTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -611,6 +616,7 @@ function ConfirmEstimationAppointment(data){
 function showInspections(data) {
 	$("#inspectionTable").DataTable().destroy();
 	$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -724,6 +730,7 @@ function editAppointment(data){
 function showContainers(data) {
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -862,6 +869,7 @@ function inOrOut(){
 		$("#containerTable").DataTable().clear().draw();
 			$("#containerTable").DataTable().destroy();
 			$("#containerTable").DataTable({
+			language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 			dom:  
 			"<'row'<'col-sm-12'B>>" +
 			"<'row'<'col-sm-12'tr>>" + 

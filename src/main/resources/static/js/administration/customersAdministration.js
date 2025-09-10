@@ -13,6 +13,7 @@ $(document).ready( function() {
 function configDataTable() {
 	var estado
 	$("#usersTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -57,9 +58,9 @@ function configDataTable() {
 			}},
 			{data: 'userId', render : function(data) {
 				if(estado==1){
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Bloquear de usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Bloquear de Usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
 				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Desbloquear usuario" onclick="activateUser(\'' + data + '\');"><i class="fas fa-user-check"></i></button>';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Desbloquear Usuario" onclick="activateUser(\'' + data + '\');"><i class="fas fa-user-check"></i></button>';
 				}
 				
 			}}

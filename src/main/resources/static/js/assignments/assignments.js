@@ -14,6 +14,7 @@ $(document).ready( function() {
 function configDataTable() {
 	
 	$("#assignmentTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -69,7 +70,7 @@ function configDataTable() {
 			{ data: "o2",visible: true},
 			{ data: "nitrogen",visible: true },
 			{ data: "assigntmentId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="newDeliveryOrder(\'' +meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp'+
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de Entrega" onclick="newDeliveryOrder(\'' +meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp'+
 				 '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar" onclick="newAssigment(\'' + meta.row + '\');"><i class="fas fa-book"></i></button>&nbsp';
 			}},
 			
@@ -80,6 +81,7 @@ function configDataTable() {
 	
 	
 		$("#bookingInformation").DataTable({
+			language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -505,6 +507,7 @@ function configDataTable() {
 function tableDelivery(){
 	$("#deliveryOrdersTable").DataTable().destroy();
 	$("#deliveryOrdersTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -541,7 +544,7 @@ function tableDelivery(){
 			{ data: "typeOfService",visible: true }, 
 			{ data: "remainingUnits",visible: true },
 			{ data: "deliveryOrderId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="newDeliveryOrder(\'' + meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de Entrega" onclick="newDeliveryOrder(\'' + meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
 				
 			}},
 			{ data: "assignmentId",visible: false }, 

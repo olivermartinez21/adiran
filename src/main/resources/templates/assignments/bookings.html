@@ -13,7 +13,7 @@
 			<h1>Asignaciones <span th:text="${loggedUser.warehouseId}"></span></h1>
 		</div>
 		<div class="title-table">
-			<h2>Bookings / reserva </h2>
+			<h2>Bookings / Reserva </h2>
 		</div>
 			<select class="form-control" id="statusBookingCatalog" hidden=true>
 									<option value=1>ABIERTO</option>
@@ -57,15 +57,15 @@
 					<th>Tipo</th>
 					<th>Tamaño</th>
 					<th>Booking </th>
-					<th>Estado de booking</th>
+					<th>Estado de Booking</th>
 					<th>Grado /Calidad</th>
 					<th>Propietario</th>
 					<th>Cantidad De Unidades</th>
-					<th>Fecha de Creacion</th>
-					<th>Tipo de unidad</th>
-					<th>Comania trans</th>
+					<th>Fecha de Creación</th>
+					<th>Tipo de Unidad</th>
+					<th>Compañia Trans</th>
 					<th>Operador</th>
-					<th>Numero Economico</th>
+					<th>Número Económico</th>
 					<th>Opciones</th>
 					</tr>
 				</thead>
@@ -75,15 +75,15 @@
 					<th>Tipo</th>
 					<th>Tamaño</th>
 					<th>Booking </th>
-					<th>Estado de booking</th>
+					<th>Estado de Booking</th>
 					<th>Grado /Calidad</th>
 					<th>Propietario</th>
 					<th>Cantidad De Unidades</th>
-					<th>Fecha de Creacion</th>
-					<th>Tipo de unidad</th>
-					<th>Comania trans</th>
+					<th>Fecha de Creación</th>
+					<th>Tipo de Unidad</th>
+					<th>Compañia Trans</th>
 					<th>Operador</th>
-					<th>Numero Economico</th>
+					<th>Número Económico</th>
 					<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -235,47 +235,47 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newExpirationDateBooking">Fecha de Expiracion</label>
+									<label for="newExpirationDateBooking">Fecha de Expiración</label>
 									<input type="date" class="form-control" id="newExpirationDateBooking">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newReleaseDateBooking">Fecha de Liberacion</label>
+									<label for="newReleaseDateBooking">Fecha de Liberación</label>
 									<input type="date" class="form-control" id="newReleaseDateBooking">
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label for="newQuantityUnitsBookings">Cantidad de unidades</label>
-									<input type="number" class="form-control" id="newQuantityUnitsBookings"  min="1">
+							</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="newQuantityUnitsBookings">Cantidad de Unidades</label>
+										<input type="number" class="form-control" id="newQuantityUnitsBookings" min="1">
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="container-table" hidden=true>
-							<table id="bookingInformation" class="table table-striped dt-responsive" style="width: 100%;">
-								<thead>
-									<tr>
-									<th>ID</th>
-									<th>N°</th>
-									<th>Tipo </th>
-									<th>Tamaño </th>
-									<th>Calidad</th>
-									<th>Número de unidad</th>
-									<th>Temperatura (RF)</th>
-									<th>Ventilación (RF)</th>
-									<th>Humedad (RF)</th>
-									<th>CO2 (RF)</th>
-									<th>O2 (RF)</th>
-									<th>Nitrogeno</th>
-									<th>Opciones</th>
-									</tr>
-								</thead>
-							</table>
-						</div>
-					</div>		
+							<div class="container-table" hidden=true>
+								<table id="bookingInformation" class="table table-striped dt-responsive" style="width: 100%;">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>N°</th>
+											<th>Tipo</th>
+											<th>Tamaño</th>
+											<th>Calidad</th>
+											<th>Número de Unidad</th>
+											<th>Temperatura (RF)</th>
+											<th>Ventilación (RF)</th>
+											<th>Humedad (RF)</th>
+											<th>CO2 (RF)</th>
+											<th>O2 (RF)</th>
+											<th>Nitrógeno</th>
+											<th>Opciones</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							</div>
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 						<button type="submit" class="btn btn-success" >Aceptar</button>
@@ -299,7 +299,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="typeBookingInformation">Tipo de la unidad</label>
+									<label for="typeBookingInformation">Tipo de la Unidad</label>
 									<select class="form-control" id="typeBookingInformation" onInput="showMoreInformation()">
 									<option value="0">Selecciona una opción</option>
 									<option value="1">CH</option>
@@ -314,7 +314,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-								<label for="sizeBookingInformation">Tamaño de la unidad</label>
+								<label for="sizeBookingInformation">Tamaño de la Unidad</label>
 								<select class="form-control" id="sizeBookingInformation"  onInput="nexInput()" disabled>
 								<option value="0">Selecciona una opción</option>
 								<option>20</option>
@@ -324,7 +324,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="qualityBookingInformation">Grado de la unidad</label>
+									<label for="qualityBookingInformation">Grado de la Unidad</label>
 									<select class="form-control" id="qualityBookingInformation" onInput="getContainersEspecifications()" disabled>
 									<option value="0">Selecciona una opción</option>
 									<option value="1">A</option>
@@ -339,7 +339,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="unitNumberBookingInformation">Numero de Unidad</label>
+									<label for="unitNumberBookingInformation">Número de Unidad</label>
 									<input type="text" class="form-control" id="unitNumberBookingInformation" list="newContainerList" onInput ="selectContainer()" autocomplete="off">
 									<datalist id="newContainerList" >
 									 <!-- <option th:each="option : ${catContainer}" th:value="${option.container}" th:text="${option.container}"></option> -->
@@ -403,7 +403,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Orden de entrega</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Orden de Entrega</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -426,7 +426,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newTypeServiceOrder">Tipo de servicio </label>
+									<label for="newTypeServiceOrder">Tipo de Servicio </label>
 									<select class="form-control" id="newTypeServiceOrder">
 									<option >CARRIER</option>
 									<option >MERCAHNT</option>
@@ -435,24 +435,24 @@
 							</div>
 							<div class="col-sm" hidden =true>
 								<div class="form-group">
-									<label for="newUnitRemainingOrder">Unidades restantes del booking </label>
+									<label for="newUnitRemainingOrder">Unidades Restantes del Booking</label>
 									<input type="text" class="form-control" id="newUnitRemainingOrder" disabled>
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm">
-								<div class="form-group">
-									<label for="newBillToOrder">Cobrar a</label>
-									<input type="text" class="form-control" id="newBillToOrder" name="example" list="newAgencyList">
-									<datalist id="newAgencyList" >
-									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
-									</datalist>
-								</div>
 							</div>
-							<div class="col-sm">
-								<div class="form-group">
-									<label for="newTypeUnitOrder">Tipo de la unidad</label>
+							<div class="row">
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="newBillToOrder">Cobrar a:</label>
+										<input type="text" class="form-control" id="newBillToOrder" name="example" list="newAgencyList">
+										<datalist id="newAgencyList" >
+											<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+										</datalist>
+									</div>
+								</div>
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="newTypeUnitOrder">Tipo de Unidad</label>
 									<select class="form-control" id="newTypeUnitOrder">
 									<option value="1">CH</option>
 									<option value="2">OT</option>
@@ -466,7 +466,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newCarrierCompanyOrder">Compañia transportista</label>
+									<label for="newCarrierCompanyOrder">Compañia Transportista</label>
 									<input type="text" class="form-control" id="newCarrierCompanyOrder" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -484,7 +484,7 @@
 							</div>	
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newEconomicNumberOrder">Número del economico</label>
+									<label for="newEconomicNumberOrder">Número del Económico</label>
 									<input type="text" class="form-control" id="newEconomicNumberOrder">
 								</div>
 							</div>
@@ -496,7 +496,7 @@
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newUnitDeliver">Unidades a entregar</label>
+									<label for="newUnitDeliver">Unidades a Entregar</label>
 									<input type="text" class="form-control" id="newUnitDeliver">
 								</div>
 							</div>
@@ -525,9 +525,9 @@
 									<th>Unidades</th>
 									<th>Propietario</th>
 									<th>Tipo de Servicio</th>
-									<th>Unidades restantes para completar el booking</th>
+									<th>Unidades Restantes para Completar el Booking</th>
 									<th>Opciones</th>
-									<th>assignmentID</th>
+									<th>AssignmentID</th>
 									<th>Opciones</th>
 									</tr>
 								</thead>
@@ -548,7 +548,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Orden de entrega</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Orden de Entrega</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -571,7 +571,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newTypeServiceOrderEdit">Tipo de servicio </label>
+									<label for="newTypeServiceOrderEdit">Tipo de Servicio </label>
 									<select class="form-control" id="newTypeServiceOrderEdit">
 									<option >CARRIER</option>
 									<option >MERCAHNT</option>
@@ -580,7 +580,7 @@
 							</div>
 							<div class="col-sm" hidden =true>
 								<div class="form-group">
-									<label for="newUnitRemainingOrderEdit">Unidades restantes del booking </label>
+									<label for="newUnitRemainingOrderEdit">Unidades Restantes del Booking </label>
 									<input type="text" class="form-control" id="newUnitRemainingOrderEdit" disabled>
 								</div>
 							</div>
@@ -597,7 +597,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newTypeUnitOrderEdit">Tipo de la unidad</label>
+									<label for="newTypeUnitOrderEdit">Tipo de la Unidad</label>
 									<select class="form-control" id="newTypeUnitOrderEdit">
 									<option value="1">CH</option>
 									<option value="2">OT</option>
@@ -611,7 +611,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newCarrierCompanyOrderEdit">Compañia transportista</label>
+									<label for="newCarrierCompanyOrderEdit">Compañia Transportista</label>
 									<input type="text" class="form-control" id="newCarrierCompanyOrderEdit" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -629,7 +629,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newEconomicNumberOrderEdit">Número del economico</label>
+									<label for="newEconomicNumberOrderEdit">Número del Económico</label>
 									<input type="text" class="form-control" id="newEconomicNumberOrderEdit">
 								</div>
 							</div>
@@ -641,7 +641,7 @@
 							</div>
 							<div class="col-sm"hidden=true>
 								<div class="form-group">
-									<label for="newUnitDeliverEdit">Unidades a entregar</label>
+									<label for="newUnitDeliverEdit">Unidades a Entregar</label>
 									<input type="text" class="form-control" id="newUnitDeliverEdit">
 								</div>
 							</div>

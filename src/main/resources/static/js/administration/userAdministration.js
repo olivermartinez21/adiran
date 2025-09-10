@@ -12,6 +12,7 @@ $(document).ready( function() {
 
 function configDataTable() {
 	$("#usersTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -47,9 +48,9 @@ function configDataTable() {
 			{data: 'userName'},
 			{data: 'roleList'},
 			{data: 'userId', render : function(data) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar nuevo Rol" onclick="assignRole(\'' + data + '\');"><i class="fas fa-arrows-alt-h"></i></button>&nbsp;'  +
-				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de rol" onclick="removeRole(\'' + data + '\');"><i class="fas fa-user-minus"></i></button>&nbsp;' + 
-				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Nuevo Rol" onclick="assignRole(\'' + data + '\');"><i class="fas fa-arrows-alt-h"></i></button>&nbsp;'  +
+				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de Rol" onclick="removeRole(\'' + data + '\');"><i class="fas fa-user-minus"></i></button>&nbsp;' + 
+				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de Usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
 			}}
 		],
 	}).columns.adjust();

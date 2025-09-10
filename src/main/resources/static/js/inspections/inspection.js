@@ -28,6 +28,7 @@ function GetURLParameter(sParam) {
 function configDataTable() {
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -99,7 +100,7 @@ function configDataTable() {
 				}},
 			{ data: "condition", visible: false , render : function(data) {
 						$("#containerConditionInspecction").val(data);
-						return   $("#containerConditionInspecction option:selected").html() + '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-pen"></i></button>';
+						return   $("#containerConditionInspecction option:selected").html() + '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-pen"></i></button>';
 					}},
 			{ data: "clasification", visible: true , render : function(data) {
 				$("#qualityGradeInspection").val(data);
@@ -120,7 +121,7 @@ function configDataTable() {
 							
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						$("#containerStatus").val(data);
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a Reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
 					}},
 			{ data: "statusQute", visible: false , render : function(data) {
 					$("#statusContainer").val(data);
@@ -141,6 +142,7 @@ function configDataTable() {
 	}).columns.adjust();
 	$("#imageTableInspectionView").DataTable().destroy();
 	$("#imageTableInspectionView").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -183,6 +185,7 @@ function configDataTable() {
 	
 	$("#imageTableInspection").DataTable().destroy();
 	$("#imageTableInspection").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -310,6 +313,7 @@ function newDamage(data){
 	
 	$("#newInspectionTable").DataTable().destroy();
 	$("#newInspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 

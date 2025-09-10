@@ -34,6 +34,7 @@ function configDataTable() {
     //     ]
     // });
     $("#historicInventoryTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +

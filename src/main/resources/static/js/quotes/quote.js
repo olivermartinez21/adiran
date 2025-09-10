@@ -36,6 +36,7 @@ $(document).ready( function() {
 function configDataTable() {
 	$("#quoteTable").DataTable().destroy();
 	$("#quoteTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -98,15 +99,15 @@ function configDataTable() {
 					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						return  $("#containerDescriptionQuoteCatalog option:selected").html() +"<br>"+ 
-						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="newQuote(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>'+
-						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambair status" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>'+
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="newQuote(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>'+
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambair Status" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>'+
 						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="#Factura" onclick="noQuote(\'' + data + '\');"><i class="fas fa-file-invoice-dollar"></i></button>';
 					}},
 			{ data: "containerId", visible: false , render : function(data) {
 						return "";
 					}},
 			{ data: "containerId", visible: false , render : function(data) {
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-pen"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-pen"></i></button>';
 					}},
 			{ data: "containerId", visible: false , render : function(data) {
 						return "";
@@ -122,6 +123,7 @@ function configDataTable() {
 	
 	$("#imageTableInspection").DataTable().destroy();
 	$("#imageTableInspection").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -238,6 +240,7 @@ function validationStatus(data){
 	//$("#inspectionTable").DataTable().clear().draw();
 	$("#inspectionTable").DataTable().destroy();
 	$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -347,7 +350,7 @@ function validationStatus(data){
 						return data;
 					}},	
 			{ data: "inspectionId", visible: true , render : function(data, meta) {
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>';
 					}},	
 		],
 

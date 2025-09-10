@@ -21,7 +21,7 @@
 						<th>Booking</th>
 						<th>Propietario</th>
 						<th>Tipo de Servicio</th>
-						<th>Unidades restantes para completar el booking</th>
+						<th>Unidades Restantes para Completar el Booking</th>
 						<th>Opciones</th>
 						<th>assignmentID</th>
 					</tr>
@@ -31,7 +31,7 @@
 						<th>Booking</th>
 						<th>Propietario</th>
 						<th>Tipo de Servicio</th>
-						<th>Unidades restantes para completar el booking</th>
+						<th>Unidades Restantes para Completar el Booking</th>
 						<th>Opciones</th>
 						<th>assignmentID</th>
 					</tr>
@@ -44,7 +44,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Crear una order de entrega</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Crear una Order de Entrega</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -63,7 +63,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="carrierCompany">Compañia transportista</label>
+									<label for="carrierCompany">Compañia Transportista</label>
 									<input type="text" class="form-control" id="carrierCompany" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -81,7 +81,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="economicNumber">Número del economico</label>
+									<label for="economicNumber">Número del Económico</label>
 									<input type="text" class="form-control" id="economicNumber">
 								</div>
 							</div>
@@ -93,7 +93,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="quantityOfUnits">Cantidad de unidades</label>
+									<label for="quantityOfUnits">Cantidad de Unidades</label>
 									<input type="number" class="form-control" id="quantityOfUnits">
 								</div>
 							</div>

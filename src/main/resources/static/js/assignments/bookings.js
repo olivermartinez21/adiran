@@ -15,6 +15,7 @@ $(document).ready( function() {
 
 function configDataTable() {
 		$("#bookignTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -83,7 +84,7 @@ function configDataTable() {
 			{ data: "operator",visible: true },
 			{ data: "economicNumber",visible: true },
 			{ data: "bookingId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="newDeliveryOrder(\'' +meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de Entrega" onclick="newDeliveryOrder(\'' +meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
 				 //'<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar" onclick="newAssigment(\'' + meta.row + '\');"><i class="fas fa-book"></i></button>&nbsp';
 			}},
 			
@@ -92,6 +93,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#bookingInformation").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -135,7 +137,7 @@ function configDataTable() {
 		 { data: "o2",visible: true },
 	 	 { data: "nitrogen",visible: true },
 		 { data: "no", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="deleteAssignment(\'' +meta.row  + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de Entrega" onclick="deleteAssignment(\'' +meta.row  + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 			}},
 		],
 	}).columns.adjust();
@@ -566,6 +568,7 @@ function newDeliveryOrder(data){
 function bookingTableOrder(data){
 	$("#bookingInformationOrder").DataTable().destroy();
 	$("#bookingInformationOrder").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -720,6 +723,7 @@ function selectContainer(){
 function tableDelivery(data){
 	$("#deliveryOrdersTable").DataTable().destroy();
 	$("#deliveryOrdersTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -935,6 +939,7 @@ function editOrder(data){
 function bookingTableOrderEdit(){
 	$("#bookingInformationOrderEdit").DataTable().destroy();
 	$("#bookingInformationOrderEdit").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1047,6 +1052,7 @@ function showBookignHapag(){
 	$("#divTableHapag").show();
 	$("#bookignTablehapag").DataTable().destroy();
 	$("#bookignTablehapag").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1130,6 +1136,7 @@ function showBookigs(){
 	$("#divTableHapag").hide();
 	$("#bookignTable").DataTable().destroy();
 		$("#bookignTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 

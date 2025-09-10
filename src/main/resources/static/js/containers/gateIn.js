@@ -557,6 +557,7 @@ function validationDate(){
 function configDataTablePregate(){
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -651,7 +652,7 @@ function configDataTablePregate(){
 						return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+					'<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
 						'<button tydpe="button" class="btn btn-outline-dark btn-sm"  title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}
@@ -666,6 +667,7 @@ function configDataTablePregate(){
 
 function configDataTable() {
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -760,7 +762,7 @@ function configDataTable() {
 					return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+					'<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
 				}
@@ -774,6 +776,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 		$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -842,6 +845,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#estimateTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -882,6 +886,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#eventTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -931,6 +936,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#imageTableInspection").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1164,6 +1170,7 @@ function pregate(data){
 function getInspectionsData(){
 	$("#inspectionTable").DataTable().destroy();
 	$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1616,6 +1623,7 @@ function showEvents(data){
 function showEventInformation(data) {
 	$("#eventTable").DataTable().destroy();
 	$("#eventTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1682,6 +1690,7 @@ function showEventInformation(data) {
 function showInspections(data) {
 	$("#estimateTable").DataTable().destroy();
 	$("#estimateTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 

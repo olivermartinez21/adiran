@@ -598,6 +598,7 @@ function validationDate(){
 function dataTableRefresh(){
     $("#containerTable").DataTable().destroy();
     $("#containerTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -685,7 +686,7 @@ function dataTableRefresh(){
 
             { data: "containerId", visible: true , render : function(data, type, full, meta) {
                     $("#containerId").val(data);
-                    return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
+                    return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
                 }},
         ],
         order: [[1, 'desc']]
@@ -693,6 +694,7 @@ function dataTableRefresh(){
 }
 function configDataTable() {
     $("#containerTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -792,13 +794,13 @@ function configDataTable() {
                     var destinyPregate = full.destinyPregate;
                     var conditionPregate = full.conditionPregate;
                     if($("#containerStatus").val()==5){
-                        return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" disabled onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+"ASIGNADO"+
+                        return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" disabled onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+"ASIGNADO"+
                             '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
                     }else{
                         if (conditionPregate === "LLENO"){
                             return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Hora" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
                         }
-                        return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+                        return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
                             '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
                     }
 
@@ -808,6 +810,7 @@ function configDataTable() {
     }).columns.adjust();
 
     $("#inspectionTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -866,6 +869,7 @@ function configDataTable() {
     }).columns.adjust();
 
     $("#estimateTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -906,6 +910,7 @@ function configDataTable() {
     }).columns.adjust();
 
     $("#eventTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -1089,6 +1094,7 @@ function inspectionContainer(data){
             document.getElementById("divCms").removeAttribute("hidden");
             $("#inspectionTable").DataTable().destroy();
             $("#inspectionTable").DataTable({
+                language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
                 dom:
                     "<'row'<'col-sm-12'B>>" +
                     "<'row'<'col-sm-12'tr>>" +
@@ -1391,6 +1397,7 @@ function showEvents(data){
 function showEventInformation(data) {
     $("#eventTable").DataTable().destroy();
     $("#eventTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -1457,6 +1464,7 @@ function showEventInformation(data) {
 function showInspections(data) {
     $("#estimateTable").DataTable().destroy();
     $("#estimateTable").DataTable({
+        language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
         dom:
             "<'row'<'col-sm-12'B>>" +
             "<'row'<'col-sm-12'tr>>" +

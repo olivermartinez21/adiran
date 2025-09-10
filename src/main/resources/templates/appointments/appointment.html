@@ -132,13 +132,13 @@
 			<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="startDate">Fecha inicial</label>
+									<label for="startDate">Fecha Inicial</label>
 									<input type="date" class="form-control" id="startDate"  min="" onchange="searchAppointmentByDate()">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="lastDate">Fecha final</label>
+									<label for="lastDate">Fecha Final</label>
 									<input type="date" class="form-control"  id="lastDate"  min="" onchange="searchAppointmentByDate()" >
 								</div>
 							</div>
@@ -157,10 +157,10 @@
 						<th>Contenedores</th>
 						<th>Tipo de Factura</th>
 						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Método de Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
@@ -177,10 +177,10 @@
 						<th>Contenedores</th>
 						<th>Tipo de Factura</th>
 						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Método de Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -204,7 +204,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newDateAppointment" id="datelabel">Fecha de descarga</label>
+									<label for="newDateAppointment" id="datelabel">Fecha de Descarga</label>
 									<input type="date" class="form-control" id="dateAppointment"  min=""  >
 								</div>
 							</div>
@@ -258,7 +258,7 @@
 							</div>-->
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newCustomerType">Tipo de servicio</label>
+									<label for="newCustomerType">Tipo de Servicio</label>
 									<select class="form-control" id="newCustomerType" onchange="customerType()" >
 									<option value="1">MERCHANT</option>
 									<option value="2">CARRIER</option>
@@ -290,7 +290,7 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newOrigin">PTO de procedencia</label>
+									<label for="newOrigin">PTO de Procedencia</label>
 									<input type="text" class="form-control" id="newOrigin" >
 								</div>
 							</div>
@@ -303,13 +303,13 @@
 						<div class="row">
 							<div class="col-sm" hidden=true id=divBooking>
 								<div class="form-group">
-									<label for="newBooking">booking</label>
+									<label for="newBooking">Booking</label>
 									<input type="text" class="form-control" id="newBooking" >
 								</div>
 							</div>
 							<div class="col-sm" hidden=true id=divContainerQuantity>
 								<div class="form-group">
-									<label for="bookingQuantity">Cant. de contenedores</label>
+									<label for="bookingQuantity">Cant. de Contenedores</label>
 									<input type="number" class="form-control" id=bookingQuantity >
 								</div>
 							</div>
@@ -337,7 +337,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerType">Tipo de la Unidad</label>
+									<label for="newContainerType">Tipo de Unidad</label>
 									<select class="form-control" id="newContainerType" >
 									<option value="1">CHASSIS</option>
 									<option value="2">OPEN TOP</option>
@@ -414,7 +414,7 @@
 						<div class="row">
 						<div class="col-sm-3">
 								<div class="form-group">
-									<label for="voucher">Comprobante de pago</label>
+									<label for="voucher">Comprobante de Pago</label>
 									<input type="file" class="form-control" id="voucher" onchange="convertToBase64()" required>
 									<textarea rows="" cols="" id="voucher64" hidden=true></textarea>
 								</div>
@@ -429,7 +429,7 @@
 						<div class="row">
 						<div class="col-sm">
 								<div class="form-group">
-									<label for="payment">Método de pago</label>
+									<label for="payment">Método de Pago</label>
 									<select class="form-control" id="payment" >
 									<option value="1">TRANSFERENCIA</option>
 									<option value="2">CHEQUE</option>
@@ -524,7 +524,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -538,9 +538,9 @@
 										<th>Container</th>
 										<th>Lado</th>
 										<th>Daño</th>
-										<th>Codigo de daño</th>
+										<th>Codigo de Daño</th>
 										<th>Referencia</th>
-										<th>Tipo de cliente</th>
+										<th>Tipo de Cliente</th>
 										<th>Imagen</th>
 										<th>Costo</th>
 									</tr>
@@ -551,9 +551,9 @@
 										<th>Container</th>
 										<th>Lado</th>
 										<th>Daño</th>
-										<th>Codigo de daño</th>
+										<th>Codigo de Daño</th>
 										<th>Referencia</th>
-										<th>Tipo de cliente</th>
+										<th>Tipo de Cliente</th>
 										<th>Imagen</th>
 										<th>Costo</th>
 									</tr>

@@ -470,7 +470,7 @@ function enviarAjaxPregate(data, esLleno) {
 				if (!esLleno) {
 					Swal.fire({
 						title: "Proceso Exitoso",
-						text: "¿Desea Comenzar con la inspeccion?",
+						text: "¿Desea Comenzar con la Inspección?",
 						icon: 'success',
 						showCancelButton: true,
 						confirmButtonText: "Si",
@@ -602,6 +602,7 @@ function validationDate(){
 function configDataTablePregate(){
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -685,13 +686,13 @@ function configDataTablePregate(){
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
 				if($("#globalUserRole").val()=="CAPTURISTA"){
-				 return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
+				 return '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
 				}else{
 				if($("#containerStatus").val()==2){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' +data + '\');"><i class="fas fa-eye"></i></button>&nbsp';	
 				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
 				}	
 				}
 			}},
@@ -703,6 +704,7 @@ function configDataTablePregate(){
 function configDataTable() {
 	console.log("estoy yaendo aqui")
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -786,10 +788,10 @@ function configDataTable() {
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
 				if($("#containerStatus").val()==2){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';	
 				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
 				}
 				
 				
@@ -799,6 +801,7 @@ function configDataTable() {
 		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 		$("#inspectionTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -864,6 +867,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#estimateTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -904,6 +908,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#eventTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -954,6 +959,7 @@ function configDataTable() {
 	
 	
 	$("#imageTableInspection").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -2018,7 +2024,7 @@ function searchContainer(){
 				$("#newShippingConpanyContainer").attr("disabled", false);
 				$("#newContainerTypeSave").attr("disabled", false);
 
-				Swal.fire("No hay informacion registrada de la unidad", "", "question");
+				Swal.fire("No hay información registrada de la unidad", "", "question");
 			} else{
 				document.getElementById("newContainerSize").removeAttribute("hidden");
 				document.getElementById("newContainerDescription").removeAttribute("hidden");

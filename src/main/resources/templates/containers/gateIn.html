@@ -63,7 +63,7 @@
 				<thead>
 					<tr>
 						<th>containerId</th>
-						<th>Dia de Registro</th>
+						<th>Día de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -73,15 +73,15 @@
 						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
-						<th>Estado del estimado</th>
-						<th>Condicion Pregate</th>
+						<th>Estado del Estimado</th>
+						<th>Condición Pregate</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 						<th>containerId</th>
-						<th>Dia de Registro</th>
+						<th>Día de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -91,8 +91,8 @@
 						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
-						<th>Estado del estimado</th>
-						<th>Condicion Pregate</th>
+						<th>Estado del Estimado</th>
+						<th>Condición Pregate</th>
 						<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -121,7 +121,7 @@
 					<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newShippingConpanyInspection">Linea Naviera</label>
+									<label for="newShippingConpanyInspection">Línea Naviera</label>
 									<select class="form-control" id="newShippingConpanyInspection">
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>
@@ -138,7 +138,7 @@
 							</div>
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
-									<label for="containerConditionInspecction">Estado de la unidad</label>
+									<label for="containerConditionInspecction">Estado de la Unidad</label>
 									<select class="form-control" id="containerConditionInspection" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
@@ -154,7 +154,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="containerClasificationInspecction">Grado de la unidad</label>
+									<label for="containerClasificationInspecction">Grado de la Uidad</label>
 									<select class="form-control" id="containerClasificationInspection" >
 									<option value="1">A</option>
 									<option value="2">B</option>
@@ -177,7 +177,7 @@
 							
 							<div class="col-sm" id=divDiesel hidden=true>
 								<div class="form-group" >
-									<label for="newDiesel">Nivel de Diesel</label>
+									<label for="newDiesel">Nivel de Diésel</label>
 									<input type="text" class="form-control" id="newDiesel" >
 								</div>
 							</div>
@@ -242,7 +242,7 @@
 						<div class="row" id="refferInspectionData"hidden=true>
 						<div class="col-sm">
 								<div class="form-group">
-									<label for="newMarkInspection">Marca de frabricante</label>
+									<label for="newMarkInspection">Marca de Fabricante</label>
 									<select class="form-control" id="newMarkInspection">
 									<option >Carrier</option>
 									<option >Termoking</option>
@@ -254,9 +254,9 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="tecnologyInspection">Tecnologia </label>
+									<label for="tecnologyInspection">Tecnología </label>
 									<select class="form-control" id="tecnologyInspection">
-									<option >Estándar: Sin fabricantes</option>
+									<option >Estándar: Sin Fabricantes</option>
 									<option >Atmosfera Controlada</option>
 									<option >XTEND FRESH</option>
 									<option >EXTRA FRESH</option>
@@ -277,13 +277,13 @@
 						<div class="row" id="gensetInspectionData"hidden=true>
 						<div class="col-sm">
 								<div class="form-group">
-									<label for="newGenetatorTypeInspection">Tipo de generador</label>
+									<label for="newGenetatorTypeInspection">Tipo de Generador</label>
 									<input type="text" class="form-control" id="newGenetatorTypeInspection" >
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="horometroInspection">Horometro </label>
+									<label for="horometroInspection">Horómetro </label>
 									<input type="text" class="form-control" id="horometroInspection">
 								</div>
 							</div>
@@ -305,7 +305,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newAptTo">Apto Para</label>
+									<label for="newAptTo">Apto para</label>
 									<input type="text" class="form-control" id="newAptTo">
 								</div>
 							</div>
@@ -345,7 +345,7 @@
 							</div>
 							<div class="col-sm" id=divVentilation>
 								<div class="form-group">
-									<label for="newVentilation">Ventilacion</label>
+									<label for="newVentilation">Ventilación</label>
 									<input type="text" class="form-control" id="newVentilation" >
 								</div>
 							</div>
@@ -364,17 +364,17 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método de reparación</th>
+										<th>Método de Reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
 										<th>Cobrar a</th>
 										<th>Imagen</th>
-										<th>largo</th>
-										<th>ancho</th>
-										<th>profundidad</th>
-										<th>largo</th>
-										<th>unidadLargo</th>
-										<th>cantidad</th>
+										<th>Largo</th>
+										<th>Ancho</th>
+										<th>Profundidad</th>
+										<th>Largo</th>
+										<th>UnidadLargo</th>
+										<th>Cantidad</th>
 										<th>Opciones</th>
 									</tr>
 								</thead>
@@ -385,17 +385,17 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método de reparación</th>
+										<th>Método de Reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
 										<th>Cobrar a</th>
 										<th>Imagen</th>
-										<th>largo</th>
-										<th>ancho</th>
-										<th>profundidad</th>
-										<th>largo</th>
-										<th>unidadLargo</th>
-										<th>cantidad</th>
+										<th>Largo</th>
+										<th>Ancho</th>
+										<th>Profundidad</th>
+										<th>Largo</th>
+										<th>UnidadLargo</th>
+										<th>Cantidad</th>
 										<th>Opciones</th>
 									</tr>
 								</tfoot>
@@ -506,7 +506,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerSize">Tamaño de la unidad</label>
+									<label for="newContainerSize">Tamaño de la Unidad</label>
 								<select class="form-control" id="newContainerSize">
 								<option>20</option>
 								<option>40</option>
@@ -523,7 +523,7 @@
 						<div class="row">
 						<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerDescription">Tipo de la unidad</label>
+									<label for="newContainerDescription">Tipo de la Unidad</label>
 									<select class="form-control" id="newContainerDescription" onclick="setDescription()">
 									<option value="1">CH</option>
 									<option value="2">OT</option>
@@ -537,7 +537,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="newContainerTypeSave">Descripcion de la Unidad</label>
+									<label for="newContainerTypeSave">Descripción de la Unidad</label>
 									<select class="form-control" id="newContainerTypeSave" onclick="setCodeDescription()" >
 									<option value="1">CHASSIS</option>
 									<option value="2">OPEN TOP</option>
@@ -572,7 +572,7 @@
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Titulo</label>
+									<label for="newContainer">Título</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
@@ -717,7 +717,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="serviceTypeEvent">Tipo de servicio</label>
+									<label for="serviceTypeEvent">Tipo de Servicio</label>
 									<select class="form-control" id="serviceTypeEvent" disabled>
 									<OPTION >MERCHANT</OPTION>
 									<OPTION >CARRIER</OPTION>
@@ -747,7 +747,7 @@
 								</div>
 								<div class="col-sm">
 									<div class="form-group">
-										<label for="newEventDate">Fecha del evento</label>
+										<label for="newEventDate">Fecha del Evento</label>
 										<input type="datetime-local" class="form-control" id="newEventDate"   >
 									</div>
 								</div>
@@ -1041,7 +1041,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1070,7 +1070,7 @@
 								</thead>
 								<tfoot>
 									<tr>
-									<th>Line</th>
+										<th>Line</th>
 										<th>Dam</th>
 										<th>Loc</th>
 										<th>Comp</th>
@@ -1103,7 +1103,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1114,55 +1114,54 @@
 								<thead>
 									<tr>
 									<th>eventId</th>
-									<th>Tipo de evento</th> 
-									<th>Fecha del evento</th>
-									<th>estimateRequired</th>
-									<th>inspected</th> 
-									<th>inspectedBy</th> 
-									<th>booking</th>
-									<th>fillState</th>
-									<th>alternateUnit</th>
-									<th>associatedUnit</th>
-									<th>transportType</th>
-									<th>sapSaleOrder</th>
-									<th>unitQuality</th>
-									<th>unitClasification</th>
-									<th>sealNumber</th>
-									<th>customerIdentifier</th>
-									<th>type</th>
-									<th>model</th>
-									<th>location</th>
-									<th>container</th>
-									<th>modelYear</th>
-									<th>containerId</th>
-									<th>transmit</th>
+									<th>Tipo de Evento</th> 
+									<th>Fecha del Evento</th>
+									<th>EstimateRequired</th>
+									<th>Inspected</th> 
+									<th>InspectedBy</th> 
+									<th>Booking</th>
+									<th>FillState</th>
+									<th>AlternateUnit</th>
+									<th>AssociatedUnit</th>
+									<th>TransportType</th>
+									<th>SapSaleOrder</th>
+									<th>UnitQuality</th>
+									<th>UnitClasification</th>
+									<th>SealNumber</th>
+									<th>CustomerIdentifier</th>
+									<th>Type</th>
+									<th>Model</th>
+									<th>Location</th>
+									<th>Container</th>
+									<th>ModelYear</th>
+									<th>ContainerId</th>
+									<th>Transmit</th>
 									</tr>
 								</thead>
 								<tfoot>
 									<tr>
-									<th>eventId</th>
-									<th>Tipo de evento</th> 
-									<th>Fecha del evento</th>
-									<th>estimateRequired</th>
-									<th>inspected</th> 
-									<th>inspectedBy</th> 
-									<th>booking</th>
-									<th>fillState</th>
-									<th>alternateUnit</th>
-									<th>associatedUnit</th>
-									<th>transportType</th>
-									<th>sapSaleOrder</th>
-									<th>unitQuality</th>
-									<th>unitClasification</th>
-									<th>sealNumber</th>
-									<th>customerIdentifier</th>
-									<th>type</th>
-									<th>model</th>
-									<th>location</th>
-									<th>container</th>
-									<th>modelYear</th>
-									<th>containerId</th>
-									<th>transmit</th>
+									<th>Tipo de Evento</th> 
+									<th>Fecha del Evento</th>
+									<th>EstimateRequired</th>
+									<th>Inspected</th> 
+									<th>InspectedBy</th> 
+									<th>Booking</th>
+									<th>FillState</th>
+									<th>AlternateUnit</th>
+									<th>AssociatedUnit</th>
+									<th>TransportType</th>
+									<th>SapSaleOrder</th>
+									<th>UnitQuality</th>
+									<th>UnitClasification</th>
+									<th>SealNumber</th>
+									<th>CustomerIdentifier</th>
+									<th>Type</th>
+									<th>Model</th>
+									<th>Location</th>
+									<th>Container</th>
+									<th>ModelYear</th>
+									<th>ContainerId</th>
+									<th>Transmit</th>
 									</tr>
 								</tfoot>
 							</table>
@@ -1181,7 +1180,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1191,7 +1190,7 @@
 					<div class="row">
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
-									<label for="containerCondition">Estado de la unidad</label>
+									<label for="containerCondition">Estado de la Uidad</label>
 									<select class="form-control" id="containerCondition" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
@@ -1208,7 +1207,7 @@
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="containerClasification">Grado de la unidad</label>
+									<label for="containerClasification">Grado de la Unidad</label>
 									<select class="form-control" id="containerClasification" >
 									<option value="1">A</option>
 									<option value="2">B</option>
@@ -1254,7 +1253,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="typeServicePregate">Tipo de servicio</label>
+									<label for="typeServicePregate">Tipo de Servicio</label>
 									<select class="form-control" id="typeServicePregate" >
 									<option>MERCHANT</option>
 									<option>CARRIER</option>
@@ -1316,13 +1315,13 @@
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newPlate">Placas del transporte</label>
+									<label for="newPlate">Placas del Transporte</label>
 									<input type="text" class="form-control" id="newPlate">
 								</div>
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newEconomicNumber">Numero del economico</label>
+									<label for="newEconomicNumber"> Número del Económico</label>
 									<input type="text" class="form-control" id="newEconomicNumber">
 								</div>
 							</div>
@@ -1355,7 +1354,7 @@
 								<div class="form-group">
 									<label for="newPart">Sección</label>
 									<select class="form-control" id="newPart" oninput="showComponents()" >
-									<option value="0">Selecciona una opcion</option>
+									<option value="0">Selecciona una opción</option>
 									</select> 
 								</div>
 							</div>
@@ -1484,7 +1483,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-								<label for="extentOtherLarge">Unidad de medida</label>
+								<label for="extentOtherLarge">Unidad de Medida</label>
 									<select class="form-control" id="extentOtherLarge">
 									    <option value="1">mm</option>
 									    <option value="2">cm</option>

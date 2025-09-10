@@ -370,6 +370,7 @@ function validationDate(){
 
 function configDataTable() {
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -454,8 +455,8 @@ function configDataTable() {
 				return  '<button tydpe="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp'+
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
 				//'<button tydpe="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>&nbsp'+
-				'<button  type="button" class="btn btn-outline-dark btn-sm" title="ver Estimados" onclick="ConfirmEstimationAppointment(\'' + data + '\');"><i class="fas fa-coins"></i></button>&nbsp;'+
-				'<button  type="button" class="btn btn-outline-dark btn-sm" title="ver Eventos" onclick="showEvents(\'' + data + '\');"><i class="fas fa-list"></i></button>&nbsp;'+
+				'<button  type="button" class="btn btn-outline-dark btn-sm" title="Ver Estimados" onclick="ConfirmEstimationAppointment(\'' + data + '\');"><i class="fas fa-coins"></i></button>&nbsp;'+
+				'<button  type="button" class="btn btn-outline-dark btn-sm" title="Ver Eventos" onclick="showEvents(\'' + data + '\');"><i class="fas fa-list"></i></button>&nbsp;'+
 				'<a href="/myre/inspections/inspection?containerId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Informacion Containers"><i class="fas fa-warehouse"></i></button></a>&nbsp;'+
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Visto Bueno" onclick="validation(\'' + data + '\');"><i class="fas fa-thumbs-up"></i></button>&nbsp';
 				
@@ -481,6 +482,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 		$("#inspectionTable").DataTable({
+			language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -539,6 +541,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#estimateTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -579,6 +582,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#eventTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -628,6 +632,7 @@ function configDataTable() {
 	}).columns.adjust();
 	
 	$("#tableResumen").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -787,6 +792,7 @@ function inspectionContainer(data){
 		document.getElementById("divCms").removeAttribute("hidden");
 		$("#inspectionTable").DataTable().destroy();
 		$("#inspectionTable").DataTable({
+			language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1089,6 +1095,7 @@ function showEvents(data){
 function showEventInformation(data) {
 	$("#eventTable").DataTable().destroy();
 	$("#eventTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -1155,6 +1162,7 @@ function showEventInformation(data) {
 function showInspections(data) {
 	$("#estimateTable").DataTable().destroy();
 	$("#estimateTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 

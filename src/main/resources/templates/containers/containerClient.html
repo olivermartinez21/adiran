@@ -90,13 +90,13 @@
 			<div class="row">
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="startDate">Fecha inicial</label>
+									<label for="startDate">Fecha Inicial</label>
 									<input type="date" class="form-control" id="startDate"  min="" onchange="searchContainerByDate()">
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="lastDate">Fecha final</label>
+									<label for="lastDate">Fecha Final</label>
 									<input type="date" class="form-control"  id="lastDate"  min="" onchange="searchContainerByDate()" >
 								</div>
 							</div>
@@ -104,7 +104,7 @@
 								<div class="form-group">
 									<label for="locationFilter">Localidad</label>
 									<select class="form-control" id="locationFilter">
-									<option>Selecciona una opcion</option>
+									<option>Selecciona una opción</option>
 									<option>VERACRUZ</option>
 									<option>AGUASCALIENTES</option>
 									<option>PANTACO</option>
@@ -174,7 +174,7 @@
 							</div>
 							<div class="col-sm" id=divDiesel hidden=true>
 								<div class="form-group" >
-									<label for="newDiesel">Nivel de Diesel</label>
+									<label for="newDiesel">Nivel de Diésel</label>
 									<input type="text" class="form-control" id="newDiesel" >
 								</div>
 							</div>
@@ -236,7 +236,7 @@
 							</div>
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
-									<label for="containerConditionInspecction">Estado de la unidad</label>
+									<label for="containerConditionInspecction">Estado de la Unidad</label>
 									<select class="form-control" id="containerConditionInspection" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
@@ -255,7 +255,7 @@
 						<div class="row">
 						<div class="col-sm" >
 								<div class="form-group">
-									<label for="containerClasificationInspecction">Grado de la unidad</label>
+									<label for="containerClasificationInspecction">Grado de la Unidad</label>
 									<select class="form-control" id="containerClasificationInspection" >
 									<option value="1">A</option>
 									<option value="2">B</option>
@@ -315,7 +315,7 @@
 							</div>
 							<div class="col-sm" id=divVentilation>
 								<div class="form-group">
-									<label for="newVentilation">Ventilacion</label>
+									<label for="newVentilation">Ventilación</label>
 									<input type="text" class="form-control" id="newVentilation" >
 								</div>
 							</div>
@@ -329,7 +329,7 @@
 								<div class="form-group">
 									<label for="newPart">Sección</label>
 									<select class="form-control" id="newPart" onchange="showComponents(this.value)" >
-									<option value="0">Selecciona una opcion</option>
+									<option value="0">Selecciona una opción</option>
 									</select> 
 								</div>
 							</div>
@@ -425,7 +425,7 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método de reparación</th>
+										<th>Método de Reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
 										<th>Imagen</th>
@@ -439,7 +439,7 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método de reparación</th>
+										<th>Método de Reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo de Cliente</th>
 										<th>Imagen</th>
@@ -541,7 +541,7 @@
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Titulo</label>
+									<label for="newContainer">Título</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
@@ -668,7 +668,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="shippingCompanyEvent">propietario</label>
+									<label for="shippingCompanyEvent">Propietario</label>
 									<select class="form-control" id="newShippingCompany" disabled>
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>
@@ -678,7 +678,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newEventDate">Fecha del evento</label>
+									<label for="newEventDate">Fecha del Evento</label>
 									<input type="date" class="form-control" id="newEventDate"  min="" disabled>
 								</div>
 							</div>
@@ -710,7 +710,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newYardLocation">Ubicación del patio</label>
+									<label for="newYardLocation">Ubicación del Patio</label>
 									<input type="text" class="form-control" id="newYardLocation">
 								</div>
 							</div>
@@ -728,7 +728,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newCustomerType">Tipo de cliente</label>
+									<label for="newCustomerType">Tipo de Cliente</label>
 									<select class="form-control" id="newCustomerType">
 									<OPTION VALUE="1">MERCHANT</OPTION>
 									<OPTION VALUE="2">CARRIER</OPTION>
@@ -751,7 +751,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newEstimateRequired">Estimado requ</label>
+									<label for="newEstimateRequired">Estimado Requerido</label>
 									<select class="form-control" id="newEstimateRequired">
 									<OPTION VALUE="1">SI</OPTION>
 									<OPTION VALUE="2">NO</OPTION>
@@ -780,7 +780,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newNumPlates">Numero de Placas</label>
+									<label for="newNumPlates">Número de Placas</label>
 									<input type="text" class="form-control" id="newNumPlates">
 								</div>
 							</div>
@@ -808,7 +808,7 @@
 						<div class="row">
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="newContainerCondition">Estado de la unidad</label>
+									<label for="newContainerCondition">Estado de la Unidad</label>
 									<select class="form-control" id="newContainerCondition" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
@@ -824,7 +824,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerClasification">Grado de la unidad</label>
+									<label for="newContainerClasification">Grado de la Unidad</label>
 									<select class="form-control" id="newContainerClasification" >
 									<option value="1">A</option>
 									<option value="2">B</option>
@@ -845,7 +845,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerContent">Contenido del contenedor</label>
+									<label for="newContainerContent">Contenido del Contenedor</label>
 									<select class="form-control" id="newContainerContent">
 									<OPTION VALUE="1">LLENO</OPTION>
 									<OPTION VALUE="2">VACIO</OPTION>
@@ -891,13 +891,13 @@
 						<div class="row">
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Prdido de venta Sap</label>
+									<label for="newContainer">Pedido de Venta SAP</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Factura Sap</label>
+									<label for="newContainer">Factura SAP</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
@@ -917,7 +917,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -979,7 +979,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -989,56 +989,56 @@
 							<table id="eventTable" class="table table-striped dt-responsive striped" style="width: 100%;">
 								<thead>
 									<tr>
-									<th>eventId</th>
-									<th>Tipo de evento</th> 
-									<th>Fecha del evento</th>
-									<th>estimateRequired</th>
-									<th>inspected</th> 
-									<th>inspectedBy</th> 
-									<th>booking</th>
-									<th>fillState</th>
-									<th>alternateUnit</th>
-									<th>associatedUnit</th>
-									<th>transportType</th>
-									<th>sapSaleOrder</th>
-									<th>unitQuality</th>
-									<th>unitClasification</th>
-									<th>sealNumber</th>
-									<th>customerIdentifier</th>
-									<th>type</th>
-									<th>model</th>
-									<th>location</th>
-									<th>container</th>
-									<th>modelYear</th>
-									<th>containerId</th>
-									<th>transmit</th>
+										<th>EventId</th>
+										<th>Tipo de Evento</th>
+										<th>Fecha del Evento</th>
+										<th>EstimateRequired</th>
+										<th>Inspected</th>
+										<th>InspectedBy</th>
+										<th>Booking</th>
+										<th>FillState</th>
+										<th>AlternateUnit</th>
+										<th>AssociatedUnit</th>
+										<th>TransportType</th>
+										<th>SapSaleOrder</th>
+										<th>UnitQuality</th>
+										<th>UnitClasification</th>
+										<th>SealNumber</th>
+										<th>CustomerIdentifier</th>
+										<th>Type</th>
+										<th>Model</th>
+										<th>Location</th>
+										<th>Container</th>
+										<th>ModelYear</th>
+										<th>Container Id</th>
+										<th>Transmit</th>
 									</tr>
 								</thead>
 								<tfoot>
 									<tr>
-									<th>eventId</th>
-									<th>Tipo de evento</th> 
-									<th>Fecha del evento</th>
-									<th>estimateRequired</th>
-									<th>inspected</th> 
-									<th>inspectedBy</th> 
-									<th>booking</th>
-									<th>fillState</th>
-									<th>alternateUnit</th>
-									<th>associatedUnit</th>
-									<th>transportType</th>
-									<th>sapSaleOrder</th>
-									<th>unitQuality</th>
-									<th>unitClasification</th>
-									<th>sealNumber</th>
-									<th>customerIdentifier</th>
-									<th>type</th>
-									<th>model</th>
-									<th>location</th>
-									<th>container</th>
-									<th>modelYear</th>
-									<th>containerId</th>
-									<th>transmit</th>
+										<th>EventId</th>
+										<th>Tipo de Evento</th>
+										<th>Fecha del Evento</th>
+										<th>EstimateRequired</th>
+										<th>Inspected</th>
+										<th>InspectedBy</th>
+										<th>Booking</th>
+										<th>FillState</th>
+										<th>AlternateUnit</th>
+										<th>AssociatedUnit</th>
+										<th>TransportType</th>
+										<th>SapSaleOrder</th>
+										<th>UnitQuality</th>
+										<th>UnitClasification</th>
+										<th>SealNumber</th>
+										<th>CustomerIdentifier</th>
+										<th>Type</th>
+										<th>Model</th>
+										<th>Location</th>
+										<th>Container</th>
+										<th>ModelYear</th>
+										<th>Container Id</th>
+										<th>Transmit</th>
 									</tr>
 								</tfoot>
 							</table>
@@ -1057,7 +1057,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de Inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1067,7 +1067,7 @@
 					<div class="row">
 							<div class="col-sm" id=divConditionUnit>
 								<div class="form-group">
-									<label for="containerCondition">Estado de la unidad</label>
+									<label for="containerCondition">Estado de la Unidad</label>
 									<select class="form-control" id="containerCondition" >
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
@@ -1084,7 +1084,7 @@
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="containerClasification">Grado de la unidad</label>
+									<label for="containerClasification">Grado de la Unidad</label>
 									<select class="form-control" id="containerClasification" >
 									<option value="1">A</option>
 									<option value="2">B</option>

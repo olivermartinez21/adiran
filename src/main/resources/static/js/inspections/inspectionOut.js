@@ -14,6 +14,7 @@ function configDataTable(){
 	console.log("si entraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -77,6 +78,7 @@ function configDataTable(){
 	}).columns.adjust();
 	$("#imageTableInspection").DataTable().destroy();
 	$("#imageTableInspection").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 

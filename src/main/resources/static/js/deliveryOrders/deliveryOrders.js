@@ -13,6 +13,7 @@ $(document).ready( function() {
 function configDataTable() {
 	
 	$("#deliveryOrdersTable").DataTable({
+		language: { url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" },
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
 		"<'row'<'col-sm-12'tr>>" + 
@@ -48,7 +49,7 @@ function configDataTable() {
 			{ data: "typeOfService",visible: true }, 
 			{ data: "remainingUnits",visible: true },
 			{ data: "deliveryOrderId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de entrega" onclick="newDeliveryOrder(\'' + meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Orden de Entrega" onclick="newDeliveryOrder(\'' + meta.row  + '\');"><i class="fas fa-truck"></i></button>&nbsp';
 				
 			}},
 			{ data: "assignmentId",visible: false }, 
