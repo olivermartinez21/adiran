@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -214,5 +215,17 @@ public class ScheduledTasks {
 
 
 
+    }
+
+    // Nueva tarea: purgar inventario histórico mayor a 1 año
+    // Se ejecuta diariamente a las 00:10 (posterior a la generación del snapshot de medianoche)
+   // @Scheduled(cron = "*/15 * * * * *")
+    @Scheduled(cron = "0 10 0 * * *")
+    public void purgeOldInventory() {
+        LocalDate cutoffLocalDate = LocalDate.now().minusYears(1); // hace un año exacto
+        java.sql.Date cutoffDate = java.sql.Date.valueOf(cutoffLocalDate);
+       //java.sql.Date cutoffDate = java.sql.Date.valueOf("2025-09-05");
+        long deleted = containerInventoryHistoricRepository.deleteByUploadDateBefore(cutoffDate);
+        log.info("Purgados {} registros de CONTAINER_INVENTORY_HISTORIC con UPLOAD_DATE anterior a {}", deleted, cutoffDate);
     }
 }

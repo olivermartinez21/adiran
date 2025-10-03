@@ -427,6 +427,11 @@ function showPhoto(data){
 	
 function initComponents(){
 	$("#inspectionCapModel").submit(function () {
+		if ($("#newWorkCode").val() === "" || $("#newWorkCode").val() === null) {
+			Swal.fire("El campo Codigo/Descripcion no puede ir vacio", "", "warning");
+			return false;
+		}
+
 		var data = {
 			jobcodeId: $("#jobcodeId").val(),
 			workCode: $("#newWorkCode").val(),

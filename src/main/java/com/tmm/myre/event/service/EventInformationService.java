@@ -130,7 +130,12 @@ public class EventInformationService implements IEventInformationService {
 			container.setTypeServicePregate(containerDto.getTypeServicePregate());
 			container.setDateGateIn(containerDto.getNewEventDate());
 			container.setStatus(4);
-			container.setStatusQute(10);
+			if(container.getConditionPregate().equals("VACIO")){
+				container.setStatusQute(container.getStatusQute());
+			} else {
+				container.setStatusQute(10);
+			}
+
 
 
 			//transmit

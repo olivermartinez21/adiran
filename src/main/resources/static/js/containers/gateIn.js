@@ -643,22 +643,30 @@ function configDataTablePregate(){
 						return data;
 					}},
 			{data: "conditionPregate", visible: false},
-			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
+			{
+				data: "containerId",
+				visible: true,
+				render: function(data, type, full, meta) {
 					$("#containerId").val(data);
 					var conditionPregate = full.conditionPregate;
-					console.log($("#containerStatus").val())
-					if (conditionPregate === "LLENO"){
-						return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
-				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button tydpe="button" class="btn btn-outline-dark btn-sm"  title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+					var userRole = $("#globalUserRole").val();
+					var btnEir = '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+					var btnEvento = '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+
+					if (conditionPregate === "LLENO") {
+						return btnEvento;
+					} else {
+						// Si el usuario es CAPTURISTA, no mostrar el botón Inspeccionar
+						if (userRole === "CAPTURISTA") {
+							return btnEir + btnActualizar + btnEvento;
+						} else {
+							return btnEir + btnActualizar + btnInspeccionar + btnEvento;
+						}
+					}
 				}
-						
-					
-				
-			}},
+			},
 		],
 		order: [[1, 'desc']]
 	}).columns.adjust();
@@ -752,22 +760,30 @@ function configDataTable() {
 						return data;
 					}},
 			{data: "conditionPregate", visible: false},
-			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-				$("#containerId").val(data);
-				var conditionPregate = full.conditionPregate;
-				console.log($("#containerStatus").val())
-					if (conditionPregate === "LLENO"){
-					return'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
-				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+			{
+				data: "containerId",
+				visible: true,
+				render: function(data, type, full, meta) {
+					$("#containerId").val(data);
+					var conditionPregate = full.conditionPregate;
+					var userRole = $("#globalUserRole").val();
+					var btnEir = '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+					var btnEvento = '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento" onclick="addNewEvent(\'' + meta.row + '\');"><i class="fa fa-plus"></i></button>&nbsp';
+
+					if (conditionPregate === "LLENO") {
+						return btnEvento;
+					} else {
+						// Si el usuario es CAPTURISTA, no mostrar el botón Inspeccionar
+						if (userRole === "CAPTURISTA") {
+							return btnEir + btnActualizar + btnEvento;
+						} else {
+							return btnEir + btnActualizar + btnInspeccionar + btnEvento;
+						}
+					}
 				}
-						
-					
-				
-			}},
+			},
 		],
 		
 		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente

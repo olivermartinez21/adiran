@@ -34,12 +34,17 @@ function initComponents() {
 
 			var prop = $("#newShippingCompanyOut").val();
 			var sap = $("#sapSaleOrderOut").val();
+			var pregateCondition = $("#conditionPregate").val();
 			if ((prop === "2" || prop === "5" || prop === "6") && sap === "") {
 				Swal.fire("Debes seleccionar Importación, Exportación o Evacuación.", "", "warning");
 				return false;
 			}
 			if(prop === "6" && $("#bookingOut").val() === ""){
 				Swal.fire("Debes ingresar el No. de Booking.", "", "warning");
+				return false;
+			}
+			if(pregateCondition === "LLENO" && $("#operatorName").val() === ""){
+				Swal.fire("Debes ingresar el nombre del operador.", "", "warning");
 				return false;
 			}
 
@@ -757,6 +762,7 @@ function gatOut(data){
 	$("#qualityOut").val(currentData.clasification);
 	$("#bookingOut").val(currentData.booking);
 	$("#billToOut").val(currentData.billTo);
+	$("#conditionPregate").val(currentData.conditionPregate);
 	console.log(currentData.conditionPregate);
 	//$("#typeDeliveryOut").val(currentData.);
 
@@ -772,7 +778,7 @@ function gatOut(data){
 	    document.querySelector("label[for='operatorName']").hidden = true;
 	}
 
-	if(currentData.shippingCompany === "3"){
+	if(currentData.shippingCompany === "6"){
 		document.getElementById("bookingOut").removeAttribute("disabled");
 	} else {
 		document.getElementById("bookingOut").setAttribute("disabled", true);

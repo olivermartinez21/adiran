@@ -89,7 +89,7 @@ public abstract class AbstractMyreController {
 				loggedUserDto.setUserRole("CLIENTE AA");
 			} else if( authority.toString().contains("CAPTURISTA")) {
 				loggedUserDto.setUserRole("CAPTURISTA");
-			}else if( authority.toString().contains("SUPERVISOR DE CAPTURA")) {
+			}else if( authority.toString().contains("SUPERVISOR_DE_CAPTURA")) {
 				loggedUserDto.setUserRole("SUPERVISOR DE CAPTURA ");
 			}else if( authority.toString().contains("INSPECTOR")) {
 				loggedUserDto.setUserRole("INSPECTOR");

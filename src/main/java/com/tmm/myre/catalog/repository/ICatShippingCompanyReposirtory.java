@@ -39,4 +39,6 @@ public interface ICatShippingCompanyReposirtory extends JpaRepository<CatShippin
 
 	@Query(value = "SELECT * FROM MYRE.MYRE_CAT_SHIPPINGCOMPANY WHERE SHIPPINGCOMPANY_ID = 999", nativeQuery = true)
 	CatShippingCompanyModel getPreLaborMerchant();
+
+    CatShippingCompanyModel findByDescription(String customerName);
 }

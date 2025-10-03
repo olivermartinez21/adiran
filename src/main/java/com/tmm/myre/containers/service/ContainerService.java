@@ -1191,7 +1191,36 @@ public class ContainerService implements IContainerService{
 
 			String companyInfo = null;
 			String laborInfo = null;
-		if(inspection.getCustomerType()==1){
+
+			if(inspection.getCustomerName().equals("CARRIER")){
+				CatShippingCompanyModel infoPreLabor = catShippingCompanyReposirtory.getPreLaborFinalFinal(inspectionId);
+
+				if(infoPreLabor.getLabor()==null) {
+					log.info("No hay informacion de pre labor");
+					CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
+					companyInfo = infoPreLaborMerchant.getShippingCompanyId();
+					laborInfo = infoPreLaborMerchant.getLabor();
+				} else {
+					log.info("Si hay informacion de pre labor");
+					companyInfo = infoPreLabor.getShippingCompanyId();
+					laborInfo = infoPreLabor.getLabor();
+				}
+			} else {
+				CatShippingCompanyModel infoNameJobcode = catShippingCompanyReposirtory.findByDescription(inspection.getCustomerName());
+				if (infoNameJobcode != null && infoNameJobcode.getLabor() != null) {
+					log.info("Si hay informacion de pre labor por nombre");
+					companyInfo = infoNameJobcode.getShippingCompanyId();
+					laborInfo = infoNameJobcode.getLabor();
+				} else {
+					log.info("No hay informacion de pre labor por nombre, se toma merchant");
+					CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
+					companyInfo = infoPreLaborMerchant.getShippingCompanyId();
+					laborInfo = infoPreLaborMerchant.getLabor();
+				}
+			}
+
+
+		/*if(inspection.getCustomerType()==1){
 
 			CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
 			companyInfo = infoPreLaborMerchant.getShippingCompanyId();
@@ -1210,7 +1239,7 @@ public class ContainerService implements IContainerService{
 				companyInfo = infoPreLabor.getShippingCompanyId();
 				laborInfo = infoPreLabor.getLabor();
 			}
-		}
+		}*/
 
 			  		InspectionShippingDto entity = InspectionShippingDto.builder()
 							.shippingCompany(companyInfo)

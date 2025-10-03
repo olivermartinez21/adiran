@@ -45,6 +45,10 @@ function intermodalInformation() {
 function initComponents() {
 
 	$("#pregateModel").submit(function () {
+		if ($("#newBillToPregate").val() === "" || $("#newBillToPregate").val() === null) {
+			Swal.fire("Debes Seleccionar a quien se le cobrara", "", "warning");
+			return false;
+		}
 		if ($("#newCondition").val() === "LLENO" && $("#fullNomenclatura").val() === "Selecciona una opción") {
 			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
@@ -327,8 +331,8 @@ $("#addNewDamageModel").submit(function () {
 	
 	formData.append('inspection',JSON.stringify(data));
 	
-	if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"||$("#inspectionCustomerType").val()=="Selecciona una opción"){
-				Swal.fire("Llenar los datos que se requieren", "", "warning");
+	if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"||$("#inspectionCustomerType").val()=="Selecciona una opción"||$("#customerName").val()==""){
+				Swal.fire("Llenar los datos que se requieren", "Seccion, Componente, Daño, Metodo de Reparacion, Responsabilidad, A quien se cobra", "warning");
 	}else{
 		$.ajax({
 		type : "POST",
@@ -467,22 +471,29 @@ function enviarAjaxPregate(data, esLleno) {
 		data: data,
 		success: function(response){
 			if(response.success==true){
+				var userRole = $("#globalUserRole").val();
 				if (!esLleno) {
-					Swal.fire({
-						title: "Proceso Exitoso",
-						text: "¿Desea Comenzar con la inspeccion?",
-						icon: 'success',
-						showCancelButton: true,
-						confirmButtonText: "Si",
-						cancelButtonText: "no",
-					}).then(resultado => {
-						if (resultado.value) {
-							inspectionContainer($("#containerId").val())
-							configDataTablePregate()
-						} else {
-							configDataTablePregate()
-						}
-					});
+					if (userRole !== "CAPTURISTA") {
+						Swal.fire({
+							title: "Proceso Exitoso",
+							text: "¿Desea Comenzar con la inspeccion?",
+							icon: 'success',
+							showCancelButton: true,
+							confirmButtonText: "Si",
+							cancelButtonText: "no",
+						}).then(resultado => {
+							if (resultado.value) {
+								inspectionContainer($("#containerId").val())
+								configDataTablePregate()
+							} else {
+								configDataTablePregate()
+							}
+						});
+					} else {
+						Swal.fire("Proceso Exitoso", "", "success").then(() => {
+							configDataTablePregate();
+						});
+					}
 				} else {
 					Swal.fire("Proceso Exitoso", "", "success").then(() => {
 						configDataTablePregate();
@@ -603,12 +614,12 @@ function configDataTablePregate(){
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
-		"<'row'<'col-sm-12'B>>" +
-		"<'row'<'col-sm-12'tr>>" + 
-		"<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
+			"<'row'<'col-sm-12'B>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
 		fixedHeader: true,
 		responsive: true,
-		autoWidth: true, 
+		autoWidth: true,
 		select: {
 			style: 'single'
 		},
@@ -616,21 +627,21 @@ function configDataTablePregate(){
 			buttons: [
 				{text: 'Alta de Unidades', action: function() { addNewContainer()}},
 				{extend: 'excelHtml5', title: 'Pregate'},
-				],
+			],
 			dom: {
-				
+
 				button:{
-					
-	                tag:"button",
-	                className:"btn btn-info"
-	            },
+
+					tag:"button",
+					className:"btn btn-info"
+				},
 			}},
-			ajax: {
+		ajax: {
 			url: "preGate/getDataTable",
 			type: 'GET',
 			dataSrc: '',
 			data: {appointmentId :  $("#appointmentId").val(),
-					userId : $("#globalUserId").val()},
+				userId : $("#globalUserId").val()},
 			error: function(response) {
 				console.log(response);
 				manageErrorAjax(response);
@@ -640,62 +651,70 @@ function configDataTablePregate(){
 			{ data: "containerId",visible: false },
 			{ data: "registerDate",visible: false },
 			{ data: "container",visible: true , render : function(data) {
-						$("#containerName").val(data);
-						return $("#containerName").val();
-					}}, 
+					$("#containerName").val(data);
+					return $("#containerName").val();
+				}},
 			{ data: "containerType",visible: true , render : function(data) {
-						$("#newContainerTypeTable").val(data);
-						return $("#newContainerTypeTable option:selected").html();
-					}}, 
+					$("#newContainerTypeTable").val(data);
+					return $("#newContainerTypeTable option:selected").html();
+				}},
 			{ data: "contaierSize",visible: true },
 			/*{ data: "containerSize", visible: true , render : function(data) {
 						$("#newModelevent").val(data);
 						return $("#newModelevent option:selected").html();
 					}}, */
 			{ data: "shippingCompany", visible: true , render : function(data) {
-						$("#newShippingCompany").val(data);
-						return $("#newShippingCompany option:selected").html();
-					}}, 
+					$("#newShippingCompany").val(data);
+					return $("#newShippingCompany option:selected").html();
+				}},
 			{ data: "clasification", visible: false , render : function(data) {
-				if(data!=null){
-					$("#containerClasification").val(data);
+					if(data!=null){
+						$("#containerClasification").val(data);
 						return $("#containerClasification option:selected").html();
-				}else{
-					return null;
-				}
-						
-					}},
+					}else{
+						return null;
+					}
+
+				}},
 			{ data: "condition", visible: true , render : function(data) {
-				if(data!=null){
-					var combo = document.getElementById("containerClasification");
-				var selected = combo.options[combo.selectedIndex].text;
+					if(data!=null){
+						var combo = document.getElementById("containerClasification");
+						var selected = combo.options[combo.selectedIndex].text;
 						$("#containerCondition").val(data);
 						return $("#containerCondition option:selected").html()+" "+selected;
-				}else{
-					return null;
-				}
-				
-					}},
-			
+					}else{
+						return null;
+					}
+
+				}},
+
 			{ data: "status", visible: false , render : function(data) {
-						$("#containerStatus").val(data);
-						return $("#containerStatus option:selected").html();
-					}},
-			
-			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-				$("#containerId").val(data);
-				if($("#globalUserRole").val()=="CAPTURISTA"){
-				 return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
-				}else{
-				if($("#containerStatus").val()==2){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' +data + '\');"><i class="fas fa-eye"></i></button>&nbsp';	
-				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
-				}	
+					$("#containerStatus").val(data);
+					return $("#containerStatus option:selected").html();
+				}},
+
+			{
+				data: "containerId",
+				visible: true,
+				render: function(data, type, full, meta) {
+					$("#containerId").val(data);
+					var userRole = $("#globalUserRole").val();
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+
+					if ($("#containerStatus").val() == 2) {
+						if (userRole === "CAPTURISTA") {
+							return btnActualizar;
+						} else {
+							return btnActualizar + btnInspeccionar;
+						}
+					} else {
+						return btnActualizar;
+					}
 				}
-			}},
+			},
 		],
+
 		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 }
@@ -782,22 +801,33 @@ function configDataTable() {
 						$("#containerStatus").val(data);
 						return $("#containerStatus option:selected").html();
 					}},
-			
-			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-				$("#containerId").val(data);
-				if($("#containerStatus").val()==2){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-						'<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';	
-				}else{
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+
+			{
+				data: "containerId",
+				visible: true,
+				render: function(data, type, full, meta) {
+					$("#containerId").val(data);
+					var userRole = $("#globalUserRole").val();
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+
+					if ($("#containerStatus").val() == 2) {
+						if (userRole === "CAPTURISTA") {
+							return btnActualizar;
+						} else {
+							return btnActualizar + btnInspeccionar;
+						}
+					} else {
+						return btnActualizar;
+					}
 				}
-				
-				
-			}},
+			},
+
 		],
 		
 		order: [[1, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
+
 		$("#inspectionTable").DataTable({
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
@@ -2165,7 +2195,7 @@ function saveInspection(){
 function fullEntry() {
 	if ($("#newCondition").val() === "LLENO") {
 		$("#typeServicePregate").val("CARRIER");
-		$("#newBillToPregate").val("CARRIER");
+
 
 		if($("#shippingCompanyRef").val()  === "7"){
 			document.getElementById("modelYearLb").removeAttribute("hidden");
