@@ -307,7 +307,7 @@ function configDataTable() {
 							return $("#usersDescriptions>option:selected").html();
 						}},
 			{ data: "paymentCheck", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="ver el Comprobante" onclick="showPaymentCheck(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp;';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver el Comprobante" onclick="showPaymentCheck(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp;';
 			}},
 			{data: 'status', visible : true, render : function(data) {
 							$("#status").val(data);
@@ -1085,7 +1085,7 @@ function addContainer(){
 		for (var i = 0; i < filas; i++) {
 		currentData = $("#containerTable").DataTable().row(i).column(2).data();
 		if($("#newBooking").val()==currentData[i]){
-			Swal.fire("El booking ya esta registrado ingrese un numero de contenedor diferente", "", "warning");
+			Swal.fire("El booking ya esta registrado ingrese un número de contenedor diferente", "", "warning");
 			contador++;
 		}
 		

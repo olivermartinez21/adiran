@@ -60,7 +60,7 @@
 			<div class="row">
 				<div class="col-sm">
 					<div class="form-group">
-						<label for="newShippingConpanyInspection">Linea Naviera</label>
+						<label for="newShippingConpanyInspection">Línea naviera</label>
 						<select class="form-control" id="newShippingConpanyInspection">
 							<option value="0">Todas las navieras</option>
 							<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
@@ -69,13 +69,13 @@
 				</div>
 				<div class="col-sm">
 					<div class="form-group">
-						<label for="jobcodeLabor">Mano de Obra</label>
+						<label for="jobcodeLabor">Mano de obra</label>
 						<input type="text" class="form-control" id="jobcodeLabor" placeholder="$$$" >
 					</div>
 				</div>
 				<div class="col-sm">
 					<div class="form-group">
-						<label for="jobcodeLabor">Costo Maniobra</label>
+						<label for="jobcodeLabor">Costo maniobra</label>
 						<input type="text" class="form-control" id="maneuverCost" placeholder="$$$" >
 					</div>
 				</div>
@@ -100,25 +100,25 @@
 				<thead>
 				<tr>
 					<th>jobcodeId</th>
-					<th>Codigo de Trabajo</th>
-					<th>Description</th>
+					<th>Código de Trabajo</th>
+					<th>Descriptión</th>
 					<th>Material</th>
 					<th>HH</th>
 					<th>Exchange</th>
 					<th>JOBCODE_SHIPPINGID</th>
-					<th>opciones</th>
+					<th>Opciones</th>
 				</tr>
 				</thead>
 				<tfoot>
 				<tr>
 					<th>jobcodeId</th>
-					<th>Codigo de Trabajo</th>
-					<th>Description</th>
+					<th>Código de Trabajo</th>
+					<th>Descriptión</th>
 					<th>Material</th>
 					<th>HH</th>
 					<th>Exchange</th>
 					<th>JOBCODE_SHIPPINGID</th>
-					<th>opciones</th>
+					<th>Opciones</th>
 				</tr>
 				</tfoot>
 			</table>

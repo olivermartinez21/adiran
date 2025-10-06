@@ -22,7 +22,7 @@
 			 	<select class="form-control" id="status" hidden=true>
 						<option value="1">CREADA</option>
 						<option value="2">ACEPTADA</option>
-						<option value="3">EN INSPECCION</option>
+						<option value="3">EN INSPECCIÓN</option>
 						<option value="4">EN PROCESO</option>
 						<option value="5">CONFIRMADO</option>
 		</select>
@@ -47,7 +47,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<option value="3">DAÑADO/PTI </option>
-									<option value="4">EVACUACION</option>
+									<option value="4">EVACUACiÓN</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOOS</option>
@@ -126,7 +126,7 @@
 									<option value=1>Por crear</option>
 									<option value=2>Creado</option>
 									<option value=3>Aprobado</option>
-									<option value=4>Reparación Confirmada</option>
+									<option value=4>Reparación confirmada</option>
 									<option value=5>Actualizar  </option>
 									<option value=6>Cancelado</option>
 									<option value=7>Actualizado</option>
@@ -147,14 +147,14 @@
 										<Th>Estado Del Estimado</Th>
 										<Th>Tipo Equipo</Th>
 										<Th>Tamaño</Th>
-										<Th>Dias De Estadia</Th> 
+										<Th>Días De Estadia</Th> 
 										<Th>Asignado A: </Th>
-										<Th>Fecha De Inicio De Reparación</Th> 
-										<Th>Fecha De Fin De La Reparación</Th>
+										<Th>Fecha Inicio De Reparación</Th> 
+										<Th>Fecha Fin De Reparación</Th>
 										<Th>Estado De La Unidad</Th>
 										<Th>Grado Calidad</Th>
-										<Th>Opcion</Th>
-										<Th>Tecnologia</Th>
+										<Th>Opción </Th>
+										<Th>Tecnología </Th>
 										<Th>Maquinaria</Th>
 										<Th>Comentarios</Th>
 										<Th>Daños</Th>
@@ -171,14 +171,14 @@
 										<Th>Estado Del Estimado</Th>
 										<Th>Tipo Equipo</Th>
 										<Th>Tamaño</Th>
-										<Th>Dias De Estadia</Th> 
+										<Th>Días De Estadia</Th> 
 										<Th>Asignado A: </Th>
-										<Th>Fecha De Inicio De Reparación</Th> 
-										<Th>Fecha De Fin De La Reparación</Th>
+										<Th>Fecha Inicio De Reparación</Th> 
+										<Th>Fecha Fin De Reparación</Th>
 										<Th>Estado De La Unidad</Th>
 										<Th>Grado Calidad</Th>
-										<Th>Opcion</Th>
-										<Th>Tecnologia</Th>
+										<Th>Opción </Th>
+										<Th>Tecnología </Th>
 										<Th>Maquinaria</Th>
 										<Th>Comentarios</Th>
 										<Th>Daños</Th>
@@ -197,7 +197,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Informacion de reparación</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Información de reparación</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -218,14 +218,14 @@
 							
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="startDate">Fecha de inicio de reparacion</label>
+									<label for="startDate">Fecha inicio de reparación</label>
 									<input type="date" class="form-control" id="startDate" >
 								</div>
 							</div>
 							
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="finalDate">fecha final de reparacion</label>
+									<label for="finalDate">Fecha final de reparación</label>
 									<input type="date" class="form-control" id="finalDate" >
 								</div>
 							</div>
@@ -260,7 +260,7 @@
 								<thead>
 									<tr>
 									    <th >id </th>
-										<th>Seccion </th>
+										<th>Sección</th>
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Método De Reparación</th>
@@ -269,7 +269,7 @@
 										<th>Área Cm2</th>
 										<th>Profunidad </th>
 										<th>Responsabilidad Del Daño </th>
-										<th>Cobrar a </th>
+										<th>Cobrar A </th>
 										<th>Código De Localización</th> 
 										<th>Cantidad </th>
 <!-- 										<th>Fabricante </th> -->
@@ -284,7 +284,7 @@
 										<th>Tarifa </th>
 										<th>Fotos </th>
 										<th>Observaciones</th>
-										<th>status</th>
+										<th>Status</th>
 										<th>Confirmar Reparación</th>
 									</tr>
 								</thead>
@@ -376,7 +376,7 @@
 						
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newRepair">Métodos de Reparación</label>
+									<label for="newRepair">Métodos de reparación</label>
 									<select class="form-control" id="newRepair">
 									<option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
 									</select>
@@ -402,7 +402,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<!--									Cambiar por Cobrar a-->
-									<label for="customerName">A quien se cobra:</label>
+									<label for="customerName">Cobrar a:</label>
 									<input type="text" class="form-control" id="customerName" name="example" list="newAgencyDamageList">
 									<datalist id="newAgencyDamageList" >
 										<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
@@ -519,7 +519,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Cambio de Estatus por Reparación</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Cambio de status por reparación</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -535,7 +535,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<option value="3">DAÑADO/PTI </option>
-									<option value="4">EVACUACION</option>
+									<option value="4">EVACUACIÓN</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOOS</option>
