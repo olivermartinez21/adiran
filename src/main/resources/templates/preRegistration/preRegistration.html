@@ -23,12 +23,12 @@
 		<select class="form-control" id="status" hidden=true>
 						<option value="1">CREADA</option>
 						<option value="2">ACEPTADA</option>
-						<option value="3">EN INSPECCION</option>
+						<option value="3">EN INSPECCIÓN</option>
 						<option value="4">EN PROCESO</option>
 						<option value="5">CONFIRMADO</option>
 						<option value="6">EN TALLER</option>
 						<option value="7">LISTO</option>
-						<option value="8">PRUEBA TECNICA</option>
+						<option value="8">PRUEBA TÉCNICA</option>
 						<option value="9">FINALIZADO</option>
 						
 		</select>
@@ -155,14 +155,14 @@
 						<th>Teléfono</th>
 						<th>Agencia Aduanal</th>
 						<th>Compañía Transportista</th>
-						<th>Tipo de Cliente</th>
+						<th>Tipo De Cliente</th>
 						<th>Contenedores</th>
-						<th>Tipo de Factura</th>
-						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Tipo De Factura</th>
+						<th>Tipo De Servicio</th>
+						<th>Método De Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
@@ -175,14 +175,14 @@
 						<th>Teléfono</th>
 						<th>Agencia Aduanal</th>
 						<th>Compañía Transportista</th>
-						<th>Tipo de Cliente</th>
+						<th>Tipo De Cliente</th>
 						<th>Contenedores</th>
-						<th>Tipo de Factura</th>
-						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Tipo De Factura</th>
+						<th>Tipo De Servicio</th>
+						<th>Método De Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -223,14 +223,14 @@
 						<th>Teléfono</th>
 						<th>Agencia Aduanal</th>
 						<th>Compañía Transportista</th>
-						<th>Tipo de Cliente</th>
+						<th>Tipo De Cliente</th>
 						<th>Contenedores</th>
-						<th>Tipo de Factura</th>
-						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Tipo De Factura</th>
+						<th>Tipo De Servicio</th>
+						<th>Método De Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
@@ -243,14 +243,14 @@
 						<th>Teléfono</th>
 						<th>Agencia Aduanal</th>
 						<th>Compañía Transportista</th>
-						<th>Tipo de Cliente</th>
+						<th>Tipo De Cliente</th>
 						<th>Contenedores</th>
-						<th>Tipo de Factura</th>
-						<th>Tipo de Servicio</th>
-						<th>Método de pago</th>
+						<th>Tipo De Factura</th>
+						<th>Tipo De Servicio</th>
+						<th>Método De Pago</th>
 						<th>Usuario</th>
 						<th>Comprobante</th>
-						<th>status</th>
+						<th>Status</th>
 						<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -261,7 +261,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addOrderModalLabel">Pre Salida </h5>
+						<h5 class="modal-title" id="addOrderModalLabel">Pre-Salida </h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -275,7 +275,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 <!--	Cambiar propiedad -->
-									<label for="newDateAppointment" id="datelabel">Fecha de Evento</label>
+									<label for="newDateAppointment" id="datelabel">Fecha de evento</label>
 									<input type="date" class="form-control" id="dateAppointment"  min=""  >
 								</div>
 							</div>
@@ -387,7 +387,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerSize">Estatus</label>
+									<label for="newContainerSize">Status</label>
 									<select class="form-control" id="newContainerSize">
 									<option >Aprobado</option>
 									<option >Denegado</option>
@@ -407,7 +407,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newCustomer">Compañía Transportista</label>
+									<label for="newCustomer">Compañía transportista</label>
 									<input type="text" class="form-control" id="newCustomer" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -514,7 +514,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 <!--	Cambiar propiedad -->
-									<label for="newDateAppointment" id="datelabel">Fecha de Evento</label>
+									<label for="newDateAppointment" id="datelabel">Fecha de evento</label>
 									<input type="date" class="form-control" id="dateAppointment"  min=""  >
 								</div>
 							</div>
@@ -552,7 +552,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newTelephone">Fecha de Real</label>
+									<label for="newTelephone">Fecha real</label>
 									<input type="date" class="form-control" id="dateAppointment"  min=""  >
 								</div>
 							</div>
@@ -609,7 +609,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newContainerSize">Tamaño de la Unidad</label>
+									<label for="newContainerSize">Tamaño de la unidad</label>
 									<select class="form-control" id="newContainerSize">
 									<option >20</option>
 									<option >40</option>
@@ -630,7 +630,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newCustomer">Compañía Transportista</label>
+									<label for="newCustomer">Compañía transportista</label>
 									<input type="text" class="form-control" id="newCustomer" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -660,13 +660,13 @@
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newInvoicingType">Carta Porte</label>
+									<label for="newInvoicingType">Carta porte</label>
 									<input type="text" class="form-control" id="newTelephone" >
 								</div>
 							</div>
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label for="newInvoicingType">Pais</label>
+									<label for="newInvoicingType">País</label>
 									<input type="text" class="form-control" id="newTelephone" >
 								</div>
 							</div>
@@ -720,7 +720,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -734,9 +734,9 @@
 										<th>Container</th>
 										<th>Lado</th>
 										<th>Daño</th>
-										<th>Codigo de daño</th>
+										<th>Código De Daño</th>
 										<th>Referencia</th>
-										<th>Tipo de cliente</th>
+										<th>Tipo De Cliente</th>
 										<th>Imagen</th>
 										<th>Costo</th>
 									</tr>
@@ -747,9 +747,9 @@
 										<th>Container</th>
 										<th>Lado</th>
 										<th>Daño</th>
-										<th>Codigo de daño</th>
+										<th>Código De Daño</th>
 										<th>Referencia</th>
-										<th>Tipo de cliente</th>
+										<th>Tipo De Cliente</th>
 										<th>Imagen</th>
 										<th>Costo</th>
 									</tr>
