@@ -25,7 +25,7 @@
 									<option value="3">EN TALLER</option>
 									<option value="4">LISTO</option>
 									<option value="5">VISTO BUENO</option>
-									<option value="7">PRUEBA TÉCNICA</option>
+									<option value="7">PRUEBA TECNICA</option>
 									<option value="8">COMPLETO</option>
 				</select>
 				
@@ -63,7 +63,7 @@
 				<thead>
 					<tr>
 						<th>containerId</th>
-						<th>Día De Registro</th>
+						<th>Dia de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -73,15 +73,15 @@
 						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
-						<th>Estado Del Estimado</th>
-						<th>Condición Pregate</th>
+						<th>Estado del estimado</th>
+						<th>Condicion Pregate</th>
 						<th>Opciones</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 						<th>containerId</th>
-						<th>Día De Registro</th>
+						<th>Dia de Registro</th>
 						<th>Nomenclatura</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -91,8 +91,8 @@
 						<th>Grado-Calidad</th>
 						<th>Estado</th>
 						<th>Eir</th>
-						<th>Estado Del Estimado</th>
-						<th>Condición Pregate</th>
+						<th>Estado del estimado</th>
+						<th>Condicion Pregate</th>
 						<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -121,7 +121,7 @@
 					<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newShippingConpanyInspection">Linea naviera</label>
+									<label for="newShippingConpanyInspection">Linea Naviera</label>
 									<select class="form-control" id="newShippingConpanyInspection">
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>
@@ -143,7 +143,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 <!-- 									<option value="3">DAÑADO/PTI </option> -->
-									<option value="4">EVACUACIÓN</option>
+									<option value="4">EVACUACION</option>
 <!-- 									<option value="5">PTI</option> -->
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOSS</option>
@@ -177,7 +177,7 @@
 							
 							<div class="col-sm" id=divDiesel hidden=true>
 								<div class="form-group" >
-									<label for="newDiesel">Nivel de diésel</label>
+									<label for="newDiesel">Nivel de Diesel</label>
 									<input type="text" class="form-control" id="newDiesel" >
 								</div>
 							</div>
@@ -254,10 +254,10 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="tecnologyInspection">Técnologia </label>
+									<label for="tecnologyInspection">Tecnologia </label>
 									<select class="form-control" id="tecnologyInspection">
-									<option >Estándar: sin fabricantes</option>
-									<option >Atmosfera controlada</option>
+									<option >Estándar: Sin fabricantes</option>
+									<option >Atmosfera Controlada</option>
 									<option >XTEND FRESH</option>
 									<option >EXTRA FRESH</option>
 									<option >LIVENTUS</option>
@@ -268,7 +268,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="unitAsosiateInspection">Unidad asociada</label>
+									<label for="unitAsosiateInspection">Unidad Asociada</label>
 									<input type="text" class="form-control" id="unitAsosiateInspection" placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
 								</div>
 							</div>
@@ -283,13 +283,13 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="horometroInspection">Horómetro</label>
+									<label for="horometroInspection">Horometro </label>
 									<input type="text" class="form-control" id="horometroInspection">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="unitAsosiateInspectiongenset">Unidad asociada</label>
+									<label for="unitAsosiateInspectiongenset">Unidad Asociada</label>
 									<input type="text" class="form-control" id="unitAsosiateInspectiongenset" placeholder="Ejem: XXXX1234567" size="11" maxlength="11" style="text-transform:uppercase">
 								</div>
 							</div>
@@ -299,13 +299,13 @@
 						
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newYear">Año de la unidad</label>
+									<label for="newYear">Año de la Unidad</label>
 									<input type="text" class="form-control" id="newYear">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newAptTo">Apto para</label>
+									<label for="newAptTo">Apto Para</label>
 									<input type="text" class="form-control" id="newAptTo">
 								</div>
 							</div>
@@ -345,7 +345,7 @@
 							</div>
 							<div class="col-sm" id=divVentilation>
 								<div class="form-group">
-									<label for="newVentilation">Ventilación</label>
+									<label for="newVentilation">Ventilacion</label>
 									<input type="text" class="form-control" id="newVentilation" >
 								</div>
 							</div>
@@ -364,17 +364,17 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método De Reparación</th>
+										<th>Método de reparación</th>
 										<th>Observaciones</th>
-										<th>Tipo De Cliente</th>
-										<th>Cobrar A</th>
+										<th>Tipo de Cliente</th>
+										<th>Cobrar a</th>
 										<th>Imagen</th>
-										<th>Largo</th>
-										<th>Ancho</th>
-										<th>Profundidad</th>
-										<th>Largo</th>
-										<th>UnidadLargo</th>
-										<th>Cantidad</th>
+										<th>largo</th>
+										<th>ancho</th>
+										<th>profundidad</th>
+										<th>largo</th>
+										<th>unidadLargo</th>
+										<th>cantidad</th>
 										<th>Opciones</th>
 									</tr>
 								</thead>
@@ -385,17 +385,17 @@
 										<th>Componente</th>
 										<th>Daño</th>
 										<th>Localización</th>
-										<th>Método De Reparación</th>
+										<th>Método de reparación</th>
 										<th>Observaciones</th>
-										<th>Tipo De Cliente</th>
-										<th>Cobrar A</th>
+										<th>Tipo de Cliente</th>
+										<th>Cobrar a</th>
 										<th>Imagen</th>
-										<th>Largo</th>
-										<th>Ancho</th>
-										<th>Profundidad</th>
-										<th>Largo</th>
-										<th>UnidadLargo</th>
-										<th>Cantidad</th>
+										<th>largo</th>
+										<th>ancho</th>
+										<th>profundidad</th>
+										<th>largo</th>
+										<th>unidadLargo</th>
+										<th>cantidad</th>
 										<th>Opciones</th>
 									</tr>
 								</tfoot>
@@ -412,7 +412,7 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="name">Nombre del operador</label>
+									<label for="name">Nombre del Operador</label>
 									<input type="text" class="form-control" id="name" required >
 								</div>
 							</div>
@@ -432,7 +432,7 @@
 												<input type="button" class="btn btn-dark" id="draw-clearBtn" value="Limpiar Firma"></input>
 												<label hidden=true>Color</label >
 												<input type="color" id="color" hidden=true>
-												<label>Tamaño puntero</label>
+												<label>Tamaño Puntero</label>
 												<input type="range" id="puntero" min="1"  max="5" width="10%">
 											</div>
 										</div>
@@ -537,7 +537,7 @@
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="newContainerTypeSave">Descripción de la unidad</label>
+									<label for="newContainerTypeSave">Descripcion de la Unidad</label>
 									<select class="form-control" id="newContainerTypeSave" onclick="setCodeDescription()" >
 									<option value="1">CHASSIS</option>
 									<option value="2">OPEN TOP</option>
@@ -560,7 +560,7 @@
 							
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Vin no° serie</label>
+									<label for="newContainer">Vin no° Serie</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
@@ -572,13 +572,13 @@
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Título</label>
+									<label for="newContainer">Titulo</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
 							<div class="col-sm" hidden=true>
 								<div class="form-group">
-									<label for="newContainer">Distan. ejes.</label>
+									<label for="newContainer">Distan. Ejes.</label>
 									<input type="text" class="form-control" id="newContainer">
 								</div>
 							</div>
@@ -624,7 +624,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Nuevo evento</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Nuevo Evento</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -659,7 +659,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<!--<option value="3">DAÑADO/PTI </option>-->
-									<option value="4">EVACUACIÓN</option>
+									<option value="4">EVACUACION</option>
 									<!--<option value="5">PTI</option>-->
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOSS</option>
@@ -735,7 +735,7 @@
 							</div>
 								<div class="col-sm">
 									<div class="form-group">
-										<label for="sapSaleOrder">Tipo de movimiento aduanal</label>
+										<label for="sapSaleOrder">Tipo de Movimiento Aduanal</label>
 <!--										<input type="text" class="form-control" id="sapSaleOrder">-->
 										<select class="form-control" id="sapSaleOrder">
 											<option value="" selected>No Aplica</option>
@@ -1041,7 +1041,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1103,7 +1103,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1114,55 +1114,55 @@
 								<thead>
 									<tr>
 									<th>eventId</th>
-									<th>Tipo De Evento</th> 
-									<th>Fecha Del Evento</th>
-									<th>EstimateRequired</th>
-									<th>Inspected</th> 
-									<th>InspectedBy</th> 
-									<th>Booking</th>
-									<th>FillState</th>
-									<th>AlternateUnit</th>
-									<th>AssociatedUnit</th>
-									<th>TransportType</th>
-									<th>SapSaleOrder</th>
-									<th>UnitQuality</th>
-									<th>UnitClasification</th>
-									<th>SealNumber</th>
-									<th>CustomerIdentifier</th>
-									<th>Type</th>
-									<th>Model</th>
-									<th>Location</th>
-									<th>Container</th>
-									<th>ModelYear</th>
-									<th>ContainerId</th>
-									<th>Transmit</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
 									</tr>
 								</thead>
 								<tfoot>
 									<tr>
 									<th>eventId</th>
-									<a>Tipo De Evento</a> 
-									<th>Fecha Del Evento</th>
-									<th>EstimateRequired</th>
-									<th>Inspected</th> 
-									<th>InspectedBy</th> 
-									<th>Booking</th>
-									<th>FillState</th>
-									<th>AlternateUnit</th>
-									<th>AssociatedUnit</th>
-									<th>TransportType</th>
-									<th>SapSaleOrder</th>
-									<th>UnitQuality</th>
-									<th>UnitClasification</th>
-									<th>SealNumber</th>
-									<th>CustomerIdentifier</th>
-									<th>Type</th>
-									<th>Model</th>
-									<th>Location</th>
-									<th>Container</th>
-									<th>ModelYear</th>
-									<th>ContainerId</th>
-									<th>Transmit</th>
+									<th>Tipo de evento</th> 
+									<th>Fecha del evento</th>
+									<th>estimateRequired</th>
+									<th>inspected</th> 
+									<th>inspectedBy</th> 
+									<th>booking</th>
+									<th>fillState</th>
+									<th>alternateUnit</th>
+									<th>associatedUnit</th>
+									<th>transportType</th>
+									<th>sapSaleOrder</th>
+									<th>unitQuality</th>
+									<th>unitClasification</th>
+									<th>sealNumber</th>
+									<th>customerIdentifier</th>
+									<th>type</th>
+									<th>model</th>
+									<th>location</th>
+									<th>container</th>
+									<th>modelYear</th>
+									<th>containerId</th>
+									<th>transmit</th>
 									</tr>
 								</tfoot>
 							</table>
@@ -1181,7 +1181,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -1196,7 +1196,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<!--<option value="3">DAÑADO/PTI </option>-->
-									<option value="4">EVACUACIÓN</option>
+									<option value="4">EVACUACION</option>
 									<!--<option value="5">PTI</option>-->
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOSS</option>
@@ -1286,7 +1286,7 @@
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newTransportCompanyPregate">Empresa transportista</label>
+									<label for="newTransportCompanyPregate">Empresa Transportista</label>
 									<input type="text" class="form-control" id="newTransportCompanyPregate" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -1310,7 +1310,7 @@
 					<div class="row">
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newOperatorNamePregate">Nombre del operador</label>
+									<label for="newOperatorNamePregate">Nombre del Operador</label>
 									<input type="text" class="form-control" id="newOperatorNamePregate">
 								</div>
 							</div>
@@ -1322,7 +1322,7 @@
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newEconomicNumber">Número del económico</label>
+									<label for="newEconomicNumber">Numero del economico</label>
 									<input type="text" class="form-control" id="newEconomicNumber">
 								</div>
 							</div>
@@ -1355,7 +1355,7 @@
 								<div class="form-group">
 									<label for="newPart">Sección</label>
 									<select class="form-control" id="newPart" oninput="showComponents()" >
-									<option value="0">Selecciona una opción</option>
+									<option value="0">Selecciona una opcion</option>
 									</select> 
 								</div>
 							</div>
@@ -1395,7 +1395,7 @@
 						
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newRepair">Métodos de reparación</label>
+									<label for="newRepair">Métodos de Reparación</label>
 									<select class="form-control" id="newRepair">
 									<option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
 									</select>
