@@ -25,7 +25,7 @@
 									<option value="1">DISPONIBLE</option>
 									<option value="2">DAÑADO</option>
 									<option value="3">DAÑADO/PTI </option>
-									<option value="4">EVACUACIÓN</option>
+									<option value="4">EVACUACION</option>
 									<option value="5">PTI</option>
 									<option value="6">BLOQUEADO/GX</option>
 									<option value="7">TOTAL LOOS</option>
@@ -42,7 +42,7 @@
 						<div class="form-group">
 							<label for="orderListCmb">Tipo de asignaciones</label>
 							<select class="form-control" id="orderListCmb" name="orderList" onclick="showAssigments()">
-							<option>Selecciona una opción</option>
+							<option>Selecciona una opcion</option>
 							<option>Asignaciones o booking</option>
 							<option>Asignaciones de unidades llenas</option>
 							</select>
@@ -63,42 +63,42 @@
 				<thead>
 					<tr>
 					<th>ID</th>
-					<th>Tamaño De La Unidad</th>
-					<th>Tipo De Unidad</th>
+					<th>Tamaño de la unidad</th>
+					<th>Tipo de unidad</th>
 					<th>Booking </th>
 					<th>Propietario</th>
-					<th>Fecha De EDI</th>
-					<th>Fecha De Vencimiento Del Booking</th>
-					<th>Cantidad De Unidades</th>
+					<th>Fecha de EDI</th>
+					<th>Fecha de vencimiento del booking</th>
+					<th>Cantidad de unidades</th>
 					<th>Estatus</th>
-					<th>Tecnología</th>
-					<th>Ventilación </th>
+					<th>Tecnologia</th>
+					<th>Ventilacion</th>
 					<th>Temperatura</th>
 					<th>Humedad</th>
 					<th>Co2</th>
 					<th>o2</th>
-					<th>Nitrógeno </th>
+					<th>Nitrogeno</th>
 					<th>Opciones</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
 					<th>ID</th>
-					<th>Tamaño De La Unidad</th>
-					<th>Tipo De Unidad</th>
+					<th>Tamaño de la unidad</th>
+					<th>Tipo de unidad</th>
 					<th>Booking </th>
 					<th>Propietario</th>
-					<th>Fecha De EDI</th>
-					<th>Fecha De Vencimiento Del Booking</th>
-					<th>Cantidad De Unidades</th>
+					<th>Fecha de EDI</th>
+					<th>Fecha de vencimiento del booking</th>
+					<th>Cantidad de unidades</th>
 					<th>Estatus</th>
-					<th>Tecnología</th>
-					<th>Ventilación </th>
+					<th>Tecnologia</th>
+					<th>Ventilacion</th>
 					<th>Temperatura</th>
 					<th>Humedad</th>
 					<th>Co2</th>
 					<th>o2</th>
-					<th>Nitrógeno </th>
+					<th>Nitrogeno</th>
 					<th>Opciones</th>
 					</tr>
 				</tfoot>
@@ -140,13 +140,13 @@
 				<thead>
 					<tr>
 					<th>ID</th>
-					<th>Número Consecutivo</th>
+					<th>Número consecutivo</th>
 					<th>Unidad </th>
 					<th>Tamaño </th>
-					<th>Planta-Destino</th>
+					<th>planta-Destino</th>
 					<th>Anden</th>
-					<th>Fecha De Entrega</th>
-					<th>Hora De Entrega</th>
+					<th>Fecha de entrega</th>
+					<th>Hora de entrega</th>
 					<th>Estatus</th>
 					<th>Opciones</th>
 					</tr>
@@ -154,13 +154,13 @@
 				<tfoot>
 					<tr>
 					<th>ID</th>
-					<th>Número Consecutivo</th>
+					<th>Número consecutivo</th>
 					<th>Unidad </th>
 					<th>Tamaño </th>
-					<th>Planta-Destino</th>
+					<th>planta-Destino</th>
 					<th>Anden</th>
-					<th>Fecha De Entrega</th>
-					<th>Hora De Entrega</th>
+					<th>Fecha de entrega</th>
+					<th>Hora de entrega</th>
 					<th>Estatus</th>
 					<th>Opciones</th>
 					</tr>
@@ -172,7 +172,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addBookinglLabel">Crear booking o reserva</h5>
+						<h5 class="modal-title" id="addBookinglLabel">Crear Booking o Reserva</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -196,7 +196,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newFinalClientBooking">Cliente final</label>
+									<label for="newFinalClientBooking">Cliente Final</label>
 									<select class="form-control" id="newFinalClientBooking">
 									<option th:each="option : ${catFinalClient}" th:value="${option.finalClientId}" th:text="${option.clientName}"></option>
 									</select>
@@ -221,19 +221,19 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newWorkOrderBooking">Work order</label>
+									<label for="newWorkOrderBooking">Work Order</label>
 									<input type="text" class="form-control" id="newWorkOrderBooking">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newExpirationDateBooking">Fecha de expiración</label>
+									<label for="newExpirationDateBooking">Fecha de Expiracion</label>
 									<input type="date" class="form-control" id="newExpirationDateBooking">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newReleaseDateBooking">Fecha de liberacion</label>
+									<label for="newReleaseDateBooking">Fecha de Liberacion</label>
 									<input type="date" class="form-control" id="newReleaseDateBooking">
 								</div>
 							</div>
@@ -255,13 +255,13 @@
 									<th>Tipo </th>
 									<th>Tamaño </th>
 									<th>Calidad</th>
-									<th>Número De Unidad</th>
+									<th>Número de unidad</th>
 									<th>Temperatura (RF)</th>
 									<th>Ventilación (RF)</th>
 									<th>Humedad (RF)</th>
 									<th>CO2 (RF)</th>
 									<th>O2 (RF)</th>
-									<th>Nitrógeno</th>
+									<th>Nitrogeno</th>
 									</tr>
 								</thead>
 							</table>
@@ -386,7 +386,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Crear booking de unidad llena</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Crear Booking de unidad LLena</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -414,7 +414,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="plantDestination">Planta-Destino</label>
+									<label for="plantDestination">planta-Destino</label>
 									<input type="text" class="form-control" id="plantDestination">
 								</div>
 							</div>
@@ -473,7 +473,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="carrierCompany">Compañía transportista</label>
+									<label for="carrierCompany">Compañia transportista</label>
 									<input type="text" class="form-control" id="carrierCompany" name="example" list="newTransportCompanyList">
 									<datalist id="newTransportCompanyList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -491,13 +491,13 @@
 						<div class="row">
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="economicNumber">Número del económico</label>
+									<label for="economicNumber">Número del economico</label>
 									<input type="text" class="form-control" id="economicNumber">
 								</div>
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="workOrder">Work order / Carta porte</label>
+									<label for="workOrder">Work Order / Carta Porte</label>
 									<input type="text" class="form-control" id="workOrder">
 								</div>
 							</div>
@@ -525,7 +525,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Asignar</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Assignar</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -601,7 +601,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="addContainerlLabel">Asignar</h5>
+						<h5 class="modal-title" id="addContainerlLabel">Assignar</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -635,7 +635,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="unitNumberBookingInformation">Número de Unidad</label>
+									<label for="unitNumberBookingInformation">Numero de Unidad</label>
 									<input type="text" class="form-control" id="unitNumberBookingInformation">
 								</div>
 							</div>
@@ -676,7 +676,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="nitrogenBookingInformation">Nitrógeno </label>
+									<label for="nitrogenBookingInformation">Nitrogeno </label>
 									<input type="text" class="form-control" id="nitrogenBookingInformation">
 								</div>
 							</div>

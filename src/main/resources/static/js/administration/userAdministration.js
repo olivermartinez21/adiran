@@ -47,7 +47,7 @@ function configDataTable() {
 			{data: 'userName'},
 			{data: 'roleList'},
 			{data: 'userId', render : function(data) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar nuevo rol" onclick="assignRole(\'' + data + '\');"><i class="fas fa-arrows-alt-h"></i></button>&nbsp;'  +
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar nuevo Rol" onclick="assignRole(\'' + data + '\');"><i class="fas fa-arrows-alt-h"></i></button>&nbsp;'  +
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de rol" onclick="removeRole(\'' + data + '\');"><i class="fas fa-user-minus"></i></button>&nbsp;' + 
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Baja de usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
 			}}

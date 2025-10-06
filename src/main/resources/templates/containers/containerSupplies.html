@@ -56,18 +56,18 @@
                 <th>containerId</th>
                 <!-- 						Dia de inspeccion [GATEIN] -->
                 <th>GateIn</th>
-                <th>Días Estadía </th>
+                <th>Dias estadia</th>
                 <th>Unidad</th>
                 <th>Propietario</th>
                 <th>Tamaño</th>
                 <th>Tipo</th>
-                <th>Condición(Vacio/Lleno)</th>
+                <th>Condicion(Vacio/Lleno)</th>
                 <th>Estado</th>
                 <th>Grado - Calidad</th>
                 <th>Estado</th>
                 <th>Planta/Destino</th>
                 <th>Comentarios</th>
-                <th>Día Salida</th>
+                <th>Dia salida</th>
                 <th>Opciones</th>
             </tr>
             </thead>
@@ -76,18 +76,18 @@
                 <th>containerId</th>
                 <!-- 						Dia de inspeccion [GATEIN] -->
                 <th>GateIn</th>
-                <th>Días Estadía </th>
+                <th>Dias estadia</th>
                 <th>Unidad</th>
                 <th>Tipo</th>
                 <th>Tamaño</th>
-                <th>Condición(Vacio/Lleno)</th>
+                <th>Condicion(Vacio/Lleno)</th>
                 <th>Propietario</th>
                 <th>Estado</th>
                 <th>Grado - Calidad</th>
                 <th>Estado</th>
                 <th>Planta/Destino</th>
                 <th>Comentarios</th>
-                <th>Día Salida</th>
+                <th>Dia salida</th>
                 <th>Opciones</th>
             </tr>
             </tfoot>
@@ -98,7 +98,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="inspectionModalLabel">Inspección</h5>
+                    <h5 class="modal-title" id="inspectionModalLabel">Inspeccion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -159,7 +159,7 @@
 
                             <div class="col-sm" id=divDiesel hidden=true>
                                 <div class="form-group" >
-                                    <label for="newDiesel">Nivel de diésel</label>
+                                    <label for="newDiesel">Nivel de Diesel</label>
                                     <input type="text" class="form-control" id="newDiesel" >
                                 </div>
                             </div>
@@ -226,13 +226,13 @@
 
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newYear">Año de la unidad</label>
+                                    <label for="newYear">Año de la Unidad</label>
                                     <input type="text" class="form-control" id="newYear">
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newAptTo">Apto para</label>
+                                    <label for="newAptTo">Apto Para</label>
                                     <input type="text" class="form-control" id="newAptTo">
                                 </div>
                             </div>
@@ -272,7 +272,7 @@
                             </div>
                             <div class="col-sm" id=divVentilation>
                                 <div class="form-group">
-                                    <label for="newVentilation">Ventilación</label>
+                                    <label for="newVentilation">Ventilacion</label>
                                     <input type="text" class="form-control" id="newVentilation" >
                                 </div>
                             </div>
@@ -286,7 +286,7 @@
                                     <div class="form-group">
                                         <label for="newPart">Sección</label>
                                         <select class="form-control" id="newPart" onchange="showComponents(this.value)" >
-                                            <option value="0">Selecciona una opción</option>
+                                            <option value="0">Selecciona una opcion</option>
                                         </select>
                                     </div>
                                 </div>
@@ -324,7 +324,7 @@
 
                                 <div class="col-sm">
                                     <div class="form-group">
-                                        <label for="newRepair">Métodos de reparación</label>
+                                        <label for="newRepair">Métodos de Reparación</label>
                                         <select class="form-control" id="newRepair">
                                             <option th:each="option : ${getRepairInformation}" th:value="${option.repairId}" th:text="${option.repairDescription}"></option>
                                         </select>
@@ -382,9 +382,9 @@
                                     <th>Componente</th>
                                     <th>Daño</th>
                                     <th>Localización</th>
-                                    <th>Método De Reparación</th>
+                                    <th>Método de reparación</th>
                                     <th>Observaciones</th>
-                                    <th>Tipo De Cliente</th>
+                                    <th>Tipo de Cliente</th>
                                     <th>Imagen</th>
                                     <th>Opciones</th>
                                 </tr>
@@ -396,9 +396,9 @@
                                     <th>Componente</th>
                                     <th>Daño</th>
                                     <th>Localización</th>
-                                    <th>Método De Reparación</th>
+                                    <th>Método de reparación</th>
                                     <th>Observaciones</th>
-                                    <th>Tipo De Cliente</th>
+                                    <th>Tipo de Cliente</th>
                                     <th>Imagen</th>
                                     <th>Opciones</th>
                                 </tr>
@@ -416,7 +416,7 @@
                         <div class="row">
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="name">Nombre del operador</label>
+                                    <label for="name">Nombre del Operador</label>
                                     <input type="text" class="form-control" id="name" required >
                                 </div>
                             </div>
@@ -436,7 +436,7 @@
                                             <input type="button" class="btn btn-dark" id="draw-clearBtn" value="Limpiar Firma"></input>
                                             <label hidden=true>Color</label >
                                             <input type="color" id="color" hidden=true>
-                                            <label>Tamaño puntero</label>
+                                            <label>Tamaño Puntero</label>
                                             <input type="range" id="puntero" min="1"  max="5" width="10%">
                                         </div>
                                     </div>
@@ -540,7 +540,7 @@
                             </div>
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="newContainerTypeSave">Descripción de la unidad</label>
+                                    <label for="newContainerTypeSave">Descripcion de la Unidad</label>
                                     <select class="form-control" id="newContainerTypeSave" onclick="setCodeDescription()" >
                                         <option value="1">CHASSIS</option>
                                         <option value="2">OPEN TOP</option>
@@ -554,7 +554,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newShippingConpanyContainer">ID cliente / naviera</label>
+                                    <label for="newShippingConpanyContainer">ID Cliente / Naviera</label>
                                     <select class="form-control" id="newShippingConpanyContainer">
                                         <option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
                                     </select>
@@ -563,7 +563,7 @@
 
                             <div class="col-sm" hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Vin no° serie</label>
+                                    <label for="newContainer">Vin no° Serie</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -575,13 +575,13 @@
                             </div>
                             <div class="col-sm" hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Título</label>
+                                    <label for="newContainer">Titulo</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
                             <div class="col-sm" hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Distan. ejes.</label>
+                                    <label for="newContainer">Distan. Ejes.</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -627,7 +627,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="addContainerlLabel">Nuevo evento</h5>
+                    <h5 class="modal-title" id="addContainerlLabel">Nuevo Evento</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -637,7 +637,7 @@
                         <div class="row">
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newEventType">Tipo de evento</label>
+                                    <label for="newEventType">Tipo de Evento</label>
                                     <select class="form-control" id="newEventType">
                                         <OPTION VALUE="1">GATE-IN</OPTION>
                                         <OPTION VALUE="2">GATE-OUT</OPTION>
@@ -646,7 +646,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newContainerNameEvent">ID unidad</label>
+                                    <label for="newContainerNameEvent">ID Unidad</label>
                                     <input type="text" class="form-control" id="newContainerNameEvent" disabled>
                                 </div>
                             </div>
@@ -681,7 +681,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="shippingCompanyEvent">Propietario</label>
+                                    <label for="shippingCompanyEvent">propietario</label>
                                     <select class="form-control" id="newShippingCompanyEvent" disabled>
                                         <option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
                                     </select>
@@ -703,7 +703,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newNumEvent">NO° de evento</label>
+                                    <label for="newNumEvent">NO° de Evento</label>
                                     <input type="text" class="form-control" id="newNumEvent" disabled>
                                 </div>
                             </div>
@@ -715,7 +715,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newTransportCompany">Compañía transportista</label>
+                                    <label for="newTransportCompany">Compañia Transportista</label>
                                     <input type="text" class="form-control" id="newTransportCompany">
                                 </div>
                             </div>
@@ -764,7 +764,7 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newEstimateRequired">Estimado requerido</label>
+                                    <label for="newEstimateRequired">Estimado requ</label>
                                     <select class="form-control" id="newEstimateRequired">
                                         <OPTION VALUE="1">SI</OPTION>
                                         <OPTION VALUE="2">NO</OPTION>
@@ -787,19 +787,19 @@
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newOperatorName">Nombre del operador</label>
+                                    <label for="newOperatorName">Nombre del Operador</label>
                                     <input type="text" class="form-control" id="newOperatorName">
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newNumPlates">Número de placas</label>
+                                    <label for="newNumPlates">Numero de Placas</label>
                                     <input type="text" class="form-control" id="newNumPlates">
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newOperatorsLicence">Licencia del operador</label>
+                                    <label for="newOperatorsLicence">Licencia del Operador</label>
                                     <input type="text" class="form-control" id="newOperatorsLicence">
                                 </div>
                             </div>
@@ -807,13 +807,13 @@
                         <div class="row">
                             <div class="col-sm"  hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Unidad asociada</label>
+                                    <label for="newContainer">Unidad Asociada</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
                             <div class="col-sm"  hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Unidad alterna</label>
+                                    <label for="newContainer">Unidad Alterna</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -826,7 +826,7 @@
                                         <option value="1">DISPONIBLE</option>
                                         <option value="2">DAÑADO</option>
                                         <option value="3">DAÑADO/PTI </option>
-                                        <option value="4">EVACUACIÓN</option>
+                                        <option value="4">EVACUACION</option>
                                         <option value="5">PTI</option>
                                         <option value="6">BLOQUEADO/GX</option>
                                         <option value="7">TOTAL LOOS</option>
@@ -852,7 +852,7 @@
 
                             <div class="col-sm"  hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Media maniobra</label>
+                                    <label for="newContainer">Media Maniobra</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -878,25 +878,25 @@
                         <div class="row">
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newTransportType">Tipo de transporte</label>
+                                    <label for="newTransportType">Tipo de Transporte</label>
                                     <input type="text" class="form-control" id="newTransportType">
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="newOriginPlace">Lugar de origen</label>
+                                    <label for="newOriginPlace">Lugar de Origen</label>
                                     <input type="text" class="form-control" id="newOriginPlace">
                                 </div>
                             </div>
                             <div class="col-sm"  hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Horas genset</label>
+                                    <label for="newContainer">Horas Genset</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
                             <div class="col-sm"  hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Diésel CM</label>
+                                    <label for="newContainer">Diesel CM</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -904,13 +904,13 @@
                         <div class="row">
                             <div class="col-sm" hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Prdido de venta SAP</label>
+                                    <label for="newContainer">Prdido de venta Sap</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
                             <div class="col-sm" hidden=true>
                                 <div class="form-group">
-                                    <label for="newContainer">Factura SAP</label>
+                                    <label for="newContainer">Factura Sap</label>
                                     <input type="text" class="form-control" id="newContainer">
                                 </div>
                             </div>
@@ -930,7 +930,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
+                    <h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -992,7 +992,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="inspectionlLabel">Estimados de inspección</h5>
+                    <h5 class="modal-title" id="inspectionlLabel">Estimados de inspeccion</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1003,55 +1003,55 @@
                             <thead>
                             <tr>
                                 <th>eventId</th>
-                                <th>Tipo De Evento</th> 
-								<th>Fecha Del Evento</th>
-								<th>EstimateRequired</th>
-								<th>Inspected</th> 
-								<th>InspectedBy</th> 
-								<th>Booking</th>
-								<th>FillState</th>
-								<th>AlternateUnit</th>
-								<th>AssociatedUnit</th>
-								<th>TransportType</th>
-								<th>SapSaleOrder</th>
-                                <th>UnitQuality</th>
-								<th>UnitClasification</th>
-								<th>SealNumber</th>
-								<th>CustomerIdentifier</th>
-								<th>Type</th>
-								<th>Model</th>
-								<th>Location</th>
-								<th>Container</th>
-								<th>ModelYear</th>
-								<th>ContainerId</th>
-								<th>Transmit</th>
+                                <th>Tipo de evento</th>
+                                <th>Fecha del evento</th>
+                                <th>estimateRequired</th>
+                                <th>inspected</th>
+                                <th>inspectedBy</th>
+                                <th>booking</th>
+                                <th>fillState</th>
+                                <th>alternateUnit</th>
+                                <th>associatedUnit</th>
+                                <th>transportType</th>
+                                <th>sapSaleOrder</th>
+                                <th>unitQuality</th>
+                                <th>unitClasification</th>
+                                <th>sealNumber</th>
+                                <th>customerIdentifier</th>
+                                <th>type</th>
+                                <th>model</th>
+                                <th>location</th>
+                                <th>container</th>
+                                <th>modelYear</th>
+                                <th>containerId</th>
+                                <th>transmit</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>eventId</th>
-                                <th>Tipo De Evento</th> 
-								<th>Fecha Del Evento</th>
-								<th>EstimateRequired</th>
-								<th>Inspected</th> 
-								<th>InspectedBy</th> 
-								<th>Booking</th>
-								<th>FillState</th>
-								<th>AlternateUnit</th>
-								<th>AssociatedUnit</th>
-								<th>TransportType</th>
-								<th>SapSaleOrder</th>
-                                <th>UnitQuality</th>
-								<th>UnitClasification</th>
-								<th>SealNumber</th>
-								<th>CustomerIdentifier</th>
-								<th>Type</th>
-								<th>Model</th>
-								<th>Location</th>
-								<th>Container</th>
-								<th>ModelYear</th>
-								<th>ContainerId</th>
-								<th>Transmit</th>
+                                <th>Tipo de evento</th>
+                                <th>Fecha del evento</th>
+                                <th>estimateRequired</th>
+                                <th>inspected</th>
+                                <th>inspectedBy</th>
+                                <th>booking</th>
+                                <th>fillState</th>
+                                <th>alternateUnit</th>
+                                <th>associatedUnit</th>
+                                <th>transportType</th>
+                                <th>sapSaleOrder</th>
+                                <th>unitQuality</th>
+                                <th>unitClasification</th>
+                                <th>sealNumber</th>
+                                <th>customerIdentifier</th>
+                                <th>type</th>
+                                <th>model</th>
+                                <th>location</th>
+                                <th>container</th>
+                                <th>modelYear</th>
+                                <th>containerId</th>
+                                <th>transmit</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -1085,7 +1085,7 @@
                                         <option value="1">DISPONIBLE</option>
                                         <option value="2">DAÑADO</option>
                                         <!-- 									<option value="3">DAÑADO/PTI </option> -->
-                                        <option value="4">EVACUACIÓN</option>
+                                        <option value="4">EVACUACION</option>
                                         <!-- 									<option value="5">PTI</option> -->
                                         <option value="6">BLOQUEADO/GX</option>
                                         <option value="7">TOTAL LOSS</option>
@@ -1175,7 +1175,7 @@
                             </div>
                             <div class="col-sm"  >
                                 <div class="form-group">
-                                    <label for="newTransportCompanyPregate">Empresa transportista</label>
+                                    <label for="newTransportCompanyPregate">Empresa Transportista</label>
                                     <input type="text" class="form-control" id="newTransportCompanyPregate" name="example" list="newTransportCompanyList">
                                     <datalist id="newTransportCompanyList" >
                                         <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
@@ -1199,7 +1199,7 @@
                         <div class="row">
                             <div class="col-sm"  >
                                 <div class="form-group">
-                                    <label for="newBlPregate">Nombre del operador</label>
+                                    <label for="newBlPregate">Nombre del Operador</label>
                                     <input type="text" class="form-control" id="newBlPregate">
                                 </div>
                             </div>
@@ -1211,7 +1211,7 @@
                             </div>
                             <div class="col-sm"  >
                                 <div class="form-group">
-                                    <label for="newBlPregate">Número del económico</label>
+                                    <label for="newBlPregate">Numero del economico</label>
                                     <input type="text" class="form-control" id="newBlPregate">
                                 </div>
                             </div>
@@ -1231,7 +1231,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="inspectionlLabel">Reporte de maniobras por cliente</h5>
+                    <h5 class="modal-title" id="inspectionlLabel">Reporte de Maniobras por Cliente</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1251,13 +1251,13 @@
 
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="filterDateInit">Fecha evento inicio </label>
+                                    <label for="filterDateInit">Fecha Evento Inicio </label>
                                     <input type="date" class="form-control" id="filterDateInit" >
                                 </div>
                             </div>
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="filterDateEnd">Fecha evento fin</label>
+                                    <label for="filterDateEnd">Fecha Evento Fin</label>
                                     <input type="date" class="form-control" id="filterDateEnd" >
                                 </div>
                             </div>
@@ -1276,7 +1276,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="inspectionlLabel">Reporte de inventario por cliente</h5>
+                    <h5 class="modal-title" id="inspectionlLabel">Reporte de Inventario por Cliente</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1331,13 +1331,13 @@
                         <div class="row">
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="filterAdsDateInit">Fecha evento inicio </label>
+                                    <label for="filterAdsDateInit">Fecha Evento Inicio </label>
                                     <input type="date" class="form-control" id="filterAdsDateInit" >
                                 </div>
                             </div>
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="filterAdsDateEnd">Fecha evento fin</label>
+                                    <label for="filterAdsDateEnd">Fecha Evento Fin</label>
                                     <input type="date" class="form-control" id="filterAdsDateEnd" >
                                 </div>
                             </div>
@@ -1356,7 +1356,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="exitDateLabel">Asigar hora de salida</h5>
+                    <h5 class="modal-title" id="exitDateLabel">Asigar Hora de Salida</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1367,7 +1367,7 @@
                         <div class="row">
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="exitDateTime">Día y hora de salida</label>
+                                    <label for="exitDateTime">Dia y Hora de Salida</label>
                                     <input type="datetime-local" class="form-control" id="exitDateTime" >
                                 </div>
                             </div>
@@ -1436,7 +1436,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header modal-header-app">
-                    <h5 class="modal-title" id="searchExitDateLabel">Buscar contenedores llenos</h5>
+                    <h5 class="modal-title" id="searchExitDateLabel">Buscar Contenedores Llenos</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1446,7 +1446,7 @@
                         <div class="row">
                             <div class="col-sm" >
                                 <div class="form-group">
-                                    <label for="searchExitDate">Día de salida</label>
+                                    <label for="searchExitDate">Dia de Salida</label>
                                     <input type="date" class="form-control" id="searchExitDate" >
                                 </div>
                             </div>

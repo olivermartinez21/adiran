@@ -57,7 +57,7 @@ function configDataTable() {
 			}},
 			{data: 'userId', render : function(data) {
 				if(estado==1){
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Bloquear usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Bloquear de usuario" onclick="deleteUser(\'' + data + '\');"><i class="fas fa-user-times"></i></button>';
 				}else{
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Desbloquear usuario" onclick="activateUser(\'' + data + '\');"><i class="fas fa-user-check"></i></button>';
 				}
