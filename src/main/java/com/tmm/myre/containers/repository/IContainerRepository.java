@@ -126,7 +126,7 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	int getCountQuote(String containerId);
 	
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE IS NOT NULL and STATUS_QUOTE !=10 ORDER BY REGISTER_DATE DESC ", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS_QUOTE IS NOT NULL and STATUS_QUOTE !=10 and STATUS >=4 ORDER BY REGISTER_DATE DESC ", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouseStatus2(String warehouse);
 
 	@Query(value = " SELECT Count(*) FROM MYRE_CONTAINERS where CONTAINER_ID=:containerId AND STATUS_QUOTE=1 ", nativeQuery = true)
@@ -148,7 +148,7 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER=:containerId", nativeQuery = true)
 	ContainerModel getPreLabor(String containerId);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE STATUS >= 2 AND STATUS <= 6;", nativeQuery = true)
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE STATUS >= 4 AND STATUS <= 6;", nativeQuery = true)
 	List<ContainerModel> getAllAndStatus();
 
 	//Nuevos metodos de filtrado para resumen en ExelUtil

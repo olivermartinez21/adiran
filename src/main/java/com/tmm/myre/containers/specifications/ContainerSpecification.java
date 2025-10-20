@@ -61,7 +61,7 @@ public class ContainerSpecification {
             }
 
             // Filtro por status = 4
-            predicates.add(cb.equal(root.get("status"), 4));
+            predicates.add(cb.between(root.get("status"), 4, 6));
 
             // Filtrado por rango de fechas para RegisterDate (Date)
             if (reportFilterDto.getDateInit() != null && reportFilterDto.getDateEnd() != null) {

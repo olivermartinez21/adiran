@@ -62,7 +62,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     		"/js/**",
             "/css/**",
             "/images/**").permitAll()
-    	.antMatchers("/administration/**").hasAnyRole("ADMIN")
+    	.antMatchers("/administration/**").hasAnyRole("ADMIN AGUASCALIENTES")
     	.anyRequest().authenticated();
 
     // Configuracion del login

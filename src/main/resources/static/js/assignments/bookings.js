@@ -28,7 +28,7 @@ function configDataTable() {
 		buttons: {
 			buttons: [
 				{text: 'Crear Booking', action: function() { addBooking(); }},
-				{text: 'Bookings HAPAG ', action: function() { showBookignHapag(); }},
+				//{text: 'Bookings HAPAG ', action: function() { showBookignHapag(); }},
 				{extend: 'excelHtml5', title: 'Asignaciones'},
 				//{extend: 'csvHtml5', title: 'Inventario'},
 				//{extend: 'pdfHtml5', title: 'Inventario', download: 'open', orientation: 'landscape',pageSize: 'LEGAL'},

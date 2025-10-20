@@ -35,12 +35,12 @@ public class ScheduledTasks {
     private IContainerInventoryHistoricRepository containerInventoryHistoricRepository;
 
     //@Scheduled(cron = "*/15 * * * * *")
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 30 23 * * *")
     public void saveInventory() {
 
         List<ContainerModel> containers = containerRepository.getAllAndStatus();
         for (ContainerModel record : containers) {
-            log.info("Registro a guardar: " + record.toString());
+            log.info("Registro a guardar: " + record.getContainer());
             ContainerInventoryHistoric containerEntity = new ContainerInventoryHistoric();
 
             // Propietario
@@ -187,6 +187,9 @@ public class ScheduledTasks {
                     break;
                 case 9:
                     containerEntity.setStatusQuote("Cerrado");
+                    break;
+                case 10:
+                    containerEntity.setStatusQuote("N/A");
                     break;
                 default:
                     containerEntity.setStatusQuote("Pendiente");

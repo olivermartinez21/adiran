@@ -323,10 +323,10 @@ $("#addNewDamageModel").submit(function () {
 	};
 	
 	formData.append('inspection',JSON.stringify(data));
-	
-	if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"||$("#newImageCode").val()==""){
-				Swal.fire("Llenar los datos que se requieren", "", "warning");
-	}else{
+
+		if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"||$("#inspectionCustomerType").val()=="Selecciona una opción"||$("#customerName").val()==""){
+			Swal.fire("Llenar los datos que se requieren", "Seccion, Componente, Daño, Metodo de Reparacion, Responsabilidad, A quien se cobra", "warning");
+		}else{
 		$.ajax({
 		type : "POST",
 		url : 'gateIn/addDamage',
