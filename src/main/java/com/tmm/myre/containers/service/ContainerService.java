@@ -398,7 +398,7 @@ public class ContainerService implements IContainerService{
 			}
 			
 			else if(containerRepository.findBycontainerStatus(containerDto.getContainer()) >= 1 && containerRepository.findBycontainerStatus(containerDto.getContainer()) <= 6) {
-				response.setMessage("La unidad "+ containerDto.getContainer() +" ya cuenta con un proceso de cita o ya esta en nuestro almacen verfificar el numero");
+				response.setMessage("La unidad "+ containerDto.getContainer() +" ya cuenta con un proceso de cita o ya está en el inventario actual, verificar el dato");
 			
 				if(response.getMessage()==""||response.getMessage()==null||response.getMessage().isEmpty()) {
 					containerDto.setLog("CONTAINER(" + containerDto.getIdUser() + ", " + containerDto.getContainerId() + "), " + "REGISTRO DE CONTENEDOR");

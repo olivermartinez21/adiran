@@ -338,12 +338,12 @@ $("#addNewDamageModel").submit(function () {
 			if(response.success==true){
 				console.log(response)
 					Swal.fire({
-				        title: "¿Desea Registrar Daño?",
+				        title: "¿Desea Registrar otro Daño?",
 				        text: " ",
 				        icon: 'warning',
 				        showCancelButton: true,
 				        confirmButtonText: "Si",
-				        cancelButtonText: "no",
+				        cancelButtonText: "No",
 				    }).then(resultado => {
 				       if (resultado.value) {
 				            // Hicieron click en "Sí"
@@ -355,7 +355,7 @@ $("#addNewDamageModel").submit(function () {
 							$("#addNewDamageModel").modal("hide");
 							getInspectionsData()
 							// self.location.reload();
-							console.log("no")
+							console.log("No")
 				        }
 				    });
 				}else{
