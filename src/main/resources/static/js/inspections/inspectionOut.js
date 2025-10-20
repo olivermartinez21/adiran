@@ -70,7 +70,7 @@ function configDataTable(){
 			{ data: "booking",visible: true },
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data)
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="inspectionOut(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionOut(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
 					}},
 			
 		],
@@ -102,14 +102,14 @@ function configDataTable(){
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
 				if(data.length==36){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver Foto" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}else{
 				return '<a onclick="showPhotoOther(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>'
 			}	
 			}},
 			{ data: "file", visible: false },
 			{ data: "photoId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Foto" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],

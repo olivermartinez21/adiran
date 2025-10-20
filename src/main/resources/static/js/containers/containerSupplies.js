@@ -796,7 +796,7 @@ function configDataTable() {
                             '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
                     }else{
                         if (conditionPregate === "LLENO"){
-                            return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Hora" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+                            return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Cita" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
                         }
                         return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
                             '<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';

@@ -699,7 +699,7 @@ function configDataTablePregate(){
 				render: function(data, type, full, meta) {
 					$("#containerId").val(data);
 					var userRole = $("#globalUserRole").val();
-					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar información" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
 					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 
 					if ($("#containerStatus").val() == 2) {
@@ -808,7 +808,7 @@ function configDataTable() {
 				render: function(data, type, full, meta) {
 					$("#containerId").val(data);
 					var userRole = $("#globalUserRole").val();
-					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
+					var btnActualizar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar información" onclick="pregate(\'' + data + '\', \'' + full.shippingCompany + '\');"><i class="fas fa-file"></i></button>&nbsp';
 					var btnInspeccionar = '<button type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar" onclick="inspectionContainer(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 
 					if ($("#containerStatus").val() == 2) {
@@ -1009,7 +1009,7 @@ function configDataTable() {
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
 				if(data.length==36){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Daño" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver Foto" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}else{
 				return '<a onclick="showPhotoOther(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>'
 			}	

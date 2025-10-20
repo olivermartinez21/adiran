@@ -106,7 +106,7 @@ function configDataTable() {
 						return   $("#containerConditionInspecction option:selected").html() +" "+$("#qualityGradeInspection option:selected").html();
 					}},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-						return  '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar" onclick="asigned(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
+						return  '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Técnico" onclick="asigned(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
 					}},	
 			{ data: "containerId", visible: true , render : function(data) {
 						return "";
@@ -120,7 +120,7 @@ function configDataTable() {
 							
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						$("#containerStatus").val(data);
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a Reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
 					}},
 			{ data: "statusQute", visible: false , render : function(data) {
 					$("#statusContainer").val(data);
@@ -131,7 +131,7 @@ function configDataTable() {
 					}},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						$("#containerStatus").val(data);
-							return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Liberar" onclick="changeStatus(\'' + meta.row  + '\');"><i class="fas fa-check"></i></button>';
+							return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Liberar Unidad" onclick="changeStatus(\'' + meta.row  + '\');"><i class="fas fa-check"></i></button>';
 						
 					}}, 
 					
@@ -166,7 +166,7 @@ function configDataTable() {
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
 			if(data.length==36){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver Fotos" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}else{
 				return '<a onclick="showPhotoOther(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>'
 			}				
@@ -175,7 +175,7 @@ function configDataTable() {
 			}},
 			{ data: "file", visible: false },
 			{ data: "photoId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Foto" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],
@@ -208,7 +208,7 @@ function configDataTable() {
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
 			if(data.length==36){
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver Foto" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 			}else{
 				return '<a onclick="showPhotoOther(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>'
 			}				
@@ -217,7 +217,7 @@ function configDataTable() {
 			}},
 			{ data: "file", visible: false },
 			{ data: "photoId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Foto" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],
@@ -322,7 +322,7 @@ function newDamage(data){
 		},
 			buttons: {
 			buttons: [
-					{text: '+', action: function() { addNewDamage()}},
+					{text: 'Agregar Daño +', action: function() { addNewDamage()}},
 				],
 			dom: {
 				

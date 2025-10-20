@@ -98,8 +98,8 @@ function configDataTable() {
 					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						return  $("#containerDescriptionQuoteCatalog option:selected").html() +"<br>"+ 
-						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="newQuote(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>'+
-						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambair status" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>'+
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Actualizar Información" onclick="newQuote(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>'+
+						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Cambiar Estatus" onclick="changeStatus(\'' + data + '\');"><i class="fas fa-edit"></i></button>'+
 						'&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="#Factura" onclick="noQuote(\'' + data + '\');"><i class="fas fa-file-invoice-dollar"></i></button>';
 					}},
 			{ data: "containerId", visible: false , render : function(data) {
@@ -146,13 +146,13 @@ function configDataTable() {
 			{ data: "photoId",visible: false },
 			
 			{ data: "image", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver Foto" onclick="showPhoto(\'' + data + '\');"><i class="fas fa-eye"></i></button>&nbsp';
 				//return '<a onclick="showPhoto(\'' + meta.row + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
 				//;
 			}},
 			{ data: "file", visible: false },
 			{ data: "photoId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Foto" onclick="deleteImage(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp';
 				
 			}},
 		],

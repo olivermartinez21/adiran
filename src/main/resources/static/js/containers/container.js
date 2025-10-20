@@ -755,9 +755,9 @@ function configDataTable() {
 			buttons: [
 				//{extend: 'excelHtml5', title: 'Unidades'},
 				//{text: 'Descargar Inventario Excel', className: 'btn btn-dark', action: function() { downloadInventoryReport()}},
-				{text: 'Busqueda Cliente Inventario', className: 'btn btn-info', action: function() { filterShippigModal(); } },
+				{text: 'Reporte Inventario por Cliente', className: 'btn btn-info', action: function() { filterShippigModal(); } },
 				//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
-				{text: 'Busqueda Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
+				{text: 'Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
 				{text: 'Anuncios HAPAG', className: 'btn btn-info', action: function() { filtersAds(); } },
 				{text: 'Salidas Llenos', className: 'btn btn-dark', action: function() { searchDateExit(); } }
 
@@ -840,7 +840,7 @@ function configDataTable() {
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
 				}else{
 					if (conditionPregate === "LLENO"){
-						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Hora" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Cita" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
 					}
 					return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';

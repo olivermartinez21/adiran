@@ -107,7 +107,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionModalLabel">Inspección</h5>
+						<h5 class="modal-title" id="inspectionModalLabel">Inspección de Entrada</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -362,7 +362,7 @@
 										<th>Método De Reparación</th>
 										<th>Observaciones</th>
 										<th>Tipo De Cliente</th>
-										<th>Cobrar A</th>
+										<th>Cobrar Maniobra a</th>
 										<th>Imagenes</th>
 										<th>Largo</th>
 										<th>Ancho</th>
@@ -737,7 +737,7 @@
 							</div>
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="newBillTo">Cobrar a</label>
+									<label for="newBillTo">Cobrar maniobra a</label>
 									<input type="text" class="form-control" id="newBillTo">
 								</div>
 							</div>
@@ -1132,7 +1132,7 @@
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newBillToPregate">Cobrar a</label>
+									<label for="newBillToPregate">Cobrar maniobra a</label>
 									<input type="text" class="form-control" id="newBillToPregate" name="example" list="newAgencyList">
 									<datalist id="newAgencyList" >
 									 <option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
