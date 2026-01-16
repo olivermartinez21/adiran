@@ -101,6 +101,17 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 			return null;
 		}
 	}
+
+	@GetMapping("validationOrders")
+	@ResponseBody
+	public ResponseManagement validationOrders(String bookingId) {
+		try {
+			return bookingService.validationOrders(bookingId);
+		} catch(Exception ex) {
+			log.info(ex.toString());
+			return null;
+		}
+	}
 	
 	@GetMapping("getDataTableFull")
 	@ResponseBody
@@ -317,9 +328,9 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 
 	@GetMapping("getContainersStock")
 	@ResponseBody
-	List<ContainerDto> getContainersStock(@RequestParam(required = true) String location) {
+	List<ContainerDto> getContainersStock(@RequestParam(required = true) String location, String shippingCompany) {
 		try {
-			return containerService.getContainersStock(location);
+			return containerService.getContainersStock(location, shippingCompany);
 		} catch(Exception ex) {
 			log.error(ex.toString());
 			return null;
@@ -413,10 +424,10 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 	
 	@GetMapping("getUnitInfo")
 	@ResponseBody
-	public ContainerDto getContainerInformation(@RequestParam("containerId") String containerId) {
+	public ContainerDto getContainerInformation(@RequestParam("containerId") String containerId, String shippingCompany) {
 		
 		try {
-			return containerService.getContainerInformation(containerId);
+			return containerService.getContainerInformation(containerId, shippingCompany);
 		} catch(Exception ex) {
 			log.error(ex.toString());
 			return null;
@@ -425,15 +436,32 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "bookings";
 	
 	@GetMapping("getUnitsFilter")
 	@ResponseBody
-	public List<ContainerDto> getUnitsFilter(String type,String size, String clasification) {
+	public List<ContainerDto> getUnitsFilter(String type,String size, String clasification, String shippingCompany) {
 		
 		try {
-			log.info(type+" " +size+" "+clasification);
-			return containerService.getUnitsFilter(type,size,clasification,getWarehouse());
+			log.info(type+" " +size+" "+clasification + " "+shippingCompany);
+			return containerService.getUnitsFilter(type,size,clasification,getWarehouse(), shippingCompany);
 		} catch(Exception ex) {
 			log.error(ex.toString());
 			return null;
 		}
+	}
+
+	@PostMapping("addNewAssignmentToBooking")
+	@ResponseBody
+	public ResponseManagement addNewAssignmentToBooking(@ModelAttribute("newQuantityAsssignment") Integer newQuantityAsssignment,
+														@ModelAttribute("bookingId")String bookingId) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+
+			return bookingService.addNewAssignmentToBooking(newQuantityAsssignment, bookingId);
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
+			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
+			response.setOperation(KeyConstants.INSERT);
+		}
+		return response;
 	}
 	
 	

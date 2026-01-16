@@ -219,17 +219,17 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header modal-header-app">
-						<h5 class="modal-title" id="inspectionlLabel">Datos del daño</h5>
+						<h5 class="modal-title" id="inspectionlLabel">Códigos de Trabajo</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<form id="inspectionCapModelForm">
 					<div class="modal-body modal-body-app">
-					<input  class="form-control" id="inspectionIdent" >
-					<input  class="form-control" id="preLabor" >
-					<input  class="form-control" id="shippingCompanyIdRef" >
-					<input  class="form-control" id="jobcodeId" >
+					<input  class="form-control" id="inspectionIdent" hidden="hidden">
+					<input  class="form-control" id="preLabor" hidden="hidden">
+					<input  class="form-control" id="shippingCompanyIdRef" hidden="hidden">
+					<input  class="form-control" id="jobcodeId" hidden="hidden">
 					<div class="row">
 					
 							<div class="col-sm" id=divConditionUnit>
@@ -518,6 +518,58 @@
 						<div class="modal-footer modal-footer-app">
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 							<button type="submit" class="btn btn-success">Guardar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="changeBilltoModel" tabindex="-1" role="dialog" aria-labelledby="changeBilltoModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="billToLabel">Cobrar A</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="changeBilltoForm">
+						<div class="modal-body modal-body-app">
+							<input  class="form-control" id="inspectionBilltoId" hidden="hidden">
+							<!--<input  class="form-control" id="billToShippingCompanyId" >-->
+							<!--<div class="row">
+
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="billToRespon">Responsabilidad del daño</label>
+										<select class="form-control" id="billToRespon" >
+											<option value="1">MERCHANT</option>
+											<option value="2">CARRIER</option>
+										</select>
+									</div>
+								</div>
+							</div>-->
+
+							<div class="row">
+
+								<div class="col-sm" >
+									<div class="form-group">
+										<!--									Cambiar por Cobrar a-->
+										<label for="newBillTo">A quien se cobra:</label>
+										<input type="text" class="form-control" id="newBillTo" name="example" list="newBillToList">
+										<datalist id="newBillToList" >
+											<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+										</datalist>
+									</div>
+								</div>
+
+
+							</div>
+
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success" >Aceptar</button>
 						</div>
 					</form>
 				</div>

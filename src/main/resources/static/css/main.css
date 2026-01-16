@@ -85,6 +85,19 @@ table.dataTable tbody tr.selected {
     color: white;
 }
 
+/* Evitar que la tabla se salga del modal en resoluciones chicas */
+.modal .dataTables_wrapper {
+	max-width: 100%;
+	overflow-x: auto;      /* scroll horizontal dentro del modal */
+}
+
+/* Que las tablas usen el ancho disponible del contenedor */
+.modal .dataTables_wrapper table.dataTable {
+	width: 100% !important;
+	box-sizing: border-box;
+}
+
+
 .separator {
     display: flex;
     align-items: center;

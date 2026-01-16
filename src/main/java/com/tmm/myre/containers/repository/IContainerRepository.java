@@ -68,8 +68,8 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and CONTAINER_CONDITION_PREGATE = 'LLENO'", nativeQuery = true)
 	List<ContainerModel> findAllbyWarehouseAndConditionPregate(String warehouse);
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 4 and CONTAINER_CONDITION = 1", nativeQuery = true)
-	List<ContainerModel> findAllbyWarehouseStock(String warehouse);
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehouse and STATUS = 4 and SHIPPING_COMPANY = :shippingCompany", nativeQuery = true)
+	List<ContainerModel> findAllbyWarehouseStock(String warehouse, String shippingCompany);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE SHIPPING_COMPANY=:shippingId", nativeQuery = true)
 	List<ContainerModel> findAllByClient(String shippingId);
@@ -136,8 +136,8 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	//@Query(value = "SELECT CONTAINER_ID,CONTAINER_TYPE,CONTAINER_ZISE,CONTAINER_CONDITION FROM MYRE_CONTAINERS WHERE CONTAINER=:containerId", nativeQuery = true)
 	ContainerModel getContainerInformation(String containerId);
 	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehous and CONTAINER_TYPE=:type and CONTAINER_ZISE=:size and CONTAINER_CONDITION =1 and CLASIFICATION=:clasification and STATUS =4", nativeQuery = true)
-	List<ContainerModel> getUnitsFilter(String warehous,String type, String size, String clasification);
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE LOCATION=:warehous and CONTAINER_TYPE=:type and CONTAINER_ZISE=:size and CLASIFICATION=:clasification and SHIPPING_COMPANY =:shippingCompany and STATUS =4", nativeQuery = true)
+	List<ContainerModel> getUnitsFilter(String warehous,String type, String size, String clasification, String shippingCompany);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId and STATUS_QUOTE=2", nativeQuery = true)
 	List<ContainerModel> getUnitsValidationAppointment(String appointmentId);
@@ -161,4 +161,8 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	// En IContainerRepository.java
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE EXIT_DATETIME BETWEEN :start AND :end", nativeQuery = true)
 	List<ContainerModel> findByExitDateTimeBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    List<ContainerModel> findByBokking(String booking);
+
+	List<ContainerModel> findByStatusAndConditionEquals(int i, String number);
 }

@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.tmm.myre.assignments.dto.PreOrderDeliveryRequestDto;
+import com.tmm.myre.assignments.model.BookingModel;
+import com.tmm.myre.assignments.repository.IBookingRepository;
 import com.tmm.myre.catalog.model.CatComponentModel;
 import com.tmm.myre.catalog.model.CatDamageModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,8 +91,10 @@ public class PdfGenerationService implements IPdfGenerationService {
 	
 	@Autowired
 	private IAssignmentRepository assignmentRepository;
-	
-	
+    @Autowired
+    private IBookingRepository bookingRepository;
+
+
 	@Override
 	public byte[] pdfCita(AppointmentDto appointmentDto,List<ContainerDto> containers) {
 	
@@ -837,18 +841,20 @@ public class PdfGenerationService implements IPdfGenerationService {
 						case 3:
 							unidadMedida = "mts";
 							break;
-
+						case 4:
+							unidadMedida = "pza";
+							break;
 						default:
 							break;
 					}
 
 					hcell = new PdfPCell(new Phrase("Largo: "+inspection.getLength()+unidadMedida+", Ancho: "+ inspection.getWidth()+unidadMedida+ ", Profundo: "+inspection.getDepth()+unidadMedida+
-							" Largo: "+inspection.getOtherLength()+unidadMedida +" Cantidad: " + inspection.getQuantity() , regularBlack));
+							" Alto: "+inspection.getOtherLength()+unidadMedida +" Cantidad: " + inspection.getQuantity() , regularBlack));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table1.addCell(hcell);
 
 
-					hcell = new PdfPCell(new Phrase(inspection.getCustomerType() == 1 ? "MERCHANT" : "CARRIER"+"\n ", regularBlack));
+					hcell = new PdfPCell(new Phrase(inspection.getCustomerName(), regularBlack));
 					hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					table1.addCell(hcell);
 
@@ -1019,12 +1025,12 @@ public class PdfGenerationService implements IPdfGenerationService {
 		} catch(Exception ex) {
 			log.error(ex.toString());
 		}
-		log.info("Paso 1----------------");
+		log.info("Paso 1----------------" + order.getDeliveryOrderId());
 		AssignmentModel assignmentSearch = assignmentRepository.getAssignment(order.getDeliveryOrderId());
-		
+		log.info("Paso 2---------------" + assignmentSearch.toString());
 		log.info(assignmentSearch.getUnitNumber() + "Numero de unidad----------------");
 		
-		log.info("Paso 2---------------");
+
 		ContainerModel containerList = containerRepository.getPreLabor(assignmentSearch.getUnitNumber());
 		
 		try {
@@ -1797,7 +1803,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 
-			hcell = new PdfPCell(new Phrase("Cliente Final:", regularBlack));
+			hcell = new PdfPCell(new Phrase("Cliente Final:" + container.getBillTo(), regularBlack));
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 
@@ -1819,9 +1825,17 @@ public class PdfGenerationService implements IPdfGenerationService {
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 
-			hcell = new PdfPCell(new Phrase("Cobrar a: "+container.getBillTo(), regularBlack));
-			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table.addCell(hcell);
+			if(container.getCondition().equals("4")){
+				hcell = new PdfPCell(new Phrase("Cobrar a: "+container.getDefinition(), regularBlack));
+				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table.addCell(hcell);
+			} else{
+				BookingModel booking = bookingRepository.findByBooking(container.getBokking());
+				hcell = new PdfPCell(new Phrase("Cobrar a: "+booking.getBillTo(), regularBlack));
+				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table.addCell(hcell);
+			}
+
 
 			//-----------------------------------------------------------------------------------------------------
 
@@ -1829,11 +1843,19 @@ public class PdfGenerationService implements IPdfGenerationService {
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 
-			hcell = new PdfPCell(new Phrase(" ", regularBlack));
-			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table.addCell(hcell);
+			if(container.getCondition().equals("4")){
+				hcell = new PdfPCell(new Phrase("Booking: N/A", regularBlack));
+				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table.addCell(hcell);
+			} else{
+				BookingModel booking = bookingRepository.findByBooking(container.getBokking());
+				hcell = new PdfPCell(new Phrase("Booking: " + booking.getBooking(), regularBlack));
+				hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table.addCell(hcell);
+			}
 
-			hcell = new PdfPCell(new Phrase(" ", regularBlack));
+
+			hcell = new PdfPCell(new Phrase("Transportista: " + container.getTransportId(), regularBlack));
 			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table.addCell(hcell);
 
@@ -2306,7 +2328,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 				// Tabla de detalles
 				PdfPTable table = new PdfPTable(13);
 				table.setWidthPercentage(100);
-				table.setWidths(new float[]{2,2,2,2,2,2,2,2,2,2,2,2,2});
+				table.setWidths(new float[]{2,1,2,4,1,1,1,1,1,2,2,2,1});
 				addTableHeaders(table, fontLabel);
 
 				List<String> horas    = new ArrayList<>();

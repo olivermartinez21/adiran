@@ -100,13 +100,13 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="newDateInspection">Fecha</label>
-									<input type="date" class="form-control" id="newDateInspection"  min="">
+									<input type="date" class="form-control" id="newDateInspection"  min="" disabled>
 								</div>
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newShippinCompany">Propietario</label>
-									<select class="form-control" id="newShippinCompany" >
+									<select class="form-control" id="newShippinCompany" disabled>
 									<option th:each="option : ${catShipping}" th:value="${option.shippingCompanyId}" th:text="${option.description}"></option>
 									</select>	
 								</div>
@@ -114,7 +114,7 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newFinalClient">Cliente final</label>
-									<input type="text" class="form-control" id="newFinalClient" >
+									<input type="text" class="form-control" id="newFinalClient" disabled>
 								</div>
 							</div>
 						</div>
@@ -122,19 +122,19 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="newUnit">Unidad</label>
-									<input type="text" class="form-control" id="newUnit"  min="">
+									<input type="text" class="form-control" id="newUnit"  min="" disabled>
 								</div>
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newNomenclatura">Nomenclatura</label>
-									<input type="text" class="form-control" id="newNomenclatura" >
+									<input type="text" class="form-control" id="newNomenclatura" disabled>
 								</div>
 							</div>
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newTypeUnit">Tipo de unidad</label>
-									<select class="form-control" id="newTypeUnit" onclick="selectType()">
+									<select class="form-control" id="newTypeUnit" onclick="selectType()" disabled>
 									<option value="1">CH</option>
 									<option value="2">OT</option>
 									<option value="3">DC</option>
@@ -180,7 +180,7 @@
 							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newBooking">Booking</label>
-									<input type="text" class="form-control" id="newBooking" >
+									<input type="text" class="form-control" id="newBooking" disabled >
 								</div>
 							</div>
 						</div>

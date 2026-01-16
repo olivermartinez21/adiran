@@ -32,6 +32,8 @@ function initComponents() {
 		
 		$("#gateOutModel").submit(function () {
 
+			var checkOrderDate = $("#orderDate").val();
+			var realDateOut = $("#newEventDateOut").val();
 			var prop = $("#newShippingCompanyOut").val();
 			var sap = $("#sapSaleOrderOut").val();
 			var pregateCondition = $("#conditionPregate").val();
@@ -45,6 +47,10 @@ function initComponents() {
 			}
 			if(pregateCondition === "LLENO" && $("#operatorName").val() === ""){
 				Swal.fire("Debes ingresar el nombre del operador.", "", "warning");
+				return false;
+			}
+			if (realDateOut < checkOrderDate) {
+				Swal.fire("La fecha y hora de salida no puede ser menor a la fecha y hora programada.", "", "warning");
 				return false;
 			}
 
@@ -503,6 +509,7 @@ function configDataTable() {
 			}
 		},
 		columns: [
+			{ data: "orderDate",visible: true },
 			{ data: "containerId",visible: false },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
@@ -549,7 +556,7 @@ function configDataTable() {
 			{data: "conditionPregate", visible: true },
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
-				return  '<button type="button" class="btn btn-outline-dark btn-sm" title="Gate Out" onclick="gatOut(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
+				return  '<button type="button" class="btn btn-outline-dark btn-sm" title="Crear Evento de Salida" onclick="gatOut(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp';
 				/*if($("#containerStatus").val()=="1"){
 					return  '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="pregate(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp';
 					}else if($("#containerStatus").val()=="2"){
@@ -597,6 +604,7 @@ function configDataTable() {
 				
 			}},
 		],
+		order: [[0, 'desc']]
 	}).columns.adjust();
 	
 		$("#inspectionTable").DataTable({
@@ -751,7 +759,8 @@ function configDataTable() {
 function gatOut(data){
 	
 	currentData = $("#containerTable").DataTable().row(data).data();
-	console.log(currentData)
+	console.log(currentData);
+	$("#orderDate").val(currentData.orderDate + 'T00:00')
 	$("#containerId").val(currentData.containerId)
 	$("#newShippingCompanyOut").val(currentData.shippingCompany);
 	$("#clientFinalOut").val(currentData.billTo);
@@ -761,7 +770,7 @@ function gatOut(data){
 	$("#conditionOut").val(currentData.condition);
 	$("#qualityOut").val(currentData.clasification);
 	$("#bookingOut").val(currentData.booking);
-	$("#billToOut").val(currentData.billTo);
+	$("#billToOut").val(currentData.definition);
 	$("#conditionPregate").val(currentData.conditionPregate);
 	console.log(currentData.conditionPregate);
 	//$("#typeDeliveryOut").val(currentData.);

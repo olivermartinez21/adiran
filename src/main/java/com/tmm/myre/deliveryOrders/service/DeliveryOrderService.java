@@ -3,6 +3,7 @@ package com.tmm.myre.deliveryOrders.service;
 import java.util.ArrayList;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.tmm.myre.containers.model.ContainerModel;
@@ -35,7 +36,7 @@ import com.tmm.myre.deliveryOrders.repository.IDeliveryOrderRepository;
 import com.tmm.myre.deliveryOrders.service.core.IDeliveryOrderService;
 
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -80,65 +81,98 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 	public ResponseManagement createDeliveryOrder(DeliveryOrderDto deliveryOrderDto) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();
 		try {
-			BookingModel assignment = bookingRepository.getById(deliveryOrderDto.getAssignmentId());
-			int use = Integer.parseInt(deliveryOrderDto.getQuantityOfUnits())+Integer.parseInt(assignment.getQuantityUnitsUse());
-			assignment.setQuantityUnitsUse(String.valueOf(use));
-			if(use>Integer.parseInt(assignment.getQuantityUnits())) {
-				response.setMessage("El BOOKING ESTA COMPLETO");	
-				response.setSuccess(false);	
-			}else {
-				
-				if(deliveryOrderDto.getAssignmentList() != null) {
+			BookingModel booking = bookingRepository.getById(deliveryOrderDto.getAssignmentId());
+			int use = Integer.parseInt(deliveryOrderDto.getQuantityOfUnits()) + Integer.parseInt(booking.getQuantityUnitsUse());
+			booking.setQuantityUnitsUse(String.valueOf(use));
 
-					for (String infoValidation : deliveryOrderDto.getAssignmentList()){
-						AssignmentModel assignmetValidation = assignmentRepository.getById(infoValidation);
-						if(assignmetValidation.getUnitNumber() == null || assignmetValidation.getUnitNumber().isEmpty()) {
-							response.setMessage("Asigna una unidad para esta orden");
-							response.setSuccess(false);
-							return response;
-						} else {
-
-							int remain = Integer.parseInt(assignment.getQuantityUnits())-use;
-							deliveryOrderDto.setBooking(assignment.getBooking());
-							//deliveryOrderDto.setOwner(assignment.getShippingCompany());
-							deliveryOrderDto.setRemainingUnits(String.valueOf(remain));
-							deliveryOrderDto.setDeliveryOrderId(UuidProvider.getUUID());
-							deliveryOrderRepository.save(deliveryOrderConverter.convert(deliveryOrderDto));
-
-							List<DeliveryOrderModel> actualizar = deliveryOrderRepository.getOrderByAssignmentId(deliveryOrderDto.getAssignmentId());
-
-							for(DeliveryOrderModel entity : actualizar) {
-								entity.setRemainingUnits(String.valueOf(remain));
-								deliveryOrderRepository.save(entity);
-
-							}
-
-							for(String assignmentSelect : deliveryOrderDto.getAssignmentList()) {
-								AssignmentModel assignmet = assignmentRepository.getById(assignmentSelect);
-								assignmet.setStatus(2);
-								assignmet.setDeliveryOrderId(deliveryOrderDto.getDeliveryOrderId());
-								assignmentRepository.save(assignmet);
-							}
-
-							response.setSuccess(true);
-						}
-					}
-					
-
-				}else {
-					response.setMessage("Por favor Selecciona las unidades para esta Orden");
-					response.setSuccess(false);
-				}
-				
-				
+			if (use > Integer.parseInt(booking.getQuantityUnits())) {
+				response.setMessage("El BOOKING ESTA COMPLETO");
+				response.setSuccess(false);
+				return response;
 			}
-			
+
+			String[] assignmentsArray = deliveryOrderDto.getAssignmentList();
+			List<String> assignmentList = assignmentsArray != null
+					? new ArrayList<>(Arrays.asList(assignmentsArray))
+					: new ArrayList<>();
+			if (assignmentList == null || assignmentList.isEmpty()) {
+				response.setMessage("Por favor Selecciona las unidades para esta Orden");
+				response.setSuccess(false);
+				return response;
+			}
+
+			// Validar que todas las assignments tengan unidad asignada antes de crear DOs
+			for (String assignmentId : assignmentList) {
+				AssignmentModel a = assignmentRepository.getById(assignmentId);
+				if (a.getUnitNumber() == null || a.getUnitNumber().isEmpty()) {
+					response.setMessage("Asigna una unidad para esta orden");
+					response.setSuccess(false);
+					return response;
+				}
+			}
+
+			int remain = Integer.parseInt(booking.getQuantityUnits()) - use;
+
+			// Procesar cada assignment creando un DeliveryOrder único
+			for (String assignmentSelect : assignmentList) {
+				String newDoId = UuidProvider.getUUID();
+
+				DeliveryOrderDto dto = new DeliveryOrderDto();
+				// Copiar los campos relevantes desde el DTO original
+				dto.setBooking(booking.getBooking());
+				dto.setRemainingUnits(String.valueOf(remain));
+				dto.setDeliveryOrderId(newDoId);
+				dto.setAssignmentId(booking.getBookingId());
+				dto.setQuantityOfUnits(deliveryOrderDto.getQuantityOfUnits());
+				// Copiar otros campos que se necesiten (carrier, economicNumber, billTo, etc.)
+				dto.setCarrierCompany(deliveryOrderDto.getCarrierCompany());
+				dto.setEconomicNumber(deliveryOrderDto.getEconomicNumber());
+				dto.setBillTo(deliveryOrderDto.getBillTo());
+
+				dto.setFileContent(deliveryOrderDto.getFileContent());
+				dto.setFileName(deliveryOrderDto.getFileName());
+				dto.setFileType(deliveryOrderDto.getFileType());
+				dto.setLocation(deliveryOrderDto.getLocation());
+				// ... añadir más campos si es necesario
+				dto.setOperator(deliveryOrderDto.getOperator());
+				dto.setWorkOrder(deliveryOrderDto.getWorkOrder());
+				dto.setTypeOfService(deliveryOrderDto.getTypeOfService());
+				dto.setOwner(deliveryOrderDto.getOwner());
+
+				DeliveryOrderModel savedOrder = deliveryOrderRepository.save(deliveryOrderConverter.convert(dto));
+
+				// Actualizar remainingUnits en órdenes relacionadas
+				List<DeliveryOrderModel> actualizar = deliveryOrderRepository.getOrderByAssignmentId(dto.getAssignmentId());
+				for (DeliveryOrderModel entity : actualizar) {
+					entity.setRemainingUnits(String.valueOf(remain));
+					deliveryOrderRepository.save(entity);
+
+					List<ContainerModel> updateExitOut = containerRepository.findByBokking(entity.getBooking());
+					for (ContainerModel updateExitOutItem : updateExitOut) {
+						updateExitOutItem.setBillTo(booking.getFinalClient());
+						updateExitOutItem.setTransportId(entity.getCarrierCompany());
+						updateExitOutItem.setEconomicNumber(entity.getEconomicNumber());
+						updateExitOutItem.setDefinition(entity.getBillTo());
+						containerRepository.save(updateExitOutItem);
+					}
+				}
+
+				// Actualizar assignment con su deliveryOrderId único
+				AssignmentModel assignmet = assignmentRepository.getById(assignmentSelect);
+				assignmet.setStatus(2);
+				assignmet.setDeliveryOrderId(newDoId);
+				assignmentRepository.save(assignmet);
+			}
+
+			// Persistir cambios en booking (units used)
+			bookingRepository.save(booking);
+
+			response.setSuccess(true);
 		} catch (Exception ex) {
 			response.setSuccess(false);
 			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
 			response.setMessage(KeyConstants.SERVICE_ERROR + ex.toString());
 		}
-		
 		return response;
 	}
 
@@ -202,7 +236,6 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 	public List<DeliveryOrderDto> getDataTableByAssignmentID(String bookingId) throws ConverterException {
 		List<DeliveryOrderDto> list = new ArrayList<DeliveryOrderDto>();
 		 List<DeliveryOrderModel> entities = deliveryOrderRepository.getOrderByAssignmentId(bookingId);
-
 			 for(DeliveryOrderModel entity : entities) {
 					list.add(deliveryOrderConverter.convert(entity));
 				}
@@ -270,16 +303,26 @@ public class DeliveryOrderService implements IDeliveryOrderService {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).build();
 		
 		try {
-			
-			int ordernum = deliveryOrderRepository.getcountpdf();
+			//Genera error cuando se despacha el contenedor
 			DeliveryOrderModel order = deliveryOrderRepository.getById(deliveryOrderId);
-			order.setFileName("AGS-ODE-0"+(ordernum+1));
-			order.setFileType(order.getFileName());
-			deliveryOrderRepository.save(order);
-			order.setFileContent(pdfGenerationService.pdfOrder(order));
-			response.setPdf(deliveryOrderId);
-			deliveryOrderRepository.save(order);
-			response.setSuccess(true);
+			if(order.getFileContent()!=null) {
+				log.info("La orden de entrega ya fue generada anteriormente");
+				response.setMessage("La orden de entrega ya fue generada anteriormente");
+				response.setPdf(deliveryOrderId);
+				response.setSuccess(false);
+				return response;
+			}else {
+				log.info("ordendeId *******"+deliveryOrderId.toString());
+				int ordernum = deliveryOrderRepository.getcountpdf();
+				order.setFileName("AGS-ODE-0"+(ordernum+1));
+				order.setFileType(order.getFileName());
+				deliveryOrderRepository.save(order);
+				order.setFileContent(pdfGenerationService.pdfOrder(order));
+				response.setPdf(deliveryOrderId);
+				deliveryOrderRepository.save(order);
+				response.setSuccess(true);
+			}
+
 		} catch (Exception ex) {
 			response.setSuccess(false);
 			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);

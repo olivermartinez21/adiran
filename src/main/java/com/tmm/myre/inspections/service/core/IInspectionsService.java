@@ -41,4 +41,6 @@ public interface IInspectionsService {
 	ResponseManagement requestInspection(String containerId);
 
 	List<InspectionWithQuoteDto> getInspectionsWithQuotes(String containerId);
+
+	ResponseManagement editBillToName(String inspectionId, String newBillTo);
 }

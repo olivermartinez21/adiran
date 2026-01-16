@@ -71,6 +71,7 @@ function configDataTable() {
 			}
 		},
 		columns: [
+			//{ data: "orderDate",visible: false },
 			{ data: "containerId",visible: false },
 			{ data: "container",visible: true },
 			{ data: "dateInspection",visible: true },
@@ -347,7 +348,8 @@ function validationStatus(data){
 						return data;
 					}},	
 			{ data: "inspectionId", visible: true , render : function(data, meta) {
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Seleccionar Código de Trabajo" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>'+
+							'<button type="button" class="btn btn-outline-dark btn-sm" title="Modificar dato Cobrar A" onclick="changeBillTo(\'' + data + '\');"><i class="fas fa-retweet"></i></button>';
 					}},	
 		],
 
@@ -511,8 +513,6 @@ function initComponents(){
 		});
 			 
 		$("#quoteStatusModel").submit(function () {
-			
-			
 			$.ajax({
 			type: "POST",
 			url: 'quote/editStatus',
@@ -542,7 +542,61 @@ function initComponents(){
 			
 			return false;
 		});
-		
+
+
+	// JavaScript
+	$("#changeBilltoModel").submit(function (e) {
+	    e.preventDefault();
+
+		var newBillTo = ($("#newBillTo").val() || "").trim();
+
+		// Validación: vacío o solo números -> mostrar advertencia y no enviar
+		if (newBillTo === "" || /^\d+$/.test(newBillTo)) {
+			Swal.fire("Campo inválido", "El campo no puede estar vacío, ni contener solo números\n Recuerda registarlo directamente del catalogo", "warning");
+			return false;
+		}
+
+	    Swal.fire({
+	        title: "¿Está seguro?",
+	        text: "Confirma cambiar el cliente a quien se le cobrará para esta inspección?",
+	        icon: "warning",
+	        showCancelButton: true,
+	        confirmButtonText: "Sí, cambiar",
+	        cancelButtonText: "Cancelar",
+	        reverseButtons: true
+	    }).then((result) => {
+	        if (result.isConfirmed) {
+	            $.ajax({
+	                type: "POST",
+	                url: 'quote/editBillTo',
+	                cache: false,
+	                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+	                data: {
+	                    inspectionId: $("#inspectionBilltoId").val(),
+	                    newBillTo: $("#newBillTo").val()
+	                },
+	                success: function (response) {
+	                    console.log(response.success);
+	                    if (response.success == true) {
+	                        Swal.fire("Cambio Realizado", "Recuerda actualizar las tarifas para evitar discrepancias en los datos", "info")
+	                            .then(() => {
+	                                $("#changeBilltoModel").modal("hide");
+	                                dataTableInpection();
+	                            });
+	                    } else {
+	                        console.log(response.message);
+	                        Swal.fire(response.message + " Error", "", "warning");
+	                    }
+	                },
+	                error: function () {
+	                    alert("AJAX ERROR");
+	                }
+	            });
+	        }
+	    });
+
+	    return false;
+	});
 		
 }
 
@@ -799,5 +853,12 @@ function noQuote(containerId) {
     }
     $("#invoiceContainerId").val(containerId);
     $("#invoiceModal").modal("show");
+}
+
+function changeBillTo (data){
+	console.log(data);
+	$("#inspectionBilltoId").val(data);
+	$("#newBillTo").val("");
+	$("#changeBilltoModel").modal("show");
 }
 

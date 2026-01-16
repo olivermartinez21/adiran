@@ -509,6 +509,8 @@ $("#conditionModel").submit(function () {
 				containerId: $("#containerExitId").val(), // Asegúrate de tener este campo en tu modal o contexto
 				fullObservation: $("#fullObservation").val(),
 				destinyPregate: $("#destinyPregate").val(),
+				newOriginPregate: $("#newOriginPregate").val(),
+				newTransportCompanyPregate: $("#newTransportCompanyPregate").val(),
 			};
 			$.ajax({
 				type: "POST",
@@ -531,7 +533,60 @@ $("#conditionModel").submit(function () {
 				}
 			});
 			return false;
+	});
+
+	$("#evacuationForm").submit(function () {
+
+
+		// Validación: evitar envío si hay campos vacíos
+		let exitDateTime = $("#evacuationDateTime").val();
+		if (exitDateTime.length === 16) { // formato 'yyyy-MM-ddTHH:mm'
+			exitDateTime += ":00";
+		}
+		// Campos requeridos
+		const required = [
+		    { el: $("#evacuationExitId"), name: "Contenedor" },
+		    { el: $("#finalClientEvacuation"), name: "Cliente final" },
+		    { el: $("#billToEvacuation"), name: "Definición" },
+		    { el: $("#newTransportCompanyEvacuation"), name: "Transportista" },
+		    { el: $("#evacuationDateTime"), name: "Fecha de evacuación" }
+		];
+		const missing = required.filter(f => $.trim(f.el.val() || "") === "").map(f => f.name);
+		if (missing.length > 0) {
+		    Swal.fire("Faltan campos: " + missing.join(", "), "", "warning");
+		    return false;
+		}
+
+		var data = {
+			exitDateTime: exitDateTime,
+			containerId: $("#evacuationExitId").val(), // Asegúrate de tener este campo en tu modal o contexto
+			billTo: $("#finalClientEvacuation").val(),
+			definition: $("#billToEvacuation").val(),
+			transportId: $("#newTransportCompanyEvacuation").val(),
+			economicNumber: $("#economicEvacuation").val(),
+		};
+		$.ajax({
+			type: "POST",
+			url: "container/evacuationUpdate",
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			success: function(response) {
+				if (response.success == true) {
+					Swal.fire("Proceso de Evacuacion Exitoso", "", "success")
+						.then(() => {
+							$("#exitDateModal").modal("hide");
+							self.location.reload();
+						});
+				} else {
+					Swal.fire("Error al guardar", "", "error");
+				}
+			},
+			error: function() {
+				alert("AJAX ERROR");
+			}
 		});
+		return false;
+	});
 
 }
 
@@ -785,7 +840,18 @@ function configDataTable() {
 
 		columns: [
 			{ data: "containerId",visible: false },
-			{ data: "dateInspection",visible: true },
+			{
+				data: "dateGateIn",
+				visible: true,
+				render: function(data, type, row) {
+					if (data) {
+						// El formato ISO separa fecha y hora con una 'T'
+						// Dividimos por 'T' y tomamos la primera posición [0]
+						return data.split('T')[0];
+					}
+					return ""; // En caso de que el dato sea nulo
+				}
+			},
 			{ data: "daysStay",visible: true },
 			{ data: "container",visible: true , render : function(data) {
 						$("#containerName").val(data);
@@ -833,18 +899,31 @@ function configDataTable() {
 			{ data: "destinyPregate", visible: false},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				$("#containerId").val(data);
+				var conditionStatus = full.condition;
 				var destinyPregate = full.destinyPregate;
 				var conditionPregate = full.conditionPregate;
-				if($("#containerStatus").val()==5){
-					return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" disabled onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+"ASIGNADO"+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
-				}else{
-					if (conditionPregate === "LLENO"){
-						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Cita" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+
+					if($("#containerStatus").val()==5){
+						if(conditionStatus===4){
+							return '<button type="button" class="btn btn-outline-dark btn-sm" title="Evacuacion" onclick="evacuationEvent(\'' + data + '\');"><i class="fas fa-shipping-fast"></i></button>&nbsp;';
+						} else {
+							return '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" disabled onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp' + "ASIGNADO" +
+								'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
+						}
+					}else{
+						if (conditionPregate === "LLENO"){
+							return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Cita" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+						}else{
+						if(conditionStatus==4){
+							return '<button type="button" class="btn btn-outline-dark btn-sm" title="Evacuacion" onclick="evacuationEvent(\'' + data + '\');"><i class="fas fa-shipping-fast"></i></button>&nbsp;';
+						} else{
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
+							'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
+							}
+						}
 					}
-					return   '<button type="button" class="btn btn-outline-dark btn-sm" title="actualizar informacion" onclick="changeStatus(\'' + meta.row + '\');"><i class="fas fa-file"></i></button>&nbsp'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="EIR" onclick="openEir(\'' + data + '\');"><i class="fas fa-print"></i></button>&nbsp';
-				}
+
+
 				
 			}},
 		],
@@ -1703,4 +1782,9 @@ function exitDate(data, destinyPregate){
 	$("#destinyPregate").val(destinyPregate);
 	$("#containerExitId").val(data);
 	$("#exitDateModal").modal("show");
+}
+
+function evacuationEvent(data){
+	$("#evacuationExitId").val(data);
+	$("#evacuationModal").modal("show");
 }

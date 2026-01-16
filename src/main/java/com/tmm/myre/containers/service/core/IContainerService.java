@@ -51,7 +51,7 @@ public interface IContainerService {
 
 	ContainerDto getInformationUnit(String unit)throws ConverterException;
 
-	List<ContainerDto> getContainersStock(String location)throws ConverterException;
+	List<ContainerDto> getContainersStock(String location, String shippingCompany)throws ConverterException;
 
 	ContainerDto getOne(String containerId) throws ConverterException;
 
@@ -76,9 +76,9 @@ public interface IContainerService {
 
 	ResponseManagement newInspectionContainer(ContainerDto containerDto)throws ConverterException;
 
-	ContainerDto getContainerInformation(String containerId)throws ConverterException;
+	ContainerDto getContainerInformation(String containerId, String shippingCompany)throws ConverterException;
 
-	List<ContainerDto> getUnitsFilter(String type,String size,String clasification, String warehous)throws ConverterException;
+	List<ContainerDto> getUnitsFilter(String type,String size,String clasification, String warehous, String shippingCompany)throws ConverterException;
 
 	List<ContainerDto> getUnitsValidationAppointment(String warehouse, Integer userId)throws ConverterException;
 
@@ -91,5 +91,7 @@ public interface IContainerService {
 
     void saveInvoiceNumber(String containerId, String invoiceNumber);
 
-	ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate);
+	ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate, String newOriginPregate, String newTransportCompanyPregate);
+
+    ResponseManagement evacuationUpdate(ContainerDto containerDto);
 }

@@ -3,6 +3,9 @@ package com.tmm.myre.quote.controller;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.tmm.myre.containers.dto.ContainerHistoricDto;
+import com.tmm.myre.containers.model.ContainerHistoricModel;
+import com.tmm.myre.containers.service.ContainerHistoricService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -48,7 +51,9 @@ import lombok.extern.slf4j.Slf4j;
 public class QuoteClientsController extends AbstractMyreController {
 
 	public static final String HOME = PREFIX_QUOTES + "quoteClients";
-	
+    @Autowired
+    private ContainerHistoricService containerHistoricService;
+
 	@GetMapping(EMPTY)
 	public String onLoadHome() {
 		return HOME;
@@ -83,9 +88,9 @@ public class QuoteClientsController extends AbstractMyreController {
 	
 	@GetMapping("getDataTable")
 	@ResponseBody
-	public List<ContainerDto> getDataTable() {
+	public List<ContainerHistoricModel> getDataTable() {
 		try {
-			return containerService.getUnitsValidationAppointment(getWarehouse(),getUserId(getUser()));
+			return containerHistoricService.getHistoricUnits();
 		} catch(Exception ex) {
 			return null;
 		}
@@ -164,7 +169,7 @@ public class QuoteClientsController extends AbstractMyreController {
 	@RequestMapping(value = "/PDF_QUOTE", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> certificateView(@RequestParam(required = true) String containerId) {
 		try {
-			ContainerDto pdf = containerService.getOne(containerId);
+			ContainerHistoricDto pdf = containerHistoricService.getOne(containerId);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Disposition",  "inline; filename="+pdf.getQuoteName()+getFileExtension(pdf.getQuoteName()));
 			ByteArrayInputStream body = new ByteArrayInputStream(pdf.getQuote());

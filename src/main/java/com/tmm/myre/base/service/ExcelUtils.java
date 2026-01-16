@@ -33,9 +33,9 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -278,10 +278,10 @@ public class ExcelUtils  implements IExcelUtils {
             // Encabezado del inventario
             Row headerRow = sheet.createRow(rowNum++);
             String[] headers = {
-                    "PROPIETARIO", "UNIDAD", "ESTADO DE LA UNIDAD", "TIPO DE UNIDAD", "TAMAÑO",
+                    "PROPIETARIO", "PLANTA-DESTINO","CLIENTE", "UNIDAD", "ESTADO DE LA UNIDAD", "TIPO DE UNIDAD", "TAMAÑO",
                     "CONDICION DE LA UNIDAD", "LOCALIDAD", "FECHA GATEIN", "GRADO-CALIDAD",
                     "DIAS DE ESTADIA", "FECHA FIN DE REPARACION", "EDO. ESTIMADO NAVIERA",
-                    "APTO PARA", "MAQUINARIA DE UNIDAD (RF)", "FECHA DE LLEGADA", "OBSERVACIONES"
+                    "APTO PARA", "MAQUINARIA DE UNIDAD (RF)", "FECHA DE INSPECCION", "OBSERVACIONES"
             };
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -298,6 +298,8 @@ public class ExcelUtils  implements IExcelUtils {
                 List<CatShippingCompanyModel> shippingCompany = catShippingCompanyReposirtory.getShippingDesc(record.getShippingCompany());
                 String propietario = (shippingCompany.size() > 0) ? shippingCompany.get(0).getDescription() : "";
                 row.createCell(cellIndex).setCellValue(propietario); row.getCell(cellIndex++).setCellStyle(style);
+                row.createCell(cellIndex).setCellValue(record.getDestinyPregate()); row.getCell(cellIndex++).setCellStyle(style);
+                row.createCell(cellIndex).setCellValue(record.getBillTo()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getContainer()); row.getCell(cellIndex++).setCellStyle(style);
 
                 String condicion = "UNKNOWN";
@@ -330,7 +332,7 @@ public class ExcelUtils  implements IExcelUtils {
 
                 row.createCell(cellIndex).setCellValue(record.getConditionPregate()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getLocation()); row.getCell(cellIndex++).setCellStyle(style);
-                row.createCell(cellIndex).setCellValue(record.getDateInspection().toString()); row.getCell(cellIndex++).setCellStyle(style);
+                row.createCell(cellIndex).setCellValue(record.getDateGateIn().toString()); row.getCell(cellIndex++).setCellStyle(style);
 
                 String clasificacion = "UNKNOWN";
                 switch (record.getClasification()) {
@@ -344,8 +346,18 @@ public class ExcelUtils  implements IExcelUtils {
                 }
                 row.createCell(cellIndex).setCellValue(clasificacion); row.getCell(cellIndex++).setCellStyle(style);
 
-                long diff = DateManagement.todayDate().getTime() - record.getDateInspection().getTime();
-                long dias = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                long dias = 0L;
+
+                if (record.getDateGateIn() != null) {
+                    // Obtenemos la fecha actual como LocalDateTime
+                    LocalDateTime hoy = LocalDateTime.now();
+
+                    // Calculamos la diferencia directamente en días
+                    dias = ChronoUnit.DAYS.between(record.getDateGateIn(), hoy);
+
+                    // Aseguramos que no sea negativo si así lo requieres
+                    dias = Math.max(0L, dias);
+                }
                 row.createCell(cellIndex).setCellValue(dias); row.getCell(cellIndex++).setCellStyle(style);
 
                 String fechaFinal = (record.getFinalDate() == null) ? "PENDIENTE" : record.getFinalDate();
@@ -368,11 +380,12 @@ public class ExcelUtils  implements IExcelUtils {
 
                 row.createCell(cellIndex).setCellValue(record.getAptTo()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getTypeServicePregate()); row.getCell(cellIndex++).setCellStyle(style);
-                row.createCell(cellIndex).setCellValue(record.getRegisterDate().toString()); row.getCell(cellIndex++).setCellStyle(style);
+                //Fecha en que se registro para preGate
+                row.createCell(cellIndex).setCellValue(record.getDateInspection().toString()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getComents()); row.getCell(cellIndex++).setCellStyle(style);
             }
 
-            for (int i = 0; i <= 15; i++) {
+            for (int i = 0; i <= 17; i++) {
                 sheet.autoSizeColumn(i);
             }
 
@@ -437,13 +450,13 @@ public class ExcelUtils  implements IExcelUtils {
             titleCell.setCellStyle(titleStyle);
 
             String[] headers = {
-                    "LOCALIDAD", "TIPO DE ACTIVIDAD", "TIPO DE UNIDAD", "EIR", "FECHA DE EVENTO", "UNIDAD",
-                    "GRADO-CALIDAD", "NUMERO DE BOOKING", "TIPO DE UNIDAD", "TAMAÑO", "NOMECLATURA",
-                    "AUTORIZACION CLIENTE", "FACTURA SAP", "COSTO DE LA MANIOBRA", "MONEDA", "SELLO DE CALIDAD",
+                    "LOCALIDAD", "TIPO DE ACTIVIDAD", "ESTADO", "EIR", "FECHA DE EVENTO", "UNIDAD",
+                    "GRADO-CALIDAD", "NUMERO DE BOOKING", "NOMECLATURA",
+                    "AUTORIZACION CLIENTE", "FACTURA SAP", "COSTO DE LA MANIOBRA", "PROPIETARIO", "COBRAR A:", "TIPO DE SERVICIO",
+                    "COMPAÑIA TRANSPORTISTA", "NOMBRE DEL OPERADOR", "NÚMERO DEL ECONÓMICO",
+                    "ORIGEN", "PLANTA DESTINO", "ANDEN", "TIPO DE ENTREGA", "MONEDA", "SELLO DE CALIDAD",
                     "SELLO DE SEGURIDAD", "TRANSMITIR POR EDI", "ESTATUS DEL EDI", "REG INSERTADO TABLA EDI",
-                    "REG ENVIADO A EDI", "ARCHIVO EDI", "PROPIETARIO", "COBRAR A:", "TIPO DE SERVICIO",
-                    "COMPAÑIA TRANSPORTISTA", "NOMBRE DEL OPERADOR", "PLACAS DEL TRANSPORTE", "NÚMERO DEL ECONÓMICO",
-                    "ORIGEN", "PLANTA DESTINO", "ANDEN", "TIPO DE ENTREGA"
+                    "REG ENVIADO A EDI", "ARCHIVO EDI",
             };
 
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headers.length - 1));
@@ -493,30 +506,29 @@ public class ExcelUtils  implements IExcelUtils {
                 createStyledCell(row, 6, record.getGradoCalidad(), cellStyle);
                 createStyledCell(row, 7, record.getNumeroBooking(), cellStyle);
 
-                createStyledCell(row, 8, record.getTipoUnidad2(), cellStyle);
-                createStyledCell(row, 9, record.getTamano(), cellStyle);
+
 
                 //List<CatNomenclaturaModel> nomenclatura = catNomencalturaRepository.findBYTransportType(containerType, record.getContaierSize());
-                createStyledCell(row, 10, record.getNomenclatura(), cellStyle);
-                createStyledCell(row, 11, "", cellStyle);
-                createStyledCell(row, 12, "", cellStyle);
-                createStyledCell(row, 13, record.getCostoManiobra(), cellStyle);
+                createStyledCell(row, 8, record.getNomenclatura(), cellStyle);
+                createStyledCell(row, 9, "", cellStyle);
+                createStyledCell(row, 10, "", cellStyle);
+                createStyledCell(row, 11, record.getCostoManiobra(), cellStyle);
 
-                for (int i = 14; i <= 21; i++) createStyledCell(row, i, " ", cellStyle);
+                createStyledCell(row, 12, record.getPropietario(), cellStyle);
 
-                createStyledCell(row, 22, record.getPropietario(), cellStyle);
+                createStyledCell(row, 13, record.getCobrarA(), cellStyle);
+                createStyledCell(row, 14, record.getTipoServicio(), cellStyle);
+                createStyledCell(row, 15, record.getCompaniaTransportista(), cellStyle);
+                createStyledCell(row, 16, record.getNombreOperador(), cellStyle);
+                createStyledCell(row, 17, record.getNumeroEconomico(), cellStyle);
+                createStyledCell(row, 18, record.getOrigen(), cellStyle);
+                createStyledCell(row, 19, record.getPlantaDestino(), cellStyle);
+                createStyledCell(row, 20, " ", cellStyle);
+                createStyledCell(row, 21, " ", cellStyle);
+
+                for (int i = 22; i <= 29; i++) createStyledCell(row, i, " ", cellStyle);
 
 
-                createStyledCell(row, 23, record.getCobrarA(), cellStyle);
-                createStyledCell(row, 24, record.getTipoServicio(), cellStyle);
-                createStyledCell(row, 25, record.getCompaniaTransportista(), cellStyle);
-                createStyledCell(row, 26, record.getNombreOperador(), cellStyle);
-                createStyledCell(row, 27, record.getPlacasTransporte(), cellStyle);
-                createStyledCell(row, 28, record.getNumeroEconomico(), cellStyle);
-                createStyledCell(row, 29, record.getOrigen(), cellStyle);
-                createStyledCell(row, 30, record.getPlantaDestino(), cellStyle);
-                createStyledCell(row, 31, " ", cellStyle);
-                createStyledCell(row, 32, " ", cellStyle);
             }
 
             // === HISTÓRICO ===
@@ -571,33 +583,43 @@ public class ExcelUtils  implements IExcelUtils {
                     case 7: containerType = "HC"; break;
                     default: containerType = "UNKNOWN"; break;
                 }
-                createStyledCell(row, 8, containerType, cellStyle);
-                createStyledCell(row, 9, record.getContaierSize(), cellStyle);
 
                 List<CatNomenclaturaModel> nomenclatura = catNomencalturaRepository.findBYTransportType(containerType, record.getContaierSize());
-                createStyledCell(row, 10, nomenclatura.isEmpty() ? " " : nomenclatura.get(0).getNomenclatura(), cellStyle);
+                createStyledCell(row, 8, nomenclatura.isEmpty() ? " " : nomenclatura.get(0).getNomenclatura(), cellStyle);
+                createStyledCell(row, 9, " ", cellStyle);
+                createStyledCell(row, 10, " ", cellStyle);
+                createStyledCell(row, 11, " ", cellStyle);
 
-                for (int i = 11; i <= 21; i++) createStyledCell(row, i, " ", cellStyle);
 
                 if (!shippingCompany.isEmpty()) {
-                    createStyledCell(row, 22, shippingCompany.get(0).getDescription(), cellStyle);
+                    createStyledCell(row, 12, shippingCompany.get(0).getDescription(), cellStyle);
                 } else {
-                    createStyledCell(row, 22, " ", cellStyle);
+                    createStyledCell(row, 12, " ", cellStyle);
                 }
 
-                createStyledCell(row, 23, record.getBillTo(), cellStyle);
-                createStyledCell(row, 24, record.getTypeServicePregate(), cellStyle);
-                createStyledCell(row, 25, record.getTransportId(), cellStyle);
-                createStyledCell(row, 26, record.getOperatorName(), cellStyle);
-                createStyledCell(row, 27, record.getPlate(), cellStyle);
-                createStyledCell(row, 28, record.getEconomicNumber(), cellStyle);
-                createStyledCell(row, 29, record.getOriginPregate(), cellStyle);
-                createStyledCell(row, 30, record.getDestinyPregate(), cellStyle);
-                createStyledCell(row, 31, " ", cellStyle);
-                createStyledCell(row, 32, " ", cellStyle);
+                if(record.getConditionPregate().equals("VACIO")){
+                    createStyledCell(row, 13, record.getDefinition(), cellStyle);
+                } else {
+                    createStyledCell(row, 13, record.getBillTo(), cellStyle);
+                }
+
+                createStyledCell(row, 14, record.getTypeServicePregate(), cellStyle);
+                createStyledCell(row, 15, record.getTransportId(), cellStyle);
+                createStyledCell(row, 16, record.getOperatorName(), cellStyle);
+                createStyledCell(row, 17, record.getEconomicNumber(), cellStyle);
+                createStyledCell(row, 18, record.getOriginPregate(), cellStyle);
+                if(record.getConditionPregate().equals("VACIO")){
+                    createStyledCell(row, 19, record.getBillTo(), cellStyle);
+                } else {
+                    createStyledCell(row, 19, record.getDestinyPregate(), cellStyle);
+                }
+                createStyledCell(row, 20, " ", cellStyle);
+                createStyledCell(row, 21, " ", cellStyle);
+
+                for (int i = 22; i <= 29; i++) createStyledCell(row, i, " ", cellStyle);
             }
 
-            for (int i = 0; i <= 32; i++) sheet.autoSizeColumn(i);
+            for (int i = 0; i <= 29; i++) sheet.autoSizeColumn(i);
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             workbook.write(out);

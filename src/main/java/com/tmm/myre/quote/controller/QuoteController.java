@@ -3,6 +3,8 @@ package com.tmm.myre.quote.controller;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.tmm.myre.catalog.dto.*;
+import com.tmm.myre.catalog.service.core.*;
 import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -23,17 +25,7 @@ import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.exception.ConverterException;
 import com.tmm.myre.base.service.core.IPdfGenerationService;
 import com.tmm.myre.base.utils.KeyConstants;
-import com.tmm.myre.catalog.dto.CatComponentDto;
-import com.tmm.myre.catalog.dto.CatDamageDto;
-import com.tmm.myre.catalog.dto.CatJobcodeDto;
-import com.tmm.myre.catalog.dto.CatRepairDto;
-import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
 import com.tmm.myre.catalog.service.CatJobcodeService;
-import com.tmm.myre.catalog.service.core.ICatComponentService;
-import com.tmm.myre.catalog.service.core.ICatDamageService;
-import com.tmm.myre.catalog.service.core.ICatJobcodeService;
-import com.tmm.myre.catalog.service.core.ICatRepairService;
-import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.dto.ContainerHistoricDto;
 import com.tmm.myre.containers.model.ContainerModel;
@@ -83,6 +75,9 @@ public class QuoteController extends AbstractMyreController {
 	
 	@Autowired
 	private IQuoteService quoteService;
+
+	@Autowired
+	private ICatCustomerService catCustomerService;
 	
 	@Autowired
 	private IInspectionRepository inspectionRepository;
@@ -99,6 +94,16 @@ public class QuoteController extends AbstractMyreController {
 		try {
 			return containerService.getContainersQuoteAll(getWarehouse());
 		} catch(Exception ex) {
+			return null;
+		}
+	}
+
+	@ModelAttribute("catClients")
+	List<CatCustomerDto> catClients() {
+		try {
+			return catCustomerService.catClients();
+		} catch(Exception ex) {
+			log.error(ex.toString());
 			return null;
 		}
 	}
@@ -381,6 +386,21 @@ public class QuoteController extends AbstractMyreController {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
 			containerService.saveInvoiceNumber(containerId, invoiceNumber);
+			response.setSuccess(true);
+			response.setMessage("Factura guardada correctamente");
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
+			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
+		}
+		return response;
+	}
+
+	@PostMapping("editBillTo")
+	@ResponseBody
+	public ResponseManagement editBillTo(@RequestParam String inspectionId, @RequestParam String newBillTo) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			inspectionsService.editBillToName(inspectionId, newBillTo);
 			response.setSuccess(true);
 			response.setMessage("Factura guardada correctamente");
 		} catch(Exception ex) {

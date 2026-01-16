@@ -15,6 +15,7 @@ public interface IBookingService {
 
 	ResponseManagement createBooking(BookingDto bookingDto) throws ConverterException;
 
+	ResponseManagement validationOrders(String bookingId);
 
-
+    ResponseManagement addNewAssignmentToBooking(Integer newQuantityAsssignment, String bookingId);
 }

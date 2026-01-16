@@ -60,10 +60,12 @@ function configDataTable() {
 			{ data: "condition", visible: true , render : function(data) {
 						$("#containerConditionQuote").val(data);
 						return $("#containerConditionQuote option:selected").html();
-					}}, 
-			{ data: "quoteName", visible: true , render : function(data) {
-						return data;
-					}}, 
+					}},
+			{ data: "quoteName", visible: true, render: function(data) {
+					if (!data) return "";
+					const matches = data.toString().match(/\d+/g);
+					return matches ? matches[matches.length - 1] : "";
+				}},
 			{ data: "typeServicePregate",visible: true },
 			{ data: "billTo",visible: true },
 			{ data: "statusQute", visible: false , render : function(data) {

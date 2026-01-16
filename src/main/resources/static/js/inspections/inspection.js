@@ -82,6 +82,9 @@ function configDataTable() {
 			{ data: "daysStay", visible: true , render : function(data) {
 						return data;
 					}},
+			{ data: "dateGateIn", visible: false , render : function(data) {
+					return data;
+				}},
 			{ data: "assignedTo", visible: true , render : function(data) {
 						return data;
 					}},
@@ -137,7 +140,7 @@ function configDataTable() {
 					
 			
 		], 
-		order: [[6, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
+		order: [[7, 'desc']] // Ordenar por la columna de fecha (registerDate) en orden ascendente
 	}).columns.adjust();
 	$("#imageTableInspectionView").DataTable().destroy();
 	$("#imageTableInspectionView").DataTable({

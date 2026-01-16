@@ -75,13 +75,14 @@
 				<option value="8">VENTA</option>
 				<option value="9">ACCIDENTADO</option>
 				</select>
-									
+
 									
 		</div>
 			<div class="container-table">
 			<table id="containerTable" class="table table-striped dt-responsive striped" style="width: 100%;">
 				<thead>
 					<tr>
+						<th>Fecha Booking/Salida</th>
 						<th>containerId</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -96,6 +97,7 @@
 				</thead>
 				<tfoot>
 					<tr>
+						<th>Fecha Booking/Salida</th>
 						<th>containerId</th>
 						<th>Unidad</th>
 						<th>Tipo</th>
@@ -1254,7 +1256,8 @@
 						</button>
 					</div>
 					<form id="gateOutForm">
-						<input type="text" class="form-control" id="conditionPregate" disabled>
+						<input type="datetime-local" class="form-control" id="orderDate" disabled hidden="hidden">
+						<input type="text" class="form-control" id="conditionPregate" hidden="hidden" disabled>
 					<div class="modal-body modal-body-app">
 					<div class="row">
 							<div class="col-sm" >

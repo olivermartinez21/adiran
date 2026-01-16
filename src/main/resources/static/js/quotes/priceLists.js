@@ -195,6 +195,7 @@ function chargeJobcodes(){
 		success : function(response) {
 			Swal.fire("INFORMACION GUARDADA", response.message, "success")
 			configDataTable();
+			$("#file").val('');
 		},
 		error : function() {
 			Swal.fire("ERRO 902","el documento no pudo cargarse", "warning")

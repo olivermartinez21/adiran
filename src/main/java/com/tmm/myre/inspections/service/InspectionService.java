@@ -475,6 +475,21 @@ public class InspectionService implements IInspectionsService {
 		return result;
 	}
 
+	@Override
+	public ResponseManagement editBillToName(String inspectionId, String newBillTo) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try{
+			InspectionModel inspection = inspectoRepository.getById(inspectionId);
+			inspection.setCustomerName(newBillTo);
+			inspectoRepository.save(inspection);
+			response.setSuccess(true);
+		} catch (Exception e) {
+			response.setSuccess(false);
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
+		}
+		return response;
+	}
 
 
 }

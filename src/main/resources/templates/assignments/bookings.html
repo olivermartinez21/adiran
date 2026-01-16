@@ -408,7 +408,7 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<input type="text" class="form-control" id="bookingId" hidden=true>
+					<input type="text" class="form-control" id="bookingId" hidden="hidden">
 					<form id="newDeliveryOrderForm">
 					<div class="modal-body modal-body-app">
 					<div class="row">
@@ -433,7 +433,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm" hidden =true>
+							<div class="col-sm" hidden="hidden">
 								<div class="form-group">
 									<label for="newUnitRemainingOrder">Unidades restantes del booking </label>
 									<input type="text" class="form-control" id="newUnitRemainingOrder" disabled>
@@ -494,7 +494,7 @@
 									<input type="text" class="form-control" id="newWorkOrderOrder">
 								</div>
 							</div>
-							<div class="col-sm" hidden=true>
+							<div class="col-sm"  hidden="hidden">
 								<div class="form-group">
 									<label for="newUnitDeliver">Unidades a entregar</label>
 									<input type="text" class="form-control" id="newUnitDeliver">
@@ -516,8 +516,16 @@
 								</thead>
 							</table>
 						</div>
-						
-						<div class="container-table">
+						<div class="row">
+							<div class="col-sm">
+								<div class="form-group">
+									<label for="addContainers">Agregar unidades   </label>
+									<input type="text" class="form-control" id="addContainers">
+									<button type="button" class="btn btn-primary" onclick="addContainersToDeliveryOrder()">Agregar</button>
+								</div>
+							</div>
+						</div>
+							<div class="container-table">
 							<table id="deliveryOrdersTable" class="table table-striped dt-responsive" style="width: 100%;">
 								<thead>
 									<tr>

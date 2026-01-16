@@ -2,6 +2,11 @@ package com.tmm.myre.containers.converter;
 
 
 
+import com.tmm.myre.assignments.model.AssignmentModel;
+import com.tmm.myre.assignments.model.BookingModel;
+import com.tmm.myre.assignments.repository.IAssignmentRepository;
+import com.tmm.myre.assignments.repository.IBookingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tmm.myre.base.converter.IConverter;
@@ -9,8 +14,15 @@ import com.tmm.myre.base.exception.ConverterException;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.model.ContainerModel;
 
+import java.sql.Date;
+
 @Component("containerConverter")
 public class ContainerConverter implements IConverter<ContainerModel, ContainerDto> {
+
+	@Autowired
+	IAssignmentRepository assignmentRepository;
+	@Autowired
+	IBookingRepository bookingRepository;
 
 	@Override
 	public ContainerModel convert(ContainerDto to) throws ConverterException {
@@ -70,6 +82,7 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.originPregate(to.getOriginPregate())
 				.destinyPregate(to.getDestinyPregate())
 				.noInvoice(to.getNoInvoice())
+				.dateGateIn(to.getDateGateIn())
 				.exitDateTime(to.getExitDateTime())
 				.build();
 		
@@ -78,6 +91,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 
 	@Override
 	public ContainerDto convert(ContainerModel entity) throws ConverterException {
+
+
 		ContainerDto to=ContainerDto.builder()
 				.containerId(entity.getContainerId())
 				.registerDate(entity.getRegisterDate())
@@ -135,6 +150,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.destinyPregate(entity.getDestinyPregate())
 				.noInvoice(entity.getNoInvoice())
 				.exitDateTime(entity.getExitDateTime())
+				.dateGateIn(entity.getDateGateIn())
+				//.orderDate(orderDate)
 				.build();
 		return to;
 	}

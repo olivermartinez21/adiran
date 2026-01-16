@@ -19,4 +19,5 @@ public interface IDeliveryOrderRepository extends JpaRepository<DeliveryOrderMod
 	@Query(value = "SELECT count(*) FROM  MYRE_DELIVERY_ORDER where File_content IS NOT NULL", nativeQuery = true)
 	int getcountpdf();
 
+    DeliveryOrderModel findByAssignmentId(String bookingId);
 }

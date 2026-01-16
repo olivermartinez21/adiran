@@ -416,10 +416,25 @@ public class ContainerController extends AbstractMyreController{
 	@PostMapping("saveExitDate")
 	@ResponseBody
 	public ResponseManagement saveExitDate(@RequestParam String containerId, @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime exitDateTime,
-										   @RequestParam String fullObservation, @RequestParam String destinyPregate) {
+										   @RequestParam String fullObservation, @RequestParam String destinyPregate,
+											@RequestParam String newOriginPregate, @RequestParam String newTransportCompanyPregate) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
-			return containerService.saveExitDate(containerId, exitDateTime, fullObservation, destinyPregate);
+			return containerService.saveExitDate(containerId, exitDateTime, fullObservation, destinyPregate, newOriginPregate, newTransportCompanyPregate);
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
+			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
+			response.setOperation(KeyConstants.UPDATE);
+		}
+		return response;
+	}
+
+	@PostMapping("evacuationUpdate")
+	@ResponseBody
+	public ResponseManagement evacuationUpdate(@ModelAttribute ContainerDto containerDto) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+		try {
+			return containerService.evacuationUpdate(containerDto);
 		} catch(Exception ex) {
 			response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
 			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());

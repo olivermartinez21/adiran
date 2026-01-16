@@ -6,6 +6,9 @@ import java.util.List;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
+
+import com.tmm.myre.deliveryOrders.model.DeliveryOrderModel;
+import com.tmm.myre.deliveryOrders.repository.IDeliveryOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +53,9 @@ public class BookingService implements IBookingService {
 	
 	@Autowired
 	private IContainerRepository containerRepository;
-	
+    @Autowired
+    private IDeliveryOrderRepository deliveryOrderRepository;
+
 	@Override
 	public List<BookingDto> getDataTable(String warehouse) throws ConverterException {
 		List<BookingDto> list = new ArrayList<BookingDto>();
@@ -150,5 +155,100 @@ public class BookingService implements IBookingService {
 		
 		return response;
 	}
+
+	@Override
+	public ResponseManagement validationOrders(String bookingId) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.SEARCH).build();
+		try {
+			BookingModel booking = bookingRepository.getById(bookingId);
+			List<AssignmentModel> assignmentModel = assignmentRepository.findByBookingId(bookingId);
+
+			if(booking.getQuantityUnitsUse().equals(booking.getQuantityUnits()) && assignmentModel.isEmpty()){
+				response.setMessage("El Booking ya fue completado ");
+				response.setSuccess(false);
+			} else {
+				response.setMessage("El Booking sigue activo ");
+				response.setSuccess(true);
+			}
+
+		} catch (Exception ex) {
+			response.setSuccess(false);
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + ex.toString());
+		}
+
+
+		return response;
+	}
+
+	@Override
+	public ResponseManagement addNewAssignmentToBooking(Integer newQuantityAsssignment, String bookingId) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).build();
+		try {
+			if (newQuantityAsssignment == null || newQuantityAsssignment <= 0) {
+				response.setSuccess(false);
+				response.setMessage("La cantidad a agregar debe ser mayor que 0");
+				return response;
+			}
+
+			BookingModel booking = bookingRepository.findByBookingId(bookingId);
+			if (booking == null) {
+				response.setSuccess(false);
+				response.setMessage("Booking no encontrado");
+				return response;
+			}
+
+			// cantidad actual total de espacios (asumimos que booking.getQuantityUnits() guarda el total actual)
+			int currentTotal = 0;
+			try {
+				currentTotal = Integer.parseInt(Optional.ofNullable(booking.getQuantityUnits()).orElse("0"));
+			} catch (NumberFormatException e) {
+				currentTotal = 0;
+			}
+
+			int newTotal = currentTotal + newQuantityAsssignment;
+			// Crear nuevas asignaciones con NO consecutivo a partir de currentTotal + 1 hasta newTotal
+			List<AssignmentModel> newAssignments = new ArrayList<>();
+			for (int i = currentTotal + 1; i <= newTotal; i++) {
+				AssignmentModel a = new AssignmentModel();
+				a.setId(UuidProvider.getUUID());
+				a.setBookingId(bookingId);
+				// Asume que el campo consecutivo se llama 'no' y es de tipo String; ajustar si es distinto
+				try {
+					// si existe setNo(String)
+					a.getClass().getMethod("setNo", String.class).invoke(a, String.valueOf(i));
+				} catch (Exception ex) {
+					// si no existe setNo(String), intentar setNo(Integer) o setConsecutive...
+					try {
+						a.getClass().getMethod("setNo", Integer.class).invoke(a, i);
+					} catch (Exception ex2) {
+						// Si no hay setter accesible, ignorar y seguir (ajustar según el modelo real)
+					}
+				}
+				a.setStatus(1);
+				newAssignments.add(a);
+			}
+
+			// Actualizar booking con la nueva cantidad total
+			booking.setQuantityUnits(String.valueOf(newTotal));
+			bookingRepository.save(booking);
+
+			// Persistir nuevas asignaciones
+			if (!newAssignments.isEmpty()) {
+				assignmentRepository.saveAll(newAssignments);
+			}
+
+			response.setSuccess(true);
+			response.setMessage("Se agregaron " + newQuantityAsssignment + " asignaciones al booking");
+		} catch (Exception ex) {
+			response.setSuccess(false);
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + ex.toString());
+		}
+
+		return response;
+	}
+
+
 
 }

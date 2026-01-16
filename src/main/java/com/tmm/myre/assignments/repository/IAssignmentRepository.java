@@ -46,4 +46,7 @@ public interface IAssignmentRepository extends JpaRepository<AssignmentModel, St
 	@Query(value = "DELETE FROM MYRE_ASSIGNMENT WHERE UNITNUMBER = :unitNumber", nativeQuery = true)
 	int deleteUnit(@Param("unitNumber") String unitNumber);
 
+    AssignmentModel findByUnitNumber(String container);
+
+	List<AssignmentModel> findByBookingId(String bookingId);
 }

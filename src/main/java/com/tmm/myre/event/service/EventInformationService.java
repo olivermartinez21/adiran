@@ -210,7 +210,7 @@ public class EventInformationService implements IEventInformationService {
 					.placasTransporte(container.getPlate())
 					.numeroEconomico(container.getEconomicNumber())
 					.origen(container.getOriginPregate())
-					.plantaDestino(containerDto.getDestinyPregate())
+					.plantaDestino(container.getDestinyPregate())
 					.anden(null)
 					.tipoEntrega(null)
 					.shippingCompany(containerDto.getShippingCompany())

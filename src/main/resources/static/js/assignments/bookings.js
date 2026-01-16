@@ -494,6 +494,7 @@ function getContainersEspecifications() {
 	console.log($("#typeBookingInformation").val());
 	console.log($("#sizeBookingInformation").val())
 	console.log($("#qualityBookingInformation").val())
+	console.log($("#shippingCompanyCatalog").val())
 	$.ajax({
 		type: "GET",
 		url: 'bookings/getUnitsFilter',
@@ -501,7 +502,9 @@ function getContainersEspecifications() {
 		data: {	
 			type: $("#typeBookingInformation").val(),
 			size: $("#sizeBookingInformation").val(),
-			clasification: $("#qualityBookingInformation").val()},
+			clasification: $("#qualityBookingInformation").val(),
+			shippingCompany: $("#shippingCompanyCatalog").val(),
+		},
 		success: function(response){
 			console.log(response)
 			clearComboContainer(document.getElementById("newContainerList"));
@@ -536,6 +539,26 @@ function newDeliveryOrder(data){
 
 	
 		currentData = $("#bookignTable").DataTable().row(data).data();
+
+	$.ajax({
+		type: "GET",
+		url: 'bookings/validationOrders',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {	bookingId: currentData.bookingId},
+		success: function(response){
+			console.log(response)
+
+			if (response.success==false){
+				Swal.fire(" ",response.message, "warning")
+			} else{
+				console.log("Sigue activo")
+			}
+
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
 		if(currentData.expirationDate>date){
 		bookingTableOrder(currentData.bookingId)
 			console.log("Entra a buscar delivry oirder")
@@ -551,13 +574,31 @@ function newDeliveryOrder(data){
 		$("#newOperatorOrder").val(currentData.operator);
 		$("#newEconomicNumberOrder").val(currentData.economicNumber);
 		$("#newWorkOrderOrder").val(currentData.workOrder);
+
 		$("#newShippngCompanyOrder").val( $("#shippingCompanyCatalog option:selected").html());
 			
 		$("#newDeliveryOrderlModal").modal('show');
 		
 		}else{
 			Swal.fire("El booking Expiro","", "warning")
-			console.log(currentData)
+			bookingTableOrder(currentData.bookingId)
+			console.log("Entra a buscar delivry oirder")
+			tableDelivery(currentData.bookingId);
+			//infoOrder(currentData.bookingId)
+			$("#bookingId").val(currentData.bookingId)
+			$("#newBookingOrder").val(currentData.booking);
+			$("#newUnitRemainingOrder").val(currentData.quantityUnits);
+			$("#newBillToOrder").val(currentData.billTo);
+			$("#shippingCompanyCatalog").val(currentData.shippingCompany);
+			$("#newTypeUnitOrder").val(currentData.unitType);
+			$("#newCarrierCompanyOrder").val(currentData.carrierCompany);
+			$("#newOperatorOrder").val(currentData.operator);
+			$("#newEconomicNumberOrder").val(currentData.economicNumber);
+			$("#newWorkOrderOrder").val(currentData.workOrder);
+
+			$("#newShippngCompanyOrder").val( $("#shippingCompanyCatalog option:selected").html());
+
+			$("#newDeliveryOrderlModal").modal('show');
 		}
 		
 }
@@ -641,10 +682,16 @@ function bookingTableOrder(data){
 //style="overflow-y: scroll;"
 
 function unitCap(data){
+		if ($("#newTypeUnitOrder").val()=="" || $("#newTypeUnitOrder").val()==null){
+			Swal.fire("Seleccione el tipo de unidad para la orden de entrega", "", "warning");
+			return false;
+		}
+
 		console.log("entra unitCap "+ $("#newTypeUnitOrder").val())
-		console.log("ENTRA TIPO"+$("#typeBookingInformation").val())
-		console.log("ENTRA TAMANIO"+$("#sizeBookingInformation").val())
-		console.log("ENTRA GRADO"+$("#qualityBookingInformation").val())
+		console.log("ENTRA TIPO "+$("#typeBookingInformation").val())
+		console.log("ENTRA TAMANIO "+$("#sizeBookingInformation").val())
+		console.log("ENTRA GRADO "+$("#qualityBookingInformation").val())
+	console.log("Entra shippingCatalog " + $("#shippingCompanyCatalog").val())
 
 	    currentData = $("#bookingInformationOrder").DataTable().row(data).data();
 		$("#newUnitInformation").val(currentData.unitNumber);
@@ -654,7 +701,9 @@ function unitCap(data){
 		type: "GET",
 		url: 'bookings/getContainersStock',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		data: {	location: $("#globalWarehouse").val()},
+		data: {	location: $("#globalWarehouse").val(),
+				shippingCompany: $("#shippingCompanyCatalog").val()
+		},
 		success: function(response){
 			console.log(response)
 			clearComboContainer(document.getElementById("newContainerList"));
@@ -679,10 +728,11 @@ function selectContainer(){
 		type: "GET",
 		url: 'bookings/getUnitInfo',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		data:{containerId :  $("#unitNumberBookingInformation").val()},	
+		data:{containerId :  $("#unitNumberBookingInformation").val(),
+				shippingCompany: $("#shippingCompanyCatalog").val()
+		},
 		success: function(response){
 			console.log(response)
-
 			if ($("#sizeBookingInformation").val() == 0 && $("#qualityBookingInformation").val() == 0){
 
 				if (response.containerType == $("#typeBookingInformation").val()){
@@ -858,6 +908,7 @@ function preOrderDelivery(data) {
 }
 
 function printOrder(data){
+		console.log(data)
 	$.ajax({
 		type: "POST",
 		url: 'bookings/printDeliveryOrder',
@@ -1190,3 +1241,24 @@ function showBookigs(){
 	}).columns.adjust();
 }
 
+function addContainersToDeliveryOrder(){
+	$.ajax({
+		type: "POST",
+		url: 'bookings/addNewAssignmentToBooking',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data:  {newQuantityAsssignment : $("#addContainers").val(),
+				bookingId: $("#bookingId").val()},
+		success: function(response){
+			console.log(response)
+			bookingTableOrderEdit()
+			tableDelivery($("#bookingId").val())
+			bookingTableOrder($("#bookingId").val())
+
+
+
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
+}

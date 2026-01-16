@@ -55,7 +55,7 @@ function initComponents() {
 		}
 		if (
 			$("#shippingCompanyRef").val() === "7" &&
-			($("#modelYear").val() === null || $("#modelYear").val() === "")
+			($("#modelYear").val() === null || $("#modelYear").val() === "" ) && $("#newCondition").val() === "LLENO"
 		) {
 			Swal.fire("Debes ingresar el año del modelo para unidades de CMA.", "", "warning");
 			return false;

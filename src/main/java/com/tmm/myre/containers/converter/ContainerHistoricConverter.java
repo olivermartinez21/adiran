@@ -9,6 +9,8 @@ import com.tmm.myre.containers.dto.ContainerHistoricDto;
 import com.tmm.myre.containers.model.ContainerHistoricModel;
 import com.tmm.myre.containers.model.ContainerModel;
 
+import java.util.List;
+
 @Component("containerHistoricConverter")
 public class ContainerHistoricConverter implements IConverter<ContainerHistoricModel, ContainerHistoricDto>{
 
@@ -127,5 +129,9 @@ public class ContainerHistoricConverter implements IConverter<ContainerHistoricM
 				.comnetsQuote(entity.getComnetsQuote())
 				.build();
 		return to;
+	}
+
+	public List<ContainerHistoricDto> convert(List<ContainerHistoricModel> containerHistoric) {
+		return null;
 	}
 }

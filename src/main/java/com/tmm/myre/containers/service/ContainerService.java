@@ -2,7 +2,10 @@ package com.tmm.myre.containers.service;
 
 import java.io.File;
 import java.sql.Blob;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
@@ -11,9 +14,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.tmm.myre.assignments.model.BookingModel;
+import com.tmm.myre.assignments.repository.IBookingRepository;
+import com.tmm.myre.base.service.FolioService;
+import com.tmm.myre.base.service.core.IFolioService;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,6 +74,8 @@ import com.tmm.myre.userRegister.model.UserRegisterModel;
 import com.tmm.myre.userRegister.repository.IUserRegisterRepository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.server.ResponseStatusException;
+
 @Slf4j
 @Service("containerService")
 public class ContainerService implements IContainerService{
@@ -124,20 +134,34 @@ public class ContainerService implements IContainerService{
 	
 	@Autowired
 	private CatShippingCompanyConverter catShippingCompanyConverter;
-	
-	
-	
-	
+    @Autowired
+    private IBookingRepository bookingRepository;
+
+	@Autowired
+	private IFolioService folioService;
+
+
 	@Override
 	public List<ContainerDto> getContainers(String warehouse) throws ConverterException {
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
 		List<ContainerModel> entities = containerRepository.findAllbyWarehouse(warehouse);
 			for(ContainerModel entity : entities) {
-				
-				long diff = DateManagement.todayDate().getTime() - entity.getDateInspection().getTime() ;
-				TimeUnit time = TimeUnit.DAYS; 
-			    long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
-			    entity.setDaysStay(" "+diffrence);
+
+				if (entity.getDateGateIn() != null) {
+					// 1. Obtenemos la fecha actual
+					LocalDateTime hoy = LocalDateTime.now();
+
+					// 2. Calculamos la diferencia directamente en días
+					long diferencia = ChronoUnit.DAYS.between(
+							entity.getDateGateIn(), hoy
+					);
+
+					// 3. Evitamos números negativos si la fecha es futura
+					diferencia = Math.max(0L, diferencia);
+
+					// 4. Guardamos como String (usando String.valueOf es más limpio que " " +)
+					entity.setDaysStay(String.valueOf(diferencia));
+				}
 				
 				list.add(containerConverter.convert(entity));
 			
@@ -163,10 +187,10 @@ public class ContainerService implements IContainerService{
 	}
 	
 	@Override
-	public List<ContainerDto> getContainersStock(String warehouse) throws ConverterException {
+	public List<ContainerDto> getContainersStock(String warehouse, String shippingCompany) throws ConverterException {
 		log.info(warehouse);
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
-		List<ContainerModel> entities = containerRepository.findAllbyWarehouseStock(warehouse);
+		List<ContainerModel> entities = containerRepository.findAllbyWarehouseStock(warehouse, shippingCompany);
 			for(ContainerModel entity : entities) {
 				list.add(containerConverter.convert(entity));
 		}
@@ -215,7 +239,7 @@ public class ContainerService implements IContainerService{
 				if(containerDto.getNum()==containerDto.getFilas()-1) {
 					int valor = containerRepository.getCountEirOut();
 					valor=valor +1;
-					container.setEirOutName("EIR-OUT-"+container.getLocation()+"-0"+valor);
+					container.setEirOutName("EIR-OUT-"+container.getLocation()+" "+valor);
 					container.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));
 				}
 				
@@ -500,14 +524,40 @@ public class ContainerService implements IContainerService{
 		return list;
 	}
 
+	// java
 	@Override
-	public List<ContainerDto> getOut(String appointmentId, Integer userId,String warehouse) throws ConverterException {
-		List<ContainerDto> list = new ArrayList<ContainerDto>();
-		List<ContainerModel> entities =  containerRepository.findAllGateOut(warehouse); 
-		for(ContainerModel entity : entities) {
-			list.add(containerConverter.convert(entity));
-		}
-		return list;
+	public List<ContainerDto> getOut(String appointmentId, Integer userId, String warehouse) throws ConverterException {
+	    List<ContainerDto> list = new ArrayList<>();
+	    List<ContainerModel> entities = containerRepository.findAllGateOut(warehouse);
+
+	    for (ContainerModel entity : entities) {
+	        // Lógica para llenar la fecha de salida
+	        Date orderDate = null;
+
+	        if ("VACIO".equals(entity.getConditionPregate())) {
+				if(entity.getCondition().equals("4")) {
+					orderDate = Date.valueOf(entity.getExitDateTime().toLocalDate());
+				} else{
+					AssignmentModel asignation = assignmentRepository.findByUnitNumber(entity.getContainer());
+					if (asignation != null) {
+						BookingModel booking = bookingRepository.findByBookingId(asignation.getBookingId());
+						if (booking != null) {
+							orderDate = booking.getCreationDate();
+						}
+					}
+				}
+
+	        } else {
+	            if (entity.getExitDateTime() != null) {
+	                orderDate = Date.valueOf(entity.getExitDateTime().toLocalDate());
+	            }
+	        }
+
+	        ContainerDto dto = containerConverter.convert(entity);
+	        dto.setOrderDate(orderDate); // setea el valor calculado para ese registro
+	        list.add(dto);
+	    }
+	    return list;
 	}
 
 	@Override
@@ -608,21 +658,27 @@ public class ContainerService implements IContainerService{
 	public List<ContainerDto> getContainersAssignments() throws ConverterException {
 		List<ContainerDto> list = new ArrayList<ContainerDto>();
 		List<AssignmentModel> assignments = assignmentRepository.getAssignments();
+		List<ContainerModel> conatinerToEvacuation = containerRepository.findByStatusAndConditionEquals(5, "4");
 		
 		for(AssignmentModel assigment : assignments) {
 			log.info("INIT GET");			
 			if(!assigment.getUnitNumber().isEmpty()) {
-				log.info("UNIT NUMBER NOT EMPTY" + assigment.getUnitNumber().toString());			
+				log.info("UNIT NUMBER NOT EMPTY" + assigment.getUnitNumber());
 				ContainerModel container = containerRepository.getByUnitAssigment(assigment.getUnitNumber());
-				log.info("Aqui paso--------------------------" + container.toString());
+				log.info("Aqui paso--------------------------" + container.getContainer());
 					log.info(container.getContainer() +  "    "+container.getStatus().toString());		
 				if(container.getStatus()==5) {
 					log.info("Entro IF y e igualo estatus");
-					log.info("----------------"+container.toString());
+					log.info("----------------"+container.getContainer());
 					list.add(containerConverter.convert(container));
 				}
 				
 			}
+		}
+
+		for (ContainerModel containerModel : conatinerToEvacuation) {
+			log.info("CONTAINER PARA EVACUACION "+containerModel.getContainer());
+			list.add(containerConverter.convert(containerModel));
 		}
 		log.info("ok");
 		return list;
@@ -832,13 +888,31 @@ public class ContainerService implements IContainerService{
 	public ResponseManagement  printQuote(String containerId, String warehouse) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		
-		List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
+		/*List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
 		ContainerModel container = containerRepository.getById(containerId);
 		container.setStatusQute(2);
 		container.setQuote(pdfGenerationService.pdfQuote(containerId,inspections));
 		int numero = containerRepository.getCountQuote(containerId)+1;
 		container.setQuoteName("ESTIMADO "+ warehouse +" "+ numero);
-		containerRepository.save(container);
+		containerRepository.save(container);*/
+
+		List<InspectionModel> inspections =
+				inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
+
+		ContainerModel containeredit = containerRepository.getById(containerId);
+		containeredit.setStatusQute(2);
+
+		// 1) obtener folio seguro para ESTIMADO
+		long numero = folioService.nextEstimado();  // 1, 2, 3, ...
+
+		// 2) armar nombre del estimado
+		containeredit.setQuoteName("ESTIMADO " + warehouse + " " + numero);
+
+		// 3) generar PDF
+		containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+
+		// 4) guardar
+		containerRepository.save(containeredit);
 		
 		response.setSuccess(true);
 		
@@ -850,15 +924,33 @@ public class ContainerService implements IContainerService{
 	public ResponseManagement changeStatus(String containerId,String warehouse)  throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).build();
 			try {;
-				List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
+				/*List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
 				ContainerModel containeredit =  containerRepository.getById(containerId);;
 				containeredit.setStatusQute(2);
 				int numero = containerRepository.getCountQuote(containerId)+1;
 				containeredit.setQuoteName("ESTIMADO "+ warehouse +" "+ numero);
 				containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
 				log.info("Si paso de aqui");
-				
-				
+
+
+				containerRepository.save(containeredit);*/
+
+				List<InspectionModel> inspections =
+						inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
+
+				ContainerModel containeredit = containerRepository.getById(containerId);
+				containeredit.setStatusQute(2);
+
+				// 1) obtener folio seguro para ESTIMADO
+				long numero = folioService.nextEstimado();  // 1, 2, 3, ...
+
+				// 2) armar nombre del estimado
+				containeredit.setQuoteName("ESTIMADO " + warehouse + " " + numero);
+
+				// 3) generar PDF
+				containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+
+				// 4) guardar
 				containerRepository.save(containeredit);
 				
 				response.setNum(2);
@@ -1110,18 +1202,23 @@ public class ContainerService implements IContainerService{
 
 
 	@Override
-	public ContainerDto getContainerInformation(String containerId) throws ConverterException {
+	public ContainerDto getContainerInformation(String containerId, String shippingCompany) throws ConverterException {
 		ContainerDto container = new ContainerDto();
 		ContainerModel entities = containerRepository.getContainerInformation(containerId);
-		container=containerConverter.convert(entities);
-		return container;
+		if(entities.getShippingCompany().equals(shippingCompany)) {
+			container=containerConverter.convert(entities);
+			return container;
+		} else{
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El contenedor no pertenece a la naviera solicitada");
+		}
+
 	}
 
 	@Override
-	public List<ContainerDto> getUnitsFilter(String type, String size, String clasification, String warehous) throws ConverterException {
+	public List<ContainerDto> getUnitsFilter(String type, String size, String clasification, String warehous, String shippingCompany) throws ConverterException {
 		log.info(warehous.toString()+"----"+ type.toString() +"----"+ size.toString() +"----"+ clasification.toString());
 		List<ContainerDto> containers = new ArrayList<ContainerDto>();
-		List<ContainerModel> entities = containerRepository.getUnitsFilter(warehous,type,size,clasification);
+		List<ContainerModel> entities = containerRepository.getUnitsFilter(warehous,type,size,clasification,shippingCompany);
 		for(ContainerModel container : entities) {
 			containers.add(containerConverter.convert(container));
 		}
@@ -1282,13 +1379,16 @@ public class ContainerService implements IContainerService{
 	}
 
 	@Override
-	public ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate){
+	public ResponseManagement saveExitDate(String containerId, LocalDateTime exitDateTime, String fullObservation, String destinyPregate,
+										   String newOriginPregate, String newTransportCompanyPregate){
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
 			// Lógica para actualizar la fecha de salida del contenedor
 			ContainerModel containerModel = containerRepository.findById(containerId).orElse(null);
 			containerModel.setExitDateTime(exitDateTime);// Asegúrate de tener este setter
 			containerModel.setComents(fullObservation);
+			containerModel.setOriginPregate(newOriginPregate);
+			containerModel.setTransportId(newTransportCompanyPregate);
 			containerModel.setDestinyPregate(destinyPregate);
 			containerModel.setStatus(6);
 			containerRepository.save(containerModel);
@@ -1300,6 +1400,31 @@ public class ContainerService implements IContainerService{
 			response.setOperation(KeyConstants.UPDATE);
 		}
 		return response;
+	}
+
+	@Override
+	public ResponseManagement evacuationUpdate(ContainerDto containerDto) {
+		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
+
+		try {
+			// Lógica para actualizar la fecha de salida del contenedor
+			ContainerModel containerModel = containerRepository.findById(containerDto.getContainerId()).orElse(null);
+			containerModel.setExitDateTime(containerDto.getExitDateTime());// Asegúrate de tener este setter
+			containerModel.setBillTo(containerDto.getBillTo());
+			containerModel.setDefinition(containerDto.getDefinition());
+			containerModel.setTransportId(containerDto.getTransportId());
+			containerModel.setEconomicNumber(containerDto.getEconomicNumber());
+			containerModel.setStatus(5);
+			containerRepository.save(containerModel);
+			response.setSuccess(true);
+			response.setOperation(KeyConstants.UPDATE);
+		} catch(Exception ex) {
+			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
+			response.setMessage(KeyConstants.SERVICE_ERROR + ex.toString());
+			response.setOperation(KeyConstants.UPDATE);
+		}
+		return response;
+
 	}
 
 }

@@ -1189,8 +1189,8 @@
 							</div>
 							<div class="col-sm" hidden=true >
 								<div class="form-group">
-									<label for="newOriginPregate">Origen</label>
-									<input type="text" class="form-control" id="newOriginPregate">
+									<label for="nousesOrgin">Origen</label>
+									<input type="text" class="form-control" id="nousesOrgin">
 								</div>
 							</div>
 					</div>
@@ -1203,9 +1203,9 @@
 							</div>
 							<div class="col-sm"  >
 								<div class="form-group">
-									<label for="newTransportCompanyPregate">Empresa transportista</label>
-									<input type="text" class="form-control" id="newTransportCompanyPregate" name="example" list="newTransportCompanyList">
-									<datalist id="newTransportCompanyList" >
+									<label for="nousesCompanyTransport">Empresa transportista</label>
+									<input type="text" class="form-control" id="nousesCompanyTransport" name="example" list="nousesCompanyTransport">
+									<datalist id="nousesCompanyTransportList" >
 									 <option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
 									</datalist>
 								</div>
@@ -1445,8 +1445,89 @@
 								</div>
 								<div class="col-sm" >
 									<div class="form-group">
+										<label for="newOriginPregate">Origen</label>
+										<select class="form-control" id="newOriginPregate" >
+											<option>VERACRUZ</option>
+											<option>ALTAMIRA</option>
+											<option>LAZARO CARDENAS</option>
+											<option>MANZANILLO</option>
+											<option selected>TMM</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm"  >
+									<div class="form-group">
+										<label for="newTransportCompanyPregate">Empresa transportista</label>
+										<input type="text" class="form-control" id="newTransportCompanyPregate" name="example" list="newTransportCompanyList">
+										<datalist id="newTransportCompanyList" >
+											<option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+										</datalist>
+									</div>
+								</div>
+								<div class="col-sm" >
+									<div class="form-group">
 										<label for="fullObservation">Observaciones</label>
 										<input type="text" class="form-control" id="fullObservation" placeholder="Observaciones">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer modal-footer-app">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-success" >Aceptar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="evacuationModal" tabindex="-1" role="dialog" aria-labelledby="evacuationModelLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<h5 class="modal-title" id="evacuationLabel">Evacuacion</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="evacuationForm">
+						<input type="text" class="form-control" id="evacuationExitId" hidden="hidden" >
+						<div class="modal-body modal-body-app">
+							<div class="row">
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="evacuationDateTime">Día y hora de salida</label>
+										<input type="datetime-local" class="form-control" id="evacuationDateTime" >
+									</div>
+								</div>
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="finalClientEvacuation">Cliente Final</label>
+										<input type="text" class="form-control" id="finalClientEvacuation" >
+									</div>
+								</div>
+								<div class="col-sm">
+									<div class="form-group">
+										<label for="billToEvacuation">Cobrar maniobra a</label>
+										<input type="text" class="form-control" id="billToEvacuation" name="example" list="billToEvacuationList">
+										<datalist id="billToEvacuationList" >
+											<option th:each="option : ${catClients}" th:value="${option.customerName}" th:text="${option.customerCode}" th:data-id="${option.customerId}"></option>
+										</datalist>
+									</div>
+								</div>
+								<div class="col-sm"  >
+									<div class="form-group">
+										<label for="newTransportCompanyEvacuation">Empresa transportista</label>
+										<input type="text" class="form-control" id="newTransportCompanyEvacuation" name="example" list="newTransportCompanyListEvacuation">
+										<datalist id="newTransportCompanyListEvacuation" >
+											<option th:each="option : ${catTransport}" th:value="${option.transportName}" th:text="${option.transportCode}" th:data-id="${option.transportId}"></option>
+										</datalist>
+									</div>
+								</div>
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="economicEvacuation">No Economico</label>
+										<input type="text" class="form-control" id="economicEvacuation">
 									</div>
 								</div>
 							</div>

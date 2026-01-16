@@ -16,6 +16,8 @@ import com.tmm.myre.containers.service.core.IContainerHistoricService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @Service("containerHistoricService")
 public class ContainerHistoricService implements IContainerHistoricService{
@@ -30,6 +32,18 @@ public class ContainerHistoricService implements IContainerHistoricService{
 	public ContainerHistoricDto searchContainer(String container) throws ConverterException {
 		ContainerHistoricModel container1 = containerHistoricRepository.getlastRegister(container);
 		return containerHistoricConverter.convert(container1);
+	}
+
+	@Override
+	public List<ContainerHistoricModel> getHistoricUnits() throws ConverterException{
+		List<ContainerHistoricModel> containerHistoric = containerHistoricRepository.findWhereQuoteNotEmpty();
+		return containerHistoric;
+	}
+
+	@Override
+	public ContainerHistoricDto getOne(String containerId) throws ConverterException {
+		ContainerHistoricModel container = containerHistoricRepository.findByContainerId(containerId);
+		return containerHistoricConverter.convert(container);
 	}
 
 

@@ -22,4 +22,7 @@ public interface IBookingRepository extends JpaRepository<BookingModel, String> 
 	@Query(value = "SELECT COUNT(*) FROM MYRE.MYRE_BOOKINGS WHERE BOOKING = :booking", nativeQuery = true)
 	String bookingValidation(String booking);
 
+    BookingModel findByBookingId(String bookingId);
+
+	BookingModel findByBooking(String booking);
 }
