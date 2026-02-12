@@ -86,19 +86,19 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT DISTINCT CONTAINER_TYPE FROM MYRE_CONTAINERS where LOCATION =:location and STATUS =4 and SHIPPING_COMPANY = :shippingCompany", nativeQuery = true)
 	List<?> getContainerTypesAndShippingCompany(String location, String shippingCompany);
 
-	@Query(value = "SELECT DISTINCT NOMENCALTURA FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and STATUS =4", nativeQuery = true)
+	@Query(value = "SELECT DISTINCT NOMENCALTURA FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and STATUS >=4", nativeQuery = true)
 	List<?> getNomenclaturas(String location, String containerType);
 	
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CONTAINER_CONDITION=:condition and STATUS =4 ", nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CONTAINER_CONDITION=:condition and STATUS >=4 ", nativeQuery = true)
 	Integer getCount(String location, String containerType, String Nomenclatura, Integer condition);
 
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CONTAINER_CONDITION=:condition and STATUS =4 and SHIPPING_COMPANY =:shippingCompany", nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CONTAINER_CONDITION=:condition and STATUS >=4 and SHIPPING_COMPANY =:shippingCompany", nativeQuery = true)
 	Integer getCountByShippingCompany(String location, String containerType, String Nomenclatura, Integer condition, String shippingCompany);
 
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CLASIFICATION=:clasification and STATUS =4 ", nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CLASIFICATION=:clasification and STATUS >=4 ", nativeQuery = true)
 	Integer getCountClasifiaction(String location, String containerType, String Nomenclatura, Integer clasification);
 
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CLASIFICATION=:clasification and STATUS =4 and SHIPPING_COMPANY =:shippingCompany", nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS where  LOCATION =:location and CONTAINER_TYPE=:containerType and NOMENCALTURA=:Nomenclatura and CLASIFICATION=:clasification and STATUS >=4 and SHIPPING_COMPANY =:shippingCompany", nativeQuery = true)
 	Integer getCountClasifiactionByShippingCompany(String location, String containerType, String Nomenclatura, Integer clasification, String shippingCompany);
 
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER = :unit AND STATUS=4", nativeQuery = true)
