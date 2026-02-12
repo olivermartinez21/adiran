@@ -69,7 +69,7 @@ function initComponents() {
 			economicNumber: $("#noEconomico").val(),
 			operatorName: $("#operatorName").val(),
 			booking: $("#bookingOut").val(),
-			//TODO agregar el operador y economico asignar regla para que no sobre escriba en los vacios
+			diesel: $("#typeDeliveryOut").val(),
 			}
 			
 			$.ajax({

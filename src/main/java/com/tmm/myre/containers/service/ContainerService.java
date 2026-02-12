@@ -760,6 +760,8 @@ public class ContainerService implements IContainerService{
 					.destinyPregate(container.getDestinyPregate())
 					.originPregate(container.getOriginPregate())
 					.dateGateOut(containerDto.getNewEventDate())
+					//Este es el tipo de entrega
+					.diesel(container.getDiesel())
 					.build();
 			
 			containerHistoricRepository.save(containerHistoric);

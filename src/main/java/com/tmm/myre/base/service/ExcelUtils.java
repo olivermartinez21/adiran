@@ -437,7 +437,7 @@ public class ExcelUtils  implements IExcelUtils {
                     "GRADO-CALIDAD", "NUMERO DE BOOKING", "NOMECLATURA",
                     "AUTORIZACION CLIENTE", "FACTURA SAP", "COSTO DE LA MANIOBRA", "PROPIETARIO", "COBRAR A:", "TIPO DE SERVICIO",
                     "COMPAÑIA TRANSPORTISTA", "NOMBRE DEL OPERADOR", "NÚMERO DEL ECONÓMICO",
-                    "ORIGEN", "PLANTA DESTINO", "ANDEN", "TIPO DE ENTREGA", "MONEDA", "SELLO DE CALIDAD",
+                    "ORIGEN", "PLANTA DESTINO", "OBSERVACIONES", "ANDEN", "TIPO DE ENTREGA", "MONEDA", "SELLO DE CALIDAD",
                     "SELLO DE SEGURIDAD", "TRANSMITIR POR EDI", "ESTATUS DEL EDI", "REG INSERTADO TABLA EDI",
                     "REG ENVIADO A EDI", "ARCHIVO EDI",
             };
@@ -506,10 +506,11 @@ public class ExcelUtils  implements IExcelUtils {
                 createStyledCell(row, 17, record.getNumeroEconomico(), cellStyle);
                 createStyledCell(row, 18, record.getOrigen(), cellStyle);
                 createStyledCell(row, 19, record.getPlantaDestino(), cellStyle);
-                createStyledCell(row, 20, " ", cellStyle);
+                createStyledCell(row, 20, "N/A", cellStyle);
                 createStyledCell(row, 21, " ", cellStyle);
+                createStyledCell(row, 22, "N/A", cellStyle);
 
-                for (int i = 22; i <= 29; i++) createStyledCell(row, i, " ", cellStyle);
+                for (int i = 23; i <= 30; i++) createStyledCell(row, i, " ", cellStyle);
 
 
             }
@@ -596,13 +597,14 @@ public class ExcelUtils  implements IExcelUtils {
                 } else {
                     createStyledCell(row, 19, record.getDestinyPregate(), cellStyle);
                 }
-                createStyledCell(row, 20, " ", cellStyle);
+                createStyledCell(row, 20, record.getComents(), cellStyle);
                 createStyledCell(row, 21, " ", cellStyle);
+                createStyledCell(row, 22, record.getDiesel(), cellStyle);
 
-                for (int i = 22; i <= 29; i++) createStyledCell(row, i, " ", cellStyle);
+                for (int i = 23; i <= 30; i++) createStyledCell(row, i, " ", cellStyle);
             }
 
-            for (int i = 0; i <= 29; i++) sheet.autoSizeColumn(i);
+            for (int i = 0; i <= 30; i++) sheet.autoSizeColumn(i);
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             workbook.write(out);
