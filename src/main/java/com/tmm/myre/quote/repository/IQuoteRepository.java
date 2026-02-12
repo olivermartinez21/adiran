@@ -17,6 +17,6 @@ public interface IQuoteRepository extends JpaRepository<QuoteModel, String> {
     QuoteModel getByInspectionId(@Param("inspectionId")String inspectionId);
 
 
-	
-	
+
+
 }

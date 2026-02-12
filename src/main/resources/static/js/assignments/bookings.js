@@ -870,7 +870,7 @@ function preOrderDelivery(data) {
 		carrierCompanyOrder: $("#newCarrierCompanyOrder").val(),
 		operatorOrder: $("#newOperatorOrder").val(),
 		economicNumberOrder: $("#newEconomicNumberOrder").val(),
-		workOrder: $("#newWorkOrderOrder").val()
+		workOrderOrder: $("#newWorkOrderOrder").val()
 	};
 
 	// Validación de campos vacíos

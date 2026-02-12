@@ -912,7 +912,7 @@ function configDataTable() {
 						}
 					}else{
 						if (conditionPregate === "LLENO"){
-							return '<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Cita" onclick="exitDate(\'' + data + '\', \'' + destinyPregate + '\');"><i class="far fa-clock"></i></button>&nbsp;';
+							return null;
 						}else{
 						if(conditionStatus==4){
 							return '<button type="button" class="btn btn-outline-dark btn-sm" title="Evacuacion" onclick="evacuationEvent(\'' + data + '\');"><i class="fas fa-shipping-fast"></i></button>&nbsp;';

@@ -2,7 +2,9 @@ package com.tmm.myre.containers.controller;
 
 import com.tmm.myre.base.controller.AbstractMyreController;
 import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
+import com.tmm.myre.catalog.dto.CatTransportCompanyDto;
 import com.tmm.myre.catalog.service.core.ICatShippingCompanyService;
+import com.tmm.myre.catalog.service.core.ICatTransportCompanyService;
 import com.tmm.myre.containers.dto.ContainerDto;
 import com.tmm.myre.containers.service.core.IContainerService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +33,23 @@ public class ContainerSuppliesController extends AbstractMyreController {
     @Autowired
     private ICatShippingCompanyService catShippingCompanyService;
 
+    @Autowired
+    private ICatTransportCompanyService catTransportCompanyService;
+
     @ModelAttribute("catShipping")
     List<CatShippingCompanyDto> catShipping() {
         try {
             return catShippingCompanyService.catShipping();
+        } catch(Exception ex) {
+            log.error(ex.toString());
+            return null;
+        }
+    }
+
+    @ModelAttribute("catTransport")
+    List<CatTransportCompanyDto> catTransport() {
+        try {
+            return catTransportCompanyService.catTransport();
         } catch(Exception ex) {
             log.error(ex.toString());
             return null;

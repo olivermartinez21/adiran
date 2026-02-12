@@ -112,9 +112,7 @@ function configDataTable() {
 			{ data: "containerId", visible: false , render : function(data) {
 						return "";
 					}},
-			{ data: "containerId", visible: true , render : function(data) {
-						return "";
-					}},
+			{ data: "quoteName2", visible: true },
 			{ data: "noInvoice", visible: true },
 			{ data: "containerId",visible: false },
 		],
@@ -173,7 +171,11 @@ function newQuote(data) {
 		}else{
 				document.getElementById("quotePrint").setAttribute("hidden",true) 
 		}
-			
+	if(currentData.quoteName2 != null){
+		document.getElementById("quotePrint2").removeAttribute("hidden")
+	} else{
+		document.getElementById("quotePrint2").setAttribute("hidden",true)
+	}
 	$("#containerId").val(currentData.containerId);
 	dataTableInpection()
 	$("#quoteCondition").val(currentData.statusQute);
@@ -350,7 +352,7 @@ function validationStatus(data){
 			{ data: "inspectionId", visible: true , render : function(data, meta) {
 						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Seleccionar Código de Trabajo" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>'+
 							'<button type="button" class="btn btn-outline-dark btn-sm" title="Modificar dato Cobrar A" onclick="changeBillTo(\'' + data + '\');"><i class="fas fa-retweet"></i></button>';
-					}},	
+					}},
 		],
 
 
@@ -608,6 +610,13 @@ function openPdf(){
 			return false;
 	
 }
+function openPdf2(){
+
+	window.open('quote/PDF_QUOTE2?containerId='+ $("#containerId").val() +'')
+	configDataTable()
+	return false;
+
+}
 
 
 function viewPhotos(data){
@@ -861,4 +870,6 @@ function changeBillTo (data){
 	$("#newBillTo").val("");
 	$("#changeBilltoModel").modal("show");
 }
+
+
 

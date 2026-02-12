@@ -122,6 +122,12 @@ public class ContainerModel implements IModel{
 	@Column(name = "NO_INVOICE")private String noInvoice;
 	@Column(name = "EXIT_DATETIME")private LocalDateTime exitDateTime;
 
+	@Column(name = "QUOTE2")  //private String fileContent;
+	@Lob
+	private byte[] quote2;
+
+	@Column(name = "QUOTE_NAME2")private String  quoteName2;
+
 
 
 

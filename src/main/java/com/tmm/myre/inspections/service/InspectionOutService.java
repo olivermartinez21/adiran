@@ -68,7 +68,7 @@ public class InspectionOutService implements IInspectionsOutService {
 		containeEdit.setClasification(containerDto.getClasification());
         containeEdit.setBillTo(containerDto.getBillTo());
 		int valor = containerRepository.getCountEirOut();
-		containeEdit.setEirOutName("EIR-OUT-"+containeEdit.getLocation()+"-0"+valor);
+		containeEdit.setEirOutName("EIR-OUT-"+"AGS"+"-0"+valor);
 		containeEdit.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));
 		containeEdit.setStatus(6);
 		

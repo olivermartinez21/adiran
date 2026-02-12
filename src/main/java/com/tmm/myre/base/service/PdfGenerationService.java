@@ -1125,7 +1125,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 				table.addCell(hcell);
 				
 //-------------------------------------------------------------------------------------
-				
+
 				hcell = new PdfPCell(new Phrase("TIPO DE SERVICIO: ", regularWhite));
 		
 				hcell.setBackgroundColor(BaseColor.DARK_GRAY);
@@ -1295,7 +1295,7 @@ public class PdfGenerationService implements IPdfGenerationService {
 				hcell = new PdfPCell(new Phrase("" + descripcionEstado+" "+descripcionClasificacion, regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
-//-------------------------------------------------------------------------------------: 
+//-------------------------------------------------------------------------------------:
 				
 				
 				hcell = new PdfPCell(new Phrase("OPERADOR: ", regularWhite));
@@ -1476,6 +1476,20 @@ public class PdfGenerationService implements IPdfGenerationService {
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase(""+request.getShippingCompany(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			//-------------------------------------------------------------------------------------
+
+			hcell = new PdfPCell(new Phrase("CLIENTE: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			BookingModel finalClient = bookingRepository.findByBooking(request.getBookingOrder());
+
+			hcell = new PdfPCell(new Phrase(""+finalClient.getFinalClient(), regularBlack));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
 
@@ -2465,4 +2479,4 @@ public class PdfGenerationService implements IPdfGenerationService {
 
 
 
-	
+

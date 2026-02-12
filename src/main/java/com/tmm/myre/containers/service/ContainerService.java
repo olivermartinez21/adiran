@@ -239,7 +239,7 @@ public class ContainerService implements IContainerService{
 				if(containerDto.getNum()==containerDto.getFilas()-1) {
 					int valor = containerRepository.getCountEirOut();
 					valor=valor +1;
-					container.setEirOutName("EIR-OUT-"+container.getLocation()+" "+valor);
+					container.setEirOutName("EIR-OUT-"+"AGS"+" "+valor);
 					container.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));
 				}
 				
@@ -497,7 +497,8 @@ public class ContainerService implements IContainerService{
 					containeredit.setStatusQute(10);
 					int valor = containerRepository.getCountEir();
 					valor=valor +1;
-					containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
+					String abreviacion="AGS";
+					containeredit.setEirName("EIR-IN-"+abreviacion+"-0"+valor);
 					containeredit.setStatus(3);
 					containeredit.setModelYear(containerDto.getModelYear());
 				}
@@ -557,6 +558,7 @@ public class ContainerService implements IContainerService{
 	        dto.setOrderDate(orderDate); // setea el valor calculado para ese registro
 	        list.add(dto);
 	    }
+		log.info("LISTA DE SALIDA "+list.size());
 	    return list;
 	}
 
@@ -695,7 +697,7 @@ public class ContainerService implements IContainerService{
 			String nombreOperador;
 			String numeroEconomico;
 			if(container.getConditionPregate().equals("LLENO")){
-				nombreOperador = containerDto.getConditionPregate();
+				nombreOperador = containerDto.getOperatorName();
 				numeroEconomico = containerDto.getEconomicNumber();
 			} else{
 				nombreOperador = container.getOperatorName();
@@ -945,13 +947,27 @@ public class ContainerService implements IContainerService{
 				long numero = folioService.nextEstimado();  // 1, 2, 3, ...
 
 				// 2) armar nombre del estimado
-				containeredit.setQuoteName("ESTIMADO " + warehouse + " " + numero);
+				if (containeredit.getQuote() != null) {
+					containeredit.setQuoteName2("ESTIMADO " + warehouse + " " + numero);
+				} else {
+					containeredit.setQuoteName("ESTIMADO " + warehouse + " " + numero);
+				}
+
 
 				// 3) generar PDF
-				containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+				if (containeredit.getQuote() != null) {
+					containeredit.setQuote2(pdfGenerationService.pdfQuote(containerId, inspections));
+				} else {
+					containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+				}
+
+				for (InspectionModel inspection : inspections) {
+					inspection.setExtentLarge(1);
+				}
 
 				// 4) guardar
 				containerRepository.save(containeredit);
+				inspectorRepository.saveAll(inspections);
 				
 				response.setNum(2);
 				response.setSuccess(true);
@@ -1114,7 +1130,7 @@ public class ContainerService implements IContainerService{
 			
 			int valor = containerRepository.getCountEir();
 			valor=valor +1;
-			containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
+			containeredit.setEirName("EIR-IN-"+"AGS"+"-0"+valor);
 			containeredit.setEir(pdfGenerationService.pdfEir(containerDto.getContainerId(),containerDto.getDataUrl()));
 			
 			
@@ -1182,7 +1198,7 @@ public class ContainerService implements IContainerService{
 			
 			int valor = containerRepository.getCountEir();
 			valor=valor +1;
-			containeredit.setEirName("EIR-"+containeredit.getLocation()+"-0"+valor);
+			containeredit.setEirName("EIR-IN-"+"AGS"+"-0"+valor);
 			containeredit.setEir(pdfGenerationService.pdfEir(containerDto.getContainerId(),containerDto.getDataUrl()));
 			
 			

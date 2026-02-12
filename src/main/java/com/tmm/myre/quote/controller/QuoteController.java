@@ -216,6 +216,25 @@ public class QuoteController extends AbstractMyreController {
 			return null;
 		}
 	}
+	@RequestMapping(value = "/PDF_QUOTE2", produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<InputStreamResource> certificateView2(@RequestParam(required = true) String containerId) {
+		try {
+			ContainerDto pdf = containerService.getOne(containerId);
+			log.info("+++++++++"+pdf.getQuoteName2());
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Disposition",  "inline; filename="+pdf.getQuoteName2()+getFileExtension(pdf.getQuoteName2()));
+			ByteArrayInputStream body = new ByteArrayInputStream(pdf.getQuote2());
+			return ResponseEntity
+					.ok()
+					.headers(headers)
+					.contentType(MediaType.APPLICATION_PDF)
+					.body(new InputStreamResource(body));
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.toString());
+			return null;
+		}
+	}
 	
 	
 	@GetMapping("validationInspection")
@@ -410,5 +429,5 @@ public class QuoteController extends AbstractMyreController {
 		return response;
 	}
 
-	
+
 }

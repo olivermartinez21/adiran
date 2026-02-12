@@ -10,3 +10,4 @@ public interface IQuoteService {
 
 	QuoteDto getQuoteDetail(String inspectionId) throws ConverterException;
 }
+

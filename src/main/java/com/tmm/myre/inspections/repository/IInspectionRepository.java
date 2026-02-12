@@ -25,7 +25,7 @@ public interface IInspectionRepository extends JpaRepository<InspectionModel, St
 	@Query(value = "SELECT  * FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId AND STATUS=2", nativeQuery = true)
 	List<InspectionModel> getAllInspectionsByContainerId(String containerId);
 
-	@Query(value = "SELECT  * FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId AND STATUS=3", nativeQuery = true)
+	@Query(value = "SELECT  * FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId AND STATUS=3 AND EXTENT_LARGE IS NULL", nativeQuery = true)
 	List<InspectionModel> getAllInspectionsByContainerIdStatus(String containerId);
 
 	@Query(value = "SELECT  * FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId AND STATUS_QUOTE=1", nativeQuery = true)

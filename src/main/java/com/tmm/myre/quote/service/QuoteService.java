@@ -38,7 +38,7 @@ public class QuoteService implements IQuoteService {
 	@Autowired
 	private IInspectionRepository inspectionRepository; 
 	
-	@Autowired 
+	@Autowired
 	private IContainerRepository containerRepository;
 
 	@Autowired
@@ -56,7 +56,7 @@ public class QuoteService implements IQuoteService {
 			InspectionModel inspection = inspectionRepository.getById(quoteDto.getInspectionId());
 			inspection.setStatus(3);
 			inspectionRepository.save(inspection);
-			
+
 			int exist = quoteRepository.getByIdInspection(inspection.getInspectionId());
 
 			// Si el jobcodeId no es nulo ni vacío, verifica si hay cambios y actualiza solo si es necesario
@@ -105,12 +105,12 @@ public class QuoteService implements IQuoteService {
 			}
 
 
-			
+
 			if(exist == 0) {
 				quoteDto.setQuoteId(UuidProvider.getUUID());
 				quoteRepository.save(quoteConverter.convert(quoteDto));
 			}else {
-				
+
 				QuoteModel quote = quoteRepository.getByInspectionId(inspection.getInspectionId());
 				quote.setHours(quoteDto.getHours());
 				quote.setLabor(quoteDto.getLabor());
@@ -119,12 +119,12 @@ public class QuoteService implements IQuoteService {
 				quote.setWorkCode(quoteDto.getWorkCode());
 				quote.setRepairDescription(quoteDto.getRepairDescription());
 				quote.setExchange(quoteDto.getExchange());
-				
+
 				quoteRepository.save(quote);
 			}
-			
-		
-			
+
+
+
 			int cuenta = inspectionRepository.countInspectionsValidation(inspection.getContainerId(),2);
 			response.setNum(cuenta);
 			response.setSuccess(true);
@@ -144,5 +144,6 @@ public class QuoteService implements IQuoteService {
 		return entity;
 
 	}
+
 
 }

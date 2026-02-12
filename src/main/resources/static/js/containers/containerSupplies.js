@@ -509,6 +509,8 @@ function initComponents() {
             containerId: $("#containerExitId").val(), // Asegúrate de tener este campo en tu modal o contexto
             fullObservation: $("#fullObservation").val(),
             destinyPregate: $("#destinyPregate").val(),
+            newOriginPregate: $("#newOriginPregate").val(),
+            newTransportCompanyPregate: $("#newTransportCompanyPregate").val(),
         };
         $.ajax({
             type: "POST",

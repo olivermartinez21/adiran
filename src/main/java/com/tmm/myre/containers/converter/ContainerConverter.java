@@ -84,6 +84,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.noInvoice(to.getNoInvoice())
 				.dateGateIn(to.getDateGateIn())
 				.exitDateTime(to.getExitDateTime())
+				.quote2(to.getQuote2())
+				.quoteName2(to.getQuoteName2())
 				.build();
 		
 		return entity;
@@ -151,6 +153,8 @@ public class ContainerConverter implements IConverter<ContainerModel, ContainerD
 				.noInvoice(entity.getNoInvoice())
 				.exitDateTime(entity.getExitDateTime())
 				.dateGateIn(entity.getDateGateIn())
+				.quote2(entity.getQuote2())
+				.quoteName2(entity.getQuoteName2())
 				//.orderDate(orderDate)
 				.build();
 		return to;
