@@ -29,7 +29,6 @@ public interface IContainerService {
 
 	ResponseManagement saveEvent(String containerId, Integer userId);
 
-	//ResponseManagement saveContainer(ContainerDto containerDto) throws ConverterException ;
 
 	ResponseManagement savePregate(ContainerDto containerDto) throws ConverterException;
 

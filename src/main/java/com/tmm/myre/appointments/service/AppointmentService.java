@@ -17,7 +17,6 @@ import com.tmm.myre.appointments.repository.IAppointmentRepository;
 import com.tmm.myre.appointments.service.core.IAppointmentService;
 import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.exception.ConverterException;
-import com.tmm.myre.base.repository.IUserRoleRepository;
 import com.tmm.myre.base.service.core.IAppLogService;
 import com.tmm.myre.base.service.core.IPdfGenerationService;
 import com.tmm.myre.base.utils.DateManagement;
@@ -49,9 +48,6 @@ public class AppointmentService implements IAppointmentService {
 	private IContainerRepository containerRepository;
 
 	@Autowired
-	private IUserRoleRepository userRoleRepository;
-	
-	@Autowired
 	private IUserRegisterRepository userRegisterRepository;
 	
 	@Autowired
@@ -60,51 +56,6 @@ public class AppointmentService implements IAppointmentService {
 	@Autowired
 	private IPdfGenerationService pdfGenerationService;
 	
-	@Override
-	public List<AppointmentDto> getDataTable(Integer userId) throws ConverterException {
-		int role = userRoleRepository.getRole(userId);
-		List<AppointmentDto> list = new ArrayList<AppointmentDto>();
-		List<AppointmentModel> entities ;
-		switch (role) {
-		case 1://usuario "CUSTOMER" se mostraran las citas que a realizado y su estatus 
-			entities = appointmentRepository.getUseAppointmentTable(userId);
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		case 4://usuario "RECEPCION" se mostraran las citas realizadas de todos los clientes para ingresar al patio
-			entities = appointmentRepository.findAllActiveAppointment();
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		case 3://usuario "INSPECTOR" se mostraran las citas las cuales ingresaron y estan listas para la inspeccion de las unidades 
-			entities = appointmentRepository.findAllInspectorAppointment();
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		case 5://usuario "TALLER" se mostraran las citas en las cuales se confirmo el estimado resultado de la inspeccion
-			entities = appointmentRepository.findAllRepairsAppointment();
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		case 6://usuario "TECNICO" se mostraran las citas en las cuales se hara la prueba tecnica del GenSet solo para reffer
-			entities = appointmentRepository.findAlltechnicalAppointment();
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		default://usuario "ADMIN y MASTER" podran tener acceso a todas las funciones para fines de reportes o modificaciones y seguimiento 
-			entities = appointmentRepository.findAll();
-			for(AppointmentModel entity : entities) {
-				list.add(appointmentConverter.convert(entity));
-			}
-			break;
-		}
-		return list;
-	}
 
 
 	@Override

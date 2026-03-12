@@ -93,16 +93,6 @@ public class GateInController extends AbstractMyreController{
 	private IPhotorService photorService;
 	
 	
-	/*@ModelAttribute("catShipping")
-	List<CatCustomerDto> catShipping() {
-		try {
-			return catCustomerService.catShipping();
-		} catch(Exception ex) {
-			log.error(ex.toString());
-			return null;
-		}
-	}*/
-	
 	@GetMapping("getDataTable")
 	@ResponseBody
 	public List<ContainerModel> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
@@ -403,21 +393,6 @@ public class GateInController extends AbstractMyreController{
 	}
 	
 	
-	@PostMapping("editInspection")
-	@ResponseBody
-	public ResponseManagement editInspection(@ModelAttribute("inspecctionDto") InspectionDto inspecctionDto) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		try {
-			log.info("-----------------------------------------"+inspecctionDto);
-				//return inspectionsService.editInspection(inspecctionDto);
-		} catch(Exception ex) {
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.UPDATE);
-			}
-			return response;
-		}
-	
 	@PostMapping("addImages")
 	@ResponseBody
 	public ResponseManagement addImages(@ModelAttribute("file") List<MultipartFile> file, @ModelAttribute("inspectionUpdate") String inspectionUpdate) {
@@ -481,21 +456,7 @@ public class GateInController extends AbstractMyreController{
 			return null;
 		}
 	}
-	/*@PostMapping("inspectionSave")
-	@ResponseBody
-	public ResponseManagement inspectionSave(@RequestParam(required = true)String inspectionList) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		
-		try {
-			return inspectionsService.inspectionSave(inspectionList);
-		} catch(Exception ex) {
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.UPDATE);
-			}
-			return response;
-		}*/
-	
+
 	@PostMapping("deleteImage")
 	@ResponseBody
 	public ResponseManagement deleteImage(@RequestParam("photoId") String photoId) {

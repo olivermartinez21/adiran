@@ -3,11 +3,8 @@ package com.tmm.myre.containers.controller;
 import java.io.ByteArrayInputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.Locale;
 
 import com.tmm.myre.base.service.core.IExcelUtils;
 import com.tmm.myre.containers.dto.ReportFilterDto;
@@ -91,15 +88,6 @@ public class ContainerController extends AbstractMyreController{
 	@Autowired
 	private IExcelUtils excelUtils;
 	
-	/*@ModelAttribute("catShipping")
-	List<CatCustomerDto> catShipping() {
-		try {
-			return catCustomerService.catShipping();
-		} catch(Exception ex) {
-			log.error(ex.toString());
-			return null;
-		}
-	}*/
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -314,21 +302,7 @@ public class ContainerController extends AbstractMyreController{
 		}
 	}
 	
-	/*@PostMapping("inspectionSave")
-	@ResponseBody
-	public ResponseManagement inspectionSave(@RequestParam(required = true)String inspectionList) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		
-		try {
-			return inspectionsService.inspectionSave(inspectionList);
-		} catch(Exception ex) {
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.UPDATE);
-			}
-			return response;
-		}*/
-	
+
 	@RequestMapping(value = "/PDF_EIR", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> PDF_EIR(@RequestParam(required = true) String containerId) {
 		try {

@@ -75,16 +75,7 @@ public class GateOutcontroller extends AbstractMyreController{
 	@Autowired
 	private ICatCustomerService catCustomerService;
 	
-	/*@ModelAttribute("catShipping")
-	List<CatCustomerDto> catShipping() {
-		try {
-			return catCustomerService.catShipping();
-		} catch(Exception ex) {
-			log.error(ex.toString());
-			return null;
-		}
-	}*/
-	
+
 	@GetMapping("getDataTable")
 	@ResponseBody
 	public List<ContainerDto> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
@@ -130,7 +121,6 @@ public class GateOutcontroller extends AbstractMyreController{
 	public ResponseManagement saveUpdateContainer(@ModelAttribute("containerDto") ContainerDto containerDto) {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		try {
-			//containerDto.setModelYear("");
 			return containerService.saveUpdateContainer(containerDto);
 		} catch(Exception ex) {
 				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
@@ -293,20 +283,6 @@ public class GateOutcontroller extends AbstractMyreController{
 		}
 	
 	
-	
-	/*@PostMapping("inspectionSave")
-	@ResponseBody
-	public ResponseManagement inspectionSave(@RequestParam(required = true)String inspectionList) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		
-		try {
-			return inspectionsService.inspectionSave(inspectionList);
-		} catch(Exception ex) {
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.UPDATE);
-			}
-			return response;
-		}*/
+
 
 }

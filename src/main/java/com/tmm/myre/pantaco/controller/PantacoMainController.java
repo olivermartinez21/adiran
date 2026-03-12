@@ -1,5 +1,6 @@
 package com.tmm.myre.pantaco.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,6 +9,7 @@ import com.tmm.myre.base.controller.AbstractMyreController;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Controller
 @RequestMapping(PantacoMainController.HOME)
 public class PantacoMainController extends AbstractMyreController {
 

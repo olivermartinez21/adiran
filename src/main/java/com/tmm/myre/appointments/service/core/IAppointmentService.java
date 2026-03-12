@@ -10,7 +10,6 @@ public interface IAppointmentService {
 
 	ResponseManagement saveAppointment(AppointmentDto appointmentDto);
 
-	List<AppointmentDto> getDataTable(Integer userId)  throws ConverterException ;
 
 	AppointmentDto getSingleData(String appointmentId,Integer userId,String warehouse)  throws ConverterException;
 

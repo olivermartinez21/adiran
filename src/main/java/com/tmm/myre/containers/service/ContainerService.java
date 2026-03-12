@@ -278,17 +278,7 @@ public class ContainerService implements IContainerService{
 			
 			
 			for(InspectionDto inspection : inspections ){
-				log.info(inspection.getInspectionId()+"----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-				/*if(inspection.getCustomerType()==1) {
-					containeredit.setStatusQute(1);
-				}
-				if(!inspectorRepository.existsById(inspection.getInspectionId())) {
-					inspection.setInspectionId(UuidProvider.getUUID());
-					inspection.setContainerId(containeredit.getContainerId());
-					inspection.setStatus(2);
-					entities.add(inspectionConverter.convert(inspection));
-				}*/
-				
+				log.info(inspection.getInspectionId());
 			}
 			
 			response.setSuccess(true);
@@ -431,23 +421,7 @@ public class ContainerService implements IContainerService{
 			}
 			
 			
-			/*
-			 * else {
-			 * if(containerRepository.serarchBdByStatus(containerDto.getContainer())!=0) {
-			 * ContainerModel existe =
-			 * containerRepository.findBycontainer(containerDto.getContainer());
-			 * existe.setStatus(1);
-			 * existe.setContainerType(containerDto.getContainerType());
-			 * existe.setContaierSize(containerDto.getContainerSize());
-			 * existe.setShippingCompany(containerDto.getShippingCompany());
-			 * existe.setLocation(warehouse); }else {
-			 * response.setMessage("La unidad "+containerDto.getContainer()
-			 * +" ya cuenta con un proceso de cita o ya esta en nuestro almacen verfificar el numero"
-			 * ); }
-			 * 
-			 * }
-			 */
-			 
+
 			if(response.getMessage()==""||response.getMessage()==null||response.getMessage().isEmpty()) {
 				containerDto.setLog("CONTAINER(" + containerDto.getIdUser() + ", " + containerDto.getContainerId() + "), " + "REGISTRO DE CONTENEDOR");
 				appLogService.registerLog(containerDto.getIdUser(), KeyConstants.INSERT, containerDto.getLog());
@@ -895,13 +869,6 @@ public class ContainerService implements IContainerService{
 	public ResponseManagement  printQuote(String containerId, String warehouse) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
 		
-		/*List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
-		ContainerModel container = containerRepository.getById(containerId);
-		container.setStatusQute(2);
-		container.setQuote(pdfGenerationService.pdfQuote(containerId,inspections));
-		int numero = containerRepository.getCountQuote(containerId)+1;
-		container.setQuoteName("ESTIMADO "+ warehouse +" "+ numero);
-		containerRepository.save(container);*/
 
 		List<InspectionModel> inspections =
 				inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
@@ -930,18 +897,7 @@ public class ContainerService implements IContainerService{
 	@Override
 	public ResponseManagement changeStatus(String containerId,String warehouse)  throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).build();
-			try {;
-				/*List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
-				ContainerModel containeredit =  containerRepository.getById(containerId);;
-				containeredit.setStatusQute(2);
-				int numero = containerRepository.getCountQuote(containerId)+1;
-				containeredit.setQuoteName("ESTIMADO "+ warehouse +" "+ numero);
-				containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
-				log.info("Si paso de aqui");
-
-
-				containerRepository.save(containeredit);*/
-
+			try {
 				List<InspectionModel> inspections =
 						inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
 
@@ -1062,61 +1018,7 @@ public class ContainerService implements IContainerService{
 				}
 			
 			inspectorRepository.saveAll(entities);
-			/*log.info(index+"----------------------");
-			for(InspectionDto inspection : inspections ){
-				
-				if(inspection.getCustomerType()==1) {
-					containeredit.setStatusQute(1);
-				}
-				if(!inspectorRepository.existsById(inspection.getInspectionId())) {
-					inspection.setPhoto(inspection.getInspectionId());
-					inspection.setInspectionId(UuidProvider.getUUID());
-					inspection.setContainerId(containeredit.getContainerId());
-					inspection.setStatus(2);
-					entities.add(inspectionConverter.convert(inspection));
-				}
-				Set<String> miConjunto = new HashSet<>(index);
-				for(String num2 : miConjunto) {
-					int contador = 0;
-					for(String num : index) {
-						if(num2.equals(num)) {
-							contador++;
-						}
-					}
-					log.info(num2+" "+contador);
-					for (int i = 1; i <= contador; i++) {
-					}
-				}
-			}*/
-			
-		/*	Set<String> miConjunto = new HashSet<>(index);
-			for(String num2 : miConjunto) {
-				int contador = 0;
-				for(String num : index) {
-					
-					if(num2.equals(num)) {
-						contador++;
-					}
-					
-				}
-				
-				for (int i = 0; i < contador; i++) {
-					
-					photo.add(PhotoModel.builder()
-							.photoId(UuidProvider.getUUID())
-							.containerId(inspections.get(i).getInspectionId())
-							.photo(file.get(i).getBytes())
-							.build());
-				}
-				
-			
-				
-				
-				
-			}
-			
-			photoRepository.saveAll(photo);*/
-							
+
 			
 			
 			if(containeredit.getAppointmentId()!=null) {
@@ -1338,55 +1240,11 @@ public class ContainerService implements IContainerService{
 			}
 
 
-		/*if(inspection.getCustomerType()==1){
+		InspectionShippingDto entity = InspectionShippingDto.builder()
+						.shippingCompany(companyInfo)
+		  				.labor(laborInfo)
+		  				.build();
 
-			CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
-			companyInfo = infoPreLaborMerchant.getShippingCompanyId();
-			laborInfo = infoPreLaborMerchant.getLabor();
-		}else{
-
-			CatShippingCompanyModel infoPreLabor = catShippingCompanyReposirtory.getPreLaborFinalFinal(inspectionId);
-
-			if(infoPreLabor.getLabor()==null) {
-				log.info("No hay informacion de pre labor");
-				CatShippingCompanyModel infoPreLaborMerchant = catShippingCompanyReposirtory.getPreLaborMerchant();
-				companyInfo = infoPreLaborMerchant.getShippingCompanyId();
-				laborInfo = infoPreLaborMerchant.getLabor();
-			} else {
-				log.info("Si hay informacion de pre labor");
-				companyInfo = infoPreLabor.getShippingCompanyId();
-				laborInfo = infoPreLabor.getLabor();
-			}
-		}*/
-
-			  		InspectionShippingDto entity = InspectionShippingDto.builder()
-							.shippingCompany(companyInfo)
-			  				.labor(laborInfo)
-			  				.build();
-			 
-					/*
-					 * List<InspectionShippingDto> list = new ArrayList<InspectionShippingDto>();
-					 * List<InspectionModel> inspectionInfo =
-					 * inspectorRepository.getInspectionForLabor(inspectionId);
-					 *
-					 * for(InspectionModel entity : inspectionInfo) {
-					 *
-					 * List<ContainerModel> infoPreContainer =
-					 * containerRepository.getPreLabor(entity.getContainerId());
-					 *
-					 * for(ContainerModel listEntity : infoPreContainer) {
-					 *
-					 * CatShippingCompanyModel infoPreLabor =
-					 * catShippingCompanyReposirtory.getPreLaborFinal(listEntity.getShippingCompany(
-					 * ));
-					 *
-					 * list.add(infoPreLabor.getLabor().toArray()); }
-					 *
-					 *
-					 * }
-					 */
-			  		log.info(entity.getLabor()+"-----------5--------");
-		  
 		  return entity; 
 		  }
 

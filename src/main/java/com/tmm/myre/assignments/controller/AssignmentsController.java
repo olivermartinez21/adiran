@@ -171,22 +171,6 @@ public static final String HOME = PREFIX_ASSIGNMENTS + "assignments";
 		}
 	}
 	
-	@PostMapping("assignation")
-	@ResponseBody
-	public ResponseManagement assignation(@ModelAttribute("deliveryOrderDto") DeliveryOrderDto deliveryOrderDto) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).success(false).build();
-		try {
-			
-			//return deliveryOrderService.createDeliveryOrder(deliveryOrderDto);
-		} catch(Exception ex) {
-				log.error(ex.toString());
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.INSERT);
-			}
-			return response;
-		}
-	
 	@ModelAttribute("catClients")
 	List<CatCustomerDto> catClients() {
 		try {

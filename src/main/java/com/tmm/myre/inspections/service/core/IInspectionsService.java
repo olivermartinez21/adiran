@@ -14,7 +14,6 @@ public interface IInspectionsService {
 
 	List<InspectionDto> getInspections(String appointmentId) throws ConverterException;
 
-	List<InspectionDto> getDataTable(String containerId , Integer userId)  throws ConverterException ;
 
 	ResponseManagement inspectionValidation(String inspectionId) throws ConverterException;
 
@@ -24,7 +23,6 @@ public interface IInspectionsService {
 
 	ResponseManagement saveNewInspection(InspectionDto inspectionDto)throws ConverterException;
 
-	ResponseManagement editInspection(InspectionDto inspecctionDto)throws ConverterException;
 
 	ResponseManagement addImages(List<MultipartFile> file, String inspectionUpdate)throws ConverterException;
 

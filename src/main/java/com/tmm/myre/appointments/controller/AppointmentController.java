@@ -25,7 +25,6 @@ import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.service.core.IAppUserService;
 import com.tmm.myre.base.utils.KeyConstants;
 import com.tmm.myre.catalog.dto.CatCustomerDto;
-import com.tmm.myre.catalog.dto.CatJobcodeDto;
 import com.tmm.myre.catalog.dto.CatShippingCompanyDto;
 import com.tmm.myre.catalog.dto.CatTransportCompanyDto;
 import com.tmm.myre.catalog.service.core.ICatCustomerService;
@@ -129,7 +128,6 @@ public class AppointmentController extends AbstractMyreController {
 	public List<AppointmentDto> getDataTable(@RequestParam(required = true) Integer userId) {
 		try {
 			return appointmentService.getDataTable(userId,getWarehouse(),getLoggedUser().getUserRole());
-			//return appointmentService.getDataTable(userId);
 		} catch(Exception ex) {
 			log.info(ex.toString());
 			return null;
@@ -140,7 +138,6 @@ public class AppointmentController extends AbstractMyreController {
 	@ResponseBody
 	public List<AppointmentDto> getFilterDate(@RequestParam(required = true) Date startDate, Date lastDate ) {
 		try {
-			//return appointmentService.getDataTable(userId,getWarehouse());
 			return appointmentService.getDataTableByDate(startDate,lastDate,getWarehouse());
 		} catch(Exception ex) {
 			log.info(ex.toString());
@@ -180,18 +177,7 @@ public class AppointmentController extends AbstractMyreController {
 		}
 	
 	
-	@GetMapping("getContainers")
-	@ResponseBody
-	public List<ContainerDto> getContainers(@RequestParam(required = true) String appointmentId , Integer userId) {
-		try {
-			return null;
-			//return containerService.getContainers(appointmentId, userId);
-		} catch(Exception ex) {
-			log.info(ex.toString());
-			return null;
-		}
-	}
-	
+
 	@PostMapping("appointmentValidation")
 	@ResponseBody
 	public ResponseManagement appointmentValidation(@RequestParam("appointmentId") String appointmentId) {

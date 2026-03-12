@@ -21,14 +21,8 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId AND STATUS=1", nativeQuery = true)
 	int countContainers(@Param("appointmentId") String appointmentId);
 
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId AND STATUS=2 OR STATUS=3 OR STATUS=4 OR STATUS=5", nativeQuery = true)
-	List<ContainerModel> findAllInspectionsContainer(String appointmentId);
-
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId", nativeQuery = true)
 	List<ContainerModel> findContainersInspections(String appointmentId);
-	
-	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :appointmentId ", nativeQuery = true)
-	List<ContainerModel> findAllContainersById(String appointmentId);
 
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE APPOINTMENT_ID = :containerId AND STATUS=4", nativeQuery = true)
 	int countContainersByVistoBueno(String containerId);
@@ -107,14 +101,9 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE CONTAINER = :unitNumber AND STATUS=4", nativeQuery = true)
 	int existsByContainer(String unitNumber);
 
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE EIR_NAME IS NOT NULL", nativeQuery = true)
-	int getCountEir();
-
 	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER = :unitNumber", nativeQuery = true)
 	ContainerModel getByUnitAssigment(String unitNumber);
 
-	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE EIR_OUT_NAME IS NOT NULL", nativeQuery = true)
-	int getCountEirOut();
 
 	@Query(value = "SELECT COUNT(*) FROM MYRE_CONTAINERS WHERE CONTAINER = :unitNumber", nativeQuery = true)
 	int existsBd(String unitNumber);

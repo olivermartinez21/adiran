@@ -1,10 +1,7 @@
 package com.tmm.myre.containers.controller;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.annotation.MultipartConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -107,16 +103,7 @@ public class PregateController extends AbstractMyreController{
 	@Autowired
 	private IPhotorService photorService;
 	
-	/*@ModelAttribute("catShipping")
-	List<CatCustomerDto> catShipping() {
-		try {
-			return catCustomerService.catShipping();
-		} catch(Exception ex) {
-			log.error(ex.toString());
-			return null;
-		}
-	}*/
-	
+
 	@GetMapping("getDataTable")
 	@ResponseBody
 	public List<ContainerModel> getDataTable(@RequestParam(required = true) String appointmentId ,Integer userId) {
@@ -469,20 +456,6 @@ public class PregateController extends AbstractMyreController{
 		}
 	
 	
-	/*@PostMapping("inspectionSave")
-	@ResponseBody
-	public ResponseManagement inspectionSave(@RequestParam(required = true)String inspectionList) {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		
-		try {
-			return inspectionsService.inspectionSave(inspectionList);
-		} catch(Exception ex) {
-				response.setErrorCode(KeyConstants.CONTROLLER_ERROR_CODE);
-				response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
-				response.setOperation(KeyConstants.UPDATE);
-			}
-			return response;
-		}*/
 
 	@GetMapping("getcontainerHistoric")
 	@ResponseBody

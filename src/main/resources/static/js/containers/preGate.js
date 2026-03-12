@@ -58,7 +58,7 @@ function initComponents() {
 			Swal.fire("Debes Seleccionar a quien se le cobrara", "", "warning");
 			return false;
 		}
-		if ($("#newCondition").val() === "LLENO" && ($("#fullNomenclatura").val() === "" || $("#fullNomenclatura option:selected").text() === "Seleccione una opción")) {
+		if ($("#newCondition").val() === "LLENO" && ($("#fullNomenclatura").val() === "Seleccione una opción"||$("#fullNomenclatura").val() === "" || $("#fullNomenclatura option:selected").text() === "Seleccione una opción")) {
 			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
 		}

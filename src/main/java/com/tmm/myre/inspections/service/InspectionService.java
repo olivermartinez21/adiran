@@ -15,7 +15,6 @@ import com.tmm.myre.appointments.model.AppointmentModel;
 import com.tmm.myre.appointments.repository.IAppointmentRepository;
 import com.tmm.myre.base.dto.ResponseManagement;
 import com.tmm.myre.base.exception.ConverterException;
-import com.tmm.myre.base.repository.IUserRoleRepository;
 import com.tmm.myre.base.utils.KeyConstants;
 import com.tmm.myre.base.utils.UuidProvider;
 import com.tmm.myre.containers.dto.ContainerDto;
@@ -44,9 +43,6 @@ public class InspectionService implements IInspectionsService {
 	
 	@Autowired
 	private InspectionConverter inspectionConverter;
-	
-	@Autowired
-	private IUserRoleRepository userRoleRepository;
 	
 	@Autowired
 	private IAppointmentRepository appointmentRepository;
@@ -85,36 +81,6 @@ public class InspectionService implements IInspectionsService {
 		return list;
 	}
 
-	@Override
-	public List<InspectionDto> getDataTable(String containerId ,Integer userId) throws ConverterException {
-		int role = userRoleRepository.getRole(userId);
-		List<InspectionModel> inspections; 
-		List<InspectionDto> list = new ArrayList<InspectionDto>();
-		
-		if(!containerId.isEmpty()) {
-			switch (role) {
-			case 5: // ROLE DE TALLER podra ver los estimados "daños" y validar que se esta reparando o que ya se reparo 
-				inspections = inspectoRepository.findAllByContainer(containerId);
-				for(InspectionModel inspection: inspections ) {
-					list.add(inspectionConverter.convert(inspection));
-				}
-				break;
-			default:// ADMIN Y MASTER podran ver los estimados "daños" y validar que se estan reparando o que ya se reparo
-				inspections = inspectoRepository.findAllByContainer(containerId);
-				for(InspectionModel inspection: inspections ) {
-					list.add(inspectionConverter.convert(inspection));
-				}
-				break;
-			}
-		}else {
-			inspections =inspectoRepository.findAll();
-			for(InspectionModel inspection: inspections ) {
-				list.add(inspectionConverter.convert(inspection));
-		}
-		}
-		
-		return list;
-	}
 
 	@Override
 	public ResponseManagement inspectionValidation(String inspectionId) throws ConverterException {
@@ -186,61 +152,6 @@ public class InspectionService implements IInspectionsService {
 			response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
 		}
 		return response;
-	}
-
-	@Override
-	public ResponseManagement editInspection(InspectionDto inspecctionDto) throws ConverterException {
-		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
-		try {
-			log.info("llego servicio  -------------------------");
-			InspectionModel inspectin =  inspectoRepository.getById(inspecctionDto.getInspectionId());
-			
-			inspectin.setPart(inspecctionDto.getPart());
-			inspectin.setComponent(inspecctionDto.getComponent());
-			inspectin.setDamage(inspecctionDto.getDamage());
-			inspectin.setLocation(inspecctionDto.getLocation());
-			inspectin.setRepair(inspecctionDto.getRepair());
-			inspectin.setReference(inspecctionDto.getReference()); 
-			inspectin.setCustomerType(inspecctionDto.getCustomerType());
-			inspectin.setLength(inspecctionDto.getLength());
-			inspectin.setWidth(inspecctionDto.getWidth());
-			inspectin.setDepth(inspecctionDto.getDepth());
-			inspectin.setOtherLength(inspecctionDto.getOtherLength()); 
-			inspectin.setQuantity(inspecctionDto.getQuantity());
-			
-			inspectoRepository.save(inspectin);
-			
-			ContainerModel container = containeRrepository.getById(inspectin.getContainerId());
-			
-			
-			if(container.getTypeServicePregate().equals("MERCHANT")) {
-				//containeredit.setStatus(50); 
-				container.setStatusQute(1);
-			}
-			
-			List<InspectionModel> inspecciones = inspectoRepository.findAllByContainer(container.getContainerId());
-			container.setStatusQute(0);
-			int contador=0;
-			for(InspectionModel ins : inspecciones) {
-				if(ins.getCustomerType()!=1) {
-					contador++;
-				}
-				
-			}
-			
-			if(inspecciones.size()==contador) {
-				container.setStatusQute(0);
-			}
-
-			containeRrepository.save(container);
-			
-			response.setSuccess(true);
-			} catch (Exception e) {
-				response.setSuccess(false);
-				response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);
-				response.setMessage(KeyConstants.SERVICE_ERROR + e.toString());
-			}
-			return response;
 	}
 
 	@Override

@@ -37,9 +37,6 @@ public interface IAppointmentRepository extends JpaRepository<AppointmentModel, 
 	@Query(value = "SELECT COUNT(*) FROM MYRE_APPOINTMENTS WHERE LOCATION=:warehouse", nativeQuery = true)
 	int countWarehouse(String warehouse);
 
-	//-------------------------------------------------------------------------
-	/*@Query(value = "SELECT * FROM MYRE_APPOINTMENTS WHERE USER = :clientId AND LOCATION = :warehouse", nativeQuery = true)
-	List<AppointmentModel> getUseAppointmentTable(@Param("userId") Integer userId, @Param("warehouse") String warehouse);*/
 
 
 }
