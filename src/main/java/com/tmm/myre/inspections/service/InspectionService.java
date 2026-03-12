@@ -295,43 +295,92 @@ public class InspectionService implements IInspectionsService {
 			ObjectMapper inspectionMapper = new ObjectMapper();
 			InspectionDto inspectionDto = inspectionMapper.readValue(inspection, new TypeReference<InspectionDto>() { });
 			List<PhotoModel> photo = new ArrayList<PhotoModel>();
-			
-			ContainerModel containerEdit = containeRrepository.getById(inspectionDto.getContainerId());
-			log.info("+++++++++++++ " + containerEdit.toString());
-			if(inspectionDto.getCustomerType()==2){
-				inspectionDto.setCustomerName("CARRIER");
-			}
-			inspectionDto.setInspectionId(UuidProvider.getUUID());
-			inspectionDto.setStatus(2);
-			
-			int cantidad =	containeRrepository.getInspectionsMerchant(containerEdit.getContainerId());
-			
+			//*************************** [PROCESO DE INSERCCION DE DAÑO NUEVO] ***************************
+			if (inspectionDto.getNewDamageTypeOperation().equals("INSERT")){
 
-			if(inspectionDto.getCustomerType()==1 || inspectionDto.getCustomerType()==2) {
-				containerEdit.setStatusQute(1);
-			}
-			
-			if(inspectionDto.getRepairInspection()!=null) {
-				if(inspectionDto.getRepairInspection()==1) {
-					containerEdit.setStatusQute(5);
+				ContainerModel containerEdit = containeRrepository.getById(inspectionDto.getContainerId());
+				log.info("+++++++++++++ " + containerEdit.toString());
+				if(inspectionDto.getCustomerType()==2){
+					inspectionDto.setCustomerName("CARRIER");
 				}
-			}
-			
+				inspectionDto.setInspectionId(UuidProvider.getUUID());
+				inspectionDto.setStatus(2);
 
-			containeRrepository.save(containerEdit);
-			
-			inspectoRepository.save(inspectionConverter.convert(inspectionDto));
-			
-			for (int i = 0; i < file.size(); i++) {
-				photo.add(PhotoModel.builder()
-						.photoId(UuidProvider.getUUID())
-						.containerId(inspectionDto.getInspectionId())
-						.photo(file.get(i).getBytes())
-						.build());
+				int cantidad =	containeRrepository.getInspectionsMerchant(containerEdit.getContainerId());
+
+
+				if(inspectionDto.getCustomerType()==1 || inspectionDto.getCustomerType()==2) {
+					containerEdit.setStatusQute(1);
+				}
+
+				if(inspectionDto.getRepairInspection()!=null) {
+					if(inspectionDto.getRepairInspection()==1) {
+						containerEdit.setStatusQute(5);
+					}
+				}
+
+
+				containeRrepository.save(containerEdit);
+
+				inspectoRepository.save(inspectionConverter.convert(inspectionDto));
+
+				if(file != null && !file.isEmpty()) {
+					for (int i = 0; i < file.size(); i++) {
+						photo.add(PhotoModel.builder()
+								.photoId(UuidProvider.getUUID())
+								.containerId(inspectionDto.getInspectionId())
+								.photo(file.get(i).getBytes())
+								.build());
+					}
+					photoRepository.saveAll(photo);
+				}
+
+				response.setSuccess(true);
 			}
-			
-			photoRepository.saveAll(photo);
-			response.setSuccess(true);
+			//*************************** [PROCESO DE ACTUALIZATION] ***************************
+			else if (inspectionDto.getNewDamageTypeOperation().equals("UPDATE")) {
+				InspectionModel inspectionUpdate = inspectoRepository.getInspectionForLabor(inspectionDto.getInspectionId());
+
+				inspectionUpdate.setPart(inspectionDto.getPart());
+				inspectionUpdate.setComponent(inspectionDto.getComponent());
+				inspectionUpdate.setDamage(inspectionDto.getDamage());
+				inspectionUpdate.setLocation(inspectionDto.getLocation());
+				inspectionUpdate.setRepair(inspectionDto.getRepair());
+				inspectionUpdate.setReference(inspectionDto.getReference());
+				inspectionUpdate.setCustomerType(inspectionDto.getCustomerType());
+				inspectionUpdate.setCustomerName(inspectionDto.getCustomerName());
+				inspectionUpdate.setLength(inspectionDto.getLength());
+				inspectionUpdate.setWidth(inspectionDto.getWidth());
+				inspectionUpdate.setDepth(inspectionDto.getDepth());
+				inspectionUpdate.setOtherLength(inspectionDto.getOtherLength());
+				inspectionUpdate.setQuantity(inspectionDto.getQuantity());
+				inspectionUpdate.setExtentOtherLarge(inspectionDto.getExtentOtherLarge());
+
+				inspectionUpdate.setStatus(2);
+				inspectionUpdate.setExtentLarge(null);
+
+				if(inspectionDto.getCustomerType()==1 || inspectionDto.getCustomerType()==2) {
+					ContainerModel containerEdit = containeRrepository.getById(inspectionUpdate.getContainerId());
+					containerEdit.setStatusQute(1);
+					containeRrepository.save(containerEdit);
+				}
+
+				if(file != null && !file.isEmpty()) {
+					for (int i = 0; i < file.size(); i++) {
+						photo.add(PhotoModel.builder()
+								.photoId(UuidProvider.getUUID())
+								.containerId(inspectionDto.getInspectionId())
+								.photo(file.get(i).getBytes())
+								.build());
+					}
+					photoRepository.saveAll(photo);
+				}
+
+				inspectoRepository.save(inspectionUpdate);
+				response.setSuccess(true);
+
+			}
+
 		} catch (Exception e) {
 			response.setSuccess(false);
 			response.setErrorCode(KeyConstants.SERVICE_ERROR_CODE);

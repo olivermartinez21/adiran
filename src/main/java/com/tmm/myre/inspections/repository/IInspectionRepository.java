@@ -55,7 +55,8 @@ public interface IInspectionRepository extends JpaRepository<InspectionModel, St
 			nativeQuery = true)
 	List<Object[]> findInspectionsWithQuotes(@Param("containerId") String containerId);
 
-
+	@Query(value = "SELECT * FROM MYRE_INSPECTIONS where CONTAINER_ID=:containerId", nativeQuery = true)
+	List<InspectionModel> findAllByContainerId(String containerId);
 
 
 

@@ -165,4 +165,10 @@ public interface IContainerRepository extends JpaRepository<ContainerModel, Stri
     List<ContainerModel> findByBokking(String booking);
 
 	List<ContainerModel> findByStatusAndConditionEquals(int i, String number);
+
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER_ID=:containerId", nativeQuery = true)
+	ContainerModel getByContainerId(String containerId);
+
+	@Query(value = "SELECT * FROM MYRE_CONTAINERS WHERE CONTAINER_CONDITION_PREGATE = 'VACIO' AND EXPEDITION_DATE BETWEEN :start AND :end", nativeQuery = true)
+	List<ContainerModel> findByExpeditionDate(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

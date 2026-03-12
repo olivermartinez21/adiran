@@ -102,6 +102,7 @@ public class ContainerHistoricModel implements IModel{
 	
 	@Column(name = "QUOTE_NAME")private String  quoteName;
 	@Column(name = "COMENTS_QUOTE")private String  comnetsQuote;
+	@Column(name = "EXPEDITION_DATE")private LocalDateTime  expeditionDate;
 	@Column(name = "APROVED_QUOTE") private Date  aprovedQuote;
 	@Column(name = "DESTINY_PREGATE")private String destinyPregate;
 	@Column(name = "ORIGIN_PREGATE")private String originPregate;

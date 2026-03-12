@@ -21,6 +21,9 @@ public class QuoteConverter implements IConverter<QuoteModel, QuoteDto>{
 				.tarifa(to.getTarifa())
 				.exchange(to.getExchange())
 				.inspectionId(to.getInspectionId())
+				.modifyDate(to.getModifyDate())
+				.createdDate(to.getCreatedDate())
+				.createdBy(to.getCreatedBy())
 				.build();
 		return entity;
 	}
@@ -37,6 +40,9 @@ public class QuoteConverter implements IConverter<QuoteModel, QuoteDto>{
 				.tarifa(entity.getTarifa())
 				.exchange(entity.getExchange())
 				.inspectionId(entity.getInspectionId())
+				.modifyDate(entity.getModifyDate())
+				.createdDate(entity.getCreatedDate())
+				.createdBy(entity.getCreatedBy())
 				.build();
 		return to;
 	}

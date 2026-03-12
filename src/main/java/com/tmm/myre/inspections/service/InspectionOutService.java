@@ -3,6 +3,7 @@ package com.tmm.myre.inspections.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tmm.myre.base.service.FolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +38,9 @@ public class InspectionOutService implements IInspectionsOutService {
 
 	@Autowired
 	private IPdfGenerationService pdfGenerationService;
-	
+    @Autowired
+    private FolioService folioService;
+
 	@Override
 	public ResponseManagement saveInspectionOut(List<MultipartFile> file, String container) throws ConverterException {
 	ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.UPDATE).success(false).build();
@@ -67,7 +70,7 @@ public class InspectionOutService implements IInspectionsOutService {
 		containeEdit.setSecurityStamp(containerDto.getSecurityStamp());
 		containeEdit.setClasification(containerDto.getClasification());
         containeEdit.setBillTo(containerDto.getBillTo());
-		int valor = containerRepository.getCountEirOut();
+		long valor = folioService.nextEirOut();
 		containeEdit.setEirOutName("EIR-OUT-"+"AGS"+"-0"+valor);
 		containeEdit.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));
 		containeEdit.setStatus(6);

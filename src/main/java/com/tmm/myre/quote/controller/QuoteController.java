@@ -3,11 +3,14 @@ package com.tmm.myre.quote.controller;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.tmm.myre.base.service.core.IExcelUtils;
 import com.tmm.myre.catalog.dto.*;
 import com.tmm.myre.catalog.service.core.*;
+import com.tmm.myre.containers.dto.ReportFilterDto;
 import com.tmm.myre.quote.dto.InspectionWithQuoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +90,9 @@ public class QuoteController extends AbstractMyreController {
 	
 	@Autowired
 	private IPhotorService photorService;
+
+	@Autowired
+	private IExcelUtils excelUtils;
 	
 	@GetMapping("getDataTable")
 	@ResponseBody
@@ -427,6 +433,22 @@ public class QuoteController extends AbstractMyreController {
 			response.setMessage(KeyConstants.CONTROLLER_ERROR + ex.toString());
 		}
 		return response;
+	}
+
+	@RequestMapping("/quoteReport")
+	public ResponseEntity<Resource> quoteReport(@ModelAttribute ReportFilterDto reportFilterDto) {
+		try {
+			ByteArrayInputStream body = new ByteArrayInputStream(excelUtils.estimadoExcel(reportFilterDto));
+
+			return ResponseEntity
+					.ok()
+					.header("Content-Disposition",  "attachment; filename=ReporteManiobras.xlsx")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(new InputStreamResource(body));
+		} catch(Exception ex) {
+			log.error(ex.toString());
+			return null;
+		}
 	}
 
 

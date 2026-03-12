@@ -17,6 +17,10 @@ import com.tmm.myre.containers.repository.IContainerHistoricRepository;
 import com.tmm.myre.containers.repository.IContainerRepository;
 import com.tmm.myre.containers.repository.IReporteManiobraRepository;
 import com.tmm.myre.containers.specifications.ContainerSpecification;
+import com.tmm.myre.inspections.model.InspectionModel;
+import com.tmm.myre.inspections.repository.IInspectionRepository;
+import com.tmm.myre.quote.model.QuoteModel;
+import com.tmm.myre.quote.repository.IQuoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -58,6 +62,11 @@ public class ExcelUtils  implements IExcelUtils {
     private IMandREmptyContainerReleaseRepository mandREmptyContainerReleaseRepository;
     @Autowired
     private IReporteManiobraRepository reporteManiobraRepository;
+
+    @Autowired
+    private IInspectionRepository inspectionRepository;
+    @Autowired
+    private IQuoteRepository quoteRepository;
 
     @Override
     public byte[] inventoryExcel(ReportFilterDto reportFilterDto) {
@@ -618,6 +627,270 @@ public class ExcelUtils  implements IExcelUtils {
     }
 
 
+
+    @Override
+    public byte[] estimadoExcel(ReportFilterDto reportFilterDto) {
+        Specification<ContainerModel> specification = ContainerSpecification.byFilterShipping(reportFilterDto);
+        Specification<ContainerHistoricModel> specificationHistoric = ContainerSpecification.byShippingCompany(reportFilterDto);
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("ESTIMADOS");
+
+            // COLORES PERSONALIZADOS (igual que maneuverExcel)
+            XSSFColor purpleBorder = new XSSFColor(new java.awt.Color(178, 144, 208), new DefaultIndexedColorMap());
+            XSSFColor headerFill  = new XSSFColor(new java.awt.Color(0, 255, 255), new DefaultIndexedColorMap());
+
+            // ESTILO ENCABEZADO
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerFont.setFontHeightInPoints((short) 11);
+            headerStyle.setFont(headerFont);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            ((XSSFCellStyle) headerStyle).setFillForegroundColor(headerFill);
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            setAllBorders(headerStyle, BorderStyle.THIN, purpleBorder);
+
+            // ESTILO CELDAS
+            CellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            setAllBorders(cellStyle, BorderStyle.THIN, purpleBorder);
+
+            // ESTILO TITULO
+            CellStyle titleStyle = workbook.createCellStyle();
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 14);
+            titleStyle.setFont(titleFont);
+            titleStyle.setAlignment(HorizontalAlignment.CENTER);
+            titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            // ESTILO FECHA
+            CellStyle dateStyle = workbook.createCellStyle();
+            Font dateFont = workbook.createFont();
+            dateFont.setItalic(true);
+            dateStyle.setFont(dateFont);
+            dateStyle.setAlignment(HorizontalAlignment.CENTER);
+            dateStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+            // 26 encabezados definidos
+            String[] definedHeaders = {
+                    "MODIFIED", "MODIFIEDBY", "ESTIMADO_MODIFICADO", "SECTION", "UNIDAD",
+                    "TIPO UNIDAD", "CAPACIDAD", "NUM ESTIMADO", "EIR", "CLIENTE",
+                    "TIPO CLIENTE", "ESTATUS EST", "EST ABIERTO", "MES EST ABIERTO",
+                    "EST CERRADO", "MES EST CERRADO", "DESCRIPCION", "HORAS",
+                    "MO COSTO", "MO TOTAL", "MATERIAL CANT", "MATERIAL COSTO",
+                    "MATERIAL TOTAL", "TOTAL LINEA", "NUM. DE AUTORIZACION", "LUGAR ORIGEN"
+            };
+
+            // 9 columnas extra incrementales vacias para uso futuro (total = 35)
+            int totalExtraColumns = 0;
+            int totalColumns = definedHeaders.length + totalExtraColumns;
+
+            // FILA 0: TITULO
+            Row titleRow = sheet.createRow(0);
+            Cell titleCell = titleRow.createCell(0);
+            titleCell.setCellValue("Reporte de Estimados");
+            titleCell.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, totalColumns - 1));
+
+            // FILA 1: FECHA
+            Row dateRow = sheet.createRow(1);
+            Cell dateCell = dateRow.createCell(0);
+            String fechaActual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            dateCell.setCellValue("Fecha de generacion: " + fechaActual
+                    + "  Rango: " + reportFilterDto.getDateInit()
+                    + " - " + reportFilterDto.getDateEnd());
+            dateCell.setCellStyle(dateStyle);
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, totalColumns - 1));
+
+            // FILA 2: ENCABEZADOS
+            Row headerRow = sheet.createRow(2);
+            for (int i = 0; i < definedHeaders.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(definedHeaders[i]);
+                cell.setCellStyle(headerStyle);
+            }
+            // Columnas extra vacias con estilo de encabezado
+            for (int i = definedHeaders.length; i < totalColumns; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue("");
+                cell.setCellStyle(headerStyle);
+            }
+
+            // DATOS
+            // Conecta tu repositorio aqui y remplaza el bloque de abajo con tu logica de consulta.
+            // Por ahora se genera una fila vacia como placeholder.
+            int rowNum = 3;
+//            Row dataRow = sheet.createRow(rowNum);
+//            for (int i = 0; i < totalColumns; i++) {
+//                createStyledCell(dataRow, i, "hola", cellStyle);
+//            }
+
+            LocalDate date = reportFilterDto.getDateInit().toLocalDate();
+            LocalDate dateEnd = reportFilterDto.getDateEnd().toLocalDate();
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = dateEnd.atTime(23, 59, 59);
+
+            List<String> filterContainers = new ArrayList<>();
+            List<InspectionModel> inspectionModelList = new ArrayList<>();
+
+            List<ContainerModel> containerFilter = containerRepository.findByExpeditionDate(start, end);
+            List<ContainerHistoricModel> historicFilter = containerHitoricRepository.findByExpeditionDate(start, end);
+
+            log.info(containerFilter.size() + " containers encontrados en el repositorio principal.");
+            log.info(historicFilter.size() + " containers encontrados en el repositorio principal.");
+
+            for (ContainerModel containerModel : containerFilter) {
+                filterContainers.add(containerModel.getContainerId());
+            }
+            for (ContainerHistoricModel containerHistoric : historicFilter) {
+                filterContainers.add(containerHistoric.getContainerId());
+            }
+
+            for (String filterContainer : filterContainers) {
+                log.info("Container ID para filtro: " + filterContainer);
+                List<InspectionModel> filterInspection = inspectionRepository.findAllByContainerId(filterContainer);
+                inspectionModelList.addAll(filterInspection);
+            }
+
+
+            for (InspectionModel inspection : inspectionModelList) {
+                log.info("Empieza ciclo: {}", inspection.getInspectionId());
+                Row row = sheet.createRow(rowNum++);
+
+                ContainerModel container = containerRepository.getByContainerId(inspection.getContainerId());
+                CatShippingCompanyModel naviera = null;
+                if (container != null && container.getShippingCompany() != null) {
+                    naviera = catShippingCompanyReposirtory.getPreLaborFinal(container.getShippingCompany());
+                }
+                log.info("Uso normal: {}", container != null ? container.getContainer() : "null");
+
+                Integer containerTypeVal = null;
+                String contaierSizeVal = null;
+                java.sql.Date aprovedQuoteVal = null;
+                String containerNameVal = null;
+                String quoteNameVal = null;
+                String eirNameVal = null;
+                String originPregateVal = null;
+                String preLabor= null;
+                LocalDateTime expeditionDateVal = null;
+
+                if (container != null) {
+                    containerTypeVal = container.getContainerType();
+                    contaierSizeVal = container.getContaierSize();
+                    aprovedQuoteVal = container.getAprovedQuote();
+                    containerNameVal = container.getContainer();
+                    quoteNameVal = container.getQuoteName();
+                    eirNameVal = container.getEirName();
+                    originPregateVal = container.getOriginPregate();
+                    preLabor = naviera != null ? naviera.getLabor() : "";
+                    expeditionDateVal = container.getExpeditionDate();
+                } else {
+                    ContainerHistoricModel containerHistoric = containerHitoricRepository.findByContainerId(inspection.getContainerId());
+                    CatShippingCompanyModel navieraHistoric = null;
+                    if (containerHistoric != null && containerHistoric.getShippingCompany() != null) {
+                        navieraHistoric = catShippingCompanyReposirtory.getPreLaborFinal(containerHistoric.getShippingCompany());
+                    }
+                    log.info("Uso historico: " + (containerHistoric != null ? containerHistoric.getContainer() : "null"));
+                    if (containerHistoric != null) {
+                        containerTypeVal = containerHistoric.getContainerType();
+                        contaierSizeVal = containerHistoric.getContaierSize();
+                        aprovedQuoteVal = containerHistoric.getAprovedQuote();
+                        containerNameVal = containerHistoric.getContainer();
+                        quoteNameVal = containerHistoric.getQuoteName();
+                        eirNameVal = containerHistoric.getEirName();
+                        originPregateVal = containerHistoric.getOriginPregate();
+                        preLabor = navieraHistoric != null ? navieraHistoric.getLabor() : "";
+                        expeditionDateVal = containerHistoric.getExpeditionDate();
+                    }
+                }
+
+                String inspectionStatus;
+                String customerType;
+                String tipoUnidad = "UNKNOWN";
+
+                if (containerTypeVal != null) {
+                    switch (containerTypeVal) {
+                        case 1: tipoUnidad = "CH"; break;
+                        case 2: tipoUnidad = "OT"; break;
+                        case 3: tipoUnidad = "DC"; break;
+                        case 4: tipoUnidad = "GS"; break;
+                        case 5: tipoUnidad = "IMO"; break;
+                        case 6: tipoUnidad = "RF"; break;
+                        case 7: tipoUnidad = "HC"; break;
+                    }
+                }
+
+                List<CatNomenclaturaModel> nomenclatura = catNomencalturaRepository.findBYTransportType(tipoUnidad, contaierSizeVal);
+                String nom = (!nomenclatura.isEmpty()) ? nomenclatura.get(0).getNomenclatura() : "";
+
+                if (aprovedQuoteVal == null){
+                    inspectionStatus  = "ABIERTO";
+                } else {
+                    inspectionStatus = "CERRADO";
+                }
+
+                if (inspection.getCustomerType() != null && inspection.getCustomerType().equals(1)){
+                    customerType = "CARRIER";
+                } else {
+                    customerType = "MERCHANT";
+                }
+
+                QuoteModel quote = quoteRepository.getByInspectionId(inspection.getInspectionId());
+
+                log.info("Empiza a escribir " + (quote != null ? quote.getQuoteId() : "falta por crear"));
+                createStyledCell(row, 0, quote != null && quote.getModifyDate() != null ? quote.getModifyDate().toString() : "", cellStyle);
+                createStyledCell(row, 1, quote != null && quote.getCreatedBy() != null ? quote.getCreatedBy() : "", cellStyle);
+                createStyledCell(row, 2, quote != null && quote.getCreatedDate() != null ? quote.getCreatedDate().toString() : "FALTA LLENAR", cellStyle);
+                createStyledCell(row, 3, inspection.getLocation(), cellStyle);
+                createStyledCell(row, 4, containerNameVal != null ? containerNameVal : "", cellStyle);
+                createStyledCell(row, 5, tipoUnidad, cellStyle);
+                createStyledCell(row, 6, nom, cellStyle);
+                createStyledCell(row, 7, quoteNameVal != null ? quoteNameVal : "", cellStyle);
+                createStyledCell(row, 8, eirNameVal != null ? eirNameVal : "", cellStyle);
+                createStyledCell(row, 9, inspection.getCustomerName(), cellStyle);
+                createStyledCell(row, 10, customerType, cellStyle);
+                createStyledCell(row, 11, inspectionStatus, cellStyle);
+                createStyledCell(row, 12, String.valueOf(expeditionDateVal), cellStyle);
+                createStyledCell(row, 13, expeditionDateVal == null ? "" : (expeditionDateVal.toLocalDate().format(DateTimeFormatter.ofPattern("MMMM", java.util.Locale.forLanguageTag("es"))).substring(0,1).toUpperCase() + expeditionDateVal.toLocalDate().format(DateTimeFormatter.ofPattern("MMMM", java.util.Locale.forLanguageTag("es"))).substring(1)), cellStyle);
+                createStyledCell(row, 14, aprovedQuoteVal == null ? "" : aprovedQuoteVal.toString(), cellStyle);
+                String mesAprobado = "";
+                if (aprovedQuoteVal != null) {
+                    String mes = aprovedQuoteVal.toLocalDate().format(DateTimeFormatter.ofPattern("MMMM", java.util.Locale.forLanguageTag("es")));
+                    if (mes != null && !mes.isEmpty()) {
+                        mesAprobado = mes.substring(0, 1).toUpperCase() + (mes.length() > 1 ? mes.substring(1) : "");
+                    }
+                }
+                createStyledCell(row, 15, mesAprobado, cellStyle);
+                createStyledCell(row, 16, quote != null && quote.getRepairDescription() != null ? quote.getRepairDescription() : "", cellStyle);
+                createStyledCell(row, 17, quote != null ? String.valueOf(quote.getHours()) : "", cellStyle);
+                createStyledCell(row, 18, preLabor, cellStyle);
+                createStyledCell(row, 19, quote != null ? String.valueOf(quote.getLabor()) : "", cellStyle);
+                createStyledCell(row, 20, "1", cellStyle);
+                createStyledCell(row, 21, quote != null ? String.valueOf(quote.getMaterial()) : "", cellStyle);
+                createStyledCell(row, 22, quote != null ? String.valueOf(quote.getMaterial()) : "", cellStyle);
+                createStyledCell(row, 23, quote != null ? String.valueOf(quote.getTarifa()) : "", cellStyle);
+                createStyledCell(row, 24,  " ", cellStyle);
+                createStyledCell(row, 25,  originPregateVal != null ? originPregateVal : "", cellStyle);
+
+            }
+
+            for (int i = 0; i < totalColumns; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            workbook.write(out);
+            return out.toByteArray();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            log.error(ex.toString());
+            return null;
+        }
+    }
 
     private void createStyledCell(Row row, int colIndex, String value, CellStyle style) {
         Cell cell = row.createCell(colIndex);

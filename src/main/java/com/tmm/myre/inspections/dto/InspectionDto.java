@@ -47,5 +47,6 @@ public class InspectionDto implements ITransferObject{
 	private Integer  repairInspection;
 	
 	private String labor;
-	
+
+	private String newDamageTypeOperation;
 }

@@ -109,7 +109,7 @@ function configDataTable() {
 						return   $("#containerConditionInspecction option:selected").html() +" "+$("#qualityGradeInspection option:selected").html();
 					}},
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-						return  '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Técnico" onclick="asigned(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
+						return  '&nbsp<button type="button" class="btn btn-outline-dark btn-sm" title="Asignar Técnico" onclick="asigned(\'' + meta.row + '\');"><i class="fas fa-user-edit"></i></button>';
 					}},	
 			{ data: "containerId", visible: true , render : function(data) {
 						return "";
@@ -123,7 +123,7 @@ function configDataTable() {
 							
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 						$("#containerStatus").val(data);
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a Reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-pen"></i></button>';
+						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Daños a Reparar" onclick="newDamage(\'' + meta.row + '\');"><i class="fas fa-tools"></i></button>';
 					}},
 			{ data: "statusQute", visible: false , render : function(data) {
 					$("#statusContainer").val(data);
@@ -395,9 +395,7 @@ function newDamage(data){
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
 			
-//			{ data: "inspectionId", visible: true , render : function(data) {
-//						return "";
-//					}},
+			{ data: "reference", visible: false},
 //			{ data: "inspectionId", visible: false , render : function(data) {
 //						return "";
 //					}},
@@ -410,18 +408,22 @@ function newDamage(data){
 //			{ data: "inspectionId", visible: true , render : function(data) {
 //						return "";
 //					}},
-//			{ data: "inspectionId", visible: true , render : function(data) {
-//						return "";
-//					}},	
+			{ data: "extentOtherLarge",visible: false },
 			{ data: "hours", visible: true},
 			{ data: "labor", visible: true },
 			{ data: "material", visible: true},
 			{ data: "tarifa", visible: true},
+			{data: "extentLarge", visible: true},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
-				$("#imagenData").val(data)
-				//return '<a onclick="showPhoto(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp';
-			}},
+					$("#imagenData").val(data);
+					var btnView = '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="onlyPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp;';
+					var btnEdit = '<button type="button" class="btn btn-outline-dark btn-sm" title="Modificar Daños" onclick="viewPhotos(\'' + meta.row + '\');"><i class="fas fa-wrench"></i></button>';
+					if (full && (full.extentLarge === 1 || full.extentLarge === '1')) {
+						return btnView; // ocultar "Modificar Daños"
+					}
+					return btnView + btnEdit;
+				}},
+
 			{ data: "inspectionId", visible: false , render : function(data) {
 						return "";
 					}},	
@@ -441,6 +443,27 @@ function newDamage(data){
 	}
 function addNewDamage(){
 	console.log("Paso 1 agrega danio")
+	$("#newDamageTypeOperation").val("INSERT")
+	document.getElementById('newComponentInspection2').setAttribute("hidden",true);
+	document.getElementById('newComponentInspection').removeAttribute("hidden");
+
+	$("#newPart").val("Selecciona una opción")
+	$("#newDamage").val("Selecciona una opción")
+	$("#newComponentInspection2").val("Selecciona una opción")
+	$("#newLocationInspection").val("")
+	$("#newRepair").val("Selecciona una opción")
+	$("#newReferent").val("")
+	$("#inspectionCustomerType").val("")
+	$("#customerName").val("")
+
+	$("#largeInspection").val("")
+	$("#heigthInspection").val("")
+	$("#depthInspection").val("")
+	$("#otherLargeInspection").val("")
+
+	$("#extentOtherLarge").val(1)
+	$("#quantityInspection").val("")
+
 	$("#newDamageAddModel").modal("show")
 }
 
@@ -543,7 +566,10 @@ $("#newDamageAddModel").submit(function () {
 			 depth: $("#depthInspection").val(),
 			 otherLength:  $("#otherLargeInspection").val(),
 			 quantity:  $("#quantityInspection").val(),
+			extentOtherLarge: $("#extentOtherLarge").val(),
+			newDamageTypeOperation: $("#newDamageTypeOperation").val(),
 			repairInspection: 1,
+
 	};
 	
 	formData.append('inspection',JSON.stringify(data));
@@ -714,14 +740,47 @@ function showComponents(){
     }
 
 function viewPhotos(data){
-table = $("#newInspectionTable").DataTable().row(data).data();
+	$("#newDamageTypeOperation").val("UPDATE")
+	document.getElementById('newComponentInspection2').removeAttribute("hidden");
+	document.getElementById('newComponentInspection').setAttribute("hidden",true);
+
+	table = $("#newInspectionTable").DataTable().row(data).data();
 $("#inspectionId").val(table.inspectionId)
-$("#imageTableInspectionView").DataTable().clear().draw();
+	$("#newPart").val(table.part)
+	$("#newDamage").val(table.damage)
+	$("#newComponentInspection2").val(table.component)
+	$("#newLocationInspection").val(table.location)
+	$("#newRepair").val(table.repair)
+	$("#newReferent").val(table.reference)
+	$("#inspectionCustomerType").val(table.customerType)
+	$("#customerName").val(table.customerName)
+
+	$("#largeInspection").val(table.length)
+	$("#heigthInspection").val(table.width)
+	$("#depthInspection").val(table.depth)
+	$("#otherLargeInspection").val(table.otherLength)
+
+	$("#extentOtherLarge").val(table.extentOtherLarge)
+	$("#quantityInspection").val(table.quantity)
+
+
+$("#imageTableInspection").DataTable().clear().draw();
+
+	
+	$("#newDamageAddModel").modal("show");
+}
+
+function onlyPhotos(data){
+
+	table = $("#newInspectionTable").DataTable().row(data).data();
+	$("#inspectionId").val(table.inspectionId)
+
+	$("#imageTableInspectionView").DataTable().clear().draw();
 
 	var info = {
-			containerId: $("#inspectionId").val(),
-			} 
-		
+		containerId: $("#inspectionId").val(),
+	}
+
 	$.ajax({
 		type: "GET",
 		url: 'inspection/getPhotos',
@@ -730,24 +789,24 @@ $("#imageTableInspectionView").DataTable().clear().draw();
 		success: function(response){
 			console.log(response)
 
-	for(var i=0;i<response.length;i++){
-$("#imageTableInspectionView").DataTable().row.add({
-				"photoId":response[i].photoId,
-				"image":response[i].photoId,
-				"file": "x",
-			}).draw(false);
-			
-	}
-	
+			for(var i=0;i<response.length;i++){
+				$("#imageTableInspectionView").DataTable().row.add({
+					"photoId":response[i].photoId,
+					"image":response[i].photoId,
+					"file": "x",
+				}).draw(false);
+
+			}
+
 		},
 		error: function(){
 			alert("AJAX ERROR");
 		}
 	});
-			
-			
-	
-	$("#photosModel").modal("show");	
+
+
+
+	$("#photosModel").modal("show");
 }
 
 
@@ -784,3 +843,19 @@ Swal.fire({
   imageUrl: data,
 })
 	}
+
+function saveComponent(){
+	cambioComponente = 1;
+	if ($('#newComponentInspection').is(':hidden')) {
+		console.log("esta visible")
+		document.getElementById('newComponentInspection').removeAttribute("hidden");
+		document.getElementById('newComponentInspection2').setAttribute("hidden",true);
+		$("#newPart").val("Selecciona una opción")
+		$("#newDamage").val("Selecciona una opción")
+		$("#newComponentInspection").val("Selecciona una opción")
+
+	}
+
+	$("#componentSave").val($("#newComponentInspection").val())
+
+}

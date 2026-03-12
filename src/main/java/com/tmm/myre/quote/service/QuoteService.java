@@ -1,5 +1,6 @@
 package com.tmm.myre.quote.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.tmm.myre.catalog.model.CatJobcodeModel;
@@ -108,6 +109,8 @@ public class QuoteService implements IQuoteService {
 
 			if(exist == 0) {
 				quoteDto.setQuoteId(UuidProvider.getUUID());
+				quoteDto.setCreatedDate(LocalDateTime.now());
+				quoteDto.setCreatedBy(quoteDto.getIdUser().toString());
 				quoteRepository.save(quoteConverter.convert(quoteDto));
 			}else {
 
@@ -119,7 +122,7 @@ public class QuoteService implements IQuoteService {
 				quote.setWorkCode(quoteDto.getWorkCode());
 				quote.setRepairDescription(quoteDto.getRepairDescription());
 				quote.setExchange(quoteDto.getExchange());
-
+				quote.setModifyDate(LocalDateTime.now());
 				quoteRepository.save(quote);
 			}
 

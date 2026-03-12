@@ -14,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -36,4 +39,7 @@ public class QuoteModel implements IModel{
 	@Column(name = "TARIFA")private String tarifa;
 	@Column(name = "EXCHANGE")private String exchange;
 	@Column(name = "INSPECTION_ID")private String inspectionId;
+	@Column(name = "MODIFY_DATE")private LocalDateTime modifyDate;
+	@Column(name = "CREATED_DATE")private LocalDateTime createdDate;
+	@Column(name = "CREATED_BY")private String createdBy;
 }

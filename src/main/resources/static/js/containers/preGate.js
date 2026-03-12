@@ -1,4 +1,3 @@
-
 $(document).ajaxStart(function(){
     $('#loading').show();
  }).ajaxStop(function(){
@@ -20,6 +19,16 @@ $(document).ready( function() {
 		width: '100%',
 		placeholder: 'Buscar destino...'
 	});
+	// Si el select ya existe en el DOM, asegúrate de que tenga la opción por defecto
+    var select = document.getElementById('fullNomenclatura');
+    if (select && select.options.length === 0) {
+        var defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.text = 'Seleccione una opción';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+    }
 });
 
 function GetURLParameter(sParam) {
@@ -49,7 +58,7 @@ function initComponents() {
 			Swal.fire("Debes Seleccionar a quien se le cobrara", "", "warning");
 			return false;
 		}
-		if ($("#newCondition").val() === "LLENO" && $("#fullNomenclatura").val() === "Selecciona una opción") {
+		if ($("#newCondition").val() === "LLENO" && ($("#fullNomenclatura").val() === "" || $("#fullNomenclatura option:selected").text() === "Seleccione una opción")) {
 			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
 		}
@@ -302,9 +311,8 @@ $("#addNewDamageModel").submit(function () {
 	table.forEach(function(item) {
 			image.push(item.file);
 			formData.append('file', item.file);
-		formData.append('containerId',  $("#containerId").val());
-		
 		});
+		formData.append('containerId',  $("#containerId").val());
 		
 		var data = {
 			inspectionId:  $("#inspectionId").val(),
@@ -327,6 +335,8 @@ $("#addNewDamageModel").submit(function () {
 			 extentDepth: $("#extentDepth").val(),
 			 extentOtherLarge: $("#extentOtherLarge").val(),
 			 quantity:  $("#quantityInspection").val(),
+			newDamageTypeOperation: "INSERT"
+
 	};
 	
 	formData.append('inspection',JSON.stringify(data));
@@ -367,7 +377,7 @@ $("#addNewDamageModel").submit(function () {
 				    });
 				}else{
 					console.log("lLLEGO AL ELSE");
-					//saveInspection()
+					Swal.fire("Error al registrar el daño", response.message || "Intente nuevamente o contacte al equipo de desarrollo", "error");
 				}
 			/*if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
@@ -1438,11 +1448,11 @@ async  function inspectionContainer(data){
 	const year = now.getFullYear();
 	const month = (now.getMonth() + 1).toString().padStart(2, '0');
 	const day = now.getDate().toString().padStart(2, '0');
-	const formattedDate = `${year}-${month}-${day}`;
+	const hours = now.getHours().toString().padStart(2, '0');
+	const minutes = now.getMinutes().toString().padStart(2, '0');
+	const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
 
-	const dateInput = document.getElementById("newDateInspection");
-	dateInput.max = formattedDate; // Establece la fecha máxima como la fecha actual
-	dateInput.value = formattedDate;
+	document.getElementById("newDateInspection").value = formattedDateTime;
 
 	$("#inspectionModal").modal("show");
 	$("#operation").val("UPDATE")
@@ -2189,8 +2199,7 @@ function saveInspection(){
 		
 	
 				return false;
-	
-}
+	}
 
 function fullEntry() {
 	if ($("#newCondition").val() === "LLENO") {

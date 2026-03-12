@@ -274,16 +274,17 @@
 										<th>Cobrar A </th>
 										<th>Código De Localización</th> 
 										<th>Cantidad </th>
-<!-- 										<th>Fabricante </th> -->
+										<th>Observaciones </th>
 <!-- 										<th>Número De Parte Sap</th> -->
 <!-- 										<th>Número De Parte</th> -->
 <!-- 										<th>Descripcion De La Parte</th>  -->
 <!-- 										<th>Codigo De Trabajo </th> -->
-<!-- 										<th>Descripción De La Reparación</th>  -->
+ 										<th>otrolargo</th>
 										<th>Horas</th>
 										<th>Labor (Mano de Obra)</th>
 										<th>Costo de Material </th>
 										<th>Tarifa </th>
+										<th>aprovedYn</th>
 										<th>Fotos </th>
 										<th>Observaciones</th>
 										<th>Status</th>
@@ -332,7 +333,7 @@
 					</div>
 					<form id="newDamageAddForm">
 					<div class="modal-body modal-body-app">
-						
+						<input type="text" class="form-control" id="newDamageTypeOperation" hidden="hidden">
 						<div class="row">
 							<div class="col-sm" id=divPart>
 								<div class="form-group">
@@ -345,12 +346,12 @@
 							<div class="col-sm" id=divDamage>
 								<div class="form-group">
 									<label for="newComponentInspection">Componente</label>
-									
-									<select class="form-control" id="newComponentInspection2" hidden="true">
-									<option th:each="option : ${catComponent}" th:value="${option.componentId}" th:text="${option.component}"></option>
+
+									<select class="form-control" id="newComponentInspection2" oninput="saveComponent()" hidden="true">
+									<option th:each="option : ${getComponets}" th:value="${option.componentId}" th:text="${option.component}"></option>
 									</select>	
 									
-									 <select class="form-control" id="newComponentInspection">
+									 <select class="form-control" id="newComponentInspection" oninput="saveComponent()">
 									</select>
 								</div>
 							</div>
@@ -425,31 +426,42 @@
 							<div class="row" >
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="largeInspection">Largo (m)</label>
+									<label for="largeInspection">Largo</label>
 									<input type="text" class="form-control" id="largeInspection"   >
 								</div>
 							</div>
 							
 							<div class="col-sm">
 								<div class="form-group">
-									<label for="heigthInspection">Ancho (m)</label>
+									<label for="heigthInspection">Ancho</label>
 									<input type="text" class="form-control" id="heigthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="depthInspection">Profundidad (m)</label>
+									<label for="depthInspection">Profundidad</label>
 									<input type="text" class="form-control" id="depthInspection"  >
 								</div>
 							</div>
 							
 							<div class="col-sm" >
 								<div class="form-group">
-									<label for="otherLargeInspection">Largo (m)</label>
+									<label for="otherLargeInspection">Alto</label>
 									<input type="text" class="form-control" id="otherLargeInspection"  >
 								</div>
 							</div>
+								<div class="col-sm" >
+									<div class="form-group">
+										<label for="extentOtherLarge">Unidad de medida</label>
+										<select class="form-control" id="extentOtherLarge">
+											<option value="1">mm</option>
+											<option value="2">cm</option>
+											<option value="3">mts</option>
+											<option value="4">pza</option>
+										</select>
+									</div>
+								</div>
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="quantityInspection">Cantidad</label>

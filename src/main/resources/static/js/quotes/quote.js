@@ -48,7 +48,7 @@ function configDataTable() {
 		},
 			buttons: {
 			buttons: [
-				//{text: '+', action: function() { addNewContainer()}},
+				{text: 'Reporte de Estimados', className: 'btn btn-info', action: function() { quoteReport(); } },
 				],
 			dom: {
 				
@@ -112,7 +112,7 @@ function configDataTable() {
 			{ data: "containerId", visible: false , render : function(data) {
 						return "";
 					}},
-			{ data: "quoteName2", visible: true },
+			{ data: "quoteName2", visible: false },
 			{ data: "noInvoice", visible: true },
 			{ data: "containerId",visible: false },
 		],
@@ -338,6 +338,7 @@ function validationStatus(data){
 			{ data: "labor", visible: true },
 			{ data: "material", visible: true},
 			{ data: "tarifa", visible: true},
+			{data: "extentLarge", visible: false},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 				$("#imagenData").val(data)
 				//return '<a onclick="showPhoto(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
@@ -348,11 +349,14 @@ function validationStatus(data){
 					}},	
 			{ data: "status", visible: false , render : function(data) {
 						return data;
-					}},	
-			{ data: "inspectionId", visible: true , render : function(data, meta) {
-						return   '<button type="button" class="btn btn-outline-dark btn-sm" title="Seleccionar Código de Trabajo" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>'+
-							'<button type="button" class="btn btn-outline-dark btn-sm" title="Modificar dato Cobrar A" onclick="changeBillTo(\'' + data + '\');"><i class="fas fa-retweet"></i></button>';
 					}},
+			{ data: "inspectionId", visible: true , render : function(data, type, full, meta) {
+					if (full && (full.extentLarge === 1 || full.extentLarge === '1')) {
+						return "";
+					}
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Seleccionar Código de Trabajo" onclick="inspectionCap(\'' + data + '\');"><i class="fas fa-file"></i></button>' +
+						'<button type="button" class="btn btn-outline-dark btn-sm" title="Modificar dato Cobrar A" onclick="changeBillTo(\'' + data + '\');"><i class="fas fa-retweet"></i></button>';
+				}},
 		],
 
 
@@ -446,7 +450,8 @@ function initComponents(){
 			tarifa : $("#newTarifa").val(),
 			tarifa : $("#newTarifa").val(),
 			exchange : $("#newExchange").val(),
-			inspectionId: 	$("#inspectionId").val()
+			inspectionId: 	$("#inspectionId").val(),
+			idUser: $("#globalUserId").val()
 			}
 			
 			$.ajax({
@@ -598,6 +603,49 @@ function initComponents(){
 	    });
 
 	    return false;
+	});
+
+	$("#quoteReportForm").submit( () => {
+		data = {
+			//shippingCompany : $("#filterShippingCompany").val(),
+			dateInit : $("#filterDateInit").val(),
+			dateEnd : $("#filterDateEnd").val(),
+
+		}
+		console.log("soy data" + JSON.stringify(data));
+		$.ajax({
+			type: "GET",
+			url: "quote/quoteReport",
+			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data: data,
+			xhrFields: {
+				responseType: 'blob' // Set response type to blob to handle binary data
+			},
+			success: (data, status, xhr) => {
+				// Create a new Blob object using the response data
+				const blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+
+				// Create a link element
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob); // Create a URL for the blob
+				link.download = 'ReporteEstimados.xlsx'; // Set the file name
+
+				// Append to the body and trigger the download
+				document.body.appendChild(link);
+				link.click();
+
+				// Clean up and remove the link
+				setTimeout(() => {
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(link.href);
+				}, 100);
+			},
+			error: (xhr, status, error) => {
+				console.error('Error generating Excel report:', error);
+				alert('Error generating report. Please try again.');
+			}
+		});
+		return false;
 	});
 		
 }
@@ -871,5 +919,8 @@ function changeBillTo (data){
 	$("#changeBilltoModel").modal("show");
 }
 
+function quoteReport(){
+	$("#quoteReportModal").modal("show");
+}
 
 

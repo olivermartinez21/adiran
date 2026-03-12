@@ -1123,6 +1123,18 @@ public class PdfGenerationService implements IPdfGenerationService {
 				hcell = new PdfPCell(new Phrase(""+order.getOwner(), regularBlack));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("CLIENTE: ", regularWhite));
+
+			hcell.setBackgroundColor(BaseColor.DARK_GRAY);
+			hcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table.addCell(hcell);
+
+			BookingModel finalClient = bookingRepository.findByBooking(order.getBooking());
+
+			hcell = new PdfPCell(new Phrase(""+finalClient.getFinalClient(), regularBlack));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 				
 //-------------------------------------------------------------------------------------
 

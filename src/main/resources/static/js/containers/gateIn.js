@@ -416,6 +416,7 @@ $("#addNewDamageModel").submit(function () {
 			 quantity:  $("#quantityInspection").val(),
 			extentOtherLarge: $("#extentOtherLarge").val(),
 			customerName: $("#customerName").val(),
+			newDamageTypeOperation: "INSERT"
 	};
 		formData.append('inspectionUpdate',JSON.stringify(data));
 		
@@ -1858,9 +1859,9 @@ $("#imageTableInspection").DataTable().row.add({
 		}
 	});
 			
-			
+
 	
-	$("#addNewDamageModel").modal("show");	
+$("#addNewDamageModel").modal("show");
 }
 
 function viewPhotosAdd(data){

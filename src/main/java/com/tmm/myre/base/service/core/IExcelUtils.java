@@ -15,4 +15,6 @@ public interface IExcelUtils {
     byte[] hapagAds(ReportFilterDto reportFilterDto);
 
     byte[] exitDateReport(ReportFilterDto reportFilterDto);
+
+    byte[] estimadoExcel(ReportFilterDto reportFilterDto);
 }

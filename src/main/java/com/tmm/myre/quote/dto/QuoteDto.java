@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -29,4 +32,7 @@ public static final long serialVersionUID = 1L;
 	private String tarifa;
 	private String exchange;
 	private String inspectionId;
+	private LocalDateTime modifyDate;
+	private LocalDateTime createdDate;
+	private String createdBy;
 }

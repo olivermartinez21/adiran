@@ -237,8 +237,7 @@ public class ContainerService implements IContainerService{
 			}
 			if(response.getSuccess()==true) {
 				if(containerDto.getNum()==containerDto.getFilas()-1) {
-					int valor = containerRepository.getCountEirOut();
-					valor=valor +1;
+					long valor = folioService.nextEirOut();
 					container.setEirOutName("EIR-OUT-"+"AGS"+" "+valor);
 					container.setEirOut(pdfGenerationService.pdfEirOut(containerDto.getContainerId(),containerDto.getDataUrl()));
 				}
@@ -470,6 +469,12 @@ public class ContainerService implements IContainerService{
 	public ResponseManagement savePregate(ContainerDto containerDto) throws ConverterException {
 		ResponseManagement response = ResponseManagement.builder().operation(KeyConstants.INSERT).build();
 			try {
+
+				if(containerDto.getConditionPregate().equals("LLENO") && (containerDto.getNomenclatura()==null || containerDto.getNomenclatura().isEmpty() || containerDto.getNomenclatura().equals("Selecciona una opción"))) {
+					response.setMessage("La nomenclatura es requerida para contenedores llenos");
+					return response;
+
+				}
 				ContainerModel containeredit =  containerRepository.getById(containerDto.getContainerId());
 				
 				containeredit.setConditionPregate(containerDto.getConditionPregate());
@@ -495,10 +500,7 @@ public class ContainerService implements IContainerService{
 					containeredit.setClasification("3");
 					containeredit.setCondition("1");
 					containeredit.setStatusQute(10);
-					int valor = containerRepository.getCountEir();
-					valor=valor +1;
-					String abreviacion="AGS";
-					containeredit.setEirName("EIR-IN-"+abreviacion+"-0"+valor);
+					containeredit.setEirName(null);
 					containeredit.setStatus(3);
 					containeredit.setModelYear(containerDto.getModelYear());
 				}
@@ -762,6 +764,7 @@ public class ContainerService implements IContainerService{
 					.dateGateOut(containerDto.getNewEventDate())
 					//Este es el tipo de entrega
 					.diesel(container.getDiesel())
+					.expeditionDate(container.getExpeditionDate())
 					.build();
 			
 			containerHistoricRepository.save(containerHistoric);
@@ -949,7 +952,7 @@ public class ContainerService implements IContainerService{
 				long numero = folioService.nextEstimado();  // 1, 2, 3, ...
 
 				// 2) armar nombre del estimado
-				if (containeredit.getQuote() != null) {
+				if (containeredit.getAprovedQuote() != null) {
 					containeredit.setQuoteName2("ESTIMADO " + warehouse + " " + numero);
 				} else {
 					containeredit.setQuoteName("ESTIMADO " + warehouse + " " + numero);
@@ -957,19 +960,16 @@ public class ContainerService implements IContainerService{
 
 
 				// 3) generar PDF
-				if (containeredit.getQuote() != null) {
+				if (containeredit.getAprovedQuote() != null) {
 					containeredit.setQuote2(pdfGenerationService.pdfQuote(containerId, inspections));
 				} else {
 					containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+					containeredit.setExpeditionDate(LocalDateTime.now());
 				}
 
-				for (InspectionModel inspection : inspections) {
-					inspection.setExtentLarge(1);
-				}
 
 				// 4) guardar
 				containerRepository.save(containeredit);
-				inspectorRepository.saveAll(inspections);
 				
 				response.setNum(2);
 				response.setSuccess(true);
@@ -1130,8 +1130,7 @@ public class ContainerService implements IContainerService{
 			}
 			
 			
-			int valor = containerRepository.getCountEir();
-			valor=valor +1;
+			long valor = folioService.nextEirIn();
 			containeredit.setEirName("EIR-IN-"+"AGS"+"-0"+valor);
 			containeredit.setEir(pdfGenerationService.pdfEir(containerDto.getContainerId(),containerDto.getDataUrl()));
 			
@@ -1196,10 +1195,9 @@ public class ContainerService implements IContainerService{
 				}
 				appointmentRepository.save(appointmentStatus);
 			}
-			
-			
-			int valor = containerRepository.getCountEir();
-			valor=valor +1;
+
+
+			long valor = folioService.nextEirIn();
 			containeredit.setEirName("EIR-IN-"+"AGS"+"-0"+valor);
 			containeredit.setEir(pdfGenerationService.pdfEir(containerDto.getContainerId(),containerDto.getDataUrl()));
 			
@@ -1266,9 +1264,14 @@ public class ContainerService implements IContainerService{
 		if(status == 3) {
 			container.setAprovedQuote(DateManagement.todayDate());
 			List<InspectionModel> inspections =  inspectorRepository.getAllInspectionsByContainerIdStatus(containerId);
-			ContainerModel containeredit =  containerRepository.getById(containerId);;
+			ContainerModel containeredit =  containerRepository.getById(containerId);
 			containeredit.setQuoteName(containeredit.getQuoteName());
 			containeredit.setQuote(pdfGenerationService.pdfQuote(containerId, inspections));
+
+			for (InspectionModel inspection : inspections) {
+				inspection.setExtentLarge(1);
+			}
+			inspectorRepository.saveAll(inspections);
 		}
 		container.setStatusQute(status);
 		container.setComents(coments);
