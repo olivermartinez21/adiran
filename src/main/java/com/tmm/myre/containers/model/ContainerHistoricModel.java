@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tmm.myre.base.model.IModel;
 
 import lombok.AllArgsConstructor;
@@ -107,15 +108,19 @@ public class ContainerHistoricModel implements IModel{
 	@Column(name = "DESTINY_PREGATE")private String destinyPregate;
 	@Column(name = "ORIGIN_PREGATE")private String originPregate;
 
-	@Column(name = "EIR_OUT")  //private String fileContent;
+	@Column(name = "EIR_OUT")
 	@Lob
+	@JsonIgnore
 	private byte[] eirOut;
-	@Column(name = "EIR")  //private String fileContent;
+
+	@Column(name = "EIR")
 	@Lob
+	@JsonIgnore
 	private byte[] eir;
 	
-	@Column(name = "QUOTE")  //private String fileContent;
+	@Column(name = "QUOTE")
 	@Lob
+	@JsonIgnore
 	private byte[] quote;
 
 	@Column(name = "DATE_GATEOUT")private LocalDateTime dateGateOut;

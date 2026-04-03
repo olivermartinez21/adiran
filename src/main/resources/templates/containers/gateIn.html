@@ -711,7 +711,7 @@
 							<div class="col-sm">
 								<div class="form-group">
 									<label for="nomenclaturaEvent">Nomenclatura</label>
-										<select class="form-control" id="nomenclaturaEvent" disabled>
+										<select class="form-control" id="nomenclaturaEvent" >
 									</select>
 								</div>
 							</div>
@@ -1243,7 +1243,7 @@
 					<form id="pregateForm">
 					<div class="modal-body modal-body-app">
 					<div class="row">
-							<div class="col-sm" >
+							<div class="col-sm" hidden=true  >
 								<div class="form-group">
 									<label for="newCondition">Condición</label>
 									<select class="form-control" id="newCondition" >
@@ -1270,10 +1270,17 @@
 									</datalist>
 								</div>
 							</div>
-							<div class="col-sm" hidden=true >
+							<div class="col-sm" >
 								<div class="form-group">
 									<label for="newOriginPregate">Origen</label>
-									<input type="text" class="form-control" id="newOriginPregate">
+									<select class="form-control" id="newOriginPregate" >
+										<option>VERACRUZ</option>
+										<option>ALTAMIRA</option>
+										<option>LAZARO CARDENAS</option>
+										<option>MANZANILLO</option>
+										<option>TMM</option>
+										<option>PLANTA</option>
+									</select>
 								</div>
 							</div>
 					</div>

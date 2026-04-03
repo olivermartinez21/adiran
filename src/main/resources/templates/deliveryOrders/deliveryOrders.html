@@ -11,7 +11,6 @@
 	<section layout:fragment="content" th:remove="tag">
 		<div class="title-table">
 			<h1>Ordenes de entrega <span th:text="${loggedUser.warehouseId}"></span></h1>
-			 <input type="text" class="form-control" id="sapNumber" hidden=true>
 		</div>
 		<input type="text" class="form-control" id="deliverOrderId" hidden=true>
 			<div class="container-table">
@@ -103,7 +102,6 @@
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 						<button type="submit" class="btn btn-success" >Guardar</button>
-						<button type="button" class="btn btn-print" >Imprimir</button>
 					</div>
 					</form>
 				</div>

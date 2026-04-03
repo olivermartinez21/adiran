@@ -1,4 +1,4 @@
-$(document).ajaxStart(function(){
+﻿$(document).ajaxStart(function(){
     $('#loading').show();
  }).ajaxStop(function(){
     $('#loading').hide();
@@ -29,6 +29,10 @@ $(document).ready( function() {
         defaultOption.selected = true;
         select.appendChild(defaultOption);
     }
+    // Recargar la tabla inspectionTable al cerrar el modal de daños (solo cuando el modal ya terminó de cerrarse)
+    $('#addNewDamageModel').on('hidden.bs.modal', function () {
+        getInspectionsData();
+    });
 });
 
 function GetURLParameter(sParam) {
@@ -53,12 +57,20 @@ function intermodalInformation() {
 }
 function initComponents() {
 
+
 	$("#pregateModel").submit(function () {
+
+		console.log(
+			"newCondition:", $("#newCondition").val(),
+			"fullNomenclatura value:", $("#fullNomenclatura").val(),
+			"fullNomenclatura text:", $("#fullNomenclatura option:selected").text()
+		);
+
 		if ($("#newBillToPregate").val() === "" || $("#newBillToPregate").val() === null) {
 			Swal.fire("Debes Seleccionar a quien se le cobrara", "", "warning");
 			return false;
 		}
-		if ($("#newCondition").val() === "LLENO" && ($("#fullNomenclatura").val() === "Seleccione una opción"||$("#fullNomenclatura").val() === "" || $("#fullNomenclatura option:selected").text() === "Seleccione una opción")) {
+		if ($("#newCondition").val() === "LLENO" && ($("#fullNomenclatura").val() === "Selecciona una opción"||$("#fullNomenclatura").val() === "" || $("#fullNomenclatura option:selected").text() === "Selecciona una opción")) {
 			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
 		}
@@ -116,7 +128,6 @@ function initComponents() {
 			condition : $("#containerCondition").val(),
 			clasification : $("#containerClasification").val() },
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 				Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -127,7 +138,7 @@ function initComponents() {
 				}
 			},
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicación", "No se pudo validar el contenedor. Intente nuevamente.", "error");
 			}
 			
 			});return false;
@@ -167,7 +178,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -178,7 +188,7 @@ function initComponents() {
 				}
 			}, 
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicación", "No se pudo guardar el evento. Intente nuevamente.", "error");
 			}
 			});
 			
@@ -199,7 +209,6 @@ function initComponents() {
 			shippingCompany: $("#newShippingConpanyContainer").val(),
 			idUser : $("#globalUserId").val(), 
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'preGate/saveContainer',
@@ -207,7 +216,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -219,7 +227,7 @@ function initComponents() {
 				}
 			}, 
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicación", "No se pudo guardar el contenedor. Intente nuevamente.", "error");
 			}
 			});
 			
@@ -276,7 +284,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					window.open('preGate/PDF_EIR?containerId='+ response.pdf+'')
 					Swal.fire("Proceso Exitoso", "", "success")
@@ -289,7 +296,7 @@ function initComponents() {
 				}
 			}, 
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 			});
 		}else{
@@ -353,7 +360,6 @@ $("#addNewDamageModel").submit(function () {
 		data :formData,
 		success : function(response) {
 			if(response.success==true){
-				console.log(response)
 					Swal.fire({
 				        title: "¿Desea Registrar Otro Daño?",
 				        text: " ",
@@ -372,11 +378,9 @@ $("#addNewDamageModel").submit(function () {
 							$("#addNewDamageModel").modal("hide");
 							getInspectionsData()
 							//self.location.reload();
-							console.log("no")
 				        }
 				    });
 				}else{
-					console.log("lLLEGO AL ELSE");
 					Swal.fire("Error al registrar el daño", response.message || "Intente nuevamente o contacte al equipo de desarrollo", "error");
 				}
 			/*if(response.success==true){
@@ -387,7 +391,6 @@ $("#addNewDamageModel").submit(function () {
 				//self.location.reload();
 				});
 				}else{
-					console.log("error")
 					Swal.fire("Error "+response.message, "", "error");
 				}*/
 		},
@@ -403,7 +406,6 @@ $("#addNewDamageModel").submit(function () {
 	var image = [];
 	var formData = new FormData();
 	table.forEach(function(item) {
-		console.log(item.photoId)
 		if(item.photoId=="x"){
 			image.push(item.file);
 			formData.append('file', item.file);
@@ -452,7 +454,6 @@ $("#addNewDamageModel").submit(function () {
 				//self.location.reload();
 				});
 				}else{
-					console.log("error")
 					Swal.fire("Error "+response.message, "", "error");
 				}
 		},
@@ -514,7 +515,7 @@ function enviarAjaxPregate(data, esLleno) {
 			}
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicación", "No se pudo guardar el Pregate. Intente nuevamente.", "error");
 		}
 	});
 }
@@ -533,10 +534,9 @@ function addNewContainer() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8 ; Access-Control-Allow-Origin",
 			data:data,
 			success: function(response){
-				console.log(response)
 			}, 
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 			});*/
 	eventDateValidator();
@@ -653,7 +653,6 @@ function configDataTablePregate(){
 			data: {appointmentId :  $("#appointmentId").val(),
 				userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -730,7 +729,6 @@ function configDataTablePregate(){
 }
 
 function configDataTable() {
-	console.log("estoy yaendo aqui")
 	$("#containerTable").DataTable({
 		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
 		"<'row'<'col-sm-12'B>>" +
@@ -762,7 +760,6 @@ function configDataTable() {
 			data: {appointmentId :  $("#appointmentId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1002,7 +999,7 @@ function configDataTable() {
 		responsive: true,
 		autoWidth: true, 
 		select: {
-			style: 'single'
+		 style: 'single'
 		},
 		buttons: {
 			buttons: [
@@ -1035,7 +1032,6 @@ function configDataTable() {
 }
 
 function getInspectionsData(){
-	console.log("cae en este llamad--------")
 	$("#inspectionTable").DataTable().destroy();
 	$("#inspectionTable").DataTable({
 		dom:  
@@ -1065,7 +1061,6 @@ function getInspectionsData(){
 			data: {containerId :  $("#containerId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1128,7 +1123,6 @@ $("#conditionModel").modal("show");
 			data: {containerId : data,
 			clasification : value},
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -1139,7 +1133,7 @@ $("#conditionModel").modal("show");
 				}
 			},
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 		});*/
 
@@ -1167,7 +1161,6 @@ Swal.fire({
 	
 function showComponents(){
 	data = $("#newPart").val();
-	console.log(data)
 	$("#seccionSave").val(data)
 	
 	clearCombo(document.getElementById("newComponentInspection"));
@@ -1185,7 +1178,7 @@ function showComponents(){
 			fillComboComponentAjax(document.getElementById("newComponentInspection"),response);
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 		}
 	});
 			
@@ -1198,7 +1191,6 @@ function showComponents(){
 function saveComponent(){
 	cambioComponente = 1;
 	if ($('#newComponentInspection').is(':hidden')) {
-		console.log("esta visible")
 		document.getElementById('newComponentInspection').removeAttribute("hidden"); 
 		document.getElementById('newComponentInspection2').setAttribute("hidden",true); 
 		$("#newPart").val("Selecciona una opción")
@@ -1230,7 +1222,7 @@ $.ajax({
 				fillComboSection(document.getElementById("newPart"),response);
 			},
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 		});
 }
@@ -1248,7 +1240,7 @@ function getNomenclatura(){
 				fillComboNomenclatura(document.getElementById("newModel"),response);
 			},
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 		});
 }
@@ -1263,7 +1255,6 @@ function getNomenclatura(){
 		Section: data},
 		success: function(response){
 			 resolve(response)
-		console.log(response)
 			//$("#appointmentId").val(response.appointmentId),
 			// $("#containerConditionInspection").val(response.condition),
 			// $("#containerClasificationInspection").val(response.clasification),
@@ -1287,9 +1278,9 @@ function getNomenclatura(){
 		}
 		},
 		
-		error: function(){
-			reject(response)
-			alert("AJAX ERROR");
+		error: function(xhr, status, error){
+			reject(error);
+			Swal.fire("Error de comunicación", "No se pudo obtener la información del contenedor. Intente nuevamente.", "error");
 		}
 	});
 	
@@ -1301,7 +1292,6 @@ function getNomenclatura(){
 			
 		}
 function pregate(data , shippingCompany){
-	console.log(shippingCompany)
 	getSingleData(data)
 	$("#containerId").val(data);
 	$("#pregateModel").modal("show");
@@ -1323,11 +1313,9 @@ document.getElementById('newComponentInspection2').removeAttribute("hidden");
 document.getElementById('newComponentInspection').setAttribute("hidden",true); 
 
 	if ($('#inspectionTable').DataTable().row('.selected').true){
-		console.log("hola")
 	}
 	
 	table = $("#inspectionTable").DataTable().row(data).data();
-	console.log(table)
 $("#newPart").val(table.part)
 $("#newDamage").val(table.damage)
 $("#newComponentInspection2").val(table.component)
@@ -1357,7 +1345,6 @@ $("#imageTableInspection").DataTable().clear().draw();
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: info,
 		success: function(response){
-			console.log(response)
 
 	for(var i=0;i<response.length;i++){
 $("#imageTableInspection").DataTable().row.add({
@@ -1370,7 +1357,7 @@ $("#imageTableInspection").DataTable().row.add({
 	
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 		}
 	});
 			
@@ -1387,7 +1374,6 @@ function getAppointmentInfo(){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {containerId :$("#containerId").val()},
 		success: function(response){
-			console.log(response)
 		if(response.appointmentId!=null){
 			$("#newCondition").val("VACIO"), 
 			$("#newBillToPregate").val(response.companyName), 
@@ -1400,8 +1386,7 @@ function getAppointmentInfo(){
 			
 		},
 		error: function(){
-			reject(response)
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicación", "No se pudo obtener la información de la cita. Intente nuevamente.", "error");
 		}
 	});
 	
@@ -1440,7 +1425,7 @@ async  function inspectionContainer(data){
 	getSingleData(data)
 	getSection()
 	eventDateValidator()
-	getDamageInfotmation($("#newContainerDescription").val())
+	getDamageInfotmation($("#containerType").val())
 	getInspectionsData()
 
 	// Configura el campo de fecha para evitar fechas futuras
@@ -1448,11 +1433,12 @@ async  function inspectionContainer(data){
 	const year = now.getFullYear();
 	const month = (now.getMonth() + 1).toString().padStart(2, '0');
 	const day = now.getDate().toString().padStart(2, '0');
-	const hours = now.getHours().toString().padStart(2, '0');
-	const minutes = now.getMinutes().toString().padStart(2, '0');
-	const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    const formattedDate = `${year}-${month}-${day}`;
+    const dateInput = document.getElementById("newDateInspection");
+    dateInput.max = formattedDate; // Establece la fecha máxima como la fecha actual
+    dateInput.value = formattedDate;
 
-	document.getElementById("newDateInspection").value = formattedDateTime;
+	document.getElementById("newDateInspection").value = formattedDate;
 
 	$("#inspectionModal").modal("show");
 	$("#operation").val("UPDATE")
@@ -1470,12 +1456,11 @@ function getDamageInfotmation(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {containerType : data},
 		success: function(response){
-			console.log("Aqui llega el newDamage")
 			clearCombo(document.getElementById("newDamage"))
 			fillComboDamage(document.getElementById("newDamage"),response)
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 		}
 	});
 			
@@ -1665,7 +1650,6 @@ function setDamage(){
 }
 
 /*function eventDateValidator(){
-	console.log("llego")
 	 fecha = new Date();
      year = fecha.getFullYear();
      day = fecha.getDate();
@@ -1685,27 +1669,27 @@ function setDamage(){
 }*/
 
 function deleteInspection(data){
-	console.log(data)
 	$.ajax({
 		type: "POST",
 		url: 'preGate/deleteDamage',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {inspectionId : data},
 		success: function(response){
-			console.log(response)
-			getInspectionsData()
-			alert("Se borro la inspeccion")		
+			if(response != null && response.success == true){
+				Swal.fire("Daño eliminado", "", "success").then(() => {
+					getInspectionsData();
+				});
+			} else {
+				Swal.fire("Error al eliminar el daño", "", "error");
+			}
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicación", "No se pudo eliminar el daño", "error");
 		}
 	});
-	//$('#inspectionTable').DataTable().row('.selected').remove().draw(false);
 }
 
 function deleteImage(data){
-	
-	console.log(data)
 	$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
 	$.ajax({
 		type: "POST",
@@ -1713,15 +1697,17 @@ function deleteImage(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {photoId : data},
 		success: function(response){
-			console.log(response)
-			alert("Se borro la imagen")
+			if(response != null && response.success == true){
+				Swal.fire("Imagen eliminada", "", "success");
+			} else {
+				Swal.fire("Error al eliminar la imagen", "", "error");
+			}
 		},
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicación", "No se pudo eliminar la imagen", "error");
 		}
 	});
-	//$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
-	
+
 }
 
 
@@ -1863,7 +1849,6 @@ function showEventInformation(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1929,7 +1914,6 @@ function showInspections(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1955,8 +1939,7 @@ function showInspections(data) {
 			{ data: "damageCode",visible: true },
 			{ data: "damageCode",visible: true },
 			{ data: "damageCode",visible: true },
-			
-			
+			{ data: "damageCode",visible: true },
 		],
 	}).columns.adjust();
 	
@@ -2027,7 +2010,6 @@ function eventDateValidator(){
 
 	document.getElementById("newDateInspection").min = formattedDateTime;
 	document.getElementById("newDateInspection").value = formattedDateTime;
-	
 }
 
 
@@ -2040,7 +2022,6 @@ function searchContainer(){
 		data: {container : $("#newContainerName").val()},
 		success: function(response){
 			
-			console.log(response.containerId)
 			
 			if(response.containerId == null){
 				
@@ -2082,20 +2063,18 @@ function searchContainer(){
 		},
 		
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 		}
 	});
 }
 
 function requestDamage(){
-	console.log($("#containerId").val());
 	$.ajax({
 		type: "GET",
 		url: 'preGate/getRequestInspection',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {containerId : $("#containerId").val()},
 		success: function(response){
-			console.log(response)
 			if(response.success==false){
 					Swal.fire({
 				        title: "No hay daño registrado",
@@ -2110,32 +2089,28 @@ function requestDamage(){
 							//configDataTablePregate()
 							//inspectionContainer($("#containerId").val())
 							//configDataTablePregate()
-							console.log("si")
 							addNewDamage();
 				        } else {
 				            // Dijeron que no
 							//configDataTablePregate()
 							//self.location.reload();
-							console.log("No")
 						   	saveInspection()
 				        }
 				    });
 				}else{
-					console.log("lLLEGO AL ELSE");
 					saveInspection()
 				}
 	
 		},
 		
 		error: function(){
-			alert("AJAX ERROR");
+			Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 		}
 	}); 
 	
 }
 
 function saveInspection(){
-	console.log("ok saveInspection");
 	
 		if($("#newModel").val()!="Selecciona una opción"){
 			var data = {
@@ -2177,7 +2152,6 @@ function saveInspection(){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					window.open('preGate/PDF_EIR?containerId='+ response.pdf+'')
 					Swal.fire("Proceso Exitoso", "", "success")
@@ -2190,7 +2164,7 @@ function saveInspection(){
 				}
 			}, 
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 			});
 		}else{
@@ -2226,7 +2200,7 @@ function fullEntry() {
 				fillComboNomenclatura(document.getElementById("fullNomenclatura"),response);
 			},
 			error: function(){
-				alert("AJAX ERROR");
+				Swal.fire("Error de comunicaci\u00f3n", "Intente nuevamente o contacte al equipo de desarrollo.", "error");
 			}
 		});
 	} else {
@@ -2260,3 +2234,4 @@ document.getElementById('newTransportCompanyPregate').addEventListener('input', 
     document.getElementById('newBillToPregate').value = this.value;
   }
 });
+

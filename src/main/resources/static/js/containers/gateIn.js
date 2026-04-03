@@ -1,5 +1,4 @@
-
-$(document).ajaxStart(function(){
+﻿$(document).ajaxStart(function(){
     $('#loading').show();
  }).ajaxStop(function(){
     $('#loading').hide();
@@ -31,7 +30,7 @@ function GetURLParameter(sParam) {
 }
 function initComponents() {
 		
-	$("#pregateModel").submit(function () {
+	$("#pregateForm").submit(function () {
 		var data = {
 			conditionPregate: $("#newCondition").val(), 
 			typeServicePregate : $("#typeServicePregate").val(), 
@@ -43,6 +42,7 @@ function initComponents() {
 			plate: $("#newPlate").val(),
 			economicNumber: $("#newEconomicNumber").val(),
 			containerId: $("#containerId").val(),
+			originPregate: $("#newOriginPregate").val(),
 			num: 1
 			}
 			
@@ -75,7 +75,7 @@ function initComponents() {
 		});
 		
 		
-		$("#conditionModel").submit(function () {
+		$("#conditionForm").submit(function () {
 			$.ajax({
 			type: "POST",
 			url: "gateIn/containerValidation",
@@ -102,12 +102,16 @@ function initComponents() {
 			
 			});
 			
-	$("#newEventModal").submit(function () {
+	$("#newEventForm").submit(function () {
 
 		var prop = $("#propietaryEvent").val();
 		var sap = $("#sapSaleOrder").val();
 		if ((prop === "2" || prop === "5" || prop === "6") && sap === "") {
 			Swal.fire("Debes seleccionar Importación, Exportación o Evacuación.", "", "warning");
+			return false;
+		}
+		if ($("#nomenclaturaEvent").val() === "Selecciona una opción"||$("#nomenclaturaEvent").val() === "" || $("#nomenclaturaEvent option:selected").text() === "Selecciona una opción") {
+			Swal.fire("Debes seleccionar la nomenclatura para unidades llenas.", "", "warning");
 			return false;
 		}
 
@@ -138,10 +142,10 @@ function initComponents() {
 			typeServicePregate: $("#serviceTypeEvent").val(),
 			sapSaleOrder: $("#sapSaleOrder").val(),
 			newEventDate: $("#newEventDate").val(),
-			containerTypeEvent: document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text,
-			
-			qualityEvent:  document.getElementById("qualityevent").options[$("#qualityevent").val()-1].text,
-					
+			containerTypeEvent: $("#unitTypeEvent option:selected").text(),
+
+			qualityEvent: $("#qualityevent option:selected").text(),
+
 			containerId: $("#containerId").val(),
 			idUser : $("#globalUserId").val(),
 			transmit: $("#newTransmit").val()
@@ -174,7 +178,7 @@ function initComponents() {
 			return false;
 	});
 	
-	$("#newContainerModal").submit(function () {
+	$("#newContainerForm").submit(function () {
 	value=$("#newContainerName").val();
 	if(value.length==11){
 	if (!verify(value)) {
@@ -243,7 +247,7 @@ function initComponents() {
 		setPoint:$("#newSetPoint").val(),
 		ventilation:$("#newVentilation").val(),
 		condition:$("#containerConditionInspection").val(),
-		clasification:$("#containerClasificationInspection").val(),
+		clasification:$("#containerClasificacionInspection").val(),
 		modelYear:$("#newYear").val(),
 		aptTo:$("#newAptTo").val(),
 		technology:$("#tecnologyInspection").val(),
@@ -288,8 +292,8 @@ function initComponents() {
 				return false;
 	});	*/
 
-$("#addNewDamageModel").submit(function () {
-	
+$("#addNewDamageForm").submit(function () {
+
 	if(damage==1){
 		table = $("#imageTableInspection").DataTable().rows().data().toArray();
 		
@@ -320,6 +324,7 @@ $("#addNewDamageModel").submit(function () {
 			 otherLength:  $("#otherLargeInspection").val(),
 			 extentOtherLarge: $("#extentOtherLarge").val(),
 			 quantity:  $("#quantityInspection").val(),
+			newDamageTypeOperation: "INSERT"
 	};
 	
 	formData.append('inspection',JSON.stringify(data));
@@ -359,8 +364,7 @@ $("#addNewDamageModel").submit(function () {
 				        }
 				    });
 				}else{
-					console.log("lLLEGO AL ELSE");
-					//saveInspection()
+					Swal.fire("Error al registrar el daño", response.message || "Intente nuevamente o contacte al equipo de desarrollo", "error");
 				}
 					/*Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -987,34 +991,16 @@ function configDataTable() {
 			}},
 		],
 	}).columns.adjust();
+
+	// Recargar la tabla inspectionTable al cerrar el modal de daños
+    $('#addNewDamageModel').on('hidden.bs.modal', function () {
+        getInspectionsData();
+    });
 }
 
 function openEir(data){
 	
 	window.open('gateIn/PDF_EIR?containerId='+ data+'')
-}
-
-function getNomenclatura(){
-	clearCombo(document.getElementById("newModel"))
-	clearCombo(document.getElementById("nomenclaturaEvent"))
-	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
-	$.ajax({
-			type: "GET",
-			url: 'gateIn/getNomenclatura',
-			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-			data: {containerType : textContainer,
-					size : $("#containerSize").val()
-					},
-			success: function(response){
-				//clearCombo(document.getElementById("newPart"));
-				fillComboNomenclatura(document.getElementById("newModel"),response);
-				fillComboNomenclatura(document.getElementById("nomenclaturaEvent"),response);
-				console.log(response)
-			},
-			error: function(){
-				alert("AJAX ERROR");
-			}
-		});
 }
 
 function getSingleData(data){	
@@ -1064,6 +1050,10 @@ function getSingleData(data){
 			$("#tecnologyInspection").val(response.technology)
 			$("#newGenetatorTypeInspection").val(response.generatorType)
 			$("#horometroInspection").val(response.horometro)
+
+			$("#newOriginPregate").val(response.originPregate)
+
+
 			
 			
 			
@@ -1075,6 +1065,29 @@ function getSingleData(data){
 	});
 		return false;	
 		}
+
+function getNomenclatura(){
+	clearCombo(document.getElementById("newModel"))
+	clearCombo(document.getElementById("nomenclaturaEvent"))
+	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
+	$.ajax({
+		type: "GET",
+		url: 'gateIn/getNomenclatura',
+		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {containerType : textContainer,
+			size : $("#containerSize").val()
+		},
+		success: function(response){
+			//clearCombo(document.getElementById("newPart"));
+			fillComboNomenclatura(document.getElementById("newModel"),response);
+			fillComboNomenclatura(document.getElementById("nomenclaturaEvent"),response);
+			console.log(response)
+		},
+		error: function(){
+			alert("AJAX ERROR");
+		}
+	});
+}
 function validation(data) {
 	$("#containerId").val(data);
 $("#conditionModel").modal("show");
@@ -1129,8 +1142,8 @@ function showComponents(){
 	$("#seccionSave").val(data)
 
 	//text = document.getElementById("newPart").options[data].text
-	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
-	
+	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
+
 	console.log(textContainer)
 	document.getElementById("newComponentInspection")
 	$.ajax({
@@ -1155,7 +1168,7 @@ function showComponents(){
 }
 function getSection(){
 	clearCombo(document.getElementById("newPart"));
-	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
+	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
 $.ajax({
 			type: "GET",
 			url: 'gateIn/getSectionInformation',
@@ -1279,7 +1292,7 @@ function inspectionContainer(data){
 	$("#containerSize").val(currentData.contaierSize)
 	$("#containerId").val(currentData.containerId)
 	
-	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
+	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
 	if(textContainer=="RF"){
 		document.getElementById("refferInspectionData").removeAttribute("hidden");
 		document.getElementById("gensetInspectionData").setAttribute("hidden",true);
@@ -1433,7 +1446,7 @@ function addInspection(){
 				"location" :  $("#newLocationInspection").val(),
 				"repair" : $("#newRepair").val(),
 				"damageCode": "",
-				"reference": $("#newReferent").val(),
+				"reference": $("#newReferent").val().toUpperCase(),
 				"customerType": $("#inspectionCustomerType").val(),
 				"customerName": $("#customerName").val(),
 				"photo": dataUrl,
@@ -1751,8 +1764,7 @@ function showInspections(data) {
 			{ data: "damageCode",visible: true },
 			{ data: "damageCode",visible: true },
 			{ data: "damageCode",visible: true },
-			
-			
+			{ data: "damageCode",visible: true },
 		],
 	}).columns.adjust();
 	
@@ -1991,7 +2003,7 @@ function deleteImage(data){
 		}
 	});
 	//$('#imageTableInspection').DataTable().row('.selected').remove().draw(false);
-	
+
 }
 
 function requestDamage(){

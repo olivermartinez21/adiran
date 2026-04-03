@@ -26,7 +26,6 @@ function configDataTable() {
 		buttons: {
 			buttons: [
 				{text: 'Usuario Nuevo', action: function() { addNewUser(); }},
-				//{text: 'Registrar Rol', action: function() { addNewRole(); }},
 				],
 			dom: {
 				button:{
@@ -39,7 +38,6 @@ function configDataTable() {
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -90,7 +88,6 @@ function initComponents() {
 			});	
 		} else {
 			Swal.fire("Las contraseñas deben ser iguales", "", "warning")
-			//showAlert(2, warningTitle, "Las contraseñas deben ser iguales", "");
 		}
 		return false;
 	});
@@ -112,7 +109,6 @@ function initComponents() {
 			});	
 		} else {
 			Swal.fire("Los nombres del rol deben ser iguales", "", "warning")
-			//showAlert(2, warningTitle, "Los nombres del rol deben ser iguales ", "");
 		}
 		return false;
 	});

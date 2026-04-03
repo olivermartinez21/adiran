@@ -11,9 +11,7 @@
 	<section layout:fragment="content" th:remove="tag">
 		<div class="title-table">
 			<h1>Inventario de Unidades - <span th:text="${loggedUser.warehouseId}"></span></h1>
-			 <input type="text" class="form-control" id="sapNumber" hidden=true>
-			 <input type="text" class="form-control" id="response" hidden=true>
-			 
+
 				<select class="form-control" id="newContainerType" hidden=true>
 									<option value="1">DRY CARGO</option>
 									<option value="2">REFEER</option>
@@ -384,22 +382,6 @@
 								</div>
 							</div>
 							
-						<!-- 	<div class="col-sm">
-								<div class="form-group">
-								 <button id="snap" type="button" class="form-control btn btn-dark" onclick="stopVideo()">Tomar</button>
-								 <br> <br>
-								 <button id="snaptake" type="button" class="form-control btn btn-dark" hidden =true onclick="playVideo()">Nueva Foto</button>
-								</div>
-								 <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
-							</div>
-							<div class="form-group">
-								 <video id="video" playsinline autoplay width="100%" height="100%"></video>
-								</div>
-								<div class="form-group" hidden=true>
-								 <canvas id="canvas" width="1280" height="720"></canvas>
-								 
-								</div>   -->
-							</div>
 						</div>
 						<div class="inspecction-table">
 							<table id="inspectionTable" class="table table-striped dt-responsive striped" style="width: 100%;">
@@ -484,6 +466,7 @@
 						</div>  
 						
 					</div>		
+					</div>
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 						<button type="submit" class="btn btn-success" >Aceptar</button>
@@ -495,8 +478,12 @@
 		
 		<div class="modal fade" id="imageShowModal" tabindex="-1" role="dialog" aria-labelledby="imageShowModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-xl" role="document">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: dark">
+				<div class="modal-content">
+					<div class="modal-header modal-header-app">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #A4FFFE">
+							<span aria-hidden="true">&times;</span>
 						</button>
+					</div>
 					<form id="imageShowForm">
 					<div class="modal-body modal-body-app">
 						<div class="row">
@@ -506,8 +493,9 @@
 								</div>
 							</div>
 						</div>
-					</div>		
+					</div>
 					</form>
+				</div>
 			</div>
 		</div>
 		

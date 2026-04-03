@@ -36,8 +36,7 @@ function initComponents() {
 		};
 		dataT.push(obj);
 	});
-	console.log(dataT)
-	
+
 		var data = {
 			appointmentId : $("#appointmentId").val(),
 			location : $("#newLocation").val(),
@@ -60,22 +59,16 @@ function initComponents() {
 			paymentCheck: $("#voucher64").val(),
 			idUser : $("#globalUserId").val(),
 			warehouse : $("#globalWarehouse").val(),
-			//status : $("#status").val(),
-			//name:$("#payment").val().toUpperCase(),
-			//signature: $("#draw-dataUrl").val(),
 			containersList: JSON.stringify(dataT),
 	};
-	console.log(data)
+
 		$.ajax({
 			type: "POST",
 			url: 'appointment/saveUpdateAppointment',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
-
 				if(response.success==true){
-					console.log(response.pdf)
 					window.open('appointment/PDF_folio?appointmentId='+ response.pdf+'')
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -108,7 +101,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {appointmentId : $("#appointmentId").val()},
 			success: function(response){
-				console.log(response);
 				manageResponse(response);
 			},
 			error: function(){
@@ -159,7 +151,6 @@ function searchAppointmentByDate() {
 			data: {startDate:  startDate,
 			lastDate: lastDate },
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -270,12 +261,11 @@ function configDataTable() {
 	            },
 			}},
 		ajax: {
-			url: "",
+			url: "preRegistration/getDataTable",
 			type: 'GET',
 			dataSrc: '',
 			data: {userId :  $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -402,9 +392,6 @@ function configDataTable() {
 						return $("#newShippingCompany option:selected").html();
 					}}, 
 			
-			{ data: "price", visible: false , render : function(data) {
-						return "$100";
-					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>';
@@ -490,7 +477,6 @@ function refresh(){
 			dataSrc: '',
 			data: {userId :  $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -579,7 +565,7 @@ function refresh(){
 
 function showPaymentCheck(data){
 	
-				var iframe = "<iframe width='100%' height='100%' tiltle src='" + data + "'></iframe>"
+				var iframe = "<iframe width='100%' height='100%' src='" + data + "'></iframe>"
 				var x = window.open();
 				x.document.open();
 				x.document.write(iframe);
@@ -593,7 +579,6 @@ function getIn(data){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {appointmentId : data},
 			success: function(response){
-				console.log(response);
 				manageResponse(response);
 			},
 			error: function(){
@@ -639,7 +624,6 @@ function showInspections(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {appointmentId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -754,7 +738,6 @@ function showContainers(data) {
 			data: {appointmentId : data,
 			userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -774,9 +757,6 @@ function showContainers(data) {
 			{ data: "shippingCompany", visible: true , render : function(data) {
 						$("#newShippingCompany").val(data);
 						return $("#newShippingCompany option:selected").html();
-					}}, 
-			{ data: "containerId", visible: false , render : function(data) {
-						return "$100";
 					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>'; 
@@ -900,9 +880,6 @@ function inOrOut(){
 							$("#newShippingCompany").val(data);
 							return $("#newShippingCompany option:selected").html();
 						}}, 
-				{ data: "containerId", visible: false , render : function(data) {
-						return "$100";
-					}}, 
 				{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>';
@@ -1045,13 +1022,10 @@ function showPhoto(data){
 /*function setId(){
 	var agency = document.getElementById("newAgency").value;
 	$("#newAgencyList").val(agency)
-		console.log(agency)
 		
-		console.log($("#newAgencyList").val())
 		
 	var newAgencyList = document.getElementById("newAgencyList");
 	agencyText = newAgencyList.options[newAgencyList.selectedIndex].text;
-	console.log(agencyText)
 	
 		}*/
 		
@@ -1073,7 +1047,6 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			$("#containerId").val("")
 			$("#newContainer").val("")
@@ -1091,7 +1064,6 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			//Swal.fire("El codigo es correcto", "", "success");
 	}else{
@@ -1113,7 +1085,6 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			//Swal.fire("El codigo es correcto", "", "success");
 	}
@@ -1141,7 +1112,6 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			$("#containerId").val("")
 			$("#newContainer").val("")
@@ -1153,13 +1123,12 @@ function addContainer(){
 	if(filas==0){
 		$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase(),
+				"container": $("#newContainer").val().toUpperCase( ),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			//Swal.fire("El codigo es correcto", "", "success");
 	}else{
@@ -1181,7 +1150,6 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
 			//Swal.fire("El codigo es correcto", "", "success");
 	}
@@ -1212,18 +1180,6 @@ function verify(container) {
 		return false
 	}
 }
-
-
-function getBase64Image(img) {
-  var canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
-  var ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
-  var dataURL = canvas.toDataURL();
-  return dataURL;
-}
-
 
 
 function convertToBase64() {

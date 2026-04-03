@@ -270,7 +270,7 @@ public class AppointmentService implements IAppointmentService {
 	@Override
 	public AppointmentDto getAppointmentData(String containerId) throws ConverterException {
 		ContainerModel container = containerRepository.getById(containerId);
-		if(!container.getAppointmentId().isEmpty()) {
+		if(container.getAppointmentId() != null && !container.getAppointmentId().isEmpty()) {
 			AppointmentModel appointment = appointmentRepository.getById(container.getAppointmentId());
 			return appointmentConverter.convert(appointment);
 		}

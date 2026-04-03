@@ -66,29 +66,7 @@
 									</select>
 		
 		
-		<select class="form-control" id="precios" hidden=true>
-						<option value="1">300</option>
-						<option value="2">200</option>
-						<option value="3">100</option>
-						<option value="4">50</option>
-						<option value="5">205</option>
-						<option value="6">43</option>
-						<option value="7">786</option>
-						<option value="8">77</option>
-						<option value="9">88</option>
-						<option value="10">99</option>
-						<option value="11">11</option>
-						<option value="12">22</option>
-						<option value="13">33</option>
-						<option value="14">44</option>
-						<option value="15">55</option>
-						<option value="16">66</option>
-		</select>
-		
-		
-		
-		
-									
+
 		<select class="form-control" id="ErrorCode" hidden=true>
 									<option value="1">PI</option>
 									<option value="2">PO</option>
@@ -107,10 +85,6 @@
 									<option value="15">DY</option>
 									<option value="16">IR</option>
 									</select>
-		<select class="form-control" id="containers" hidden=true>
-						<option th:each="option : ${containers}" th:value="${option.containerId}" th:text="${option.container}"></option>
-		</select>
-		
 		<select class="form-control" id="component" hidden=true>
 						<option th:each="option : ${getComponets}" th:value="${option.componentId}" th:text="${option.component}"></option>
 		</select>
@@ -134,9 +108,7 @@
 									
 									</select>
 									
-									 <textarea rows="" cols="" id= "imagenData" hidden=true></textarea>
-									 
-		</div>
+			</div>
 			<div class="container-table">
 			<table id="containerTable" class="table table-striped dt-responsive striped" style="width: 100%;">
 								<thead>

@@ -1,4 +1,3 @@
-
 $(document).ajaxStart(function(){
     $('#loading').show();
 }).ajaxStop(function(){
@@ -50,7 +49,6 @@ function initComponents() {
             contentType : "application/x-www-form-urlencoded; charset=UTF-8",
             data:data,
             success: function(response){
-                console.log(response.success);
                 if(response.success==true){
                     Swal.fire("Proceso Exitoso", "", "success")
                         .then(() => {
@@ -69,7 +67,6 @@ function initComponents() {
 
     });
     $("#conditionModel").submit(function () {
-        console.log($("#containerId").val())
         $.ajax({
             type: "POST",
             url: "container/containerValidation",
@@ -78,7 +75,6 @@ function initComponents() {
                 condition : $("#containerCondition").val(),
                 clasification : $("#containerClasification").val() },
             success: function(response){
-                console.log(response);
                 if(response.success==true){
                     Swal.fire("Proceso Exitoso", "", "success")
                         .then(() => {
@@ -130,7 +126,6 @@ function initComponents() {
             contentType : "application/x-www-form-urlencoded; charset=UTF-8",
             data:data,
             success: function(response){
-                console.log(response.success);
                 if(response.success==true){
                     Swal.fire("Proceso Exitoso", "", "success")
                         .then(() => {
@@ -162,7 +157,6 @@ function initComponents() {
                     shippingCompany: $("#newShippingConpanyContainer").val(),
                     idUser : $("#globalUserId").val(),
                 };
-                console.log(data)
                 $.ajax({
                     type: "POST",
                     url: 'container/saveContainer',
@@ -170,7 +164,6 @@ function initComponents() {
                     contentType : "application/x-www-form-urlencoded; charset=UTF-8",
                     data:data,
                     success: function(response){
-                        console.log(response.success);
                         if(response.success==true){
                             Swal.fire("Proceso Exitoso", "", "success")
                                 .then(() => {
@@ -230,7 +223,6 @@ function initComponents() {
                         idUser : $("#globalUserId").val(),
                         inspectionList: JSON.stringify(dataT),
                     };
-                    console.log(data)
                     $.ajax({
                         type: "POST",
                         url: 'container/saveUpdateContainer',
@@ -238,7 +230,6 @@ function initComponents() {
                         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
                         data:data,
                         success: function(response){
-                            console.log(response);
                             if(response.success==true){
                                 Swal.fire("Proceso Exitoso", "", "success")
                                     .then(() => {
@@ -275,7 +266,6 @@ function initComponents() {
                         photo: item.photo,
                     }
                     dataT.push(obj);
-                    console.log(dataT)
                     var data = {
                         containerId: $("#containerId").val(),
                         dateInspection : $("#newDateInspection").val(),
@@ -299,7 +289,6 @@ function initComponents() {
                         idUser : $("#globalUserId").val(),
                         inspectionList: JSON.stringify(dataT),
                     };
-                    console.log(data)
                     $.ajax({
                         type: "POST",
                         url: 'container/saveUpdateContainer',
@@ -340,7 +329,6 @@ function initComponents() {
             dateEnd : $("#filterDateEnd").val(),
 
         }
-        console.log("soy data" + JSON.stringify(data));
         $.ajax({
             type: "GET",
             url: "container/generateManeuverReport",
@@ -382,7 +370,6 @@ function initComponents() {
             dateInit : $("#filterDateInit2").val(),
             dateEnd : $("#filterDateEnd2").val(),
         }
-        console.log("soy data" + JSON.stringify(data));
         $.ajax({
             type: "GET",
             url: "container/generateInventoryReport",
@@ -423,7 +410,6 @@ function initComponents() {
             dateInit : $("#filterAdsDateInit").val(),
             dateEnd : $("#filterAdsDateEnd").val(),
         }
-        console.log("soy data" + JSON.stringify(data));
         $.ajax({
             type: "GET",
             url: "container/generateAdsReport",
@@ -463,7 +449,6 @@ function initComponents() {
         data = {
             dateInit : $("#searchExitDate").val(),
         }
-        console.log("soy data" + JSON.stringify(data));
         $.ajax({
             type: "GET",
             url: "container/generateExitDateReport",
@@ -500,17 +485,36 @@ function initComponents() {
     });
 
     $("#exitDateForm").submit(function () {
+        // Validación de campos obligatorios excepto fullObservation
         let exitDateTime = $("#exitDateTime").val();
+        let containerExitId = $("#containerExitId").val();
+        let destinyPregate = $("#destinyPregate").val();
+        let newOriginPregate = $("#newOriginPregate").val();
+        let newTransportCompanyPregate = $("#newTransportCompanyPregate").val();
+        // fullObservation es opcional
+
+        let missingFields = [];
+        if (!exitDateTime) missingFields.push("Día y hora de salida");
+        if (!containerExitId) missingFields.push("ID de contenedor");
+        if (!destinyPregate) missingFields.push("Planta-Destino");
+        if (!newOriginPregate) missingFields.push("Origen");
+        if (!newTransportCompanyPregate) missingFields.push("Empresa transportista");
+
+        if (missingFields.length > 0) {
+            Swal.fire("Faltan campos obligatorios: " + missingFields.join(", "), "", "warning");
+            return false;
+        }
+
         if (exitDateTime.length === 16) { // formato 'yyyy-MM-ddTHH:mm'
             exitDateTime += ":00";
         }
         var data = {
             exitDateTime: exitDateTime,
-            containerId: $("#containerExitId").val(), // Asegúrate de tener este campo en tu modal o contexto
+            containerId: containerExitId, // Asegúrate de tener este campo en tu modal o contexto
             fullObservation: $("#fullObservation").val(),
-            destinyPregate: $("#destinyPregate").val(),
-            newOriginPregate: $("#newOriginPregate").val(),
-            newTransportCompanyPregate: $("#newTransportCompanyPregate").val(),
+            destinyPregate: destinyPregate,
+            newOriginPregate: newOriginPregate,
+            newTransportCompanyPregate: newTransportCompanyPregate,
         };
         $.ajax({
             type: "POST",
@@ -633,7 +637,6 @@ function dataTableRefresh(){
             data: {appointmentId :  $("#appointmentId").val(),
                 userId : $("#globalUserId").val()},
             error: function(response) {
-                console.log(response);
                 manageErrorAjax(response);
             }
         },
@@ -718,7 +721,6 @@ function configDataTable() {
             data: {appointmentId :  $("#appointmentId").val(),
                 userId : $("#globalUserId").val()},
             error: function(response) {
-                console.log(response);
                 manageErrorAjax(response);
             }
         },
@@ -962,7 +964,6 @@ function configDataTable() {
 
 function changeStatus(data){
     currentData = $("#containerTable").DataTable().row(data).data();
-    console.log(currentData)
     $("#containerCondition").val(currentData.condition);
     $("#containerClasification").val(currentData.clasification);
     $("#containerId").val(currentData.containerId);
@@ -981,7 +982,6 @@ function validation(data) {
             data: {containerId : data,
             clasification : value},
             success: function(response){
-                console.log(response);
                 if(response.success==true){
                     Swal.fire("Proceso Exitoso", "", "success")
                 .then(() => {
@@ -1008,7 +1008,6 @@ function showPhoto(data){
 }
 
 function showComponents(data){
-    console.log(data)
     //text = document.getElementById("newPart").options[data].text
     textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text
     document.getElementById("newComponentInspection")
@@ -1182,7 +1181,6 @@ function checkboxOrigin(){
 
 editAdd=0;
 function addInspection(){
-    console.log($("#containerStatus").val() )
     if($("#containerStatus").val() == null){
         Swal.fire("Por favor Selecciona una imagen", "", "warning");
     }else{
@@ -1419,7 +1417,6 @@ function showEventInformation(data) {
             contentType : "application/x-www-form-urlencoded; charset=UTF-8",
             data: {containerId : data},
             error: function(response) {
-                console.log(response);
                 manageErrorAjax(response);
             }
         },
@@ -1485,7 +1482,6 @@ function showInspections(data) {
             contentType : "application/x-www-form-urlencoded; charset=UTF-8",
             data: {containerId : data},
             error: function(response) {
-                console.log(response);
                 manageErrorAjax(response);
             }
         },

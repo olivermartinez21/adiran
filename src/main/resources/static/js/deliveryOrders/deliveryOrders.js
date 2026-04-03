@@ -24,9 +24,7 @@ function configDataTable() {
 			style: 'single'
 		},
 		buttons: {
-			buttons: [
-				//{text: 'Crear reserva', action: function() { addBooking(); }},
-				],
+			buttons: [],
 			dom: {
 				button:{
 	                tag:"button",
@@ -38,7 +36,6 @@ function configDataTable() {
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -77,7 +74,6 @@ function configDataTable() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("los cambios se guardaron de forma correcta","", "success")
 				.then(() => {
@@ -109,16 +105,15 @@ function configDataTable() {
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {deliveryOrderId : $("#deliverOrderId").val()},
 		success: function(response){
-			$("#billTo").val(response.billTo)
-			$("#carrierCompany").val(response.carrierCompany)
-			$("#operator").val(response.operator)
-			$("#economicNumber").val(response.economicNumber)
-			$("#workOrder").val(response.workOrder)
-			$("#quantityOfUnits").val(response.quantityOfUnits)
+			$("#billTo").val(response.billTo);
+			$("#carrierCompany").val(response.carrierCompany);
+			$("#operator").val(response.operator);
+			$("#economicNumber").val(response.economicNumber);
+			$("#workOrder").val(response.workOrder);
+			$("#quantityOfUnits").val(response.quantityOfUnits);
 		},
 		error: function(){
 			alert("AJAX ERROR");
 		}
 	});
 	}
-	

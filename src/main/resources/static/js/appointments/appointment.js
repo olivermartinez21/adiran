@@ -24,7 +24,6 @@ function initComponents() {
  	
 	var dataT = [];
 	table.forEach(function(item) {
-		
 		var obj = {
 			containerId: item.containerId,
 			container: item.container.toUpperCase(),
@@ -36,8 +35,7 @@ function initComponents() {
 		};
 		dataT.push(obj);
 	});
-	console.log(dataT)
-	
+
 		var data = {
 			appointmentId : $("#appointmentId").val(),
 			location : $("#newLocation").val(),
@@ -60,22 +58,15 @@ function initComponents() {
 			paymentCheck: $("#voucher64").val(),
 			idUser : $("#globalUserId").val(),
 			warehouse : $("#globalWarehouse").val(),
-			//status : $("#status").val(),
-			//name:$("#payment").val().toUpperCase(),
-			//signature: $("#draw-dataUrl").val(),
 			containersList: JSON.stringify(dataT),
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'appointment/saveUpdateAppointment',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
-
 				if(response.success==true){
-					console.log(response.pdf)
 					window.open('appointment/PDF_folio?appointmentId='+ response.pdf+'')
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -85,8 +76,6 @@ function initComponents() {
 				}else{
 					Swal.fire(response.message, "", "warning");
 				}
-					
-				
 			},
 			error: function(){
 				alert("AJAX ERROR");
@@ -234,15 +223,12 @@ function searchAppointmentByDate() {
 					}
 					
 				}
-			}}
-			
+			}
 		],
-	
-		
 	}).columns.adjust();
 	}
-	
-	}
+}
+
 function configDataTable() {
 		$("#appointmentTable").DataTable().destroy();
 	$("#appointmentTable").DataTable({
@@ -400,9 +386,6 @@ function configDataTable() {
 						return $("#newShippingCompany option:selected").html();
 					}}, 
 			
-			{ data: "price", visible: false , render : function(data) {
-						return "$100";
-					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
 				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
 				'<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>';
@@ -458,132 +441,17 @@ function configDataTable() {
 }
 
 function refresh(){
-	
-	$("#appointmentTable").DataTable().destroy();
-	$("#appointmentTable").DataTable({
-		dom:  "<'row'<'col-sm-6 'l><'col-sm-4 '><'col-sm-2 dt-right'f>>" +
-		"<'row'<'col-sm-12'B>>" +
-		"<'row'<'col-sm-12'tr>>" + 
-		"<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
-		fixedHeader: true,
-		responsive: true,
-		autoWidth: true, 
-		select: {
-			style: 'single'
-		},
-		buttons: {
-			buttons: [
-				{text: 'Nueva Cita', action: function() { addNewAppointment(); }},
-				{extend: 'excelHtml5', title: 'Citas'},
-				],
-			dom: {
-				button:{
-	                tag:"button",
-	                className:"btn btn-dark"
-	            },
-			}},
-		ajax: {
-			url: "appointment/getDataTable",
-			type: 'GET',
-			dataSrc: '',
-			data: {userId :  $("#globalUserId").val()},
-			error: function(response) {
-				console.log(response);
-				manageErrorAjax(response);
-			}
-		},
-		columns: [
-			{data: 'appointmentId' , visible: false},
-			{data: 'location' , visible: true},
-			{data: 'folio'},
-			{data: 'date'},
-			{data: 'telephone'},
-			{data: 'agency'},
-			{data: 'customer'},
-			{data: 'customerType', visible : true, render : function(data) {
-							$("#newCustomerType").val(data);
-							return $("#newCustomerType>option:selected").html();
-						}},
-			{data: 'containers'},
-			{data: 'invoincingType', visible : true, render : function(data) {
-							$("#newInvoicingType").val(data);
-							return $("#newInvoicingType>option:selected").html();
-						}},
-			{data: 'eventType', visible : true, render : function(data) {
-							$("#newEventType").val(data);
-							return $("#newEventType>option:selected").html();
-						}},
-			{data: 'paymentType', visible : true, render : function(data) {
-							$("#payment").val(data);
-							return $("#payment>option:selected").html();
-						}},
-			{data: 'user', visible : true, render : function(data) {
-							$("#usersDescriptions").val(data);
-							return $("#usersDescriptions>option:selected").html();
-						}},
-			{ data: "paymentCheck", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="ver el Comprobante" onclick="showPaymentCheck(\'' + data + '\');"><i class="fas fa-file"></i></button>&nbsp;';
-			}},
-			{data: 'status', visible : true, render : function(data) {
-							$("#status").val(data);
-							return $("#status>option:selected").html();
-						}},
-			{data: 'appointmentId', render : function(data) {
-				$("#appointmentId").val(data)
-				
-				//return //'<a href="/myre/containers/preGate?appointmentId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar"><i class="fas fa-eye"></i></button></a>&nbsp;'+
-			return	'<a href="appointment/PDF_folio?appointmentId='+data+'" target="_blank"><button type="button" class="btn btn-outline-dark btn-sm" title="Ver Documento"><i class="fas fa-file-contract"></i></button></a> &nbsp;&nbsp;' ;
-				
-				/*switch ($("#globalUserRole").val()) {
-					case "ADMINSHOW":
-					if($("#status").val()==7){
-						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Cita salida" onclick="addNewAppointmentOut(\'' + data + '\');"><i class="fas fa-calendar"></i></button>&nbsp;';
-					}
-					return '<a href="/myre/containers/container?appointmentId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar"><i class="fas fa-eye"></i></button></a>&nbsp;'+
-					'<button  type="button" class="btn btn-outline-dark btn-sm" title="Editar Cita" onclick="editAppointment(\'' + data + '\');"><i class="fas fa-edit"></i></button>&nbsp;'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="Validar cita" onclick="getIn(\'' + data + '\');"><i class="fas fa-check"></i></button>&nbsp;'+
-					'<button  type="button" class="btn btn-outline-dark btn-sm" title="ver Estimados" onclick="ConfirmEstimationAppointment(\'' + data + '\');"><i class="fas fa-coins"></i></button>&nbsp;';
-					case "RECEPCION":
-					return '<button  type="button" class="btn btn-outline-dark btn-sm" title="Editar Cita" onclick="editAppointment(\'' + data + '\');"><i class="fas fa-edit"></i></button>&nbsp;'+
-					'<button type="button" class="btn btn-outline-dark btn-sm" title="Validar cita" onclick="getIn(\'' + data + '\');"><i class="fas fa-check"></i></button>&nbsp;';
-					case "INSPECTOR":
-					return '<a href="/myre/containers/container?appointmentId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Inspeccionar"><i class="fas fa-eye"></i></button></a>&nbsp;';
-					case "TALLER":
-					return '<a href="/myre/containers/container?appointmentId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Informacion Containers"><i class="fas fa-eye"></i></button></a>&nbsp;';
-					case "TECNICO":
-					return '<a href="/myre/containers/container?appointmentId='+data+'"><button  type="button" class="btn btn-outline-dark btn-sm" title="Informacion Containers"><i class="fas fa-eye"></i></button></a>&nbsp;';
-					default:
-					if($("#status").val()==1){
-						return '<button  type="button" class="btn btn-outline-dark btn-sm" title="Editar Cita" onclick="editAppointment(\'' + data + '\');"><i class="fas fa-edit"></i></button>&nbsp;';
-					}if($("#status").val()==4){
-						return '<button disabled type="button" class="btn btn-outline-dark btn-sm" title="Editar Cita" onclick="editAppointment(\'' + data + '\');"><i class="fas fa-edit"></i></button>&nbsp;' +
-						 '<button  type="button" class="btn btn-outline-dark btn-sm" title="ver Estimados" onclick="ConfirmEstimationAppointment(\'' + data + '\');"><i class="fas fa-coins"></i></button>&nbsp;';
-					}else if($("#status").val()==7){
-						return '<button type="button" class="btn btn-outline-dark btn-sm" title="Cita salida" onclick="addNewAppointmentOut(\'' + data + '\');"><i class="fas fa-calendar"></i></button>&nbsp;';
-					}else if($("#status").val()==9){
-						return null;
-					}else{
-						return '<button disabled type="button" class="btn btn-outline-dark btn-sm" title="Editar Cita" onclick="editAppointment(\'' + data + '\');"><i class="fas fa-edit"></i></button>&nbsp;';
-					}
-					
-				}*/
-			}}
-			
-		],
-	
-		
-	}).columns.adjust();
+	configDataTable();
 }
 
 function showPaymentCheck(data){
-	
-				var iframe = "<iframe width='100%' height='100%' tiltle src='" + data + "'></iframe>"
-				var x = window.open();
-				x.document.open();
-				x.document.write(iframe);
-				x.document.close();	
-	}
-	
+	var iframe = "<iframe width='100%' height='100%' tiltle src='" + data + "'></iframe>";
+	var x = window.open();
+	x.document.open();
+	x.document.write(iframe);
+	x.document.close();
+}
+
 function getIn(data){
 	$.ajax({
 			type: "POST",
@@ -591,14 +459,12 @@ function getIn(data){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {appointmentId : data},
 			success: function(response){
-				console.log(response);
 				manageResponse(response);
 			},
 			error: function(){
 				alert("AJAX ERROR");
 			}
 		});
-	
 }
 
 function ConfirmEstimationAppointment(data){
@@ -647,7 +513,6 @@ function showInspections(data) {
 						$("#containers").val(data);
 						return $("#containers option:selected").html();
 					}}, 
-			
 			{ data: "part", visible: true , render : function(data) {
 						$("#part").val(data);
 						return $("#part option:selected").html();
@@ -659,15 +524,10 @@ function showInspections(data) {
 					}}, 
 			{ data: "reference", visible: true },
 			{ data: "customerType", visible: false },
-			{ data: "photo", visible: true , render : function(data, type, full, meta) {
-				$("#imagenData").val(data)
+			{ data: "photo", visible: true , render : function(data) {
 				return '<a onclick="showPhoto(\'' + data + '\');" > <img  src="' + data + '" width="40" height="30" ></a>';
 			}},
-			{ data: "damageCode", visible: true , render : function(data) {
-						$("#precios").val(data);
-						return '$'+$("#precios option:selected").html()+' MXN';
-					}}, 
-			
+			{ data: "cost", visible: true },
 		],
 	}).columns.adjust();
 	
@@ -701,9 +561,6 @@ function editAppointment(data){
 			$("#rfc").val(response.rfc),
 			$("#nweBuque").val(response.buque),
 			$("#newOrigin").val(response.origin),
-			//signature: $("#draw-dataUrl").val(),
-			//JSON.stringify(containerList),
-			
 			$("#newAppointmentModal").modal("show");
 		},
 		error: function(){
@@ -773,14 +630,8 @@ function showContainers(data) {
 						$("#newShippingCompany").val(data);
 						return $("#newShippingCompany option:selected").html();
 					}}, 
-			{ data: "containerId", visible: false , render : function(data) {
-						return "$100";
-					}}, 
 			{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>'; 
-				//'<button type="button" class="btn btn-outline-dark btn-sm" title="Quitar Unidad" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
-				
-			
+				return '<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>';
 			}},
 			
 		],
@@ -789,22 +640,17 @@ function showContainers(data) {
 	$("#newAppointmentModal").modal("show");
 }
 
-function deleteAppointment(data){
-	
-}
-function printAppointment(data){
-	
-}
+function deleteAppointment(data){}
 
 function cleanForm(){
-			$("#containerTable").DataTable().clear().draw();
-			$("#newTelephone").val(""),
-			$("#newAgency").val(""),
-			$("#newCustomer").val(""),
-			$("#newCustomerType").val(1),
-			$("#companyName").val(""),
-			$("#fiscalAdress").val(""),
-			$("#rfc").val("")
+	$("#containerTable").DataTable().clear().draw();
+	$("#newTelephone").val("");
+	$("#newAgency").val("");
+	$("#newCustomer").val("");
+	$("#newCustomerType").val(1);
+	$("#companyName").val("");
+	$("#fiscalAdress").val("");
+	$("#rfc").val("");
 }
 
 function selectContainer(){
@@ -899,13 +745,9 @@ function inOrOut(){
 							$("#newShippingCompany").val(data);
 							return $("#newShippingCompany option:selected").html();
 						}}, 
-				{ data: "containerId", visible: false , render : function(data) {
-						return "$100";
-					}}, 
 				{ data: "containerId", visible: true , render : function(data, type, full, meta) {
-					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar Cita" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
+					return '<button type="button" class="btn btn-outline-dark btn-sm" title="Eliminar" onclick="deleteContainer(\'' + meta.row + '\');"><i class="fas fa-trash"></i></button>&nbsp'+
 					'<button type="button" class="btn btn-outline-dark btn-sm" title="Editar Unidad" onclick="editContainer(\'' + meta.row + '\');"><i class="fas fa-edit"></i></button>';
-					
 				}},
 			],
 		}).columns.adjust();
@@ -918,28 +760,24 @@ function inOrOut(){
  function addNewAppointmentOut(data){
 	document.getElementById("addOrderModalLabel").innerHTML = "NUEVA CITA";
 	cleanForm();
-	$("#newEventType").val(2)
-	$("#typeForAppointmentOut").val("APOINTMENT_OUT")
-	$("#appointmentId").val(data)
-	inOrOut()
-	getInformation()
+	$("#newEventType").val(2);
+	$("#typeForAppointmentOut").val("APOINTMENT_OUT");
+	$("#appointmentId").val(data);
+	inOrOut();
+	getInformation();
 	document.getElementById("newEventType").setAttribute("disabled",true);
-	//cleanForm();
-	eventDateValidator()
-	$("#operation").val("INSERT")
+	eventDateValidator();
+	$("#operation").val("INSERT");
 	$("#newAppointmentModal").modal('show');
 }
  function customerType(){
 	if($("#newCustomerType").val()==2){
-		//document.getElementById("divAgency").setAttribute("hidden",true);
 		$("#newAgency").val("")
 		document.getElementById("newAgency").setAttribute("disabled", "");
 	}else{
-		console.log("No entraaaaa")
 		document.getElementById("newAgency").removeAttribute("disabled", "");
-		//document.getElementById("divAgency").removeAttribute("hidden");
 	}
-	}
+}
 
  function addNewAppointment(){
 	$("#newLocation").val($("#globalWarehouse").val())
@@ -957,7 +795,6 @@ function inOrOut(){
 	$("#newAppointmentModal").modal('show');
 }
 function getInformation(){
-	console.log("Aqui trae la informacion")
 	cleanForm();
 	$.ajax({
 		type: "GET",
@@ -966,13 +803,12 @@ function getInformation(){
 		data: {appointmentId :$("#appointmentId").val(),
 		idUser:$("#globalUserId").val()},
 		success: function(response){
-			$("#newTelephone").val(response.telephone),
-			$("#newAgency").val(response.agency),
-			$("#newCustomer").val(response.customer),
-			//$("#newTransportCompany").val(response.transportCompany),
-			$("#companyName").val(response.companyName),
-			$("#fiscalAdress").val(response.fiscalAdress),
-			$("#rfc").val(response.rfc),
+			$("#newTelephone").val(response.telephone);
+			$("#newAgency").val(response.agency);
+			$("#newCustomer").val(response.customer);
+			$("#companyName").val(response.companyName);
+			$("#fiscalAdress").val(response.fiscalAdress);
+			$("#rfc").val(response.rfc);
 			$("#newAppointmentModal").modal("show");
 		},
 		error: function(){
@@ -1026,60 +862,37 @@ function editContainer(){
 function showPhoto(data){
 	document.getElementById("imagenPrevisualizacion").setAttribute("src", data);
 	$("#imageShowModal").modal("show");
-	}
-	
-/*function setId(){
-	var agency = document.getElementById("newAgency").value;
-	$("#newAgencyList").val(agency)
-		console.log(agency)
-		
-		console.log($("#newAgencyList").val())
-		
-	var newAgencyList = document.getElementById("newAgencyList");
-	agencyText = newAgencyList.options[newAgencyList.selectedIndex].text;
-	console.log(agencyText)
-	
-		}*/
-		
-/*$("#newAgencySelect").on('input', function () {
-   var val=$('#newAgencySelect').val();
-   var ejemplo = $('#newAgencyList').find('option[value="'+val+'"]').data("id");
-  $('#newAgency').val(ejemplo);
-});*/
-		
+}
+
 function addContainer(){
 	if($("#newEventType").val()==2){
 		if(editAdd==1){
 		editAdd=0;
 		$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase( ),
+				"container": $("#newContainer").val().toUpperCase(),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			$("#containerId").val("")
-			$("#newContainer").val("")
-			//.fire("El codigo es correcto", "", "success");
+			$("#containerId").val("");
+			$("#newContainer").val("");
 	}else{
 	if($("#newContainerType").val()!="0"&&$("#newShippingCompany").val()!="0"){
-	filas =  $("#containerTable").DataTable().rows().data().count()
-	$("#containerId").val(filas+1)
+	filas =  $("#containerTable").DataTable().rows().data().count();
+	$("#containerId").val(filas+1);
 	if(filas==0){
 		$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase( ),
+				"container": $("#newContainer").val().toUpperCase(),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			//Swal.fire("El codigo es correcto", "", "success");
 	}else{
 		contador=0;
 		for (var i = 0; i < filas; i++) {
@@ -1088,28 +901,23 @@ function addContainer(){
 			Swal.fire("El booking ya esta registrado ingrese un número de contenedor diferente", "", "warning");
 			contador++;
 		}
-		
 	}
 	if(contador==0){
 			$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase( ),
+				"container": $("#newContainer").val().toUpperCase(),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			//Swal.fire("El codigo es correcto", "", "success");
 	}
-	
 	}
-		
 	}else{
 		Swal.fire("Llenar los datos que se requieren", "", "warning");
 	}
-	$("#newContainer").val("")
+	$("#newContainer").val("");
 	}
 	}else{
 	value=$("#newContainer").val();
@@ -1121,21 +929,19 @@ function addContainer(){
 		editAdd=0;
 		$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase( ),
+				"container": $("#newContainer").val().toUpperCase(),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			$("#containerId").val("")
-			$("#newContainer").val("")
-			//Swal.fire("El codigo es correcto", "", "success");
+			$("#containerId").val("");
+			$("#newContainer").val("");
 	}else{
 	if($("#newContainer").val()!=""&&$("#newContainerType").val()!="0"&&$("#newShippingCompany").val()!="0"){
-	filas =  $("#containerTable").DataTable().rows().data().count()
-	$("#containerId").val(filas+1)
+	filas =  $("#containerTable").DataTable().rows().data().count();
+	$("#containerId").val(filas+1);
 	if(filas==0){
 		$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
@@ -1145,9 +951,7 @@ function addContainer(){
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			//Swal.fire("El codigo es correcto", "", "success");
 	}else{
 		contador=0;
 		for (var i = 0; i < filas; i++) {
@@ -1156,33 +960,28 @@ function addContainer(){
 			Swal.fire("El contenedor ya esta registrado ingrese un numero de contenedor diferente", "", "warning");
 			contador++;
 		}
-		
 	}
 	if(contador==0){
 			$("#containerTable").DataTable().row.add({
 				"containerId": $("#containerId").val(),
-				"container": $("#newContainer").val().toUpperCase( ),
+				"container": $("#newContainer").val().toUpperCase(),
 				"containerType": $("#newContainerType").val(),
 				"containerSize": $("#newContainerSize").val(),
 				"shippingCompany": $("#newShippingCompany").val(),
 				"booking" : $("#newBooking").val(),
 				"bookingQuantity" : $("#bookingQuantity").val(),
-				"price": "$100",
 			}).draw(false);
-			//Swal.fire("El codigo es correcto", "", "success");
 	}
-	
 	}
-		
 	}else{
 		Swal.fire("Llenar los datos que se requieren", "", "warning");
 	}
-	$("#newContainer").val("")
+	$("#newContainer").val("");
 	}
 	}
 	}else{
-		Swal.fire("El codigo debe contener 11 caracteres ejemplo "+  '"XXXX1234567"', "", "warning");
-	}	
+		Swal.fire("El codigo debe contener 11 caracteres ejemplo " + '"XXXX1234567"', "", "warning");
+	}
 	}
 
 			
@@ -1206,65 +1005,45 @@ function getBase64Image(img) {
   canvas.height = img.height;
   var ctx = canvas.getContext("2d");
   ctx.drawImage(img, 0, 0);
-  var dataURL = canvas.toDataURL();
-  return dataURL;
+  return canvas.toDataURL();
 }
 
-
-
 function convertToBase64() {
-        //Read File
-        var selectedFile = document.getElementById("voucher").files;
-        //Check File is not Empty
-        if (selectedFile.length > 0) {
-            // Select the very first file from list
-            var fileToLoad = selectedFile[0];
-            // FileReader function for read the file.
-            var fileReader = new FileReader();
-            var base64;
-            // Onload of file read the file content
+	var selectedFile = document.getElementById("voucher").files;
+	if (selectedFile.length > 0) {
+		var fileToLoad = selectedFile[0];
+		var fileReader = new FileReader();
+		fileReader.onload = function(fileLoadedEvent) {
+			$("#voucher64").val(fileLoadedEvent.target.result);
+		};
+		fileReader.readAsDataURL(fileToLoad);
+	}
+}
 
-            fileReader.onload = function(fileLoadedEvent) {
-                base64 = fileLoadedEvent.target.result;
-                // Print data in console
-				$("#voucher64").val(base64)
-            };
-            // Convert data to base64
-             fileReader.readAsDataURL(fileToLoad);
-        }
-
-
-    }
-
-//Clientes para facturar
-console.log(companyNameList)
+// Autocompletar datos de facturación al seleccionar empresa
 document.getElementById("companyNameList").addEventListener("change", myFunction);
 
 function myFunction() {
-	
 	var input = document.getElementById('companyName');
-    var selectedOption = document.querySelector('#companyNameList option[value="' + input.value + '"]');	
-	
-   var customerId = selectedOption.getAttribute('data-id');
-   
-   console.log(customerId)
-   $.ajax({
+	var selectedOption = document.querySelector('#companyNameList option[value="' + input.value + '"]');
+	var customerId = selectedOption.getAttribute('data-id');
+	$.ajax({
 		type: "GET",
 		url: 'appointment/getAddressClient',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {customerId : customerId},
 		success: function(response){
-
-				$("#fiscalAdress").val(response.customerAddress)
-	
+			$("#fiscalAdress").val(response.customerAddress);
 		},
-		
+
 		error: function(){
 			alert("AJAX ERROR");
 		}
 	});
-   
+
 }
+
+
 
 
 

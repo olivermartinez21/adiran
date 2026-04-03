@@ -38,7 +38,6 @@ function configDataTable() {
             },
             dataSrc: '',
             error: function(response) {
-                console.log(response);
                 if (typeof manageErrorAjax === 'function') {
                     manageErrorAjax(response);
                 }

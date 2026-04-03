@@ -595,7 +595,6 @@ function getMonthString(monthNumber) {
 }
 
 function manageErrorAjax(response){
-	console.log(response);
 	showAlert(3,response.error, "Codigo " + response.status, serverDescription(response.status, response.message))
 }
 

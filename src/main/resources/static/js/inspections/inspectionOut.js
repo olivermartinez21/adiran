@@ -11,7 +11,6 @@ $(document).ready( function() {
 });
 
 function configDataTable(){
-	console.log("si entraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 	$("#containerTable").DataTable().destroy();
 	$("#containerTable").DataTable({
 		dom:  
@@ -41,7 +40,6 @@ function configDataTable(){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			//data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -74,6 +72,7 @@ function configDataTable(){
 					}},
 			
 		],
+		order: [[1, 'desc']]
 	}).columns.adjust();
 	$("#imageTableInspection").DataTable().destroy();
 	$("#imageTableInspection").DataTable({
@@ -167,7 +166,6 @@ function initComponents(){
 					$("#inspectionModal").modal("hide");
 				});
 				}else{
-					console.log("error")
 					Swal.fire("Error "+response.message, "", "error");
 				}
 		},
@@ -185,7 +183,6 @@ function initComponents(){
 function inspectionOut(data){
 	currentData = $("#containerTable").DataTable().row(data).data();
 	$("#containerId").val(currentData.containerId);
-	console.log(currentData.containerType)
 	if(currentData.containerType==6){
 		document.getElementById("gensetDiv").setAttribute("hidden",true);
 		document.getElementById("reeferDiv").removeAttribute("hidden");

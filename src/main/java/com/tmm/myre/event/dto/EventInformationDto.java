@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 @Builder
@@ -27,6 +28,7 @@ public class EventInformationDto extends AbstractManagement implements ITransfer
 	//private Integer eventDetailsIdentifier;
 	private String eventId;
 	private String eventType; 
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDateTime eventDate;
 	private String estimateRequired;
 	private String inspected; 

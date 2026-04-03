@@ -87,7 +87,7 @@
 									
 									</select>
 			<div class="container-table">
-			<table id="quoteTable" class="table table-striped dt-responsive striped" style="width: 100%;">
+							<table id="quoteTable" class="table table-striped dt-responsive striped" style="width: 100%;">
 								<thead>
 									<tr>
 										<Th>N° </Th>
@@ -100,12 +100,6 @@
 										<Th>Responsabilidad Del Daño </Th>
 										<Th>Cobrar A: </Th>
 										<th>Status</th>
-										<Th>Validación Estimado</Th>
-										<Th>Estado Del Estimado</Th>
-										<Th>Editar Estado Del Estimado</Th>
-										<Th>Estado Del Estimado De La Naviera </Th>
-										<Th>Aprobación Del Cliente </Th>
-										<Th># Factura</Th>
 										<Th>Opciones</Th>
 									</tr>
 								</thead>
@@ -121,14 +115,7 @@
 										<Th>Responsabilidad Del Daño </Th>
 										<Th>Cobrar A: </Th>
 										<th>Status</th>
-										<Th>Validación Estimado</Th>
-										<Th>Estado Del Estimado</Th>
-										<Th>Editar Estado Del Estimado</Th>
-										<Th>Estado Del Estimado De La Naviera </Th>
-										<Th>Aprobación Del Cliente </Th>
-										<Th># Factura</Th>
 										<Th>Opciones</Th>
-															
 									</tr>
 								</tfoot>
 							</table>
@@ -172,7 +159,7 @@
 							<table id="inspectionTable" class="table table-striped dt-responsive striped"  style="width: 100%;" >
 								<thead>
 									<tr>
-									    <th >id </th>
+									    <th>id </th>
 										<th>Sección </th>
 										<th>Componente</th>
 										<th>Daño</th>
@@ -180,22 +167,10 @@
 										<th>Largo</th>
 										<th>Ancho</th>
 										<th>Área Cm2</th>
-										<th>Profunidad </th>
 										<th>Responsabilidad Del Daño </th>
-										<th>Código De Localización</th> 
+										<th>Código De Localización</th>
 										<th>Cantidad </th>
-										<th>Fabricante </th>
-										<th>Número De Parte SAP</th>
-										<th>Número De Parte</th>
-										<th>Descripción De La Parte</th> 
-										<th>Código De Trabajo </th>
-										<th>Descripción De La Reparación</th> 
-										<th>Hrs</th>
-										<th>Labor</th>
-										<th>$ Material </th>
-										<th>Tarifa </th>
 										<th>Fotos </th>
-										<th>Observaciones</th>
 										<th>Status</th>
 										<th>Opciones</th>
 									</tr>
@@ -205,10 +180,8 @@
 					</div>
 					<div class="modal-footer modal-footer-app">
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-						<button id=quotePrint type="button" class="btn btn-quote" onclick="openPdf()">Ver documento</button>
-						<!--<button id=quoteDenegate type="button" class="btn btn-quoteCanceled" onclick="newFormDenegate(6)">Cancelar</button>
-						<button id=quoteDenegate type="button" class="btn btn-quoteUpdate" onclick="newFormDenegate(5)">Actualizar</button>
-						<button id=quoteDenegate type="button" class="btn btn-quoteApproved" onclick="newFormDenegate(3)">Aprobar</button>-->
+						<button id="quotePrint" type="button" class="btn btn-quote" onclick="openPdf()">Ver documento</button>
+						<button id="btAcept" type="submit" class="btn btn-success" hidden>Aprobar</button>
 					</div>
 					</form>
 				</div>
@@ -474,7 +447,6 @@
 										<th>inspectionId</th>
 										<th>Imagen</th>
 										<th>Archivo</th>
-										<th>Opciones</th>
 									</tr>
 								</thead>
 							</table>

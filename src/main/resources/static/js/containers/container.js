@@ -34,7 +34,7 @@ function initComponents() {
 		
 	$("#pregateModel").submit(function () {
 		var data = {
-			condition: $("#newCondition").val(), 
+			conditionPregate: $("#newCondition").val(), 
 			typeServicePregate : $("#typeServicePregate").val(), 
 			billTo : $("#newBillTo").val(),
 			transportId : $("#newTransportCompanyPregate").val(),
@@ -45,12 +45,11 @@ function initComponents() {
 			
 			$.ajax({
 			type: "POST",
-			url: 'container/saveEventInformation',
+			url: 'container/savePregate',
 			cache: false,
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -69,7 +68,6 @@ function initComponents() {
 			
 		});
 $("#conditionModel").submit(function () {
-			console.log($("#containerId").val())
 			$.ajax({
 			type: "POST",
 			url: "container/containerValidation",
@@ -78,7 +76,6 @@ $("#conditionModel").submit(function () {
 			condition : $("#containerCondition").val(),
 			clasification : $("#containerClasification").val() },
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -98,29 +95,26 @@ $("#conditionModel").submit(function () {
 });
 			
 	$("#newEventModal").submit(function () {
+		var rawEventDate = $("#newEventDate").val();
+		if (rawEventDate && rawEventDate.length === 10) {
+			rawEventDate += "T00:00:00";
+		}
 		var data = {
 			eventType: $("#newEventType").val(), 
-			eventDate: $("#newEventDate").val(),
+			eventDate: rawEventDate,
 			estimateRequired: $("#newEstimateRequired").val(),
 			inspectedBy: $("#newInspectedBy").val(), 
-			//booking: $("#containerId").val(),
 			fillState: $("#newStatusEvent").val(),
-			//alternateUnit: $("#containerId").val(),
-			//associatedUnit: $("#containerId").val(),
 			transportType: $("#newTransportType").val(),
-			//sapSaleOrder: $("#containerId").val(),
 			unitQuality: $("#newContainerCondition").val(),
 			unitClasification: $("#newContainerClasification").val(),
-			//sealNumber: $("#containerId").val(),
 			customerIdentifier: $("#newBillTo").val(),
 			type: $("#newContainerTypeEvent").val(),
 			model: $("#newModel").val(),
-			//location: $("#containerId").val(),
 			container: $("#newContainerNameEvent").val(),
 			containerId: $("#containerId").val(),
 			idUser : $("#globalUserId").val(),
 			transmit: $("#newTransmit").val()
-			
 		};
 		
 			$.ajax({
@@ -130,7 +124,6 @@ $("#conditionModel").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -154,15 +147,18 @@ $("#conditionModel").submit(function () {
 	if (!verify(value)) {
 		Swal.fire("El codigo es incorrecto", "", "error");
 	}else {
+		var rawRegisterDate = $("#startDate").val();
+		if (rawRegisterDate && rawRegisterDate.length === 10) {
+			rawRegisterDate += "T00:00:00";
+		}
 		var data = {
 			container: $("#newContainerName").val().toUpperCase(),
-			registerDate : $("#startDate").val(),
+			registerDate : rawRegisterDate,
 			containerType: $("#newContainerTypeSave").val(),
 			containerSize: $("#newContainerSize").val(),
 			shippingCompany: $("#newShippingConpanyContainer").val(),
 			idUser : $("#globalUserId").val(),
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'container/saveContainer',
@@ -170,7 +166,6 @@ $("#conditionModel").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -184,9 +179,6 @@ $("#conditionModel").submit(function () {
 				alert("AJAX ERROR");
 			}
 			});
-			
-				
-		
 	}
 	}else{
 		Swal.fire("El codigo debe contener 11 caracteres ejemplo "+  '"XXXX1234567"', "", "warning");
@@ -202,7 +194,7 @@ $("#conditionModel").submit(function () {
 	filas =  $("#inspectionTable").DataTable().rows().data().count()
 	for (var i = 0; i < filas; i++) {
 		
-		table = $("#inspection").DataTable().rows(i).data().toArray();
+		table = $("#inspectionTable").DataTable().rows(i).data().toArray();
 		table.forEach(function(item) {
 		var dataT = [];
 			var obj = {
@@ -229,8 +221,7 @@ $("#conditionModel").submit(function () {
 			modelYear :$("#newYear").val(),
 			idUser : $("#globalUserId").val(),
 			inspectionList: JSON.stringify(dataT),
-	};
-	console.log(data)
+		};
 		$.ajax({
 			type: "POST",
 			url: 'container/saveUpdateContainer',
@@ -238,7 +229,6 @@ $("#conditionModel").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -275,7 +265,6 @@ $("#conditionModel").submit(function () {
 			 photo: item.photo,
 		}
 		dataT.push(obj);
-			console.log(dataT)
 		var data = {
 			containerId: $("#containerId").val(),
 			dateInspection : $("#newDateInspection").val(),
@@ -296,10 +285,9 @@ $("#conditionModel").submit(function () {
 			condition : $("#containerConditionInspection").val(),
 			clasification : $("#containerClasificationInspection").val(),
 			modelYear :$("#newYear").val(),
-				idUser : $("#globalUserId").val(),
+			idUser : $("#globalUserId").val(),
 			inspectionList: JSON.stringify(dataT),
-	};
-	console.log(data)
+		};
 		$.ajax({
 			type: "POST",
 			url: 'container/saveUpdateContainer',
@@ -319,32 +307,21 @@ $("#conditionModel").submit(function () {
 		var doc = new jsPDF();
 		doc.text(65, 20, "EIR "+textContainer);
 		doc.save('EIR '+textContainer+'.pdf');
-		//doc.autoPrint();
-		
-		/*var ticket = new jsPDF();
-		ticket.text("TMM LOGISTIC, S.A DE C.V");
-		ticket.save('tiket '+textContainer+'.pdf');
-		ticket.autoPrint();*/
-						
 		}
-	
-	
+
 		return false;
 	});	
 	
-	//Formulario de busqueda*************************
+	// Reporte de maniobras con filtro de fecha
 	$("#filterInventoryForm").submit( () => {
 		data = {
 			shippingCompany : $("#filterShippingCompany").val(),
 			dateInit : $("#filterDateInit").val(),
 			dateEnd : $("#filterDateEnd").val(),
-
 		}
-		console.log("soy data" + JSON.stringify(data));
 		$.ajax({
 			type: "GET",
 			url: "container/generateManeuverReport",
-			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			xhrFields: {
 				responseType: 'blob' // Set response type to blob to handle binary data
@@ -382,11 +359,9 @@ $("#conditionModel").submit(function () {
 			dateInit : $("#filterDateInit2").val(),
 			dateEnd : $("#filterDateEnd2").val(),
 		}
-		console.log("soy data" + JSON.stringify(data));
 		$.ajax({
 			type: "GET",
 			url: "container/generateInventoryReport",
-			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			xhrFields: {
 				responseType: 'blob' // Set response type to blob to handle binary data
@@ -423,11 +398,9 @@ $("#conditionModel").submit(function () {
 			dateInit : $("#filterAdsDateInit").val(),
 			dateEnd : $("#filterAdsDateEnd").val(),
 		}
-		console.log("soy data" + JSON.stringify(data));
 		$.ajax({
 			type: "GET",
 			url: "container/generateAdsReport",
-			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			xhrFields: {
 				responseType: 'blob' // Set response type to blob to handle binary data
@@ -463,11 +436,9 @@ $("#conditionModel").submit(function () {
 		data = {
 			dateInit : $("#searchExitDate").val(),
 		}
-		console.log("soy data" + JSON.stringify(data));
 		$.ajax({
 			type: "GET",
 			url: "container/generateExitDateReport",
-			//contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			xhrFields: {
 				responseType: 'blob' // Set response type to blob to handle binary data
@@ -643,7 +614,7 @@ function validationDate(){
 	var month = "0" + month;
 	}
     else{ 
-	var month = month.toString;
+	var month = month.toString();
 	}
     document.getElementById("newEventDate").min = year+'-'+month+'-'+day; 
 	document.getElementById("newEventDate").value = year+'-'+month+'-'+day; 
@@ -686,7 +657,6 @@ function dataTableRefresh(){
 			data: {appointmentId :  $("#appointmentId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -703,10 +673,6 @@ function dataTableRefresh(){
 						return $("#newContainerTypeSave option:selected").html();
 					}}, 
 			{ data: "containerSize",visible: true },
-			/*{ data: "containerSize", visible: true , render : function(data) {
-						$("#newModelevent").val(data);
-						return $("#newModelevent option:selected").html();
-					}}, */
 			{ data: "conditionPregate",visible: true },
 			{ data: "shippingCompany", visible: true , render : function(data) {
 						$("#newShippingCompany").val(data);
@@ -774,7 +740,6 @@ function dataTableRefresh(){
 			data: {userId : $("#globalUserId").val(),
 			location : $("#globalWarehouse").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -808,24 +773,19 @@ function configDataTable() {
 		},
 		buttons: {
 			buttons: [
-				//{extend: 'excelHtml5', title: 'Unidades'},
-				//{text: 'Descargar Inventario Excel', className: 'btn btn-dark', action: function() { downloadInventoryReport()}},
 				{text: 'Reporte Inventario por Cliente', className: 'btn btn-info', action: function() { filterShippigModal(); } },
-				//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
 				{text: 'Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
 				{text: 'Anuncios HAPAG', className: 'btn btn-info', action: function() { filtersAds(); } },
 				{text: 'Salidas Llenos', className: 'btn btn-dark', action: function() { searchDateExit(); } }
-
 			],
-			},
-			ajax: {
+		},
+		ajax: {
 			url: "container/getDataTable",
 			type: 'GET',
 			dataSrc: '',
 			data: {appointmentId :  $("#appointmentId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -862,10 +822,6 @@ function configDataTable() {
 						return $("#newContainerTypeSave option:selected").html();
 					}}, 
 			{ data: "containerSize",visible: true },
-			/*{ data: "containerSize", visible: true , render : function(data) {
-						$("#newModelevent").val(data);
-						return $("#newModelevent option:selected").html();
-					}}, */
 			{ data: "conditionPregate",visible: true },
 			{ data: "shippingCompany", visible: true , render : function(data) {
 						$("#newShippingCompany").val(data);
@@ -988,46 +944,6 @@ function configDataTable() {
 		],
 	}).columns.adjust();
 	
-	$("#estimateTable").DataTable({
-		dom:  
-		"<'row'<'col-sm-12'B>>" +
-		"<'row'<'col-sm-12'tr>>" + 
-		"<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
-		fixedHeader: true,
-		responsive: true,
-		autoWidth: true, 
-		select: {
-			style: 'single'
-		},
-		buttons: {
-			buttons: [
-				//{text: 'Agregar Inspeccion', action: function() { addInspection(); }},
-				],
-			dom: {
-				button:{
-	                tag:"button",
-	                className:"btn btn-dark"
-	            },
-			}},
-		columns: [
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-			{ data: "inspectionId",visible: true },
-		],
-	}).columns.adjust();
-	
 	$("#eventTable").DataTable({
 		dom:  
 		"<'row'<'col-sm-12'B>>" +
@@ -1105,7 +1021,6 @@ function configDataTable() {
 			data: {userId : $("#globalUserId").val(),
 			location : $("#globalWarehouse").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1130,7 +1045,6 @@ function configDataTable() {
 
 function changeStatus(data){
 	currentData = $("#containerTable").DataTable().row(data).data();
-	console.log(currentData)
 	$("#containerCondition").val(currentData.condition);
 	$("#containerClasification").val(currentData.clasification);
 	$("#containerId").val(currentData.containerId);
@@ -1141,31 +1055,8 @@ function changeStatus(data){
 
 function validation(data) {
 	$("#containerId").val(data);
-$("#conditionModel").modal("show");
-	/*$.ajax({
-			type: "POST",
-			url: "container/containerValidation",
-			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-			data: {containerId : data,
-			clasification : value},
-			success: function(response){
-				console.log(response);
-				if(response.success==true){
-					Swal.fire("Proceso Exitoso", "", "success")
-				.then(() => {
-				self.location.reload();
-				});
-				}else{
-					Swal.fire("Error", "", "error");
-				}
-			},
-			error: function(){
-				alert("AJAX ERROR");
-			}
-		});*/
-
-		
-	}
+	$("#conditionModel").modal("show");
+}
 
 		
 		
@@ -1176,10 +1067,7 @@ Swal.fire({
 	}
 
 function showComponents(data){
-	console.log(data)
-	//text = document.getElementById("newPart").options[data].text
-	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
-	document.getElementById("newComponentInspection")
+	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text;
 	$.ajax({
 		type: "GET",
 		url: 'container/getComponentIformation',
@@ -1194,11 +1082,7 @@ function showComponents(data){
 			alert("AJAX ERROR");
 		}
 	});
-			
-			
-			return false;
-	//clearCombo(document.getElementById("newComponentInspection"));
-	//fillComboComponent(document.getElementById("newComponentInspection"), $("#containerType").val(),data);
+	return false;
 }
 function getSection(){
 	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
@@ -1226,15 +1110,11 @@ function pregate(data){
 function inspectionContainer(data){
 	$("#inspectionTable").DataTable().clear().draw();
 	currentData = $("#containerTable").DataTable().row(data).data();
-	
-	//clearCombo(document.getElementById("newPart"));
-    //fillComboPart(document.getElementById("newPart"),currentData.containerType);
-		
-	$("#containerType").val(currentData.containerType)
-	$("#containerId").val(currentData.containerId)
+	$("#containerType").val(currentData.containerType);
+	$("#containerId").val(currentData.containerId);
 	getSection()
 	getDamageInfotmation(currentData.containerType)
-	eventDateValidator()
+	inspectionDateValidator()
 	if(currentData.containerType==1){
 		document.getElementById("refferData").setAttribute("hidden",true);
 	}else if(currentData.containerType==6){
@@ -1314,23 +1194,20 @@ function inspectionContainer(data){
 }
 
 function getDamageInfotmation(data){
-			$.ajax({
+	$.ajax({
 		type: "GET",
 		url: 'container/getDamageInformation',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {containerType : data},
 		success: function(response){
-			clearCombo(document.getElementById("newDamage"))
-			fillCombo(document.getElementById("newDamage"),response)
+			clearCombo(document.getElementById("newDamage"));
+			fillCombo(document.getElementById("newDamage"),response);
 		},
 		error: function(){
 			alert("AJAX ERROR");
 		}
 	});
-			
-			
-			return false;
-	}
+}
 
 function checkboxDestination(){
 	document.getElementById("origin").checked=false
@@ -1350,7 +1227,6 @@ function checkboxOrigin(){
 	
 editAdd=0;
 function addInspection(){
-	console.log($("#containerStatus").val() )
 	if($("#containerStatus").val() == null){
 		Swal.fire("Por favor Selecciona una imagen", "", "warning");
 	}else{
@@ -1426,8 +1302,7 @@ function setCode(){
 function setDamage(){
 	$("#newDamage").val($("#newErrorCode").val());
 }
-function eventDateValidator(){
-	
+function inspectionDateValidator(){
 	 fecha = new Date();
      year = fecha.getFullYear();
      day = fecha.getDate();
@@ -1440,7 +1315,7 @@ function eventDateValidator(){
 	var month = "0" + month;
 	}
     else{ 
-	var month = month.toString;
+	var month = month.toString();
 	}
     document.getElementById("newDateInspection").min = year+'-'+month+'-'+day; 
 	document.getElementById("newDateInspection").value = year+'-'+month+'-'+day; 
@@ -1451,99 +1326,6 @@ function deleteInspection(){
 }
 
 
-function stopVideo(){
-document.getElementById('snaptake').removeAttribute("hidden"); 
-document.getElementById('snap').setAttribute("hidden",true); 
-var video = document.getElementById("video");
-         video.pause();
-         video.currentTime = 0;
- }
-
-function playVideo(){
-document.getElementById('snap').removeAttribute("hidden"); 
-document.getElementById('snaptake').setAttribute("hidden",true); 
-var video = document.getElementById("video");
-         video.play();
-         video.currentTime = 0;
-  }
-
-
-// foto	 --------------------------------------------------
-function photo(){
-		'use strict';
-
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const snap = document.getElementById("snap");
-const errorMsgElement = document.querySelector('span#errorMsg');
-
-const constraints = {
-  audio: false,
-  video: {
-    width: 1280, height: 720
-  }
-};
-
-// Access webcam
-async function init() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-  } catch (e) {
-    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
-  }
-}
-
-// Success
-function handleSuccess(stream) {
-  window.stream = stream;
-  video.srcObject = stream;
-}
-
-// Load init
-init();
-
-// Draw image
-var context = canvas.getContext('2d');
-snap.addEventListener("click", function() {
-        context.drawImage(video, 0, 0, 720, 720);
-});
-
-	}
-
-
-// DATA URL A BLOB
-
-function dataURItoBlob(dataUrl) {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    var byteString = atob(dataUrl.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to an ArrayBuffer
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    //Old Code
-    //write the ArrayBuffer to a blob, and you're done
-    //var bb = new BlobBuilder();
-    //bb.append(ab);
-    //return bb.getBlob(mimeString);
-
-    //New Code
-    return new Blob([ab], {type: mimeString});
-
-
-}
-
-	
-	
-	
 function ConfirmEstimationAppointment(data){
 	showInspections(data);
 	//$("#appointmentId").val(data);
@@ -1587,7 +1369,6 @@ function showEventInformation(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1634,18 +1415,8 @@ function showInspections(data) {
 		fixedHeader: true,
 		responsive: true,
 		autoWidth: true, 
-		select: {
-			style: 'single'
-		},
-		buttons: {
-			buttons: [
-				],
-			dom: {
-				button:{
-	                tag:"button",
-	                className:"btn btn-dark"
-	            },
-			}},
+		select: { style: 'single' },
+		buttons: { buttons: [], dom: { button:{ tag:"button", className:"btn btn-dark" }}},
 		ajax: {
 			url: 'container/getInspections',
 			type: 'GET',
@@ -1653,84 +1424,50 @@ function showInspections(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
 		columns: [
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true , render : function(data) {
-						$("#newErrorCode").val(data);
-						return $("#newErrorCode option:selected").html();
-					}}, 
-			{ data: "part",visible: true , render : function(data) {
+			{ data: "inspectionId", visible: false },
+			{ data: "part", visible: true , render : function(data) {
 						$("#newPart").val(data);
 						return $("#newPart option:selected").html();
-					}}, 
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			{ data: "damageCode",visible: true },
-			
-			
+					}},
+			{ data: "component", visible: true , render : function(data) {
+						$("#newComponentInspection").val(data);
+						return $("#newComponentInspection option:selected").html();
+					}},
+			{ data: "damage", visible: true , render : function(data) {
+						$("#newDamage").val(data);
+						return $("#newDamage option:selected").html();
+					}},
+			{ data: "reference", visible: true },
+			{ data: "customerType", visible: true , render : function(data) {
+						$("#inspectionCustomerType").val(data);
+						return $("#inspectionCustomerType option:selected").html();
+					}},
+			{ data: "damageCode", visible: true , render : function(data) {
+						$("#newErrorCode").val(data);
+						return $("#newErrorCode option:selected").html();
+					}},
 		],
 	}).columns.adjust();
-	
 }
 
-function downloadInventoryReport(){
-	let url = 'container/generateInventoryReport'
-	const a = document.createElement('a')
-	a.href = url
-
-	a.download = url.split('/').pop()
-	document.body.appendChild(a)
-	a.click()
-	document.body.removeChild(a)
-}
-
-function downloadManeuverReport(){
-	let url = 'container/generateManeuverReport'
-	const a = document.createElement('a')
-	a.href = url
-
-	a.download = url.split('/').pop()
-	document.body.appendChild(a)
-	a.click()
-	document.body.removeChild(a)
-}
 
 function convertToBase64() {
-        //Read File
-        var selectedFile = document.getElementById("newImageCode").files;
-        //Check File is not Empty
-        if (selectedFile.length > 0) {
-            // Select the very first file from list
-            var fileToLoad = selectedFile[0];
-            // FileReader function for read the file.
-            var fileReader = new FileReader();
-            var base64;
-            // Onload of file read the file content
-
-            fileReader.onload = function(fileLoadedEvent) {
-                base64 = fileLoadedEvent.target.result;
-                // Print data in console
-				$("#imagenData").val("")
-				$("#imagenData").val(base64)
-				 document.getElementById("imagenPrevisualizacion").src = $("#imagenData").val();
-            };
-            // Convert data to base64
-             fileReader.readAsDataURL(fileToLoad);
-        }
-    }
+	var selectedFile = document.getElementById("newImageCode").files;
+	if (selectedFile.length > 0) {
+		var fileToLoad = selectedFile[0];
+		var fileReader = new FileReader();
+		fileReader.onload = function(fileLoadedEvent) {
+			var base64 = fileLoadedEvent.target.result;
+			$("#imagenData").val(base64);
+			document.getElementById("imagenPrevisualizacion").src = base64;
+		};
+		fileReader.readAsDataURL(fileToLoad);
+	}
+}
 
 function eventDateValidator(){
 	 fecha = new Date();
@@ -1745,7 +1482,7 @@ function eventDateValidator(){
 	var month = "0" + month;
 	}
     else{ 
-	var month = month.toString;
+	var month = month.toString();
 	}
 	
     document.getElementById("startDate").min = year+'-'+month+'-'+day; 

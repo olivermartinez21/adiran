@@ -137,7 +137,7 @@ public class ExcelUtils  implements IExcelUtils {
             // Encabezado del bloque resumen
             Row summaryHeader = sheet.createRow(rowNum++);
             // Eliminadas columnas PPTI, BL, FS y FX según solicitud: ahora solo mostramos A, B, C y D
-            String[] summaryTitles = {"TIPO", "NOMENCLATURA", "DISPONIBLES", "DAÑADOS", "A", "B", "C", "D"};
+            String[] summaryTitles = {"TIPO", "NOMENCLATURA", "DISPONIBLES", "DAÑADOS", "A", "B", "C", "EVACUACION"};
             for (int i = 0; i < summaryTitles.length; i++) {
                 Cell cell = summaryHeader.createCell(i);
                 cell.setCellValue(summaryTitles[i]);
@@ -167,7 +167,7 @@ public class ExcelUtils  implements IExcelUtils {
                                 .totB(containerRepository.getCountClasifiaction( "AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2))
                                 .totC(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 3))
                                 // .totBL(...) no se mostrará en el resumen
-                                .totD(containerRepository.getCountClasifiaction("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5))
+                                .totD(containerRepository.getCount("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 4))
                                 // .totFS(...) y .totFX(...) no se mostrarán en el resumen
                                 .build());
                     }
@@ -190,7 +190,7 @@ public class ExcelUtils  implements IExcelUtils {
                                 .totB(containerRepository.getCountClasifiactionByShippingCompany( "AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 2, reportFilterDto.getShippingCompany()))
                                 .totC(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 3, reportFilterDto.getShippingCompany()))
                                 // .totBL(...) no se mostrará en el resumen
-                                .totD(containerRepository.getCountClasifiactionByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 5, reportFilterDto.getShippingCompany()))
+                                .totD(containerRepository.getCountByShippingCompany("AGUASCALIENTES", distinct.get(i).toString(), nomenclaturas.get(j).toString(), 4, reportFilterDto.getShippingCompany()))
                                 // .totFS(...) y .totFX(...) no se mostrarán en el resumen
                                 .build());
                     }
@@ -287,6 +287,9 @@ public class ExcelUtils  implements IExcelUtils {
                 Row row = sheet.createRow(rowNum++);
                 int cellIndex = 0;
 
+                log.info("[inventoryExcel] Procesando contenedor ID={} | container={}",
+                        record.getContainerId(), record.getContainer());
+
                 List<CatShippingCompanyModel> shippingCompany = catShippingCompanyReposirtory.getShippingDesc(record.getShippingCompany());
                 String propietario = (shippingCompany.size() > 0) ? shippingCompany.get(0).getDescription() : "";
                 row.createCell(cellIndex).setCellValue(propietario); row.getCell(cellIndex++).setCellStyle(style);
@@ -294,27 +297,39 @@ public class ExcelUtils  implements IExcelUtils {
                 row.createCell(cellIndex).setCellValue(record.getBillTo()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getContainer()); row.getCell(cellIndex++).setCellStyle(style);
 
+                // condition puede ser null → NPE en switch
                 String condicion = "UNKNOWN";
-                switch (record.getCondition()) {
-                    case "1": condicion = "DISPONIBLE"; break;
-                    case "2": condicion = "DAÑADO"; break;
-                    case "4": condicion = "EVACUACION"; break;
-                    case "6": condicion = "BLOQUEADO/GX"; break;
-                    case "7": condicion = "TOTAL LOSS"; break;
-                    case "8": condicion = "VENTA"; break;
-                    case "9": condicion = "ACCIDENTADO"; break;
+                if (record.getCondition() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: condition es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                } else {
+                    switch (record.getCondition()) {
+                        case "1": condicion = "DISPONIBLE"; break;
+                        case "2": condicion = "DAÑADO"; break;
+                        case "4": condicion = "EVACUACION"; break;
+                        case "6": condicion = "BLOQUEADO/GX"; break;
+                        case "7": condicion = "TOTAL LOSS"; break;
+                        case "8": condicion = "VENTA"; break;
+                        case "9": condicion = "ACCIDENTADO"; break;
+                    }
                 }
                 row.createCell(cellIndex).setCellValue(condicion); row.getCell(cellIndex++).setCellStyle(style);
 
+                // containerType es Integer (objeto) → NPE si es null al hacer unboxing en switch
                 String tipoUnidad = "UNKNOWN";
-                switch (record.getContainerType()) {
-                    case 1: tipoUnidad = "CH"; break;
-                    case 2: tipoUnidad = "OT"; break;
-                    case 3: tipoUnidad = "DC"; break;
-                    case 4: tipoUnidad = "GS"; break;
-                    case 5: tipoUnidad = "IMO"; break;
-                    case 6: tipoUnidad = "RF"; break;
-                    case 7: tipoUnidad = "HC"; break;
+                if (record.getContainerType() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: containerType es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                } else {
+                    switch (record.getContainerType()) {
+                        case 1: tipoUnidad = "CH"; break;
+                        case 2: tipoUnidad = "OT"; break;
+                        case 3: tipoUnidad = "DC"; break;
+                        case 4: tipoUnidad = "GS"; break;
+                        case 5: tipoUnidad = "IMO"; break;
+                        case 6: tipoUnidad = "RF"; break;
+                        case 7: tipoUnidad = "HC"; break;
+                    }
                 }
                 row.createCell(cellIndex).setCellValue(tipoUnidad); row.getCell(cellIndex++).setCellStyle(style);
 
@@ -324,17 +339,29 @@ public class ExcelUtils  implements IExcelUtils {
 
                 row.createCell(cellIndex).setCellValue(record.getConditionPregate()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getLocation()); row.getCell(cellIndex++).setCellStyle(style);
-                row.createCell(cellIndex).setCellValue(record.getDateGateIn().toString()); row.getCell(cellIndex++).setCellStyle(style);
 
+                // dateGateIn puede ser null → NPE al llamar .toString()
+                if (record.getDateGateIn() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: dateGateIn es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                }
+                row.createCell(cellIndex).setCellValue(record.getDateGateIn() != null ? record.getDateGateIn().toString() : ""); row.getCell(cellIndex++).setCellStyle(style);
+
+                // clasification puede ser null → NPE en switch
                 String clasificacion = "UNKNOWN";
-                switch (record.getClasification()) {
-                    case "1": clasificacion = "A"; break;
-                    case "2": clasificacion = "B"; break;
-                    case "3": clasificacion = "C"; break;
-                    case "4": clasificacion = "BL"; break;
-                    case "5": clasificacion = "D"; break;
-                    case "6": clasificacion = "FS"; break;
-                    case "7": clasificacion = "FX"; break;
+                if (record.getClasification() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: clasification es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                } else {
+                    switch (record.getClasification()) {
+                        case "1": clasificacion = "A"; break;
+                        case "2": clasificacion = "B"; break;
+                        case "3": clasificacion = "C"; break;
+                        case "4": clasificacion = "BL"; break;
+                        case "5": clasificacion = "D"; break;
+                        case "6": clasificacion = "FS"; break;
+                        case "7": clasificacion = "FX"; break;
+                    }
                 }
                 row.createCell(cellIndex).setCellValue(clasificacion); row.getCell(cellIndex++).setCellStyle(style);
 
@@ -355,25 +382,36 @@ public class ExcelUtils  implements IExcelUtils {
                 String fechaFinal = (record.getFinalDate() == null) ? "PENDIENTE" : record.getFinalDate();
                 row.createCell(cellIndex).setCellValue(fechaFinal); row.getCell(cellIndex++).setCellStyle(style);
 
+                // statusQute puede ser null (Integer) → NPE al hacer unboxing en switch
                 String estado = "Pendiente";
-                switch (record.getStatusQute()) {
-                    case 1: estado = "Por crear"; break;
-                    case 2: estado = "Creado"; break;
-                    case 3: estado = "Aprobado"; break;
-                    case 4: estado = "Reparación Confirmada"; break;
-                    case 5: estado = "Actualizar"; break;
-                    case 6: estado = "Cancelado"; break;
-                    case 7: estado = "Actualizado"; break;
-                    case 8: estado = "Rechazado"; break;
-                    case 9: estado = "Cerrado"; break;
-                    case 10: estado = "N/A"; break;
+                if (record.getStatusQute() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: statusQute es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                } else {
+                    switch (record.getStatusQute()) {
+                        case 1: estado = "Por crear"; break;
+                        case 2: estado = "Creado"; break;
+                        case 3: estado = "Aprobado"; break;
+                        case 4: estado = "Reparación Confirmada"; break;
+                        case 5: estado = "Actualizar"; break;
+                        case 6: estado = "Cancelado"; break;
+                        case 7: estado = "Actualizado"; break;
+                        case 8: estado = "Rechazado"; break;
+                        case 9: estado = "Cerrado"; break;
+                        case 10: estado = "N/A"; break;
+                    }
                 }
                 row.createCell(cellIndex).setCellValue(estado); row.getCell(cellIndex++).setCellStyle(style);
 
                 row.createCell(cellIndex).setCellValue(record.getAptTo()); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getTypeServicePregate()); row.getCell(cellIndex++).setCellStyle(style);
                 //Fecha en que se registro para preGate
-                row.createCell(cellIndex).setCellValue(record.getDateInspection().toString()); row.getCell(cellIndex++).setCellStyle(style);
+                // dateInspection puede ser null → NPE al llamar .toString()
+                if (record.getDateInspection() == null) {
+                    log.warn("[inventoryExcel] NPE DETECTADO: dateInspection es NULL en contenedor ID={} | container={}",
+                            record.getContainerId(), record.getContainer());
+                }
+                row.createCell(cellIndex).setCellValue(record.getDateInspection() != null ? record.getDateInspection().toString() : ""); row.getCell(cellIndex++).setCellStyle(style);
                 row.createCell(cellIndex).setCellValue(record.getComents()); row.getCell(cellIndex++).setCellStyle(style);
             }
 
@@ -1152,7 +1190,12 @@ public class ExcelUtils  implements IExcelUtils {
                 row.getCell(col++).setCellStyle(style);
 
                 CatShippingCompanyModel naviera = catShippingCompanyReposirtory.getPreLaborFinal(e.getShippingCompany());
-                row.createCell(col).setCellValue(naviera.getDescription());
+                // naviera puede ser null → NPE al llamar naviera.getDescription()
+                if (naviera == null) {
+                    log.warn("[exitDateReport] NPE DETECTADO: naviera es NULL para shippingCompany={} | contenedor={}",
+                            e.getShippingCompany(), e.getContainer());
+                }
+                row.createCell(col).setCellValue(naviera != null ? naviera.getDescription() : "");
                 row.getCell(col++).setCellStyle(style);
 
                 row.createCell(col).setCellValue(e.getNomenclatura());

@@ -36,14 +36,12 @@ function initComponents() {
 				password: $("#password").val()
 			};
 			
-			console.log(data)
 			$.ajax({
 			type: "POST",
 			url: 'login/register',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					swal("Proceso Exitoso", "", "success")
 				.then(() => {

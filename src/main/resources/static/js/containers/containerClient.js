@@ -37,7 +37,6 @@ function initComponents() {
 			condition : $("#containerCondition").val(),
 			clasification : $("#containerClasification").val() },
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -88,7 +87,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -119,7 +117,6 @@ function initComponents() {
 			shippingCompany: $("#newShippingConpanyContainer").val(),
 			idUser : $("#globalUserId").val(),
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'containerClient/saveContainer',
@@ -127,7 +124,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -187,7 +183,6 @@ function initComponents() {
 			idUser : $("#globalUserId").val(),
 			inspectionList: JSON.stringify(dataT),
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'containerClient/saveUpdateContainer',
@@ -195,7 +190,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -232,7 +226,6 @@ function initComponents() {
 			 photo: item.photo,
 		}
 		dataT.push(obj);
-			console.log(dataT)
 		var data = {
 			containerId: $("#containerId").val(),
 			dateInspection : $("#newDateInspection").val(),
@@ -256,7 +249,6 @@ function initComponents() {
 				idUser : $("#globalUserId").val(),
 			inspectionList: JSON.stringify(dataT),
 	};
-	console.log(data)
 		$.ajax({
 			type: "POST",
 			url: 'containerClient/saveUpdateContainer',
@@ -264,7 +256,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response)
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -399,7 +390,6 @@ function configDataTable() {
 			data: {appointmentId :  $("#appointmentId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -654,7 +644,6 @@ function configDataTable() {
 			dataSrc: '',
 			data: {userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -683,7 +672,6 @@ $("#conditionModel").modal("show");
 			data: {containerId : data,
 			clasification : value},
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 				.then(() => {
@@ -710,7 +698,6 @@ Swal.fire({
 	}
 
 function showComponents(data){
-	console.log(data)
 	//text = document.getElementById("newPart").options[data].text
 	textContainer = document.getElementById("newContainerDescription").options[$("#containerType").val()-1].text	
 	document.getElementById("newComponentInspection")
@@ -878,7 +865,6 @@ function checkboxOrigin(){
 	
 editAdd=0;
 function addInspection(){
-	console.log($("#containerStatus").val() )
 	if($("#containerStatus").val() == null){
 		Swal.fire("Por favor Selecciona una imagen", "", "warning");
 	}else{
@@ -1115,7 +1101,6 @@ function showEventInformation(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1181,7 +1166,6 @@ function showInspections(data) {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {containerId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},

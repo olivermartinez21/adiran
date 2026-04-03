@@ -61,16 +61,6 @@ function configDataTable(shippingCompanyId = 0) {
 		select: {
 			style: 'single'
 		},
-		// buttons: {
-		// 	buttons: [
-		// 		//{extend: 'excelHtml5', title: 'Unidades'},
-		// 		//{text: 'Descargar Inventario Excel', className: 'btn btn-dark', action: function() { downloadInventoryReport()}},
-		// 		{text: 'Busqueda Cliente Inventario', className: 'btn btn-info', action: function() { filterShippigModal(); } },
-		// 		//{text: 'Descargar reporte De Maniobra Excel', className: 'btn btn-dark', action: function() { downloadManeuverReport()}},
-		// 		{text: 'Busqueda Reporte de Maniobras', className: 'btn btn-info', action: function() { filtersModal(); } },
-		// 		{text: 'Anuncios HAPAG', className: 'btn btn-info', action: function() { filtersAds(); } },
-		// 	],
-		// },
 		ajax: {
 			url: "priceLists/getDataTable",
 			type: 'GET',
@@ -79,7 +69,6 @@ function configDataTable(shippingCompanyId = 0) {
 			},
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},

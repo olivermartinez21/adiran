@@ -28,12 +28,7 @@ function configDataTable() {
 		buttons: {
 			buttons: [
 				{text: 'Crear Booking', action: function() { addBooking(); }},
-				//{text: 'Bookings HAPAG ', action: function() { showBookignHapag(); }},
 				{extend: 'excelHtml5', title: 'Asignaciones'},
-				//{extend: 'csvHtml5', title: 'Inventario'},
-				//{extend: 'pdfHtml5', title: 'Inventario', download: 'open', orientation: 'landscape',pageSize: 'LEGAL'},
-				//{text: 'Imprimir', extend: 'print', title: 'Inventarios'},
-				//{text: 'Columnas', extend: 'colvis' },
 				],
 			dom: {
 				button:{
@@ -46,7 +41,6 @@ function configDataTable() {
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -117,7 +111,6 @@ function configDataTable() {
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},*/
@@ -171,7 +164,6 @@ function initComponents() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					$("#newBookingInformationModal").modal('hide');
 					Swal.fire(response.message,"", "success")
@@ -227,7 +219,7 @@ $("#newBookingModal").submit(function () {
 				if($("#bookingInformation").DataTable().rows().count()!=$("#newQuantityUnitsBookings").val()){
 					count =  $("#bookingInformation").DataTable().rows().data().count()
 					filas = $("#newQuantityUnitsBookings").val() - count
-					console.log(count)
+
 					for (var i = 0; i < filas; i++) {
 						count++
 				 $("#bookingInformation").DataTable().row.add({
@@ -269,7 +261,7 @@ $("#newBookingModal").submit(function () {
 				 }
 			     dataT.push(obj);
 				 });
-			console.log(dataT)
+
 				var data = {
 					booking:  $("#newBooking").val(),
 					shippingCompany:  $("#newShippingConpanyBooking").val(),
@@ -289,7 +281,6 @@ $("#newBookingModal").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Se creo correctamente la reserva","", "success")
 				.then(() => {
@@ -322,7 +313,7 @@ $("#newBookingModal").submit(function () {
 					}
 				}
 				$("#newUnitDeliver").val(assignmentList.length)
-				console.log($("#newShippngCompanyOrder").val())
+
 				var data = {
 					booking: $("#newBookingOrder").val(),
 					owner:  $("#newShippngCompanyOrder").val(),
@@ -339,14 +330,12 @@ $("#newBookingModal").submit(function () {
 					containerType:$("#newTypeUnitOrder").val(),
 					assignmentList: assignmentList,
 				};
-				console.log(data);
 			$.ajax({
 			type: "POST",
 			url: 'bookings/createDeliveryOrder',
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Se creo correctamente la Orden de entrega","", "success")
 				.then(() => {
@@ -389,7 +378,6 @@ $("#newBookingModal").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: data,
 			success: function(response){
-				console.log(response);
 				if(response.success==true){
 					Swal.fire("Se edito correctamente la Orden de entrega","", "success")
 				.then(() => {
@@ -473,7 +461,7 @@ function addInformationBooking() {
 }
 
 function showMoreInformation() {
-	console.log("entra a showMoreInformation")
+
 	if($("#typeBookingInformation").val()=="RF"){
 		document.getElementById("divReffer1").removeAttribute("hidden");
 		document.getElementById("divReffer").removeAttribute("hidden");
@@ -491,10 +479,9 @@ function nexInput() {
 }
 	
 function getContainersEspecifications() {
-	console.log($("#typeBookingInformation").val());
-	console.log($("#sizeBookingInformation").val())
-	console.log($("#qualityBookingInformation").val())
-	console.log($("#shippingCompanyCatalog").val())
+
+
+
 	$.ajax({
 		type: "GET",
 		url: 'bookings/getUnitsFilter',
@@ -506,7 +493,7 @@ function getContainersEspecifications() {
 			shippingCompany: $("#shippingCompanyCatalog").val(),
 		},
 		success: function(response){
-			console.log(response)
+
 			clearComboContainer(document.getElementById("newContainerList"));
 			fillComboConainer(document.getElementById("newContainerList"),response);
 		},
@@ -546,12 +533,12 @@ function newDeliveryOrder(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {	bookingId: currentData.bookingId},
 		success: function(response){
-			console.log(response)
+
 
 			if (response.success==false){
 				Swal.fire(" ",response.message, "warning")
 			} else{
-				console.log("Sigue activo")
+
 			}
 
 		},
@@ -561,7 +548,7 @@ function newDeliveryOrder(data){
 	});
 		if(currentData.expirationDate>date){
 		bookingTableOrder(currentData.bookingId)
-			console.log("Entra a buscar delivry oirder")
+
 		tableDelivery(currentData.bookingId);
 		//infoOrder(currentData.bookingId)
 		$("#bookingId").val(currentData.bookingId)
@@ -582,7 +569,7 @@ function newDeliveryOrder(data){
 		}else{
 			Swal.fire("El booking Expiro","", "warning")
 			bookingTableOrder(currentData.bookingId)
-			console.log("Entra a buscar delivry oirder")
+
 			tableDelivery(currentData.bookingId);
 			//infoOrder(currentData.bookingId)
 			$("#bookingId").val(currentData.bookingId)
@@ -633,7 +620,6 @@ function bookingTableOrder(data){
 			data:{bookingId: data},
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -687,11 +673,11 @@ function unitCap(data){
 			return false;
 		}
 
-		console.log("entra unitCap "+ $("#newTypeUnitOrder").val())
-		console.log("ENTRA TIPO "+$("#typeBookingInformation").val())
-		console.log("ENTRA TAMANIO "+$("#sizeBookingInformation").val())
-		console.log("ENTRA GRADO "+$("#qualityBookingInformation").val())
-	console.log("Entra shippingCatalog " + $("#shippingCompanyCatalog").val())
+
+
+
+
+
 
 	    currentData = $("#bookingInformationOrder").DataTable().row(data).data();
 		$("#newUnitInformation").val(currentData.unitNumber);
@@ -705,7 +691,7 @@ function unitCap(data){
 				shippingCompany: $("#shippingCompanyCatalog").val()
 		},
 		success: function(response){
-			console.log(response)
+
 			clearComboContainer(document.getElementById("newContainerList"));
 			fillComboConainer(document.getElementById("newContainerList"),response);
 		},
@@ -732,7 +718,7 @@ function selectContainer(){
 				shippingCompany: $("#shippingCompanyCatalog").val()
 		},
 		success: function(response){
-			console.log(response)
+
 			if ($("#sizeBookingInformation").val() == 0 && $("#qualityBookingInformation").val() == 0){
 
 				if (response.containerType == $("#typeBookingInformation").val()){
@@ -796,7 +782,6 @@ function tableDelivery(data){
 			dataSrc: '',
 			data:  {bookingId : data},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -828,7 +813,7 @@ function infoOrder(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {bookingId : data},
 		success: function(response){
-			console.log(response)
+
 			$("#newTypeUnitOrder").val(response.containerType)
 			$("#newCarrierCompanyOrder").val(response.carrierCompany)
 			$("#newOperatorOrder").val(response.operator)
@@ -858,7 +843,6 @@ function infoOrder(data){
 }
 
 function preOrderDelivery(data) {
-	console.log("entra a preOrderDelivery " + data);
 
 	var requestData = {
 		assignmentId: data,
@@ -908,14 +892,14 @@ function preOrderDelivery(data) {
 }
 
 function printOrder(data){
-		console.log(data)
+
 	$.ajax({
 		type: "POST",
 		url: 'bookings/printDeliveryOrder',
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {deliveryOrderId : data},
 		success: function(response){
-			console.log(response)
+
 			window.open('bookings/PDF_order?deliveryOrderId='+ response.pdf+'')
 		},
 		error: function(){
@@ -932,7 +916,7 @@ function removeOrder(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {deliveryOrderId : data},
 		success: function(response){
-			console.log(response)
+
 				//bookingTableOrderEdit()
 				tableDelivery($("#bookingId").val())
 				bookingTableOrder($("#bookingId").val())
@@ -952,7 +936,7 @@ function editOrder(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {deliveryOrderId : data},
 		success: function(response){
-			console.log(response)
+
 			$("#newBookingOrderEdit").val(response.booking)
 			$("#newShippngCompanyOrderEdit").val(response.owner);
 			$("#newTypeServiceOrderEdit").val(response.typeOfService)
@@ -1012,7 +996,6 @@ function bookingTableOrderEdit(){
 			data:{deliveryOrderId: $("#deliveryOrderId").val()},
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1021,7 +1004,7 @@ function bookingTableOrderEdit(){
 		 { data: "no",visible: true },
 	 	 { data: "unitNumber",visible: true },
 		{ data: "type", visible: true , render : function(data) {
-						console.log(data)
+
 						if(data!=' '){
 							return data;
 						}else{
@@ -1059,7 +1042,7 @@ function editUnitCap(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {	location: $("#globalWarehouse").val()},
 		success: function(response){
-			console.log(response)
+
 			clearComboContainer(document.getElementById("newContainerList"));
 			fillComboConainer(document.getElementById("newContainerList"),response);
 		},
@@ -1078,7 +1061,7 @@ function deleteAssignmet(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data:  {assignmentId : data},
 		success: function(response){
-			console.log(response)
+
 				bookingTableOrderEdit()
 				tableDelivery($("#bookingId").val())
 				bookingTableOrder($("#bookingId").val())
@@ -1112,10 +1095,6 @@ function showBookignHapag(){
 			buttons: [
 				{text: 'Bookings', action: function() { showBookigs(); }},
 				{extend: 'excelHtml5', title: 'Asignaciones'},
-				//{extend: 'csvHtml5', title: 'Inventario'},
-				//{extend: 'pdfHtml5', title: 'Inventario', download: 'open', orientation: 'landscape',pageSize: 'LEGAL'},
-				//{text: 'Imprimir', extend: 'print', title: 'Inventarios'},
-				//{text: 'Columnas', extend: 'colvis' },
 				],
 			dom: {
 				button:{
@@ -1128,7 +1107,6 @@ function showBookignHapag(){
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},*/
@@ -1196,10 +1174,6 @@ function showBookigs(){
 				{text: 'Crear Booking', action: function() { addBooking(); }},
 				{text: 'Bookings HAPAG ', action: function() { showBookignHapag(); }},
 				{extend: 'excelHtml5', title: 'Asignaciones'},
-				//{extend: 'csvHtml5', title: 'Inventario'},
-				//{extend: 'pdfHtml5', title: 'Inventario', download: 'open', orientation: 'landscape',pageSize: 'LEGAL'},
-				//{text: 'Imprimir', extend: 'print', title: 'Inventarios'},
-				//{text: 'Columnas', extend: 'colvis' },
 				],
 			dom: {
 				button:{
@@ -1212,7 +1186,6 @@ function showBookigs(){
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -1249,7 +1222,7 @@ function addContainersToDeliveryOrder(){
 		data:  {newQuantityAsssignment : $("#addContainers").val(),
 				bookingId: $("#bookingId").val()},
 		success: function(response){
-			console.log(response)
+
 			bookingTableOrderEdit()
 			tableDelivery($("#bookingId").val())
 			bookingTableOrder($("#bookingId").val())
@@ -1262,3 +1235,4 @@ function addContainersToDeliveryOrder(){
 		}
 	});
 }
+

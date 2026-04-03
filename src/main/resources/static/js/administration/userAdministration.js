@@ -38,7 +38,6 @@ function configDataTable() {
 			type: 'GET',
 			dataSrc: '',
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -77,7 +76,7 @@ function initComponents() {
 		   		}
 			});	
 		} else {
-			showAlert(2, warningTitle, "Las contraseñas deben ser iguales", "");
+			Swal.fire("Las contraseñas deben ser iguales", "", "warning");
 		}
 		return false;
 	});
@@ -98,7 +97,7 @@ function initComponents() {
 		   		}
 			});	
 		} else {
-			showAlert(2, warningTitle, "Los nombres del rol deben ser iguales ", "");
+			Swal.fire("Los nombres del rol deben ser iguales", "", "warning");
 		}
 		return false;
 	});
@@ -112,26 +111,17 @@ function initComponents() {
 						roleId : $("#roleAssignSelect").val(),
 						operation : "INSERT",},
 		   		success: function(response) {
-			Swal.fire("Proceso Exitoso", "", "success")
-				.then(() => {
-					//$("#inspectionModal").modal("hide");
-				//configDataTablePregate()
-				self.location.reload();
-				});
-			   		//manageResponse(response)
+					Swal.fire("Proceso Exitoso", "", "success")
+					.then(() => { self.location.reload(); });
 			   	},
 			   	error: function(response) {
-		   			//manageAjaxResponse(response);
+		   			manageAjaxResponse(response);
 		   		}
 			});	
 		return false;
 	});
 	
 	$("#removeRoleForm").submit(function () {
-		 
-		console.log($("#removeRoleUserSelect").val())
-		console.log($("#removeRolSelect").val())
-		 
 			$.ajax({
 				type: "POST",
 		    	url: "userAdministration/removeRole",
@@ -140,15 +130,11 @@ function initComponents() {
 						roleId : $("#removeRolSelect").val(),
 						operation : "UPDATE",},
 		   		success: function(response) {
-			console.log(response)
 			   		Swal.fire("Proceso Exitoso", "", "success")
-				.then(() => {
-				self.location.reload();
-				});
+					.then(() => { self.location.reload(); });
 			   	},
 			   	error: function(response) {
-					console.log(response)
-		   			Swal.fire("Proceso fallido", "", "warning")
+		   			Swal.fire("Proceso fallido", "", "warning");
 		   		}
 			});	
 		return false;
@@ -195,7 +181,6 @@ function removeRole(data) {
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {userId : data},
 		success: function(response) {
-			console.log(response)
 			clearCombo(combo);
 			fillCombo(combo,response);
 	    	manageResponse(response);

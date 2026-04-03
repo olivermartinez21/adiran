@@ -57,7 +57,6 @@ function configDataTable() {
 			data: {appointmentId :  $("#appointmentId").val(),
 					userId : $("#globalUserId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 			
@@ -235,7 +234,6 @@ function configDataTable() {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {inspectionId : data},
 			success: function(response){
-				console.log(response);
 				
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
@@ -274,7 +272,6 @@ function changeStatus(data){
 	
 	currentData = $("#containerTable").DataTable().row(data).data();
 	$("#containerId").val(currentData.containerId)
-	console.log(currentData)
 		$("#containerCondition").val(currentData.condition),
 		$("#qualityGrade").val(currentData.clasification),
 	
@@ -342,7 +339,6 @@ function newDamage(data){
 			dataSrc: '',
 			data: {containerId : $("#containerId").val()},
 			error: function(response) {
-				console.log(response);
 				manageErrorAjax(response);
 			}
 		},
@@ -394,26 +390,13 @@ function newDamage(data){
 			{ data: "customerName", visible: true},
 			{ data: "location",visible: true },
 			{ data: "quantity",visible: true },
-			
 			{ data: "reference", visible: false},
-//			{ data: "inspectionId", visible: false , render : function(data) {
-//						return "";
-//					}},
-//			{ data: "inspectionId", visible: true , render : function(data) {
-//						return "";
-//					}},
-//			{ data: "inspectionId", visible: true , render : function(data) {
-//						return "";
-//					}},	
-//			{ data: "inspectionId", visible: true , render : function(data) {
-//						return "";
-//					}},
 			{ data: "extentOtherLarge",visible: false },
 			{ data: "hours", visible: true},
 			{ data: "labor", visible: true },
 			{ data: "material", visible: true},
 			{ data: "tarifa", visible: true},
-			{data: "extentLarge", visible: true},
+			{data: "extentLarge", visible: false},
 			{ data: "photo", visible: true , render : function(data, type, full, meta) {
 					$("#imagenData").val(data);
 					var btnView = '<button type="button" class="btn btn-outline-dark btn-sm" title="Ver fotos" onclick="onlyPhotos(\'' + meta.row + '\');"><i class="fas fa-eye"></i></button>&nbsp;';
@@ -442,7 +425,6 @@ function newDamage(data){
 	
 	}
 function addNewDamage(){
-	console.log("Paso 1 agrega danio")
 	$("#newDamageTypeOperation").val("INSERT")
 	document.getElementById('newComponentInspection2').setAttribute("hidden",true);
 	document.getElementById('newComponentInspection').removeAttribute("hidden");
@@ -476,7 +458,6 @@ function repairDamage(data){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {inspectionId: data},
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 					.then(() => {
@@ -487,7 +468,6 @@ function repairDamage(data){
 					}
 				});
 				}else{
-					console.log(response.message);
 					Swal.fire(response.message+" Error", "", "warning");
 				}
 			}, 
@@ -516,7 +496,6 @@ function initComponents(){
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					$("#inspectionCapModel").modal("hide")
 					Swal.fire("Proceso Exitoso", "", "success")
@@ -525,7 +504,6 @@ function initComponents(){
 					$("#containerStatusModel").modal("hide");
 				});
 				}else{
-					console.log(response.message);
 					Swal.fire(response.message+" Error", "", "warning");
 				}
 			}, 
@@ -574,7 +552,7 @@ $("#newDamageAddModel").submit(function () {
 	
 	formData.append('inspection',JSON.stringify(data));
 	
-	if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"||$("#newImageCode").val()==""){
+	if($("#newPart").val()=="Selecciona una opción"||$("#newComponentInspection").val()=="Selecciona una opción"||$("#newDamage").val()=="Selecciona una opción"){
 				Swal.fire("Llenar los datos que se requieren", "", "warning");
 	}else{
 		$.ajax({
@@ -594,7 +572,6 @@ $("#newDamageAddModel").submit(function () {
 				//self.location.reload();
 				});
 				}else{
-					console.log("error")
 					Swal.fire("Error "+response.message, "", "error");
 				}
 		},
@@ -631,7 +608,6 @@ $("#statusModel").submit(function () {
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			data:data,
 			success: function(response){
-				console.log(response.success);
 				if(response.success==true){
 					Swal.fire("Proceso Exitoso", "", "success")
 					.then(() => {
@@ -639,7 +615,6 @@ $("#statusModel").submit(function () {
 					$("#statusModel").modal("hide")
 				});
 				}else{
-					console.log(response.message);
 					Swal.fire(response.message+" Error", "", "warning");
 				}
 			}, 
@@ -675,11 +650,7 @@ $.ajax({
 
 function showComponents(){
 	data = $("#newPart").val();
-	console.log(data)
-	$("#seccionSave").val(data)
-	textContainer = $("#containerDescriptionInspecction option:selected").html()	
-	console.log(textContainer) 
-	document.getElementById("newComponentInspection")
+	textContainer = $("#containerDescriptionInspecction option:selected").html()
 	$.ajax({
 		type: "GET",
 		url: 'inspection/getComponentIformation',
@@ -787,7 +758,6 @@ function onlyPhotos(data){
 		contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		data: info,
 		success: function(response){
-			console.log(response)
 
 			for(var i=0;i<response.length;i++){
 				$("#imageTableInspectionView").DataTable().row.add({
@@ -847,15 +817,11 @@ Swal.fire({
 function saveComponent(){
 	cambioComponente = 1;
 	if ($('#newComponentInspection').is(':hidden')) {
-		console.log("esta visible")
 		document.getElementById('newComponentInspection').removeAttribute("hidden");
 		document.getElementById('newComponentInspection2').setAttribute("hidden",true);
-		$("#newPart").val("Selecciona una opción")
-		$("#newDamage").val("Selecciona una opción")
-		$("#newComponentInspection").val("Selecciona una opción")
-
+		$("#newPart").val("Selecciona una opción");
+		$("#newDamage").val("Selecciona una opción");
+		$("#newComponentInspection").val("Selecciona una opción");
 	}
-
-	$("#componentSave").val($("#newComponentInspection").val())
-
+	$("#componentSave").val($("#newComponentInspection").val());
 }
