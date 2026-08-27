@@ -1268,6 +1268,7 @@ function getNomenclatura(){
 			$("#newPlate").val(response.plate),
 			$("#newEconomicNumber").val(response.economicNumber),
 			$("#newOriginPregate").val(response.originPregate),
+			$("#newDestinyPregate").val(response.destinyPregate).trigger('change'),
 			
 			$("#containerId").val(response.containerId)
 			$("#containerType").val(response.containerType)

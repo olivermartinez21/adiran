@@ -41,6 +41,7 @@ function initComponents() {
 			buque : $("#newBuquePregate").val(),
 			bl : $("#newBlPregate").val(),
 			containerId: $("#containerId").val(),
+			destinyPregate: $("#newDestinyPregate").val(),
 			}
 			
 			$.ajax({

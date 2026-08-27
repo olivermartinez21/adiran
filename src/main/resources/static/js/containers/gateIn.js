@@ -13,6 +13,18 @@ $(document).ready( function() {
 	validationCode($("#newContainerName")) 
 	validationCode($("#unitAsosiateInspection")) 
 	validationCode($("#unitAsosiateInspectiongenset")) 
+	if($("#globalWarehouse").val()=="AGUASCALIENTES"){
+		var destinity = document.getElementById("divDestinityPregate");
+		if(destinity){
+			destinity.removeAttribute("hidden");
+		}
+	}
+	if($('#newDestinyPregate').length){
+		$('#newDestinyPregate').select2({
+			width: '100%',
+			placeholder: 'Buscar destino...'
+		});
+	} 
 });
 
 function GetURLParameter(sParam) {
@@ -43,6 +55,7 @@ function initComponents() {
 			economicNumber: $("#newEconomicNumber").val(),
 			containerId: $("#containerId").val(),
 			originPregate: $("#newOriginPregate").val(),
+			destinyPregate: $("#newDestinyPregate").val(),
 			num: 1
 			}
 			
@@ -1052,6 +1065,7 @@ function getSingleData(data){
 			$("#horometroInspection").val(response.horometro)
 
 			$("#newOriginPregate").val(response.originPregate)
+			$("#newDestinyPregate").val(response.destinyPregate).trigger('change')
 
 
 			
